@@ -43,65 +43,6 @@
             border: 2px solid var(--primary);
             border-radius: 30px;
             font-weight: 600;
-           
-# Verificar el contenido actual del directorio
-echo "=== Contenido actual del proyecto ==="
-ls -la
-
-# Si existe el directorio frontend, verificar su contenido
-if [ -d "frontend" ]; then
-    echo "=== Contenido del directorio frontend ==="
-    ls -la frontend/
-fi
-
-# Crear el sitio web principal en index.html
-echo "=== Creando sitio web principal ==="
-cat > index.html << 'EOF'
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arreglos Victoria Florería</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #5a8f69;
-            --secondary: #4a7a5a;
-            --light: #f5f9f6;
-            --dark: #333;
-            --white: #fff;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: #f9f9f9;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        img { max-width: 100%; height: auto; }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: var(--white);
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            border-radius: 30px;
-            font-weight: 600;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
