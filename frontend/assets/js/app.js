@@ -2,6 +2,30 @@
 let cart = [];
 let cartCount = 0;
 
+// Función para cargar el carrito desde localStorage
+function loadCartFromLocalStorage() {
+    try {
+        const savedCart = localStorage.getItem('arreglosVictoriaCart');
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+            cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+        }
+    } catch (error) {
+        console.error('Error al cargar el carrito desde localStorage:', error);
+        cart = [];
+        cartCount = 0;
+    }
+}
+
+// Función para guardar el carrito en localStorage
+function saveCartToLocalStorage() {
+    try {
+        localStorage.setItem('arreglosVictoriaCart', JSON.stringify(cart));
+    } catch (error) {
+        console.error('Error al guardar el carrito en localStorage:', error);
+    }
+}
+
 // Función para actualizar el contador del carrito
 function updateCartCount() {
     const cartCountElement = document.querySelector('.cart-count');
@@ -28,6 +52,7 @@ function addToCart(id, name, price) {
     
     cartCount++;
     updateCartCount();
+    saveCartToLocalStorage();
     
     // Mostrar mensaje de confirmación
     alert(`${name} agregado al carrito!`);
@@ -38,7 +63,12 @@ function handleContactFormSubmit(event) {
     event.preventDefault();
     
     const name = document.getElementById('name').value;
-    alert(`Gracias ${name}! Hemos recibido tu mensaje y nos pondremos en contacto contigo pronto.`);
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const message = document.getElementById('message').value;
+    
+    // En un entorno real, aquí se enviaría la información a un servidor
+    alert(`Gracias ${name}! Hemos recibido tu mensaje y nos pondremos en contacto contigo pronto.\n\nDetalles del mensaje:\nEmail: ${email}\nTeléfono: ${phone}\nMensaje: ${message}`);
     
     // Limpiar el formulario
     document.getElementById('contactForm').reset();
@@ -66,6 +96,7 @@ function initializeEventListeners() {
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
+    loadCartFromLocalStorage();
     initializeEventListeners();
     updateCartCount();
     

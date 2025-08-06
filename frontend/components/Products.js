@@ -6,7 +6,7 @@ const Products = () => {
         <div class="product-grid">
           <div class="product-card">
             <div class="product-image">
-              <img src="https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ramo de Rosas">
+              <img src="https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ramo elegante de rosas rojas para regalo romántico" loading="lazy">
             </div>
             <div class="product-info">
               <h3>Ramo de Rosas</h3>
@@ -20,7 +20,7 @@ const Products = () => {
           
           <div class="product-card">
             <div class="product-image">
-              <img src="https://images.unsplash.com/photo-1597146743874-18b555153880?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Arreglo Tropical">
+              <img src="https://images.unsplash.com/photo-1597146743874-18b555153880?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Arreglo floral tropical con flores exóticas y follaje decorativo" loading="lazy">
             </div>
             <div class="product-info">
               <h3>Arreglo Tropical</h3>
@@ -34,7 +34,7 @@ const Products = () => {
           
           <div class="product-card">
             <div class="product-image">
-              <img src="https://images.unsplash.com/photo-1613945768171-18074f8f4b0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ramo Primaveral">
+              <img src="https://images.unsplash.com/photo-1613945768171-18074f8f4b0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ramo primaveral colorido con flores de temporada" loading="lazy">
             </div>
             <div class="product-info">
               <h3>Ramo Primaveral</h3>
@@ -48,7 +48,7 @@ const Products = () => {
           
           <div class="product-card">
             <div class="product-image">
-              <img src="https://images.unsplash.com/photo-1583182965353-d9a9168261d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Orquídeas">
+              <img src="https://images.unsplash.com/photo-1583182965353-d9a9168261d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Orquídeas blancas elegantes en presentación única" loading="lazy">
             </div>
             <div class="product-info">
               <h3>Orquídeas</h3>
