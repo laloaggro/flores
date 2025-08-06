@@ -55,7 +55,21 @@ function addToCart(id, name, price) {
     saveCartToLocalStorage();
     
     // Mostrar mensaje de confirmación
-    alert(`${name} agregado al carrito!`);
+    showFormMessage('success', `${name} agregado al carrito!`);
+}
+
+// Función para mostrar mensajes en el formulario de contacto
+function showFormMessage(type, message) {
+    const messageElement = document.getElementById('formMessage');
+    if (messageElement) {
+        messageElement.textContent = message;
+        messageElement.className = `form-message ${type}`;
+        
+        // Ocultar el mensaje después de 5 segundos
+        setTimeout(() => {
+            messageElement.className = 'form-message';
+        }, 5000);
+    }
 }
 
 // Función para manejar el envío del formulario de contacto
@@ -86,15 +100,15 @@ async function handleContactFormSubmit(event) {
         const result = await response.json();
         
         if (response.ok) {
-            alert(result.message);
+            showFormMessage('success', result.message);
             // Limpiar el formulario
             document.getElementById('contactForm').reset();
         } else {
-            alert('Error: ' + result.message);
+            showFormMessage('error', 'Error: ' + result.message);
         }
     } catch (error) {
         console.error('Error al enviar el formulario:', error);
-        alert('Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
+        showFormMessage('error', 'Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
     } finally {
         // Restaurar botón
         submitButton.textContent = originalText;

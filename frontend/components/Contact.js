@@ -57,6 +57,7 @@ const Contact = () => {
               <div class="form-group">
                 <textarea id="message" name="message" placeholder="Tu Mensaje" rows="5" required></textarea>
               </div>
+              <div id="formMessage" class="form-message"></div>
               <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
             </form>
           </div>
