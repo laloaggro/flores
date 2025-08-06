@@ -59,6 +59,62 @@ const Products = () => {
               </button>
             </div>
           </div>
+          
+          <div class="product-card">
+            <div class="product-image">
+              <img src="https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Arreglo de flores para bodas con diseño elegante" loading="lazy">
+            </div>
+            <div class="product-info">
+              <h3>Arreglo para Boda</h3>
+              <p>Diseño elegante para el día especial.</p>
+              <span class="price">$950.00</span>
+              <button class="btn btn-secondary add-to-cart" data-id="5" data-name="Arreglo para Boda" data-price="950.00">
+                <i class="fas fa-shopping-cart"></i> Agregar
+              </button>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-image">
+              <img src="https://images.unsplash.com/photo-1598193920002-b6ba1031a2d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Ramo de flores para cumpleaños coloridas" loading="lazy">
+            </div>
+            <div class="product-info">
+              <h3>Ramo de Cumpleaños</h3>
+              <p>Flores vibrantes para celebrar un cumpleaños.</p>
+              <span class="price">$420.00</span>
+              <button class="btn btn-secondary add-to-cart" data-id="6" data-name="Ramo de Cumpleaños" data-price="420.00">
+                <i class="fas fa-shopping-cart"></i> Agregar
+              </button>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-image">
+              <img src="https://images.unsplash.com/photo-1593617281798-1b1cbadd3ef9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Arreglo fúnebre con lirios y crisantemos" loading="lazy">
+            </div>
+            <div class="product-info">
+              <h3>Arreglo de Condolencias</h3>
+              <p>Diseño respetuoso para momentos difíciles.</p>
+              <span class="price">$650.00</span>
+              <button class="btn btn-secondary add-to-cart" data-id="7" data-name="Arreglo de Condolencias" data-price="650.00">
+                <i class="fas fa-shopping-cart"></i> Agregar
+              </button>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-image">
+              <img src="https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Ramo de flores mixtas con girasoles y rosas" loading="lazy">
+            </div>
+            <div class="product-info">
+              <h3>Ramo Mixto</h3>
+              <p>Combinación alegre de girasoles y rosas.</p>
+              <span class="price">$520.00</span>
+              <button class="btn btn-secondary add-to-cart" data-id="8" data-name="Ramo Mixto" data-price="520.00">
+                <i class="fas fa-shopping-cart"></i> Agregar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

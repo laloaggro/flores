@@ -1,5 +1,6 @@
 import Header from '../components/Header.js';
 import Hero from '../components/Hero.js';
+import Categories from '../components/Categories.js';
 import Products from '../components/Products.js';
 import About from '../components/About.js';
 import Contact from '../components/Contact.js';
@@ -38,6 +39,7 @@ const Home = () => {
         ${Header()}
         ${Hero()}
         <main>
+          ${Categories()}
           ${Products()}
           ${About()}
           ${Contact()}
