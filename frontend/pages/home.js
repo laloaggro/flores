@@ -3,6 +3,7 @@ import Hero from '../components/Hero.js';
 import Categories from '../components/Categories.js';
 import Products from '../components/Products.js';
 import About from '../components/About.js';
+import Testimonials from '../components/Testimonials.js';
 import Contact from '../components/Contact.js';
 import Footer from '../components/Footer.js';
 
@@ -42,6 +43,7 @@ const Home = () => {
           ${Categories()}
           ${Products()}
           ${About()}
+          ${Testimonials()}
           ${Contact()}
         </main>
         ${Footer()}
