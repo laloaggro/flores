@@ -138,9 +138,12 @@ function initializeEventListeners() {
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
-    loadCartFromLocalStorage();
-    initializeEventListeners();
-    updateCartCount();
+    // Pequeña demora para asegurar que el contenido se haya renderizado
+    setTimeout(function() {
+        loadCartFromLocalStorage();
+        initializeEventListeners();
+        updateCartCount();
+    }, 100);
     
     // Smooth scrolling para enlaces de navegación
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

@@ -34,10 +34,10 @@
     <script type="module">
         import Home from './pages/home.js';
         
-        // Simular una pequeña demora para mostrar el loading
-        setTimeout(() => {
+        // Esperar a que el DOM esté completamente cargado
+        document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('app').innerHTML = Home();
-        }, 500);
+        });
     </script>
 </body>
 </html>
