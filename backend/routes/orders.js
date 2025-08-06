@@ -1,17 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const orderController = require('../controllers/orderController');
 
-let orders = [];
+// Ruta para crear una nueva orden
+router.post('/', orderController.createOrder);
 
-router.post('/create', (req, res) => {
-  const newOrder = { id: Date.now(), ...req.body };
-  orders.push(newOrder);
-  console.log('Nuevo pedido:', newOrder);
-  res.status(201).json(newOrder);
-});
-
-router.get('/', (req, res) => {
-  res.json(orders);
-});
+// Ruta para obtener todas las órdenes
+router.get('/', orderController.getAllOrders);
 
 module.exports = router;

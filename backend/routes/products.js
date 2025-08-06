@@ -1,14 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const productController = require('../controllers/productController');
 
-const products = [
-  { id: 1, name: "Rosas Rojas", price: 85, image_url: "https://res.cloudinary.com/dkzmsk7qv/image/upload/v1719500000/rosas-rojas.jpg" },
-  { id: 2, name: "Tulipanes", price: 120, image_url: "https://res.cloudinary.com/dkzmsk7qv/image/upload/v1719500000/tulipanes.jpg" },
-  { id: 3, name: "Orquídeas", price: 150, image_url: "https://res.cloudinary.com/dkzmsk7qv/image/upload/v1719500000/orquideas.jpg" }
-];
+// Ruta para obtener todos los productos
+router.get('/', productController.getAllProducts);
 
-router.get('/', (req, res) => {
-  res.json(products);
-});
+// Ruta para obtener un producto por ID
+router.get('/:id', productController.getProductById);
 
 module.exports = router;
