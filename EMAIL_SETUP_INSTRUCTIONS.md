@@ -27,7 +27,8 @@ Para usar Gmail como proveedor de correo, necesitas configurar una contraseña d
    - Ponle un nombre como "ArreglosVictoriaApp"
    - Haz clic en "Generar"
 5. **Copia la contraseña generada inmediatamente** (solo se muestra una vez)
-6. Usa esta contraseña en lugar de tu contraseña normal de Google
+6. **Importante**: La contraseña de aplicación **no debe contener espacios**. Si la contraseña generada tiene espacios, elimínalos al copiarla.
+7. Usa esta contraseña en lugar de tu contraseña normal de Google
 
 ### 3. Actualizar las variables de entorno
 
@@ -37,7 +38,7 @@ Edita el archivo `.env` y actualiza las siguientes variables:
 # Configuración de correo electrónico
 EMAIL_SERVICE=gmail
 EMAIL_USER=tu-email@gmail.com
-EMAIL_PASS=la-contraseña-de-aplicación-que-generaste
+EMAIL_PASS=la-contraseña-de-aplicación-que-generaste-sin-espacios
 ```
 
 **Importante**: No uses espacios en la contraseña de aplicación. Si la contraseña generada tiene espacios, quítalos al copiarla.
@@ -59,7 +60,8 @@ npm start
    - Asegúrate de usar una contraseña de aplicación, no tu contraseña normal de Google
    - Verifica que las credenciales sean correctas
    - Comprueba que la verificación en dos pasos esté activada
-   - Si copiaste la contraseña con espacios, inténtalo sin ellos
+   - **Importante**: Si copiaste la contraseña con espacios, inténtalo sin ellos
+   - **Si el error persiste después de quitar espacios**: Genera una nueva contraseña de aplicación y usa esa
 
 2. **Error: "Connection timeout" o problemas de conexión**
    - Verifica tu conexión a Internet
