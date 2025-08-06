@@ -85,6 +85,12 @@ async function handleContactFormSubmit(event) {
     
     console.log('Datos del formulario:', { name, email, phone, message });
     
+    // Validar que todos los campos requeridos estén completos
+    if (!name || !email || !message) {
+        showFormMessage('error', 'Por favor, completa todos los campos requeridos.');
+        return;
+    }
+    
     // Mostrar mensaje de carga
     const submitButton = document.querySelector('#contactForm .btn');
     const originalText = submitButton.textContent;
@@ -112,19 +118,17 @@ async function handleContactFormSubmit(event) {
         const result = await response.json();
         console.log('Datos de la respuesta:', result);
         
-        if (response.ok) {
-            showFormMessage('success', result.message);
-            // Limpiar el formulario
-            document.getElementById('contactForm').reset();
-        } else {
-            showFormMessage('error', 'Error: ' + result.message);
-        }
+        showFormMessage('success', result.message);
+        // Limpiar el formulario
+        document.getElementById('contactForm').reset();
     } catch (error) {
         console.error('Error al enviar el formulario:', error);
         
         // Manejar errores específicos de CORS
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
             showFormMessage('error', 'Error de conexión. Por favor, verifica tu conexión a internet e inténtalo nuevamente.');
+        } else if (error.message.includes('HTTP error')) {
+            showFormMessage('error', 'Error del servidor. Por favor, inténtalo de nuevo más tarde.');
         } else {
             showFormMessage('error', 'Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
         }
@@ -161,16 +165,39 @@ function initializeEventListeners() {
     }
 }
 
+// Función para verificar si el formulario existe y adjuntar event listener si es necesario
+function checkAndAttachFormListener() {
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm && !contactForm.dataset.listenerAttached) {
+        contactForm.addEventListener('submit', handleContactFormSubmit);
+        contactForm.dataset.listenerAttached = 'true';
+        console.log('Event listener adjuntado al formulario de contacto');
+    }
+}
+
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM completamente cargado');
-    // Pequeña demora para asegurar que el contenido se haya renderizado
+    
+    // Cargar carrito y actualizar contador
+    loadCartFromLocalStorage();
+    updateCartCount();
+    
+    // Inicializar event listeners con una pequeña demora
     setTimeout(function() {
         console.log('Inicializando aplicación después de la demora');
-        loadCartFromLocalStorage();
         initializeEventListeners();
-        updateCartCount();
     }, 100);
+    
+    // Verificar y adjuntar listener al formulario con intervalo
+    const formCheckInterval = setInterval(() => {
+        checkAndAttachFormListener();
+    }, 500);
+    
+    // Limpiar intervalo después de 5 segundos
+    setTimeout(() => {
+        clearInterval(formCheckInterval);
+    }, 5000);
     
     // Smooth scrolling para enlaces de navegación
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -186,4 +213,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+});
+
+// Verificar también después de que la ventana se haya cargado completamente
+window.addEventListener('load', function() {
+    console.log('Ventana completamente cargada');
+    setTimeout(() => {
+        checkAndAttachFormListener();
+    }, 100);
 });
