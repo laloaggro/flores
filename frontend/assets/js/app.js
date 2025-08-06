@@ -74,12 +74,16 @@ function showFormMessage(type, message) {
 
 // Función para manejar el envío del formulario de contacto
 async function handleContactFormSubmit(event) {
+    console.log('Función handleContactFormSubmit llamada');
     event.preventDefault();
+    console.log('Evento preventDefault ejecutado');
     
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
     const message = document.getElementById('message').value;
+    
+    console.log('Datos del formulario:', { name, email, phone, message });
     
     // Mostrar mensaje de carga
     const submitButton = document.querySelector('#contactForm .btn');
@@ -89,6 +93,7 @@ async function handleContactFormSubmit(event) {
     
     try {
         // Enviar datos al backend
+        console.log('Enviando datos al backend...');
         const response = await fetch('/api/contact/send-message', {
             method: 'POST',
             headers: {
@@ -97,7 +102,9 @@ async function handleContactFormSubmit(event) {
             body: JSON.stringify({ name, email, phone, message })
         });
         
+        console.log('Respuesta recibida del backend:', response);
         const result = await response.json();
+        console.log('Datos de la respuesta:', result);
         
         if (response.ok) {
             showFormMessage('success', result.message);
@@ -118,6 +125,8 @@ async function handleContactFormSubmit(event) {
 
 // Función para inicializar los event listeners
 function initializeEventListeners() {
+    console.log('Inicializando event listeners');
+    
     // Event listeners para los botones "Agregar al carrito"
     const addToCartButtons = document.querySelectorAll('.add-to-cart');
     addToCartButtons.forEach(button => {
@@ -131,15 +140,21 @@ function initializeEventListeners() {
     
     // Event listener para el formulario de contacto
     const contactForm = document.getElementById('contactForm');
+    console.log('Formulario de contacto encontrado:', contactForm);
     if (contactForm) {
         contactForm.addEventListener('submit', handleContactFormSubmit);
+        console.log('Event listener adjuntado al formulario de contacto');
+    } else {
+        console.log('No se encontró el formulario de contacto');
     }
 }
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM completamente cargado');
     // Pequeña demora para asegurar que el contenido se haya renderizado
     setTimeout(function() {
+        console.log('Inicializando aplicación después de la demora');
         loadCartFromLocalStorage();
         initializeEventListeners();
         updateCartCount();
