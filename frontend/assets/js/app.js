@@ -59,7 +59,7 @@ function addToCart(id, name, price) {
 }
 
 // Función para manejar el envío del formulario de contacto
-function handleContactFormSubmit(event) {
+async function handleContactFormSubmit(event) {
     event.preventDefault();
     
     const name = document.getElementById('name').value;
@@ -67,11 +67,39 @@ function handleContactFormSubmit(event) {
     const phone = document.getElementById('phone').value;
     const message = document.getElementById('message').value;
     
-    // En un entorno real, aquí se enviaría la información a un servidor
-    alert(`Gracias ${name}! Hemos recibido tu mensaje y nos pondremos en contacto contigo pronto.\n\nDetalles del mensaje:\nEmail: ${email}\nTeléfono: ${phone}\nMensaje: ${message}`);
+    // Mostrar mensaje de carga
+    const submitButton = document.querySelector('#contactForm .btn');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'Enviando...';
+    submitButton.disabled = true;
     
-    // Limpiar el formulario
-    document.getElementById('contactForm').reset();
+    try {
+        // Enviar datos al backend
+        const response = await fetch('/api/contact/send-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, phone, message })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            alert(result.message);
+            // Limpiar el formulario
+            document.getElementById('contactForm').reset();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error al enviar el formulario:', error);
+        alert('Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
+    } finally {
+        // Restaurar botón
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    }
 }
 
 // Función para inicializar los event listeners

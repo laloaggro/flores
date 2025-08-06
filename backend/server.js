@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
+const contactRouter = require('./routes/contact');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +17,7 @@ app.use(express.static('../frontend'));
 // Rutas API
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
+app.use('/api/contact', contactRouter);
 
 // Ruta principal
 app.get('/', (req, res) => {
