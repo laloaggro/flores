@@ -9,22 +9,29 @@ const Contact = () => {
               <i class="fas fa-map-marker-alt"></i>
               <div>
                 <h3>Ubicación</h3>
-                <p>Calle Principal #123, Col. Centro</p>
-                <p>Victoria de Durango, Dgo. México</p>
+                <p>Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</p>
+                <p><a href="https://maps.google.com/?q=Av.+Valdivieso+593,+8441510+Recoleta,+Región+Metropolitana" target="_blank">Ver en Google Maps</a></p>
               </div>
             </div>
             <div class="info-item">
               <i class="fas fa-phone"></i>
               <div>
                 <h3>Teléfono</h3>
-                <p>+52 (618) 123-4567</p>
+                <p><a href="tel:+56963603177">+569 6360 3177</a></p>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="fab fa-whatsapp"></i>
+              <div>
+                <h3>WhatsApp</h3>
+                <p><a href="https://wa.me/56963603177" target="_blank">+569 6360 3177</a></p>
               </div>
             </div>
             <div class="info-item">
               <i class="fas fa-envelope"></i>
               <div>
                 <h3>Email</h3>
-                <p>info@arreglosvictoria.com</p>
+                <p><a href="mailto:arreglosvictoriafloreria@gmail.com">arreglosvictoriafloreria@gmail.com</a></p>
               </div>
             </div>
             <div class="info-item">

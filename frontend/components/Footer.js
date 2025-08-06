@@ -7,9 +7,9 @@ const Footer = () => {
             <h3>Arreglos Victoria</h3>
             <p>Flores frescas y hermosos arreglos florales para cada ocasión especial.</p>
             <div class="social-links">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-whatsapp"></i></a>
+              <a href="https://www.facebook.com/profile.php?id=61578999845743" target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/arreglosvictoria/" target="_blank"><i class="fab fa-instagram"></i></a>
+              <a href="https://wa.me/56963603177" target="_blank"><i class="fab fa-whatsapp"></i></a>
             </div>
           </div>
           <div class="footer-section">
