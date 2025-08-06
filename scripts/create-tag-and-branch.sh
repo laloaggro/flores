@@ -12,7 +12,25 @@ fi
 
 # Crear un tag con la versión actual
 echo "Creando tag v$VERSION"
-git tag -a "v$VERSION" -m "Versión $VERSION - Actualización de imágenes y mejoras visuales"
+
+# Generar mensaje detallado de cambios
+CHANGELOG_MESSAGE="Versión $VERSION
+
+Cambios realizados:
+- Actualización de imágenes en la sección de productos con imágenes únicas para cada producto
+- Actualización de imágenes en la galería con imágenes únicas para cada flor
+- Mejora visual del sitio web con contenido más diverso y atractivo
+- Creación de script automatizado para gestión de versiones
+- Implementación de sistema de tags y branches para mejor control de versiones
+
+Archivos modificados:
+- frontend/index.html (actualización de URLs de imágenes)
+- frontend/assets/css/styles.css (posibles ajustes de estilo)
+- scripts/create-tag-and-branch.sh (mejoras en el script de versionado)
+- FRONTEND_STRUCTURE.md (actualización de documentación)"
+
+# Crear tag con mensaje detallado
+git tag -a "v$VERSION" -m "$CHANGELOG_MESSAGE"
 
 # Crear y cambiar al nuevo branch con el número de versión
 BRANCH_NAME="version-$VERSION"
@@ -26,8 +44,8 @@ git add .
 if [ -z "$(git diff --cached --name-only)" ]; then
     echo "No hay cambios para commit en este branch."
 else
-    # Realizar commit de los cambios
-    git commit -m "Versión $VERSION - Actualización de imágenes y mejoras visuales"
+    # Realizar commit de los cambios con mensaje detallado
+    git commit -m "$CHANGELOG_MESSAGE"
     echo "Cambios commitados en el branch '$BRANCH_NAME'."
 fi
 

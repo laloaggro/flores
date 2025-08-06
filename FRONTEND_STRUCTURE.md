@@ -169,6 +169,7 @@ frontend/
 - **Mapa interactivo**: Google Maps integrado para facilitar la localización
 - **Galería visual**: Colección de imágenes de flores para embellecer el sitio
 - **Imágenes únicas**: Todas las imágenes del sitio son ahora únicas y representativas
+- **Gestión de versiones**: Script automatizado para creación de tags y branches con información detallada de cambios
 
 ---
 
