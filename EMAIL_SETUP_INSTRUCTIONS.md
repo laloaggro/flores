@@ -17,13 +17,17 @@ cp .env.example .env
 
 ### 2. Configurar las credenciales de Gmail
 
-Para usar Gmail como proveedor de correo, necesitas configurar una contraseña de aplicación:
+Para usar Gmail como proveedor de correo, necesitas configurar una contraseña de aplicación. **No uses tu contraseña normal de Google**:
 
 1. Ve a [Google Account Settings](https://myaccount.google.com/)
 2. En la sección "Seguridad", busca "Verificación en dos pasos" y actívala
 3. Una vez activada, busca "Contraseñas de aplicaciones"
-4. Genera una nueva contraseña de aplicación
-5. Usa esta contraseña en lugar de tu contraseña normal de Google
+4. Genera una nueva contraseña de aplicación:
+   - En "Seleccionar aplicación", elige "Otra (nombre personalizado)"
+   - Ponle un nombre como "ArreglosVictoriaApp"
+   - Haz clic en "Generar"
+5. **Copia la contraseña generada inmediatamente** (solo se muestra una vez)
+6. Usa esta contraseña en lugar de tu contraseña normal de Google
 
 ### 3. Actualizar las variables de entorno
 
@@ -35,6 +39,8 @@ EMAIL_SERVICE=gmail
 EMAIL_USER=tu-email@gmail.com
 EMAIL_PASS=la-contraseña-de-aplicación-que-generaste
 ```
+
+**Importante**: No uses espacios en la contraseña de aplicación. Si la contraseña generada tiene espacios, quítalos al copiarla.
 
 ### 4. Reiniciar el servidor
 
@@ -53,6 +59,7 @@ npm start
    - Asegúrate de usar una contraseña de aplicación, no tu contraseña normal de Google
    - Verifica que las credenciales sean correctas
    - Comprueba que la verificación en dos pasos esté activada
+   - Si copiaste la contraseña con espacios, inténtalo sin ellos
 
 2. **Error: "Connection timeout" o problemas de conexión**
    - Verifica tu conexión a Internet
@@ -102,3 +109,16 @@ EMAIL_PASS=tu-contraseña
 ```
 
 Consulta la [documentación de Nodemailer](https://nodemailer.com/smtp/well-known/) para ver la lista completa de servicios compatibles.
+
+## Verificación de Funcionamiento
+
+Puedes verificar si la configuración es correcta ejecutando este comando en la terminal:
+
+```bash
+curl -X POST http://localhost:5000/api/contact/send-message -H "Content-Type: application/json" -d '{"name": "Test User", "email": "test@example.com", "phone": "123456789", "message": "Mensaje de prueba"}'
+```
+
+Si todo está configurado correctamente, recibirás una respuesta como:
+```json
+{"message":"Mensaje enviado exitosamente. Nos pondremos en contacto contigo pronto."}
+```

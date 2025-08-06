@@ -22,7 +22,7 @@ const sendContactMessage = (req, res) => {
     }
     
     // Configurar el transporte de correo (usando variables de entorno)
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: process.env.EMAIL_SERVICE || 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
@@ -34,8 +34,24 @@ const sendContactMessage = (req, res) => {
     transporter.verify((error, success) => {
       if (error) {
         console.error('Error al verificar la conexión de correo:', error);
+        
+        // Manejar errores específicos de Gmail
+        let errorMessage = 'Error de conexión con el servidor de correo. Por favor, inténtelo más tarde.';
+        if (error.code === 'EAUTH' || (error.message && error.message.includes('Bad username or password'))) {
+          errorMessage = 'Error de autenticación. Verifique que las credenciales de correo electrónico sean correctas y que esté usando una contraseña de aplicación si usa Gmail.';
+        } else if (error.code === 'ECONNREFUSED') {
+          errorMessage = 'No se puede conectar al servidor de correo. Verifique la configuración del servicio de correo.';
+        } else if (error.message && error.message.includes('Invalid login')) {
+          errorMessage = 'Inicio de sesión inválido. Verifique las credenciales de correo electrónico.';
+        }
+        
         return res.status(500).json({ 
-          message: 'Error de conexión con el servidor de correo. Por favor, inténtelo más tarde.' 
+          message: errorMessage,
+          debug: {
+            service: process.env.EMAIL_SERVICE,
+            user: process.env.EMAIL_USER ? 'Configurado' : 'No configurado',
+            error: error.message
+          }
         });
       }
       
