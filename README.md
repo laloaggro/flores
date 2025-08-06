@@ -1,107 +1,98 @@
-# 🌸 Arreglos Victoria Florería
+# Arreglos Victoria Florería
 
-Proyecto completo de florería con delivery. Frontend React + Backend Node.js.
+Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo de productos y formulario de contacto.
 
-## 📁 Estructura del Proyecto
+## Estructura del proyecto
 
 ```
-arreglos-victoria/
+.
+├── backend/
+│   ├── config/
+│   ├── routes/
+│   ├── contact.php
+│   ├── contact-enhanced.php
+│   ├── server.js
+│   └── ...
 ├── frontend/
-│   ├── index.html
 │   ├── assets/
-│   │   ├── css/
-│   │   ├── images/
-│   │   └── js/
 │   ├── components/
-│   └── pages/
-└── backend/
-    ├── server.js
-    ├── package.json
-    ├── routes/
-    ├── controllers/
-    ├── models/
-    ├── db/
-    ├── middleware/
-    ├── utils/
-    └── config/
+│   └── index.html
+└── README.md
 ```
 
-## 🚀 Iniciar el Proyecto
+## Tecnologías utilizadas
 
-### Backend
+- Frontend: HTML, CSS (Tailwind), JavaScript (ES6)
+- Backend: Node.js con Express, PHP
+- Correo: PHPMailer
+- Gestión de dependencias: npm, Composer
 
-1. Navegar al directorio del backend:
-   ```bash
-   cd backend
+## Configuración del entorno
+
+1. Copiar el archivo de ejemplo de variables de entorno:
+   ```
+   cp backend/.env.example backend/.env
    ```
 
-2. Instalar dependencias:
-   ```bash
+2. Configurar las variables de entorno en `backend/.env`:
+   ```
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USERNAME=tu-correo@gmail.com
+   SMTP_PASSWORD=tu-contraseña
+   SMTP_ENCRYPTION=tls
+   ```
+
+3. Instalar dependencias del backend:
+   ```
+   cd backend
    npm install
    ```
 
-3. Iniciar el servidor:
-   ```bash
-   npm start
+4. Instalar PHPMailer y otras dependencias de PHP (requiere Composer):
    ```
-   
-   Para desarrollo con reinicio automático:
-   ```bash
-   npm run dev
+   cd backend
+   php composer.phar require phpmailer/phpmailer
+   php composer.phar require vlucas/phpdotenv
    ```
 
-### Frontend
+## Ejecutar el servidor
 
-1. Abrir el archivo `frontend/index.html` en un navegador, o
-2. Usar un servidor local como Live Server en VS Code
+```
+cd backend
+npm start
+```
 
-## 🌐 API Endpoints
+El servidor estará disponible en `http://localhost:5000`
 
-### Productos
+## Desarrollo
 
-- `GET /api/products` - Obtener todos los productos
-- `GET /api/products/:id` - Obtener un producto por ID
+Para desarrollo con reinicio automático:
+```
+cd backend
+npm run dev
+```
 
-### Órdenes
+## Pruebas
 
-- `POST /api/orders` - Crear una nueva orden
-- `GET /api/orders` - Obtener todas las órdenes
+Para probar la funcionalidad de contacto sin enviar correos reales:
+```
+cd backend
+php dev-contact-test.php
+```
 
-## 🛠️ Tecnologías Utilizadas
+## Configuración de VSCode
 
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Backend**: Node.js, Express.js
-- **Base de Datos**: MySQL (configurable)
-- **Otros**: CORS, DotEnv
+Este proyecto incluye configuraciones recomendadas para VSCode:
+- Extensiones recomendadas
+- Formato de código con Prettier
+- Configuración de EditorConfig
+- Configuración específica por tipo de archivo
 
-## 📦 Dependencias
+### Extensiones recomendadas
 
-### Backend
+El archivo `.vscode/extensions.json` contiene una lista de extensiones recomendadas y no recomendadas para este proyecto.
 
-- `express`: Framework web para Node.js
-- `cors`: Middleware para habilitar CORS
-- `dotenv`: Carga variables de entorno desde un archivo .env
-- `mysql2`: Cliente MySQL para Node.js
-- `sequelize`: ORM para Node.js
+### Formato de código
 
-### Desarrollo
-
-- `nodemon`: Herramienta para reiniciar automáticamente la aplicación al detectar cambios
-
-## 📝 Notas de Desarrollo
-
-1. La estructura del proyecto sigue el patrón MVC (Modelo-Vista-Controlador)
-2. Los controladores manejan la lógica de negocio
-3. Los modelos representan la estructura de datos
-4. Las rutas definen los endpoints de la API
-5. La configuración se maneja según el entorno (desarrollo/producción)
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, sigue estos pasos:
-
-1. Haz un fork del proyecto
-2. Crea una rama para tu función (`git checkout -b feature/NuevaFuncion`)
-3. Realiza tus cambios y haz commit (`git commit -m 'Agrega nueva función'`)
-4. Haz push a la rama (`git push origin feature/NuevaFuncion`)
-5. Abre un Pull Request
+El proyecto utiliza Prettier para mantener un formato consistente. La configuración se encuentra en `.prettierrc`.

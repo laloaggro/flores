@@ -10,7 +10,12 @@ const Products = () => {
             </div>
             <div class="product-info">
               <h3>Ramo de Rosas</h3>
-              <p>Elegantes rosas rojas en un ramo clásico.</p>
+              <p>Elegantes rosas rojas en un ramo clásico. Perfecto para ocasiones románticas y expresiones de amor.</p>
+              <div class="product-details">
+                <span class="detail-item"><i class="fas fa-ruler-combined"></i> 40cm de altura</span>
+                <span class="detail-item"><i class="fas fa-leaf"></i> 12 rosas frescas</span>
+                <span class="detail-item"><i class="fas fa-box"></i> Envoltura premium</span>
+              </div>
               <span class="price">$450.00</span>
               <button class="btn btn-secondary add-to-cart" data-id="1" data-name="Ramo de Rosas" data-price="450.00">
                 <i class="fas fa-shopping-cart"></i> Agregar
@@ -24,7 +29,12 @@ const Products = () => {
             </div>
             <div class="product-info">
               <h3>Arreglo Tropical</h3>
-              <p>Exóticas flores tropicales con follaje decorativo.</p>
+              <p>Exóticas flores tropicales con follaje decorativo. Ideal para crear un ambiente vibrante y alegre.</p>
+              <div class="product-details">
+                <span class="detail-item"><i class="fas fa-ruler-combined"></i> 50cm de altura</span>
+                <span class="detail-item"><i class="fas fa-leaf"></i> Flores variadas</span>
+                <span class="detail-item"><i class="fas fa-box"></i> Maceta decorativa</span>
+              </div>
               <span class="price">$680.00</span>
               <button class="btn btn-secondary add-to-cart" data-id="2" data-name="Arreglo Tropical" data-price="680.00">
                 <i class="fas fa-shopping-cart"></i> Agregar
@@ -38,7 +48,12 @@ const Products = () => {
             </div>
             <div class="product-info">
               <h3>Ramo Primaveral</h3>
-              <p>Colorida mezcla de flores de temporada.</p>
+              <p>Colorida mezcla de flores de temporada. Una explosión de colores que representa la alegría de la primavera.</p>
+              <div class="product-details">
+                <span class="detail-item"><i class="fas fa-ruler-combined"></i> 35cm de altura</span>
+                <span class="detail-item"><i class="fas fa-leaf"></i> Flores mixtas</span>
+                <span class="detail-item"><i class="fas fa-box"></i> Envoltura decorativa</span>
+              </div>
               <span class="price">$380.00</span>
               <button class="btn btn-secondary add-to-cart" data-id="3" data-name="Ramo Primaveral" data-price="380.00">
                 <i class="fas fa-shopping-cart"></i> Agregar
@@ -52,7 +67,12 @@ const Products = () => {
             </div>
             <div class="product-info">
               <h3>Orquídeas</h3>
-              <p>Elegantes orquídeas blancas en presentación única.</p>
+              <p>Elegantes orquídeas blancas en presentación única. Símbolo de pureza y sofisticación.</p>
+              <div class="product-details">
+                <span class="detail-item"><i class="fas fa-ruler-combined"></i> 45cm de altura</span>
+                <span class="detail-item"><i class="fas fa-leaf"></i> 3 orquídeas premium</span>
+                <span class="detail-item"><i class="fas fa-box"></i> Jarrón de cristal</span>
+              </div>
               <span class="price">$720.00</span>
               <button class="btn btn-secondary add-to-cart" data-id="4" data-name="Orquídeas" data-price="720.00">
                 <i class="fas fa-shopping-cart"></i> Agregar
@@ -66,7 +86,12 @@ const Products = () => {
             </div>
             <div class="product-info">
               <h3>Arreglo para Boda</h3>
-              <p>Diseño elegante para el día especial.</p>
+              <p>Diseño elegante para el día especial. Combina flores blancas y verdes para un look sofisticado.</p>
+              <div class="product-details">
+                <span class="detail-item"><i class="fas fa-ruler-combined"></i> 60cm de altura</span>
+                <span class="detail-item"><i class="fas fa-leaf"></i> Rosas y follaje</span>
+                <span class="detail-item"><i class="fas fa-box"></i> Base decorativa</span>
+              </div>
               <span class="price">$950.00</span>
               <button class="btn btn-secondary add-to-cart" data-id="5" data-name="Arreglo para Boda" data-price="950.00">
                 <i class="fas fa-shopping-cart"></i> Agregar
@@ -80,7 +105,12 @@ const Products = () => {
             </div>
             <div class="product-info">
               <h3>Ramo de Cumpleaños</h3>
-              <p>Flores vibrantes para celebrar un cumpleaños.</p>
+              <p>Flores vibrantes para celebrar un cumpleaños. Una combinación alegre de colores vivos.</p>
+              <div class="product-details">
+                <span class="detail-item"><i class="fas fa-ruler-combined"></i> 35cm de altura</span>
+                <span class="detail-item"><i class="fas fa-leaf"></i> Flores variadas</span>
+                <span class="detail-item"><i class="fas fa-box"></i> Envoltura colorida</span>
+              </div>
               <span class="price">$420.00</span>
               <button class="btn btn-secondary add-to-cart" data-id="6" data-name="Ramo de Cumpleaños" data-price="420.00">
                 <i class="fas fa-shopping-cart"></i> Agregar
@@ -94,7 +124,12 @@ const Products = () => {
             </div>
             <div class="product-info">
               <h3>Arreglo de Condolencias</h3>
-              <p>Diseño respetuoso para momentos difíciles.</p>
+              <p>Diseño respetuoso para momentos difíciles. Transmite consuelo y apoyo en tiempos de duelo.</p>
+              <div class="product-details">
+                <span class="detail-item"><i class="fas fa-ruler-combined"></i> 50cm de altura</span>
+                <span class="detail-item"><i class="fas fa-leaf"></i> Lirios y crisantemos</span>
+                <span class="detail-item"><i class="fas fa-box"></i> Arco decorativo</span>
+              </div>
               <span class="price">$650.00</span>
               <button class="btn btn-secondary add-to-cart" data-id="7" data-name="Arreglo de Condolencias" data-price="650.00">
                 <i class="fas fa-shopping-cart"></i> Agregar
@@ -108,13 +143,21 @@ const Products = () => {
             </div>
             <div class="product-info">
               <h3>Ramo Mixto</h3>
-              <p>Combinación alegre de girasoles y rosas.</p>
+              <p>Combinación alegre de girasoles y rosas. Perfecto para alegrar el día de alguien especial.</p>
+              <div class="product-details">
+                <span class="detail-item"><i class="fas fa-ruler-combined"></i> 40cm de altura</span>
+                <span class="detail-item"><i class="fas fa-leaf"></i> Girasoles y rosas</span>
+                <span class="detail-item"><i class="fas fa-box"></i> Envoltura rústica</span>
+              </div>
               <span class="price">$520.00</span>
               <button class="btn btn-secondary add-to-cart" data-id="8" data-name="Ramo Mixto" data-price="520.00">
                 <i class="fas fa-shopping-cart"></i> Agregar
               </button>
             </div>
           </div>
+        </div>
+        <div class="product-note">
+          <p><i class="fas fa-info-circle"></i> Todos nuestros arreglos florales son hechos con flores frescas y de la más alta calidad. Entregamos en toda la Región Metropolitana con un tiempo de anticipación mínimo de 2 horas.</p>
         </div>
       </div>
     </section>

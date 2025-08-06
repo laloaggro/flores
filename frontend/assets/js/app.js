@@ -56,6 +56,54 @@ function addToCart(id, name, price) {
     
     // Mostrar mensaje de confirmación
     showFormMessage('success', `${name} agregado al carrito!`);
+    
+    // Opcional: Mostrar notificación visual del producto agregado
+    showProductAddedNotification(name);
+}
+
+// Función para mostrar una notificación visual cuando se agrega un producto
+function showProductAddedNotification(productName) {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = 'product-notification';
+    notification.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${productName} agregado al carrito</span>
+    `;
+    
+    // Añadir estilos básicos
+    notification.style.position = 'fixed';
+    notification.style.bottom = '20px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = 'var(--success)';
+    notification.style.color = 'white';
+    notification.style.padding = '15px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    notification.style.zIndex = '1000';
+    notification.style.display = 'flex';
+    notification.style.alignItems = 'center';
+    notification.style.gap = '10px';
+    notification.style.opacity = '0';
+    notification.style.transition = 'opacity 0.3s ease';
+    
+    // Añadir al documento
+    document.body.appendChild(notification);
+    
+    // Animar entrada
+    setTimeout(() => {
+        notification.style.opacity = '1';
+    }, 10);
+    
+    // Eliminar después de 3 segundos
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
 }
 
 // Función para mostrar mensajes en el formulario de contacto
@@ -91,6 +139,13 @@ async function handleContactFormSubmit(event) {
         return;
     }
     
+    // Validar formato de correo electrónico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showFormMessage('error', 'Por favor, ingresa un correo electrónico válido.');
+        return;
+    }
+    
     // Mostrar mensaje de carga
     const submitButton = document.querySelector('#contactForm .btn');
     const originalText = submitButton.textContent;
@@ -98,9 +153,9 @@ async function handleContactFormSubmit(event) {
     submitButton.disabled = true;
     
     try {
-        // Enviar datos al backend
-        console.log('Enviando datos al backend...');
-        const response = await fetch('/api/contact/send-message', {
+        // Enviar datos al backend PHP
+        console.log('Enviando datos al backend PHP...');
+        const response = await fetch('/backend/contact.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,25 +165,22 @@ async function handleContactFormSubmit(event) {
         
         console.log('Respuesta recibida del backend:', response);
         
-        // Verificar si la respuesta es válida
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
         const result = await response.json();
         console.log('Datos de la respuesta:', result);
         
-        showFormMessage('success', result.message);
-        // Limpiar el formulario
-        document.getElementById('contactForm').reset();
+        if (response.ok) {
+            showFormMessage('success', result.message);
+            // Limpiar el formulario
+            document.getElementById('contactForm').reset();
+        } else {
+            showFormMessage('error', result.message);
+        }
     } catch (error) {
         console.error('Error al enviar el formulario:', error);
         
-        // Manejar errores específicos de CORS
+        // Manejar errores de conexión
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
             showFormMessage('error', 'Error de conexión. Por favor, verifica tu conexión a internet e inténtalo nuevamente.');
-        } else if (error.message.includes('HTTP error')) {
-            showFormMessage('error', 'Error del servidor. Por favor, inténtalo de nuevo más tarde.');
         } else {
             showFormMessage('error', 'Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
         }
