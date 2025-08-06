@@ -46,16 +46,20 @@ const Contact = () => {
           <div class="contact-form">
             <form id="contactForm">
               <div class="form-group">
-                <input type="text" id="name" name="name" placeholder="Tu Nombre" required>
+                <label for="name" class="sr-only">Nombre</label>
+                <input type="text" id="name" name="name" placeholder="Tu Nombre" required autocomplete="name">
               </div>
               <div class="form-group">
-                <input type="email" id="email" name="email" placeholder="Tu Email" required>
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" id="email" name="email" placeholder="Tu Email" required autocomplete="email">
               </div>
               <div class="form-group">
-                <input type="tel" id="phone" name="phone" placeholder="Tu Teléfono">
+                <label for="phone" class="sr-only">Teléfono</label>
+                <input type="tel" id="phone" name="phone" placeholder="Tu Teléfono" autocomplete="tel">
               </div>
               <div class="form-group">
-                <textarea id="message" name="message" placeholder="Tu Mensaje" rows="5" required></textarea>
+                <label for="message" class="sr-only">Mensaje</label>
+                <textarea id="message" name="message" placeholder="Tu Mensaje" rows="5" required autocomplete="off"></textarea>
               </div>
               <div id="formMessage" class="form-message"></div>
               <button type="submit" class="btn btn-primary">Enviar Mensaje</button>

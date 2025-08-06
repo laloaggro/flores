@@ -1,30 +1,60 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+const dotenv = require('dotenv');
+const path = require('path');
 
-const productsRouter = require('./routes/products');
-const ordersRouter = require('./routes/orders');
-const contactRouter = require('./routes/contact');
+// Cargar variables de entorno
+dotenv.config();
 
+// Crear la aplicación Express
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Configurar CORS con opciones específicas
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Permitir solicitudes sin origen (como desde Postman)
+    if (!origin) return callback(null, true);
+    
+    // Permitir solicitudes desde localhost (para desarrollo)
+    if (origin.startsWith('http://localhost') || origin.startsWith('https://localhost')) {
+      return callback(null, true);
+    }
+    
+    // Permitir solicitudes desde el dominio del frontend
+    if (origin === 'https://arreglosvictoria.cl') {
+      return callback(null, true);
+    }
+    
+    // Rechazar otras solicitudes
+    callback(new Error('No permitido por CORS'));
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+// Usar middleware CORS
+app.use(cors(corsOptions));
+
+// Middleware para parsear JSON
 app.use(express.json());
-app.use(express.static('../frontend'));
 
-// Rutas API
-app.use('/api/products', productsRouter);
-app.use('/api/orders', ordersRouter);
-app.use('/api/contact', contactRouter);
+// Middleware para servir archivos estáticos
+app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Ruta principal
-app.get('/', (req, res) => {
-  res.send('🌸 API de Arreglos Victoria - Activada');
+// Rutas
+app.use('/api/products', require('./routes/products'));
+app.use('/api/orders', require('./routes/orders'));
+app.use('/api/contact', require('./routes/contact'));
+
+// Ruta para servir la aplicación frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Iniciar servidor
+// Puerto del servidor
+const PORT = process.env.PORT || 5000;
+
+// Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);
   console.log(`📄 Documentación de la API: http://localhost:${PORT}/api/docs (próximamente)`);

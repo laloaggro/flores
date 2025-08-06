@@ -103,6 +103,12 @@ async function handleContactFormSubmit(event) {
         });
         
         console.log('Respuesta recibida del backend:', response);
+        
+        // Verificar si la respuesta es válida
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
         console.log('Datos de la respuesta:', result);
         
@@ -115,7 +121,13 @@ async function handleContactFormSubmit(event) {
         }
     } catch (error) {
         console.error('Error al enviar el formulario:', error);
-        showFormMessage('error', 'Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
+        
+        // Manejar errores específicos de CORS
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            showFormMessage('error', 'Error de conexión. Por favor, verifica tu conexión a internet e inténtalo nuevamente.');
+        } else {
+            showFormMessage('error', 'Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
+        }
     } finally {
         // Restaurar botón
         submitButton.textContent = originalText;
