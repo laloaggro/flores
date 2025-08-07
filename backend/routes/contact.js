@@ -27,11 +27,25 @@ router.post('/', (req, res) => {
   // Preparar los datos para pasar al script PHP
   const formData = JSON.stringify({ name, email, phone, message });
   
-  // Ejecutar el script PHP mejorado
-  const phpScriptPath = path.join(__dirname, '../contact-enhanced.php');
-  const command = `echo '${formData}' | php ${phpScriptPath}`;
+  // Preparar variables de entorno para pasar al script PHP
+  // Envolver en comillas los valores que puedan contener espacios
+  const envVars = [
+    `SMTP_HOST="${process.env.SMTP_HOST}"`,
+    `SMTP_PORT="${process.env.SMTP_PORT}"`,
+    `SMTP_USERNAME="${process.env.SMTP_USERNAME}"`,
+    `SMTP_PASSWORD="${process.env.SMTP_PASSWORD}"`,
+    `SMTP_ENCRYPTION="${process.env.SMTP_ENCRYPTION}"`,
+    `MAIL_FROM_ADDRESS="${process.env.MAIL_FROM_ADDRESS}"`,
+    `MAIL_FROM_NAME="${process.env.MAIL_FROM_NAME}"`,
+    `MAIL_TO_ADDRESS="${process.env.MAIL_TO_ADDRESS}"`,
+    `MAIL_TO_NAME="${process.env.MAIL_TO_NAME}"`
+  ].join(' ');
   
-  exec(command, (error, stdout, stderr) => {
+  // Ejecutar el script PHP mejorado con variables de entorno
+  const phpScriptPath = path.join(__dirname, '../contact-enhanced.php');
+  const command = `echo '${formData}' | ${envVars} php ${phpScriptPath}`;
+  
+  exec(command, { maxBuffer: 1024 * 1024 }, (error, stdout, stderr) => {
     // Registrar información de depuración
     console.log('Comando ejecutado:', command);
     console.log('Salida estándar:', stdout);
@@ -42,7 +56,8 @@ router.post('/', (req, res) => {
       console.error(`Error ejecutando script PHP: ${error}`);
       return res.status(500).json({
         message: 'Error al procesar el formulario. Por favor, inténtalo de nuevo más tarde.',
-        status: 'error'
+        status: 'error',
+        debug: error.message
       });
     }
     
@@ -60,7 +75,8 @@ router.post('/', (req, res) => {
       console.error('Salida recibida:', stdout);
       res.status(500).json({
         message: 'Error al procesar la respuesta del servidor.',
-        status: 'error'
+        status: 'error',
+        debug: 'Error al parsear la respuesta del script PHP'
       });
     }
   });

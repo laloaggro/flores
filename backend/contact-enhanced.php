@@ -54,24 +54,47 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
+// Verificar que las variables de entorno estén disponibles
+$smtpHost = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
+$smtpPort = getenv('SMTP_PORT') ?: 587;
+$smtpUsername = getenv('SMTP_USERNAME') ?: 'arreglosvictoriafloreria@gmail.com';
+$smtpPassword = getenv('SMTP_PASSWORD');
+$smtpEncryption = getenv('SMTP_ENCRYPTION') ?: 'tls';
+$mailFromAddress = getenv('MAIL_FROM_ADDRESS') ?: 'arreglosvictoriafloreria@gmail.com';
+$mailFromName = getenv('MAIL_FROM_NAME') ?: 'Arreglos Victoria Florería';
+$mailToAddress = getenv('MAIL_TO_ADDRESS') ?: 'arreglosvictoriafloreria@gmail.com';
+$mailToName = getenv('MAIL_TO_NAME') ?: 'Arreglos Victoria Florería';
+
+// Verificar si la contraseña SMTP está configurada
+if (empty($smtpPassword)) {
+    http_response_code(500);
+    echo json_encode([
+        'message' => 'Error de configuración: No se ha proporcionado la contraseña SMTP.',
+        'status' => 'error',
+        'debug' => 'SMTP_PASSWORD no está configurada'
+    ]);
+    exit;
+}
+
 // Crear una instancia de PHPMailer
 $mail = new PHPMailer(true);
 
 try {
     // Configuración del servidor SMTP
     $mail->isSMTP();
-    $mail->Host       = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
+    $mail->Host       = $smtpHost;
     $mail->SMTPAuth   = true;
-    $mail->Username   = getenv('SMTP_USERNAME') ?: 'arreglosvictoriafloreria@gmail.com';
-    $mail->Password   = getenv('SMTP_PASSWORD');
-    $mail->SMTPSecure = getenv('SMTP_ENCRYPTION') ?: PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = getenv('SMTP_PORT') ?: 587;
+    $mail->Username   = $smtpUsername;
+    $mail->Password   = $smtpPassword;
+    $mail->SMTPSecure = $smtpEncryption;
+    $mail->Port       = $smtpPort;
+    
+    // Habilitar depuración solo en desarrollo
+    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 
     // Configurar remitente y destinatario
-    $mail->setFrom(getenv('MAIL_FROM_ADDRESS') ?: 'arreglosvictoriafloreria@gmail.com', 
-                   getenv('MAIL_FROM_NAME') ?: 'Arreglos Victoria Florería');
-    $mail->addAddress(getenv('MAIL_TO_ADDRESS') ?: 'arreglosvictoriafloreria@gmail.com', 
-                      getenv('MAIL_TO_NAME') ?: 'Arreglos Victoria Florería');
+    $mail->setFrom($mailFromAddress, $mailFromName);
+    $mail->addAddress($mailToAddress, $mailToName);
 
     // Configurar contenido del correo
     $mail->isHTML(true);
