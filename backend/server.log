@@ -1,0 +1,55 @@
+
+[2025-08-07T04:14:45.145Z] [2025-08-07T04:14:45.145Z] POST /api/contact - IP: ::1
+[2025-08-07T04:14:45.147Z] Iniciando procesamiento de formulario de contacto
+[2025-08-07T04:14:45.147Z] Datos recibidos - Nombre: Prueba Final, Email: test@example.com, Teléfono: 123456789, Mensaje: Este es un mensaje de prueba final
+[2025-08-07T04:14:45.146Z] Ruta /api/contact accedida con método POST
+[2025-08-07T04:14:48.530Z] Correo enviado correctamente: <9a877000-a870-cf38-d5a8-d023d881c4a8@gmail.com>
+[2025-08-07T04:15:42.847Z] [2025-08-07T04:15:42.847Z] POST /api/contact - IP: ::1
+[2025-08-07T04:15:42.848Z] Iniciando procesamiento de formulario de contacto
+[2025-08-07T04:15:42.848Z] Datos recibidos - Nombre: Usuario de Prueba, Email: usuario@prueba.com, Teléfono: 987654321, Mensaje: Hola, me gustaría hacer un pedido de varios arreglos florales para un evento especial. ¿Podrían ayudarme con esto?
+[2025-08-07T04:15:42.847Z] Ruta /api/contact accedida con método POST
+[2025-08-07T04:15:45.468Z] Correo enviado correctamente: <37ef5956-c79b-3455-3f38-6855bd89a081@gmail.com>
+[2025-08-07T04:15:52.000Z] [2025-08-07T04:15:52.000Z] POST /api/contact - IP: ::1
+[2025-08-07T04:15:52.002Z] Iniciando procesamiento de formulario de contacto
+[2025-08-07T04:15:52.002Z] Datos recibidos - Nombre: Usuario de Prueba, Email: usuario@prueba.com, Teléfono: undefined, Mensaje: undefined
+[2025-08-07T04:15:52.003Z] Error: Faltan campos requeridos
+[2025-08-07T04:15:52.001Z] Ruta /api/contact accedida con método POST
+[2025-08-07T04:16:07.307Z] Iniciando procesamiento de formulario de contacto
+[2025-08-07T04:16:07.307Z] Datos recibidos - Nombre: Usuario de Prueba, Email: email-invalido, Teléfono: undefined, Mensaje: Mensaje de prueba
+[2025-08-07T04:16:07.305Z] [2025-08-07T04:16:07.305Z] POST /api/contact - IP: ::1
+[2025-08-07T04:16:07.308Z] Error: Formato de correo electrónico inválido
+[2025-08-07T04:16:07.306Z] Ruta /api/contact accedida con método POST
+[2025-08-07T04:17:46.803Z] [2025-08-07T04:17:46.803Z] GET / - IP: ::1
+[2025-08-07T04:17:47.097Z] [2025-08-07T04:17:47.097Z] GET /.well-known/appspecific/com.chrome.devtools.json - IP: ::1
+[2025-08-07T04:17:47.175Z] [2025-08-07T04:17:47.175Z] GET /assets/css/styles.css - IP: ::1
+[2025-08-07T04:17:47.369Z] [2025-08-07T04:17:47.369Z] GET /assets/js/app.js - IP: ::1
+[2025-08-07T04:17:57.743Z] [2025-08-07T04:17:57.743Z] POST /api/contact - IP: ::1
+[2025-08-07T04:17:57.743Z] Iniciando procesamiento de formulario de contacto
+[2025-08-07T04:17:57.744Z] Datos recibidos - Nombre: Mauricio Eduardo Garay Veas, Email: laloaggro@gmail.com, Teléfono: 963603177, Mensaje: 222222222222222222222222222222222
+[2025-08-07T04:17:57.743Z] Ruta /api/contact accedida con método POST
+[2025-08-07T04:18:00.030Z] Correo enviado correctamente: <a7d76985-04b5-f8e6-1c67-cb9972511657@gmail.com>
+[2025-08-07T04:18:24.540Z] [2025-08-07T04:18:24.540Z] POST /api/contact - IP: ::1
+[2025-08-07T04:18:24.541Z] Iniciando procesamiento de formulario de contacto
+[2025-08-07T04:18:24.541Z] Datos recibidos - Nombre: Mauricio Eduardo Garay Veas, Email: laloaggro@gmail.com, Teléfono: 963603177, Mensaje: Hola, estoy interesado en los siguientes productos:
+Arreglo Tropical (x3) - $2.040
+
+Total: $2.040
+
+Me gustaría obtener más información sobre estos productos.
+[2025-08-07T04:18:24.540Z] Ruta /api/contact accedida con método POST
+[2025-08-07T04:18:27.170Z] Correo enviado correctamente: <efff4fe0-9944-0b2e-a342-84ef7870edf6@gmail.com>
+[2025-08-07T04:19:39.475Z] [2025-08-07T04:19:39.474Z] POST /api/contact - IP: ::1
+[2025-08-07T04:19:39.475Z] Iniciando procesamiento de formulario de contacto
+[2025-08-07T04:19:39.475Z] Datos recibidos - Nombre: Mauricio Eduardo Garay Veas, Email: laloaggro@gmail.com, Teléfono: 963603177, Mensaje: Hola, estoy interesado en los siguientes productos:
+Ramo de Rosas (x1) - $450
+Arreglo Tropical (x1) - $680
+Ramo Primaveral (x1) - $380
+Ramo de Cumpleaños (x1) - $420
+Arreglo para Boda (x1) - $950
+Orquídeas (x1) - $720
+
+Total: $3.600
+
+Me gustaría obtener más información sobre estos productos.
+[2025-08-07T04:19:39.475Z] Ruta /api/contact accedida con método POST
+[2025-08-07T04:19:42.333Z] Correo enviado correctamente: <00bb61a0-95f0-b3c7-1fa4-79ac88070835@gmail.com>

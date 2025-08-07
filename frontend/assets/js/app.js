@@ -368,20 +368,62 @@ async function handleContactFormSubmit(event) {
     try {
         // Enviar datos al backend PHP
         console.log('Enviando datos al backend...');
-        const response = await fetch('/api/contact', {
+        const url = '/api/contact';
+        console.log('URL de la solicitud:', url);
+        
+        const formData = { name, email, phone, message };
+        console.log('Datos a enviar:', formData);
+        
+        const fetchOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, email, phone, message })
-        });
+            body: JSON.stringify(formData)
+        };
+        
+        console.log('Opciones de fetch:', fetchOptions);
+        
+        const response = await fetch(url, fetchOptions);
         
         console.log('Respuesta recibida del backend:', response);
+        console.log('Estado de la respuesta:', response.status);
+        console.log('Texto de estado:', response.statusText);
+        
+        // Verificar si la respuesta es válida
+        if (!response.ok) {
+            // Intentar obtener el mensaje de error del cuerpo de la respuesta
+            let errorMessage = `Error HTTP ${response.status}: ${response.statusText}`;
+            try {
+                const errorResult = await response.json();
+                console.log('Resultado de error del servidor:', errorResult);
+                if (errorResult && errorResult.message) {
+                    errorMessage = errorResult.message;
+                }
+            } catch (parseError) {
+                console.error('Error al parsear la respuesta de error:', parseError);
+                // Si no se puede parsear la respuesta como JSON, usar el texto
+                try {
+                    const errorText = await response.text();
+                    console.log('Texto de error del servidor:', errorText);
+                    if (errorText) {
+                        errorMessage = errorText;
+                    }
+                } catch (textError) {
+                    console.error('Error al obtener el texto de error:', textError);
+                    // Si tampoco se puede obtener el texto, usar mensaje genérico
+                }
+            }
+            
+            console.error('Error del servidor:', response.status, response.statusText);
+            showFormMessage('error', errorMessage);
+            return;
+        }
         
         const result = await response.json();
         console.log('Datos de la respuesta:', result);
         
-        if (response.ok) {
+        if (result.status === 'success') {
             showFormMessage('success', result.message);
             // Limpiar el formulario
             document.getElementById('contactForm').reset();
@@ -395,10 +437,13 @@ async function handleContactFormSubmit(event) {
                 renderCartItems();
             }
         } else {
-            showFormMessage('error', result.message);
+            showFormMessage('error', result.message || 'Error al procesar el formulario. Por favor, inténtalo de nuevo más tarde.');
         }
     } catch (error) {
         console.error('Error al enviar el formulario:', error);
+        console.error('Nombre del error:', error.name);
+        console.error('Mensaje del error:', error.message);
+        console.error('Stack trace:', error.stack);
         
         // Manejar errores de conexión
         if (error.name === 'TypeError' && error.message.includes('fetch')) {

@@ -1,85 +1,114 @@
 const express = require('express');
 const router = express.Router();
-const { exec } = require('child_process');
+const nodemailer = require('nodemailer');
+const fs = require('fs');
 const path = require('path');
 
-router.post('/', (req, res) => {
-  // Obtener los datos del cuerpo de la solicitud
-  const { name, email, phone, message } = req.body;
-  
-  // Validar los datos
-  if (!name || !email || !message) {
-    return res.status(400).json({ 
-      message: 'Faltan campos requeridos',
-      status: 'error'
-    });
-  }
-  
-  // Validar formato de correo electrónico
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({ 
-      message: 'Formato de correo electrónico inválido',
-      status: 'error'
-    });
-  }
-  
-  // Preparar los datos para pasar al script PHP
-  const formData = JSON.stringify({ name, email, phone, message });
-  
-  // Preparar variables de entorno para pasar al script PHP
-  // Envolver en comillas los valores que puedan contener espacios
-  const envVars = [
-    `SMTP_HOST="${process.env.SMTP_HOST}"`,
-    `SMTP_PORT="${process.env.SMTP_PORT}"`,
-    `SMTP_USERNAME="${process.env.SMTP_USERNAME}"`,
-    `SMTP_PASSWORD="${process.env.SMTP_PASSWORD}"`,
-    `SMTP_ENCRYPTION="${process.env.SMTP_ENCRYPTION}"`,
-    `MAIL_FROM_ADDRESS="${process.env.MAIL_FROM_ADDRESS}"`,
-    `MAIL_FROM_NAME="${process.env.MAIL_FROM_NAME}"`,
-    `MAIL_TO_ADDRESS="${process.env.MAIL_TO_ADDRESS}"`,
-    `MAIL_TO_NAME="${process.env.MAIL_TO_NAME}"`
-  ].join(' ');
-  
-  // Ejecutar el script PHP mejorado con variables de entorno
-  const phpScriptPath = path.join(__dirname, '../contact-enhanced.php');
-  const command = `echo '${formData}' | ${envVars} php ${phpScriptPath}`;
-  
-  exec(command, { maxBuffer: 1024 * 1024 }, (error, stdout, stderr) => {
-    // Registrar información de depuración
-    console.log('Comando ejecutado:', command);
-    console.log('Salida estándar:', stdout);
-    console.log('Error estándar:', stderr);
-    console.log('Error de ejecución:', error);
-    
+// Función para registrar mensajes en el archivo de logs
+function logMessage(message) {
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] ${message}\n`;
+    // Escribir en el archivo de logs si existe
+    try {
+        fs.appendFileSync(path.join(__dirname, '../server.log'), logEntry);
+    } catch (err) {
+        // Si no se puede escribir en el archivo, mostrar en consola
+        console.log(logEntry);
+    }
+    console.log(message); // También mostrar en consola
+}
+
+// Crear transporter para enviar correos
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: process.env.SMTP_PORT || 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: process.env.SMTP_USERNAME || 'arreglosvictoriafloreria@gmail.com',
+        pass: process.env.SMTP_PASSWORD
+    }
+});
+
+// Verificar la configuración del transporter
+transporter.verify((error, success) => {
     if (error) {
-      console.error(`Error ejecutando script PHP: ${error}`);
-      return res.status(500).json({
-        message: 'Error al procesar el formulario. Por favor, inténtalo de nuevo más tarde.',
-        status: 'error',
-        debug: error.message
-      });
+        logMessage(`Error en la configuración del transporte de correo: ${error}`);
+    } else {
+        logMessage('Servidor de correo configurado correctamente');
+    }
+});
+
+router.post('/', async (req, res) => {
+    logMessage('Iniciando procesamiento de formulario de contacto');
+    
+    // Obtener los datos del cuerpo de la solicitud
+    const { name, email, phone, message } = req.body;
+    
+    logMessage(`Datos recibidos - Nombre: ${name}, Email: ${email}, Teléfono: ${phone}, Mensaje: ${message}`);
+    
+    // Validar los datos
+    if (!name || !email || !message) {
+        logMessage('Error: Faltan campos requeridos');
+        return res.status(400).json({ 
+            message: 'Faltan campos requeridos',
+            status: 'error'
+        });
     }
     
-    if (stderr) {
-      console.error(`Error PHP: ${stderr}`);
-      // No retornar inmediatamente, ya que algunos warnings pueden estar en stderr
-      // pero la ejecución puede haber sido exitosa
+    // Validar formato de correo electrónico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        logMessage('Error: Formato de correo electrónico inválido');
+        return res.status(400).json({ 
+            message: 'Formato de correo electrónico inválido',
+            status: 'error'
+        });
     }
     
     try {
-      const result = JSON.parse(stdout);
-      res.status(result.status === 'success' ? 200 : 500).json(result);
-    } catch (parseError) {
-      console.error(`Error parseando respuesta: ${parseError}`);
-      console.error('Salida recibida:', stdout);
-      res.status(500).json({
-        message: 'Error al procesar la respuesta del servidor.',
-        status: 'error',
-        debug: 'Error al parsear la respuesta del script PHP'
-      });
+        // Configurar opciones del correo
+        const mailOptions = {
+            from: `"${process.env.MAIL_FROM_NAME || 'Arreglos Victoria Florería'}" <${process.env.MAIL_FROM_ADDRESS || 'arreglosvictoriafloreria@gmail.com'}>`,
+            to: process.env.MAIL_TO_ADDRESS || 'arreglosvictoriafloreria@gmail.com',
+            subject: `Nuevo mensaje de contacto de la web - ${name}`,
+            html: `
+            <html>
+            <head>
+                <title>Nuevo mensaje de contacto</title>
+            </head>
+            <body>
+                <h2>Nuevo mensaje de contacto desde la web</h2>
+                <p><strong>Nombre:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Teléfono:</strong> ${phone || 'No proporcionado'}</p>
+                <p><strong>Mensaje:</strong></p>
+                <p>${message.replace(/\n/g, '<br>')}</p>
+                <hr>
+                <p><small>Este mensaje fue enviado desde el formulario de contacto de la web de Arreglos Victoria Florería</small></p>
+            </body>
+            </html>
+            `
+        };
+        
+        // Enviar el correo
+        const info = await transporter.sendMail(mailOptions);
+        logMessage(`Correo enviado correctamente: ${info.messageId}`);
+        
+        // Responder con éxito
+        res.status(200).json({
+            message: '¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.',
+            status: 'success'
+        });
+    } catch (error) {
+        logMessage(`Error enviando correo: ${error.message}`);
+        console.error('Error detallado:', error);
+        
+        res.status(500).json({
+            message: 'Error al procesar el formulario. Por favor, inténtalo de nuevo más tarde.',
+            status: 'error',
+            debug: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
-  });
 });
 
 module.exports = router;
