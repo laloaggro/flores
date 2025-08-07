@@ -17,7 +17,8 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 │   ├── assets/
 │   ├── components/
 │   └── index.html
-└── README.md
+├── README.md
+└── PRODUCTION.md
 ```
 
 ## Tecnologías utilizadas
@@ -27,7 +28,9 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 - Correo: PHPMailer
 - Gestión de dependencias: npm, Composer
 
-## Configuración del entorno
+## Instalación
+
+### Configuración del entorno
 
 1. Copiar el archivo de ejemplo de variables de entorno:
    ```
@@ -39,39 +42,38 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
    SMTP_HOST=smtp.gmail.com
    SMTP_PORT=587
    SMTP_USERNAME=tu-correo@gmail.com
-   SMTP_PASSWORD=tu-contraseña
+   SMTP_PASSWORD=tu-contraseña-o-contraseña-de-aplicación
    SMTP_ENCRYPTION=tls
    ```
 
-3. Instalar dependencias del backend:
-   ```
-   cd backend
-   npm install
-   ```
+## Instalación de dependencias
 
-4. Instalar PHPMailer y otras dependencias de PHP (requiere Composer):
-   ```
-   cd backend
-   php composer.phar require phpmailer/phpmailer
-   php composer.phar require vlucas/phpdotenv
-   ```
+### Node.js (backend)
+```
+cd backend
+npm install
+```
 
-## Ejecutar el servidor
+### PHP (para envío de correos)
+```
+cd backend
+# Si no tienes Composer instalado
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+
+# Instalar dependencias de PHP
+php composer.phar install
+```
+
+## Ejecutar el servidor de desarrollo
 
 ```
 cd backend
 npm start
 ```
 
-El servidor estará disponible en `http://localhost:5000`
-
-## Desarrollo
-
-Para desarrollo con reinicio automático:
-```
-cd backend
-npm run dev
-```
+El servidor se ejecutará en `http://localhost:5000`
 
 ## Pruebas
 
@@ -81,18 +83,38 @@ cd backend
 php dev-contact-test.php
 ```
 
-## Configuración de VSCode
+Para verificar la configuración de producción:
+```
+cd backend
+php check-production.php
+```
 
-Este proyecto incluye configuraciones recomendadas para VSCode:
-- Extensiones recomendadas
-- Formato de código con Prettier
-- Configuración de EditorConfig
-- Configuración específica por tipo de archivo
+## Despliegue en producción
 
-### Extensiones recomendadas
+Para instrucciones detalladas sobre cómo desplegar en producción, consulta [PRODUCTION.md](PRODUCTION.md).
 
-El archivo `.vscode/extensions.json` contiene una lista de extensiones recomendadas y no recomendadas para este proyecto.
+## Funcionalidades del sitio
 
-### Formato de código
+1. **Catálogo de productos**: Muestra los arreglos florales disponibles con nombre, precio e imagen.
+2. **Formulario de contacto**: Permite a los clientes enviar mensajes directamente al negocio.
+3. **Sistema de pedidos**: Permite a los clientes realizar pedidos de productos.
+4. **Integración con redes sociales**: Enlaces a Instagram y WhatsApp.
 
-El proyecto utiliza Prettier para mantener un formato consistente. La configuración se encuentra en `.prettierrc`.
+## API Endpoints
+
+- `GET /api/products` - Obtener la lista de productos
+- `POST /api/orders/create` - Crear un nuevo pedido
+- `GET /api/orders` - Obtener la lista de pedidos
+- `POST /api/contact` - Enviar un mensaje de contacto
+
+## Configuración de correo
+
+Para que la funcionalidad de contacto funcione correctamente, debes:
+
+1. Configurar una contraseña de aplicación de Gmail (recomendado) o habilitar el acceso de aplicaciones menos seguras
+2. Actualizar las variables de entorno en el archivo `.env` con tus credenciales
+3. Verificar que el servidor tenga las extensiones PHP necesarias instaladas
+
+## Extensiones recomendadas de VSCode
+
+El proyecto incluye una configuración recomendada de extensiones para VSCode en `.vscode/extensions.json`.

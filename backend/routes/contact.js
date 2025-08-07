@@ -32,6 +32,12 @@ router.post('/', (req, res) => {
   const command = `echo '${formData}' | php ${phpScriptPath}`;
   
   exec(command, (error, stdout, stderr) => {
+    // Registrar información de depuración
+    console.log('Comando ejecutado:', command);
+    console.log('Salida estándar:', stdout);
+    console.log('Error estándar:', stderr);
+    console.log('Error de ejecución:', error);
+    
     if (error) {
       console.error(`Error ejecutando script PHP: ${error}`);
       return res.status(500).json({
@@ -42,10 +48,8 @@ router.post('/', (req, res) => {
     
     if (stderr) {
       console.error(`Error PHP: ${stderr}`);
-      return res.status(500).json({
-        message: 'Error al procesar el formulario. Por favor, inténtalo de nuevo más tarde.',
-        status: 'error'
-      });
+      // No retornar inmediatamente, ya que algunos warnings pueden estar en stderr
+      // pero la ejecución puede haber sido exitosa
     }
     
     try {
@@ -53,6 +57,7 @@ router.post('/', (req, res) => {
       res.status(result.status === 'success' ? 200 : 500).json(result);
     } catch (parseError) {
       console.error(`Error parseando respuesta: ${parseError}`);
+      console.error('Salida recibida:', stdout);
       res.status(500).json({
         message: 'Error al procesar la respuesta del servidor.',
         status: 'error'

@@ -3,9 +3,9 @@ const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
 
-const productsRouter = require('./routes/products');
-const ordersRouter = require('./routes/orders');
-const contactRouter = require('./routes/contact');
+const productRoutes = require('./routes/products');
+const orderRoutes = require('./routes/orders');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,17 +16,23 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Rutas API
-app.use('/api/products', productsRouter);
-app.use('/api/orders', ordersRouter);
-app.use('/api/contact', contactRouter);
+// Rutas
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/contact', contactRoutes);
 
-// Ruta principal
-app.get('/', (req, res) => {
-  res.send('🌸 API de Arreglos Victoria - Activada');
+// Endpoint temporal para verificar variables de entorno
+app.get('/api/debug/env', (req, res) => {
+  res.json({
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_PORT: process.env.SMTP_PORT,
+    SMTP_USERNAME: process.env.SMTP_USERNAME,
+    SMTP_PASSWORD: process.env.SMTP_PASSWORD ? '[CONFIGURADO]' : '[NO CONFIGURADO]',
+    hasEnvFile: !!process.env.SMTP_HOST
+  });
 });
 
-// Servir el frontend para cualquier otra ruta
+// Servir archivos estáticos
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
