@@ -1,6 +1,6 @@
 # Arreglos Victoria Florería
 
-Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo de productos y formulario de contacto.
+Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo de productos, carrito de compras y formulario de contacto.
 
 ## Estructura del proyecto
 
@@ -18,12 +18,13 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 │   ├── components/
 │   └── index.html
 ├── README.md
-└── PRODUCTION.md
+├── PRODUCTION.md
+└── DOCUMENTATION.md
 ```
 
 ## Tecnologías utilizadas
 
-- Frontend: HTML, CSS (Tailwind), JavaScript (ES6)
+- Frontend: HTML, CSS (Flexbox/Grid), JavaScript (ES6+)
 - Backend: Node.js con Express, PHP
 - Correo: PHPMailer
 - Gestión de dependencias: npm, Composer
@@ -89,32 +90,29 @@ cd backend
 php check-production.php
 ```
 
-## Despliegue en producción
+## Documentación
 
-Para instrucciones detalladas sobre cómo desplegar en producción, consulta [PRODUCTION.md](PRODUCTION.md).
+Para una documentación más completa del proyecto, consulta los siguientes archivos:
+
+- [DOCUMENTATION.md](DOCUMENTATION.md) - Documentación general del proyecto
+- [PRODUCTION.md](PRODUCTION.md) - Instrucciones detalladas para despliegue en producción
 
 ## Funcionalidades del sitio
 
 1. **Catálogo de productos**: Muestra los arreglos florales disponibles con nombre, precio e imagen.
-2. **Formulario de contacto**: Permite a los clientes enviar mensajes directamente al negocio.
-3. **Sistema de pedidos**: Permite a los clientes realizar pedidos de productos.
-4. **Integración con redes sociales**: Enlaces a Instagram y WhatsApp.
+2. **Carrito de compras**: Permite a los clientes agregar productos y realizar pedidos.
+3. **Formulario de contacto**: Permite a los clientes enviar mensajes directamente al negocio.
+4. **Sistema de pedidos**: Permite a los clientes realizar pedidos de productos.
+5. **Integración con redes sociales**: Enlaces a Instagram y WhatsApp.
 
-## API Endpoints
+## Ramas del repositorio
 
-- `GET /api/products` - Obtener la lista de productos
-- `POST /api/orders/create` - Crear un nuevo pedido
-- `GET /api/orders` - Obtener la lista de pedidos
-- `POST /api/contact` - Enviar un mensaje de contacto
+- `main/master`: Código en producción
+- `development`: Rama de desarrollo principal
+- `release-*`: Ramas para versiones específicas
+- `feature/*`: Ramas para nuevas funcionalidades
+- `hotfix/*`: Ramas para correcciones urgentes
 
-## Configuración de correo
+## Despliegue en producción
 
-Para que la funcionalidad de contacto funcione correctamente, debes:
-
-1. Configurar una contraseña de aplicación de Gmail (recomendado) o habilitar el acceso de aplicaciones menos seguras
-2. Actualizar las variables de entorno en el archivo `.env` con tus credenciales
-3. Verificar que el servidor tenga las extensiones PHP necesarias instaladas
-
-## Extensiones recomendadas de VSCode
-
-El proyecto incluye una configuración recomendada de extensiones para VSCode en `.vscode/extensions.json`.
+Para instrucciones detalladas sobre cómo desplegar en producción, consulta [PRODUCTION.md](PRODUCTION.md) y [DOCUMENTATION.md](DOCUMENTATION.md).

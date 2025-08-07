@@ -44,6 +44,14 @@ function calculateCartTotal() {
     return total;
 }
 
+// Función para formatear precios
+function formatPrice(price) {
+    return new Intl.NumberFormat('es-CL', {
+        style: 'currency',
+        currency: 'CLP'
+    }).format(price);
+}
+
 // Función para renderizar los items del carrito en el modal
 function renderCartItems() {
     const cartItemsContainer = document.querySelector('.cart-items');
@@ -53,10 +61,28 @@ function renderCartItems() {
     if (!cartItemsContainer) return;
     
     if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p class="empty-cart-message">Tu carrito está vacío</p>';
-        if (cartTotalElement) cartTotalElement.textContent = '$0.00';
+        cartItemsContainer.innerHTML = `
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart fa-3x"></i>
+                <h3>Tu carrito está vacío</h3>
+                <p>Agrega productos para comenzar</p>
+                <button class="btn btn-primary continue-shopping">Continuar comprando</button>
+            </div>
+        `;
+        if (cartTotalElement) cartTotalElement.textContent = formatPrice(0);
         if (checkoutButton) checkoutButton.disabled = true;
         console.log('Carrito vacío renderizado');
+        
+        // Añadir evento al botón de continuar comprando
+        const continueShoppingBtn = document.querySelector('.continue-shopping');
+        if (continueShoppingBtn) {
+            continueShoppingBtn.addEventListener('click', function() {
+                const cartModal = document.getElementById('cartModal');
+                if (cartModal) {
+                    cartModal.style.display = 'none';
+                }
+            });
+        }
         return;
     }
     
@@ -64,14 +90,20 @@ function renderCartItems() {
     cart.forEach(item => {
         cartItemsHTML += `
             <div class="cart-item" data-id="${item.id}">
+                <div class="item-image">
+                    <img src="${item.image || 'https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}" alt="${item.name}">
+                </div>
                 <div class="item-info">
                     <h4>${item.name}</h4>
-                    <div class="item-price">$${item.price.toFixed(2)}</div>
+                    <div class="item-price">${formatPrice(item.price)}</div>
                     <div class="item-quantity">
                         <button class="quantity-btn decrease-quantity" data-id="${item.id}">-</button>
                         <span>${item.quantity}</span>
                         <button class="quantity-btn increase-quantity" data-id="${item.id}">+</button>
                     </div>
+                </div>
+                <div class="item-total">
+                    ${formatPrice(item.price * item.quantity)}
                 </div>
                 <button class="remove-item" data-id="${item.id}">
                     <i class="fas fa-trash"></i>
@@ -81,7 +113,7 @@ function renderCartItems() {
     });
     
     cartItemsContainer.innerHTML = cartItemsHTML;
-    if (cartTotalElement) cartTotalElement.textContent = `$${calculateCartTotal().toFixed(2)}`;
+    if (cartTotalElement) cartTotalElement.textContent = formatPrice(calculateCartTotal());
     if (checkoutButton) checkoutButton.disabled = false;
     
     // Añadir event listeners a los botones de cantidad y eliminar
@@ -139,35 +171,38 @@ function removeFromCart(id) {
         saveCartToLocalStorage();
         renderCartItems();
         console.log('Item eliminado del carrito. ID:', id);
+        
+        // Mostrar notificación de eliminación
+        showNotification('Producto eliminado del carrito', 'success');
     }
 }
 
 // Función para agregar un producto al carrito
-function addToCart(id, name, price) {
+function addToCart(id, name, price, image = null) {
     // Verificar si el producto ya está en el carrito
     const existingItem = cart.find(item => item.id === id);
     
     if (existingItem) {
         existingItem.quantity += 1;
         console.log('Producto ya existente en carrito. Incrementando cantidad. ID:', id);
+        showNotification(`${name} actualizado en el carrito`, 'success');
     } else {
         cart.push({
             id: id,
             name: name,
             price: parseFloat(price),
-            quantity: 1
+            quantity: 1,
+            image: image
         });
         console.log('Nuevo producto agregado al carrito. ID:', id, 'Nombre:', name);
+        showNotification(`${name} agregado al carrito`, 'success');
     }
     
     cartCount++;
     updateCartCount();
     saveCartToLocalStorage();
     
-    // Mostrar mensaje de confirmación
-    showFormMessage('success', `${name} agregado al carrito!`);
-    
-    // Opcional: Mostrar notificación visual del producto agregado
+    // Mostrar notificación visual del producto agregado
     showProductAddedNotification(name);
 }
 
@@ -179,6 +214,7 @@ function showProductAddedNotification(productName) {
     notification.innerHTML = `
         <i class="fas fa-check-circle"></i>
         <span>${productName} agregado al carrito</span>
+        <button class="view-cart-btn">Ver carrito</button>
     `;
     
     // Añadir estilos básicos
@@ -196,6 +232,72 @@ function showProductAddedNotification(productName) {
     notification.style.gap = '10px';
     notification.style.opacity = '0';
     notification.style.transition = 'opacity 0.3s ease';
+    notification.style.maxWidth = '300px';
+    
+    // Añadir al documento
+    document.body.appendChild(notification);
+    
+    // Animar entrada
+    setTimeout(() => {
+        notification.style.opacity = '1';
+    }, 10);
+    
+    // Añadir evento al botón de ver carrito
+    const viewCartBtn = notification.querySelector('.view-cart-btn');
+    if (viewCartBtn) {
+        viewCartBtn.addEventListener('click', function() {
+            const cartModal = document.getElementById('cartModal');
+            if (cartModal) {
+                cartModal.style.display = 'block';
+                renderCartItems();
+            }
+            // Eliminar notificación
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        });
+    }
+    
+    // Eliminar después de 5 segundos
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+}
+
+// Función para mostrar notificaciones generales
+function showNotification(message, type = 'info') {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Añadir estilos
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--danger)' : 'var(--primary)';
+    notification.style.color = 'white';
+    notification.style.padding = '15px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    notification.style.zIndex = '1000';
+    notification.style.display = 'flex';
+    notification.style.alignItems = 'center';
+    notification.style.gap = '10px';
+    notification.style.opacity = '0';
+    notification.style.transition = 'opacity 0.3s ease';
+    notification.style.maxWidth = '300px';
     
     // Añadir al documento
     document.body.appendChild(notification);
@@ -283,6 +385,15 @@ async function handleContactFormSubmit(event) {
             showFormMessage('success', result.message);
             // Limpiar el formulario
             document.getElementById('contactForm').reset();
+            
+            // Limpiar el carrito si se envió un pedido
+            if (message.includes('estoy interesado en los siguientes productos')) {
+                cart = [];
+                cartCount = 0;
+                updateCartCount();
+                saveCartToLocalStorage();
+                renderCartItems();
+            }
         } else {
             showFormMessage('error', result.message);
         }
@@ -314,8 +425,9 @@ function initializeEventListeners() {
             const id = this.getAttribute('data-id');
             const name = this.getAttribute('data-name');
             const price = this.getAttribute('data-price');
+            const image = this.closest('.product-card').querySelector('.product-image img')?.src || null;
             console.log('Botón "Agregar al carrito" presionado. ID:', id, 'Nombre:', name, 'Precio:', price);
-            addToCart(parseInt(id), name, price);
+            addToCart(parseInt(id), name, price, image);
         });
     });
     
@@ -377,12 +489,12 @@ function initializeEventListeners() {
                 contactoSection.scrollIntoView({ behavior: 'smooth' });
                 // Mostrar los productos del carrito en el mensaje
                 const cartSummary = cart.map(item => 
-                    `${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+                    `${item.name} (x${item.quantity}) - ${formatPrice(item.price * item.quantity)}`
                 ).join('\n');
                 
                 const messageArea = document.getElementById('message');
                 if (messageArea) {
-                    messageArea.value = `Hola, estoy interesado en los siguientes productos:\n${cartSummary}\n\nTotal: $${calculateCartTotal().toFixed(2)}\n\nMe gustaría obtener más información sobre estos productos.`;
+                    messageArea.value = `Hola, estoy interesado en los siguientes productos:\n${cartSummary}\n\nTotal: ${formatPrice(calculateCartTotal())}\n\nMe gustaría obtener más información sobre estos productos.`;
                     console.log('Mensaje pre-rellenado con productos del carrito');
                 }
             }
