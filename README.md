@@ -50,12 +50,14 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 ## Instalación de dependencias
 
 ### Node.js (backend)
+
 ```
 cd backend
 npm install
 ```
 
 ### PHP (para envío de correos)
+
 ```
 cd backend
 # Si no tienes Composer instalado
@@ -79,12 +81,14 @@ El servidor se ejecutará en `http://localhost:5000`
 ## Pruebas
 
 Para probar la funcionalidad de contacto sin enviar correos reales:
+
 ```
 cd backend
 php dev-contact-test.php
 ```
 
 Para verificar la configuración de producción:
+
 ```
 cd backend
 php check-production.php

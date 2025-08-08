@@ -557,13 +557,217 @@ function checkAndAttachFormListener() {
     }
 }
 
+// Función para cargar y mostrar productos dinámicamente en la página de inicio
+async function loadProductsSection() {
+    const productsSection = document.getElementById('products');
+    if (!productsSection) return;
+    
+    console.log('Cargando sección de productos...');
+    
+    // Mostrar mensaje de carga
+    const productGrid = productsSection.querySelector('.product-grid');
+    if (productGrid) {
+        productGrid.innerHTML = '<div class="loading-message">Cargando productos...</div>';
+    }
+    
+    try {
+        // Solicitar productos al backend
+        const response = await fetch('/api/products?page=1&limit=8');
+        
+        if (!response.ok) {
+            throw new Error(`Error al cargar productos: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const products = data.products;
+        
+        console.log('Productos cargados exitosamente:', products.length);
+        
+        // Generar HTML de los productos
+        if (productGrid && products.length > 0) {
+            const productsHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image_url}" alt="${product.name}" loading="lazy">
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-details">
+                            <span class="detail-item"><i class="fas fa-tag"></i> ${product.category}</span>
+                            <span class="detail-item"><i class="fas fa-calendar-alt"></i> ${new Date(product.created_at).toLocaleDateString('es-CL')}</span>
+                        </div>
+                        <span class="price">$${parseInt(product.price).toLocaleString('es-CL')}</span>
+                        <button class="btn btn-secondary add-to-cart" 
+                                data-id="${product.id}" 
+                                data-name="${product.name}" 
+                                data-price="${product.price}"
+                                data-image="${product.image_url}">
+                            <i class="fas fa-shopping-cart"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            productGrid.innerHTML = productsHTML;
+            
+            // Volver a adjuntar los event listeners para los botones de agregar al carrito
+            attachCartEventListeners();
+        } else if (productGrid) {
+            productGrid.innerHTML = '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
+        }
+    } catch (error) {
+        console.error('Error al cargar productos:', error);
+        if (productGrid) {
+            productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>';
+        }
+    }
+}
+
+// Función para adjuntar event listeners a los botones de agregar al carrito
+function attachCartEventListeners() {
+    // Agregar event listeners a los botones de "Agregar al carrito"
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const product = {
+                id: this.dataset.id,
+                name: this.dataset.name,
+                price: parseFloat(this.dataset.price),
+                image: this.dataset.image,
+                quantity: 1
+            };
+            
+            window.productManager.addToCart(product);
+        });
+    });
+    
+    console.log('Event listeners de carrito adjuntados');
+}
+
+// Función para agregar productos al carrito
+function addToCart(product) {
+    // Verificar si el producto ya está en el carrito
+    const existingProductIndex = cart.findIndex(item => item.id == product.id);
+    
+    if (existingProductIndex !== -1) {
+        // Si el producto ya existe, aumentar la cantidad
+        cart[existingProductIndex].quantity += 1;
+        console.log('Cantidad actualizada para producto existente:', product.name);
+    } else {
+        // Si es un producto nuevo, agregarlo al carrito
+        cart.push(product);
+        console.log('Producto agregado al carrito:', product.name);
+    }
+    
+    // Actualizar contador del carrito
+    cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+    updateCartCount();
+    
+    // Guardar carrito en localStorage
+    saveCartToLocalStorage();
+    
+    // Mostrar notificación
+    showNotification(`${product.name} agregado al carrito`, 'success');
+}
+
+// Función para mostrar notificaciones
+function showNotification(message, type) {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    // Agregar estilo a la notificación
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+    `;
+    
+    // Colores según el tipo
+    if (type === 'success') {
+        notification.style.backgroundColor = '#48bb78';
+    } else if (type === 'error') {
+        notification.style.backgroundColor = '#e53e3e';
+    } else {
+        notification.style.backgroundColor = '#3182ce';
+    }
+    
+    // Agregar notificación al cuerpo
+    document.body.appendChild(notification);
+    
+    // Animar entrada
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 10);
+    
+    // Eliminar notificación después de 3 segundos
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+    
+    console.log('Notificación mostrada:', message, type);
+}
+
+// Función para manejar la navegación y carga de secciones
+function handleNavigation() {
+    // Manejar clics en enlaces de navegación
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            
+            // Desplazarse a la sección objetivo
+            const targetSection = document.querySelector(targetId);
+            if (targetSection) {
+                targetSection.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                console.log('Navegando a sección:', targetId);
+                
+                // Si es la sección de productos, cargar productos dinámicamente
+                if (targetId === '#products') {
+                    loadProductsSection();
+                }
+            }
+        });
+    });
+    
+    console.log('Event listeners de navegación configurados');
+}
+
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM completamente cargado');
     
-    // Cargar carrito y actualizar contador
+    // Cargar carrito desde localStorage
     loadCartFromLocalStorage();
+    
+    // Actualizar contador del carrito
     updateCartCount();
+    
+    // Configurar navegación
+    handleNavigation();
+    
+    // Cargar productos en la sección de productos si estamos en la página principal
+    if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+        // Cargar productos inmediatamente
+        loadProductsSection();
+    }
     
     // Inicializar event listeners con una pequeña demora
     setTimeout(function() {

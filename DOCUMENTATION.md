@@ -30,18 +30,21 @@ Este es el sitio web para la florería Arreglos Victoria, que incluye un catálo
 ## Tecnologías Utilizadas
 
 ### Frontend
+
 - HTML5
 - CSS3 (con Flexbox y Grid)
 - JavaScript (ES6+)
 - Font Awesome para iconos
 
 ### Backend
+
 - Node.js con Express
 - PHP para procesamiento de correos
 - PHPMailer para envío de correos electrónicos
 - Dotenv para gestión de variables de entorno
 
 ### Herramientas
+
 - npm para gestión de dependencias de Node.js
 - Composer para gestión de dependencias de PHP
 - Git para control de versiones
@@ -49,11 +52,13 @@ Este es el sitio web para la florería Arreglos Victoria, que incluye un catálo
 ## Funcionalidades Principales
 
 ### 1. Catálogo de Productos
+
 - Visualización de arreglos florales con nombre, descripción, precio e imagen
 - Diseño responsivo que se adapta a diferentes dispositivos
 - Información detallada de cada producto
 
 ### 2. Carrito de Compras
+
 - Agregar productos al carrito
 - Ver y modificar cantidades de productos
 - Eliminar productos del carrito
@@ -62,6 +67,7 @@ Este es el sitio web para la florería Arreglos Victoria, que incluye un catálo
 - Interfaz de usuario intuitiva
 
 ### 3. Formulario de Contacto
+
 - Envío de mensajes a través de correo electrónico
 - Validación de campos requeridos
 - Validación de formato de correo electrónico
@@ -69,6 +75,7 @@ Este es el sitio web para la florería Arreglos Victoria, que incluye un catálo
 - Feedback visual al usuario
 
 ### 4. Sistema de Pedidos
+
 - Creación de pedidos con información del cliente
 - Almacenamiento de pedidos en memoria
 - API REST para gestión de pedidos
@@ -76,9 +83,11 @@ Este es el sitio web para la florería Arreglos Victoria, que incluye un catálo
 ## Arquitectura del Sistema
 
 ### Frontend
+
 El frontend está construido con HTML, CSS y JavaScript vanilla. Se comunica con el backend a través de llamadas AJAX a la API REST.
 
 #### Componentes Principales:
+
 1. **Header**: Navegación principal y carrito de compras
 2. **Hero Section**: Sección principal con llamado a la acción
 3. **Productos**: Catálogo de arreglos florales
@@ -87,9 +96,11 @@ El frontend está construido con HTML, CSS y JavaScript vanilla. Se comunica con
 6. **Footer**: Información de contacto y enlaces
 
 ### Backend
+
 El backend utiliza Node.js con Express para servir archivos estáticos y proporcionar una API REST. El envío de correos se maneja con PHP y PHPMailer.
 
 #### API Endpoints:
+
 1. `GET /api/products` - Obtener lista de productos
 2. `GET /api/orders` - Obtener lista de pedidos
 3. `POST /api/orders/create` - Crear un nuevo pedido
@@ -98,6 +109,7 @@ El backend utiliza Node.js con Express para servir archivos estáticos y proporc
 ## Flujo de Trabajo de Desarrollo
 
 ### Ramas Git
+
 - `main/master`: Código en producción
 - `development`: Rama de desarrollo principal
 - `release-*`: Ramas para versiones específicas
@@ -105,12 +117,14 @@ El backend utiliza Node.js con Express para servir archivos estáticos y proporc
 - `hotfix/*`: Ramas para correcciones urgentes
 
 ### Desarrollo Local
+
 1. Clonar el repositorio
 2. Instalar dependencias de Node.js y PHP
 3. Configurar variables de entorno
 4. Iniciar el servidor de desarrollo
 
 ### Despliegue
+
 1. Crear una rama de release
 2. Realizar pruebas finales
 3. Fusionar con la rama principal
@@ -120,6 +134,7 @@ El backend utiliza Node.js con Express para servir archivos estáticos y proporc
 ## Configuración y Personalización
 
 ### Variables de Entorno
+
 Las variables de entorno se configuran en el archivo `backend/.env`:
 
 ```
@@ -138,6 +153,7 @@ MAIL_TO_NAME="Nombre del destinatario"
 ```
 
 ### Personalización del Contenido
+
 - Los productos se pueden modificar en el archivo `frontend/components/Products.js`
 - El contenido de "Sobre Nosotros" se encuentra en `frontend/index.html`
 - La información de contacto se puede actualizar en `frontend/index.html`
@@ -145,6 +161,7 @@ MAIL_TO_NAME="Nombre del destinatario"
 ## Pruebas
 
 ### Pruebas Manuales
+
 1. Verificar que todos los enlaces funcionen correctamente
 2. Probar el carrito de compras (agregar, modificar, eliminar productos)
 3. Probar el formulario de contacto
@@ -152,7 +169,9 @@ MAIL_TO_NAME="Nombre del destinatario"
 5. Probar la responsividad en diferentes dispositivos
 
 ### Pruebas Automatizadas
+
 Se pueden ejecutar scripts de prueba en el directorio `backend`:
+
 - `php check-production.php` - Verificación de configuración
 - `php dev-contact-test.php` - Prueba de contacto en desarrollo
 
@@ -161,16 +180,19 @@ Se pueden ejecutar scripts de prueba en el directorio `backend`:
 ### Problemas Comunes
 
 #### El formulario de contacto no funciona
+
 1. Verificar que las credenciales SMTP estén correctamente configuradas
 2. Asegurarse de que la verificación en dos pasos esté activada en la cuenta de Gmail
 3. Confirmar que se esté usando una contraseña de aplicación, no la contraseña normal
 
 #### El carrito no se muestra correctamente
+
 1. Verificar que JavaScript esté habilitado en el navegador
 2. Confirmar que el navegador sea compatible con localStorage
 3. Revisar la consola del navegador en busca de errores
 
 #### Las imágenes no se cargan
+
 1. Verificar que las URLs de las imágenes sean accesibles
 2. Confirmar que haya conexión a internet
 3. Revisar la consola del navegador en busca de errores de carga
@@ -178,10 +200,12 @@ Se pueden ejecutar scripts de prueba en el directorio `backend`:
 ## Mantenimiento
 
 ### Actualización de Dependencias
+
 - Ejecutar `npm update` en el directorio `backend` para actualizar dependencias de Node.js
 - Ejecutar `composer update` en el directorio `backend` para actualizar dependencias de PHP
 
 ### Monitoreo
+
 - Verificar regularmente los logs del servidor
 - Asegurarse de que el servicio esté funcionando correctamente
 - Monitorear el uso de recursos del servidor

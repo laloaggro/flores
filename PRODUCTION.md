@@ -64,6 +64,7 @@ Para que el sistema de contacto funcione correctamente, se debe configurar una c
 7. Pegar esta contraseña en el archivo `.env` en la variable `SMTP_PASSWORD`
 
 Importante:
+
 - No usar la contraseña normal de la cuenta de Gmail
 - La contraseña de aplicación solo se muestra una vez, asegúrate de guardarla
 - Las contraseñas de aplicación solo funcionan si la verificación en dos pasos está activada
@@ -88,6 +89,7 @@ php check-production.php
 ```
 
 Este script verificará:
+
 - Presencia del archivo `.env`
 - Instalación de dependencias
 - Variables de entorno críticas

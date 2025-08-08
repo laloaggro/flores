@@ -1,4 +1,5 @@
 import { showNotification, updateCartCount, formatPrice } from './utils.js';
+import productManager from './productManager.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   // Variables para la paginación y filtrado
@@ -6,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const limit = 12;
   let currentCategory = '';
   let currentSearch = '';
+  let isLoading = false;
   
   // Elementos del DOM
   const productGrid = document.getElementById('productGrid');
@@ -21,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Cargar productos iniciales
   loadProducts();
+  
+  // Cargar categorías en el filtro
+  loadCategories();
   
   // Event listeners
   categoryFilter.addEventListener('change', function() {
@@ -66,87 +71,130 @@ document.addEventListener('DOMContentLoaded', function() {
     currentPage++;
     loadProducts();
   });
-  
+
   // Función para cargar productos
-  function loadProducts() {
-    // Mostrar mensaje de carga
-    productGrid.innerHTML = '<div class="loading">Cargando productos...</div>';
+  async function loadProducts() {
+    if (isLoading) return;
     
-    // Construir URL de la API
-    let url = `/api/products?page=${currentPage}&limit=${limit}`;
+    isLoading = true;
+    showLoading();
     
-    if (currentCategory) {
-      url = `/api/products/category/${currentCategory}?page=${currentPage}&limit=${limit}`;
-    } else if (currentSearch) {
-      url = `/api/products/search/${currentSearch}?page=${currentPage}&limit=${limit}`;
-    }
-    
-    // Realizar solicitud a la API
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        // Renderizar productos
+    try {
+      const data = await productManager.loadProducts(currentPage, limit, currentCategory, currentSearch);
+      
+      if (data) {
         renderProducts(data.products);
-        
-        // Actualizar información de paginación
-        updatePagination(data.pagination);
-      })
-      .catch(error => {
-        console.error('Error al cargar productos:', error);
-        productGrid.innerHTML = '<div class="error">Error al cargar productos. Por favor, intente nuevamente.</div>';
+        updatePagination(data.pagination); // Actualizar paginación con el objeto de paginación recibido
+      }
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+      showError('Error al cargar productos. Por favor, inténtelo más tarde.');
+    } finally {
+      isLoading = false;
+    }
+  }
+  
+  // Función para cargar categorías
+  async function loadCategories() {
+    try {
+      const data = await productManager.getCategories();
+      const categories = data; // getCategories ya devuelve el array directamente
+      
+      // Limpiar opciones existentes excepto la primera
+      while (categoryFilter.options.length > 1) {
+        categoryFilter.remove(1);
+      }
+      
+      // Agregar categorías al select
+      categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
       });
+    } catch (error) {
+      console.error('Error al cargar categorías:', error);
+    }
+  }
+  
+  // Función para mostrar mensaje de carga
+  function showLoading() {
+    if (productGrid) {
+      productGrid.innerHTML = '<div class="loading">Cargando productos...</div>';
+    }
+  }
+  
+  // Función para mostrar error
+  function showError(message) {
+    if (productGrid) {
+      productGrid.innerHTML = `<div class="error-message">${message}</div>`;
+    }
   }
   
   // Función para renderizar productos
   function renderProducts(products) {
-    if (products.length === 0) {
-      productGrid.innerHTML = '<div class="no-products">No se encontraron productos.</div>';
-      return;
-    }
-    
-    productGrid.innerHTML = products.map(product => `
-      <div class="product-card">
-        <div class="product-image">
-          <img src="${product.image_url}" alt="${product.name}" loading="lazy">
+    try {
+      if (products.length === 0) {
+        productGrid.innerHTML = '<div class="no-products">No se encontraron productos.</div>';
+        return;
+      }
+      
+      productGrid.innerHTML = products.map(product => `
+        <div class="product-card">
+          <div class="product-image">
+            <img src="${product.image_url}" alt="${product.name}" loading="lazy">
+          </div>
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p class="product-description">${product.description}</p>
+            <p class="product-price">${formatPrice(product.price)}</p>
+            <button class="btn add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image_url}">
+              <i class="fas fa-shopping-cart"></i> Agregar al carrito
+            </button>
+          </div>
         </div>
-        <div class="product-info">
-          <h3>${product.name}</h3>
-          <p class="product-description">${product.description}</p>
-          <p class="product-price">${formatPrice(product.price)}</p>
-          <button class="btn add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image_url}">
-            <i class="fas fa-shopping-cart"></i> Agregar al carrito
-          </button>
-        </div>
-      </div>
-    `).join('');
-    
-    // Agregar event listeners a los botones "Agregar al carrito"
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-      button.addEventListener('click', function() {
-        const product = {
-          id: this.dataset.id,
-          name: this.dataset.name,
-          price: parseFloat(this.dataset.price),
-          image: this.dataset.image,
-          quantity: 1
-        };
-        
-        addToCart(product);
+      `).join('');
+      
+      // Agregar event listeners a los botones "Agregar al carrito"
+      document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+          const product = {
+            id: this.dataset.id,
+            name: this.dataset.name,
+            price: parseFloat(this.dataset.price),
+            image: this.dataset.image,
+            quantity: 1
+          };
+          
+          addToCart(product);
+        });
       });
-    });
+      
+      // Actualizar paginación (sin parámetros ya que se maneja en loadProducts)
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+      productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>';
+    }
   }
   
   // Función para actualizar la paginación
   function updatePagination(pagination) {
+    // Verificar que se haya pasado el objeto de paginación
+    if (!pagination) {
+      console.error('No se proporcionó el objeto de paginación');
+      return;
+    }
+    
     // Actualizar información de página
-    pageInfo.textContent = `Página ${pagination.currentPage} de ${pagination.totalPages}`;
-    pageInfoBottom.textContent = `Página ${pagination.currentPage} de ${pagination.totalPages}`;
+    const pageInfoText = `Página ${pagination.currentPage} de ${pagination.totalPages}`;
+    if (pageInfo) pageInfo.textContent = pageInfoText;
+    if (pageInfoBottom) pageInfoBottom.textContent = pageInfoText;
     
     // Actualizar estado de botones
-    prevPage.disabled = !pagination.hasPrevPage;
-    nextPage.disabled = !pagination.hasNextPage;
-    prevPageBottom.disabled = !pagination.hasPrevPage;
-    nextPageBottom.disabled = !pagination.hasNextPage;
+    if (prevPage) prevPage.disabled = !pagination.hasPrevPage;
+    if (nextPage) nextPage.disabled = !pagination.hasNextPage;
+    if (prevPageBottom) prevPageBottom.disabled = !pagination.hasPrevPage;
+    if (nextPageBottom) nextPageBottom.disabled = !pagination.hasNextPage;
   }
   
   // Función para agregar productos al carrito
@@ -175,33 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
     showNotification(`${product.name} agregado al carrito`, 'success');
   }
   
-  // Función para actualizar el contador del carrito
-  function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
-    const cartCountElements = document.querySelectorAll('.cart-count');
-    
-    cartCountElements.forEach(element => {
-      element.textContent = totalCount;
-    });
-  }
-  
-  // Función para mostrar notificaciones
-  function showNotification(message, type) {
-    // Crear elemento de notificación
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    // Agregar notificación al cuerpo
-    document.body.appendChild(notification);
-    
-    // Eliminar notificación después de 3 segundos
-    setTimeout(() => {
-      notification.remove();
-    }, 3000);
-  }
-  
-  // Actualizar contador del carrito al cargar la página
+  // Inicializar contador del carrito
   updateCartCount();
 });

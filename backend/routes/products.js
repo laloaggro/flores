@@ -13,6 +13,20 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
+// Ruta para obtener todas las categorías únicas
+router.get('/categories', (req, res) => {
+  // Obtener categorías únicas
+  db.all(`SELECT DISTINCT category FROM products ORDER BY category`, (err, rows) => {
+    if (err) {
+      console.error('Error al obtener categorías:', err.message);
+      return res.status(500).json({ error: 'Error al obtener categorías' });
+    }
+    
+    const categories = rows.map(row => row.category);
+    res.json({ categories });
+  });
+});
+
 // Ruta para obtener todos los productos
 router.get('/', (req, res) => {
   const page = parseInt(req.query.page) || 1;

@@ -47,16 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
     
-    // Aquí iría la lógica para procesar el pedido
-    showNotification('Pedido procesado correctamente', 'success');
-    // Mostrar información de depuración
-    console.log('Procesando pedido para el usuario:', user);
-    console.log('Productos en el carrito:', cart);
-    
-    // Limpiar carrito después de procesar el pedido
-    localStorage.removeItem('cart');
-    updateCartCount();
-    loadCart();
+    // Redirigir a la página de checkout
+    window.location.href = 'checkout.html';
   });
   
   // Función para cargar y mostrar el carrito
@@ -139,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
       cart[productIndex].quantity += change;
       
       // Si la cantidad es 0 o menos, eliminar el producto
-      if (cart[productIndex].quantity <= 0) {
+      if (cart[parameter=productIndex].quantity <= 0) {
         cart.splice(productIndex, 1);
       }
       
@@ -147,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('cart', JSON.stringify(cart));
       
       // Mostrar información de depuración
-      console.log('Cantidad actualizada para producto', productId, 'Nueva cantidad:', cart[productIndex]?.quantity || 0);
+      console.log('Cantidad actualizada para producto', productId, 'Nueva cantidad:', cart[parameter=productIndex]?.quantity || 0);
       
       // Actualizar contador del carrito y volver a renderizar
       updateCartCount();
