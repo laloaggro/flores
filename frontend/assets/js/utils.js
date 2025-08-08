@@ -183,6 +183,71 @@ function useDefaultValueOption(longOption, optionConfig, values) {
     values[longOption] === undefined;
 }
 
+// Función para mostrar notificaciones
+function showNotification(message, type) {
+  // Crear elemento de notificación
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+  
+  // Agregar notificación al cuerpo
+  document.body.appendChild(notification);
+  
+  // Eliminar notificación después de 3 segundos
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
+  
+  // Mostrar información de depuración
+  console.log('Notificación mostrada:', message, 'Tipo:', type);
+}
+
+// Función para actualizar el contador del carrito
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const cartCountElements = document.querySelectorAll('.cart-count');
+  
+  cartCountElements.forEach(element => {
+    element.textContent = totalCount;
+  });
+  
+  // Mostrar información de depuración
+  console.log('Carrito actualizado. Total de productos:', totalCount);
+}
+
+// Función para obtener información del usuario
+function getUser() {
+  return JSON.parse(localStorage.getItem('user')) || null;
+}
+
+// Función para verificar si el usuario está autenticado
+function isAuthenticated() {
+  return !!getUser();
+}
+
+// Función para cerrar sesión
+function logout() {
+  localStorage.removeItem('user');
+  updateCartCount();
+  console.log('Usuario desconectado');
+}
+
+// Función para formatear precios en formato chileno
+function formatPrice(price) {
+  return `$${parseInt(price).toLocaleString('es-CL')}`;
+}
+
+// Exportar funciones
+export { 
+  showNotification, 
+  updateCartCount, 
+  getUser, 
+  isAuthenticated, 
+  logout,
+  formatPrice
+};
+
 module.exports = {
   findLongOptionForShort,
   isLoneLongOption,

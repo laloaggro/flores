@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Arreglos Victoria Florería</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="Menú principal">
+                <a href="index.html" class="logo"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="products.html">Productos</a></li>
+                    <li><a href="index.html#about">Nosotros</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+                <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="login-section">
+            <div class="container">
+                <div class="login-container">
+                    <div class="login-form-container">
+                        <h2>Iniciar Sesión</h2>
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="loginEmail">Email</label>
+                                <input type="email" id="loginEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Contraseña</label>
+                                <input type="password" id="loginPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        </form>
+                        <p>¿No tienes cuenta? <a href="#" id="showRegister">Regístrate aquí</a></p>
+                    </div>
+
+                    <div class="register-form-container hidden">
+                        <h2>Registrarse</h2>
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label for="registerName">Nombre Completo</label>
+                                <input type="text" id="registerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerEmail">Email</label>
+                                <input type="email" id="registerEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerPhone">Teléfono</label>
+                                <input type="tel" id="registerPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerPassword">Contraseña</label>
+                                <input type="password" id="registerPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerConfirmPassword">Confirmar Contraseña</label>
+                                <input type="password" id="registerConfirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrarse</button>
+                        </form>
+                        <p>¿Ya tienes cuenta? <a href="#" id="showLogin">Inicia sesión aquí</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Tu Carrito</h2>
+                <span class="cart-close">&times;</span>
+            </div>
+            <div class="cart-body">
+                <div class="cart-items">
+                    <!-- Los items del carrito se cargarán aquí dinámicamente -->
+                    <p class="empty-cart-message">Tu carrito está vacío</p>
+                </div>
+                <div class="cart-summary">
+                    <div class="cart-total">
+                        <span>Total:</span>
+                        <span class="total-amount">$0.00</span>
+                    </div>
+                    <button class="btn btn-primary checkout-button" disabled>Proceder al Pedido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</h2>
+                    <p>Florería & Delivery</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>Enlaces</h3>
+                        <ul>
+                            <li><a href="index.html">Inicio</a></li>
+                            <li><a href="products.html">Productos</a></li>
+                            <li><a href="index.html#about">Nosotros</a></li>
+                            <li><a href="index.html#contacto">Contacto</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Categorías</h3>
+                        <ul>
+                            <li><a href="#">Ramos</a></li>
+                            <li><a href="#">Arreglos</a></li>
+                            <li><a href="#">Bodas</a></li>
+                            <li><a href="#">Cumpleaños</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Recoleta 1234, Recoleta, Santiago</p>
+                    <p><i class="fas fa-phone"></i> +56 2 1234 5678</p>
+                    <p><i class="fas fa-envelope"></i> info@arreglosvictoria.cl</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arreglos Victoria. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/utils.js" type="module"></script>
+    <script src="assets/js/login.js" type="module"></script>
+    <script src="assets/js/cart.js" type="module"></script>
+</body>
+</html>

@@ -37,10 +37,16 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Rutas
 const contactRoutes = require('./routes/contact');
+const productsRouter = require('./routes/products');
+const usersRouter = require('./routes/users');
+
 app.use('/api/contact', (req, res, next) => {
     logMessage(`Ruta /api/contact accedida con método ${req.method}`);
     next();
 }, contactRoutes);
+
+app.use('/api/products', productsRouter);
+app.use('/api/users', usersRouter);
 
 // Ruta para servir el index.html
 app.get('/', (req, res) => {
