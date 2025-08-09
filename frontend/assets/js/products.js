@@ -1,5 +1,6 @@
 import { showNotification, updateCartCount, formatPrice } from './utils.js';
-import productManager from './productManager.js';
+import productManager, { handleImageError } from './productManager.js';
+import CartUtils from './cartUtils.js';
 
 // Variables de estado
 let currentPage = 1;
@@ -7,6 +8,7 @@ const limit = 8;
 let currentCategory = '';
 let currentSearch = '';
 let isLoading = false;
+let totalProducts = 0;
 
 // Elementos del DOM
 let productGrid = null;
@@ -19,6 +21,7 @@ let prevPageBottom = null;
 let nextPageBottom = null;
 let pageInfo = null;
 let pageInfoBottom = null;
+let resultsCount = null;
 
 // Inicializar la página de productos
 document.addEventListener('DOMContentLoaded', async function() {
@@ -33,6 +36,14 @@ document.addEventListener('DOMContentLoaded', async function() {
   
   // Adjuntar event listeners
   attachEventListeners();
+  
+  // Actualizar contador del carrito
+  updateCartCount();
+  
+  // Vincular la función handleImageError al ámbito global con imagen SVG por defecto
+  window.handleImageError = function (img) {
+    img.src = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\' viewBox=\'0 0 600 400\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' fill=\'%23aaa\' font-size=\'30\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ENo Image%3C/text%3E%3C/svg%3E';
+  };
 });
 
 // Inicializar elementos del DOM
@@ -41,14 +52,13 @@ function initializeDOMElements() {
   categoryFilter = document.getElementById('categoryFilter');
   searchFilter = document.getElementById('searchFilter');
   clearFiltersBtn = document.getElementById('clearFilters');
-  // Usar selectores más generales y verificar elementos por clase
   prevPage = document.querySelector('.prev-page');
   nextPage = document.querySelector('.next-page');
-  prevPageBottom = document.querySelector('.prev-page.bottom');
-  nextPageBottom = document.querySelector('.next-page.bottom');
-  // Buscar primero por clase específica, si no existe, buscar por clase genérica
-  pageInfo = document.querySelector('.page-info.top') || document.querySelector('.page-info');
+  prevPageBottom = document.querySelector('.prev-page-bottom');
+  nextPageBottom = document.querySelector('.next-page-bottom');
+  pageInfo = document.querySelector('.page-info.top');
   pageInfoBottom = document.querySelector('.page-info.bottom');
+  resultsCount = document.getElementById('resultsCount');
 }
 
 // Adjuntar event listeners
@@ -95,36 +105,16 @@ async function loadProducts() {
     const data = await productManager.loadProducts(currentPage, limit, currentCategory, currentSearch);
     
     if (data) {
+      totalProducts = data.pagination.totalProducts;
       renderProducts(data.products);
-      updatePagination(data.pagination); // Pasar el objeto pagination completo
+      updatePagination(data.pagination);
+      updateResultsCount();
     }
   } catch (error) {
     console.error('Error al cargar productos:', error);
-    showError('Error al cargar productos. Por favor, inténtelo más tarde.');
+    showError('Error al cargar productos. Por favor, intente nuevamente.');
   } finally {
     isLoading = false;
-  }
-}
-
-// Función para cargar categorías
-async function loadCategories() {
-  try {
-    const categories = await productManager.getCategories();
-    
-    // Limpiar opciones existentes excepto la primera
-    while (categoryFilter.options.length > 1) {
-      categoryFilter.remove(1);
-    }
-    
-    // Agregar categorías al select
-    categories.forEach(category => {
-      const option = document.createElement('option');
-      option.value = category;
-      option.textContent = category;
-      categoryFilter.appendChild(option);
-    });
-  } catch (error) {
-    console.error('Error al cargar categorías:', error);
   }
 }
 
@@ -156,7 +146,7 @@ async function renderProducts(products) {
     const productsHTML = products.map(product => `
       <div class="product-card">
         <div class="product-image">
-          <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="this.src='/assets/images/products/product_1.jpg'">
+          <img src="${product.image_url || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\' viewBox=\'0 0 600 400\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' fill=\'%23aaa\' font-size=\'30\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ENo Image%3C/text%3E%3C/svg%3E'}" alt="${product.name}" loading="lazy" onerror="handleImageError(this)">
         </div>
         <div class="product-info">
           <h3>${product.name}</h3>
@@ -179,72 +169,79 @@ async function renderProducts(products) {
     
     if (productGrid) {
       productGrid.innerHTML = productsHTML;
-    }
-    
-    // Adjuntar event listeners a los botones "Agregar al carrito"
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-      button.addEventListener('click', function() {
-        const product = {
-          id: this.dataset.id,
-          name: this.dataset.name,
-          price: parseFloat(this.dataset.price),
-          image: this.dataset.image,
-          quantity: 1
-        };
-        
-        addToCart(product);
+      
+      // Agregar event listeners a los botones de "Agregar al carrito"
+      document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+          const product = {
+            id: this.dataset.id,
+            name: this.dataset.name,
+            price: parseFloat(this.dataset.price),
+            image: this.dataset.image
+          };
+          
+          productManager.addToCart(product);
+          showNotification('Producto agregado al carrito', 'success');
+          updateCartCount();
+        });
       });
-    });
+    }
   } catch (error) {
-    console.error('Error al cargar productos:', error);
+    console.error('Error al renderizar productos:', error);
     if (productGrid) {
-      productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>';
+      productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, intente nuevamente.</div>';
     }
   }
 }
 
-// Función para actualizar la paginación
-function updatePagination(pagination) {
-  // Verificar que se haya pasado el objeto de paginación
-  if (!pagination) {
-    console.error('No se proporcionó el objeto de paginación');
-    return;
+
+// Función para cargar categorías
+async function loadCategories() {
+  try {
+    const categories = await productManager.getCategories();
+    
+    if (categories && categoryFilter) {
+      // Limpiar el filtro antes de cargar nuevas categorías
+      categoryFilter.innerHTML = '<option value="">Todas las categorías</option>';
+      
+      // Agregar las categorías ordenadas
+      categories.sort().forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error('Error al cargar categorías:', error);
+    showError('Error al cargar categorías. Por favor, intente nuevamente.');
   }
-  
-  // Actualizar información de página
-  const pageInfoText = `Página ${pagination.currentPage} de ${pagination.totalPages}`;
-  if (pageInfo) pageInfo.textContent = pageInfoText;
-  if (pageInfoBottom) pageInfoBottom.textContent = pageInfoText;
-  
-  // Actualizar estado de botones
-  if (prevPage) prevPage.disabled = !pagination.hasPrevPage;
-  if (nextPage) nextPage.disabled = !pagination.hasNextPage;
-  if (prevPageBottom) prevPageBottom.disabled = !pagination.hasPrevPage;
-  if (nextPageBottom) nextPageBottom.disabled = !pagination.hasNextPage;
 }
 
-// Función para cambiar de página
-function changePage(page) {
-  if (page < 1) return;
-  currentPage = page;
-  loadProducts();
-}
-
-// Función para manejar el cambio de categoría
+// Manejar cambio de categoría
 function handleCategoryChange() {
-  currentCategory = categoryFilter.value;
+  currentCategory = this.value;
   currentPage = 1;
   loadProducts();
 }
 
-// Función para manejar la búsqueda
+// Manejar búsqueda con debounce
 function handleSearch() {
-  currentSearch = searchFilter.value;
+  currentSearch = this.value;
   currentPage = 1;
   loadProducts();
 }
 
-// Función para limpiar filtros
+// Función debounce para evitar llamadas frecuentes a la API
+function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+// Limpiar filtros
 function clearFilters() {
   if (categoryFilter) categoryFilter.value = '';
   if (searchFilter) searchFilter.value = '';
@@ -254,42 +251,40 @@ function clearFilters() {
   loadProducts();
 }
 
-// Función para agregar al carrito
-function addToCart(product) {
-  // Usar una clave constante para el carrito y verificar si existe
-  const CART_KEY = 'arreglosVictoriaCart';
+// Cambiar página
+function changePage(page) {
+  if (page < 1) return;
   
-  // Obtener carrito actual del localStorage
-  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-  
-  // Verificar si el producto ya está en el carrito
-  const existingProductIndex = cart.findIndex(item => item.id == product.id);
-  
-  if (existingProductIndex !== -1) {
-    // Si el producto ya existe, aumentar la cantidad
-    cart[existingProductIndex].quantity += 1;
-  } else {
-    // Si es un producto nuevo, agregarlo al carrito
-    cart.push(product);
-  }
-  
-  // Guardar carrito actualizado en localStorage
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  
-  // Mostrar notificación
-  alert(`Producto agregado al carrito: ${product.name}`);
-  
-  // Actualizar contador del carrito si existe la función
-  if (typeof updateCartCount === 'function') {
-    updateCartCount();
-  }
+  currentPage = page;
+  loadProducts();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Función de debounce para la búsqueda
-function debounce(func, delay) {
-  let timeoutId;
-  return function (...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(this, args), delay);
-  };
+// Actualizar información de paginación
+function updatePagination(pagination) {
+  const { currentPage, totalPages, hasNextPage, hasPrevPage } = pagination;
+  
+  // Actualizar botones de paginación
+  if (prevPage) prevPage.disabled = !hasPrevPage;
+  if (nextPage) nextPage.disabled = !hasNextPage;
+  if (prevPageBottom) prevPageBottom.disabled = !hasPrevPage;
+  if (nextPageBottom) nextPageBottom.disabled = !hasNextPage;
+  
+  // Actualizar información de página
+  const pageInfoText = `Página ${currentPage} de ${totalPages}`;
+  if (pageInfo) pageInfo.textContent = pageInfoText;
+  if (pageInfoBottom) pageInfoBottom.textContent = pageInfoText;
+}
+
+// Actualizar contador de resultados
+function updateResultsCount() {
+  if (resultsCount) {
+    if (totalProducts === 0) {
+      resultsCount.textContent = 'No se encontraron productos';
+    } else if (totalProducts === 1) {
+      resultsCount.textContent = 'Mostrando 1 producto';
+    } else {
+      resultsCount.textContent = `Mostrando ${totalProducts} productos`;
+    }
+  }
 }

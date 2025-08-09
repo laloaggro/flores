@@ -1,75 +1,7 @@
-// cartUtils.js
-const CartUtils = {
-  // Obtener el carrito desde localStorage
-  getCart() {
-    return JSON.parse(localStorage.getItem('cart')) || [];
-  },
-  
-  // Guardar el carrito en localStorage
-  saveCart(cart) {
-    CartUtils.saveCart(cart);
-  },
-  
-  // Obtener el total del carrito
-  getCartTotal() {
-    const cart = this.getCart();
-    return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  },
-  
-  // Actualizar la cantidad de un producto
-  updateQuantity(productId, change) {
-    let cart = this.getCart();
-    
-    const productIndex = cart.findIndex(item => item.id == productId);
-    
-    if (productIndex !== -1) {
-      cart[productIndex].quantity += change;
-      
-      // Si la cantidad es 0 o menos, eliminar el producto
-      if (cart[productIndex].quantity <= 0) {
-        cart.splice(productIndex, 1);
-      }
-      
-      // Guardar carrito actualizado
-      this.saveCart(cart);
-      
-      // Mostrar información de depuración
-      console.log('Cantidad actualizada para producto', productId, 'Nueva cantidad:', cart[productIndex]?.quantity || 0);
-    }
-  },
-  
-  // Eliminar un producto del carrito
-  removeFromCart(productId) {
-    let cart = this.getCart();
-    
-    const initialLength = cart.length;
-    cart = cart.filter(item => item.id != productId);
-    
-    // Guardar carrito actualizado
-    this.saveCart(cart);
-    
-    // Mostrar información de depuración
-    console.log('Producto eliminado del carrito', productId, 'Productos eliminados:', initialLength - cart.length);
-    
-    return initialLength - cart.length;
-  },
-  
-  // Actualizar el contador del carrito
-  updateCartCount() {
-    const cart = this.getCart();
-    const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
-    const cartCountElements = document.querySelectorAll('.cart-count');
-    
-    cartCountElements.forEach(element => {
-      element.textContent = totalCount;
-    });
-    
-    // Mostrar información de depuración
-    console.log('Carrito actualizado. Total de productos:', totalCount);
-  }
-};
 import { showNotification, getUser, isAuthenticated, formatPrice } from './utils.js';
 import CartUtils from './cartUtils.js';
+
+// Funcionalidad del carrito de compras
 
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos del DOM
@@ -80,47 +12,55 @@ document.addEventListener('DOMContentLoaded', function() {
   const totalAmount = document.querySelector('.total-amount');
   const checkoutButton = document.querySelector('.checkout-button');
   
-  // Mostrar/ocultar carrito
-  cartIcon.addEventListener('click', function() {
-    loadCart();
-    cartModal.style.display = 'block';
-  });
+  // Mostrar/ocultar carrito - solo si los elementos existen
+  if (cartIcon && cartModal) {
+    cartIcon.addEventListener('click', function() {
+      loadCart();
+      cartModal.style.display = 'block';
+    });
+  }
   
-  cartClose.addEventListener('click', function() {
-    cartModal.style.display = 'none';
-  });
-  
-  window.addEventListener('click', function(event) {
-    if (event.target === cartModal) {
+  if (cartClose && cartModal) {
+    cartClose.addEventListener('click', function() {
       cartModal.style.display = 'none';
-    }
-  });
+    });
+  }
+  
+  if (cartModal) {
+    window.addEventListener('click', function(event) {
+      if (event.target === cartModal) {
+        cartModal.style.display = 'none';
+      }
+    });
+  }
   
   // Agregar funcionalidad al botón 'Proceder al pedido'
-  checkoutButton.addEventListener('click', function() {
-    const cart = CartUtils.getCart();
-    
-    if (cart.length === 0) {
-      showNotification('Tu carrito está vacío', 'error');
-      return;
-    }
-    
-    // Verificar si el usuario está logueado
-    if (!isAuthenticated()) {
-      showNotification('Debes iniciar sesión para continuar con el pedido', 'error');
-      // Mostrar información de depuración
-      console.log('Usuario no autenticado, redirigiendo a login');
+  if (checkoutButton) {
+    checkoutButton.addEventListener('click', function() {
+      const cart = CartUtils.getCart();
       
-      // Redirigir a la página de login/registro
-      setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 1500);
-      return;
-    }
-    
-    // Redirigir a la página de checkout
-    window.location.href = 'checkout.html';
-  });
+      if (cart.length === 0) {
+        showNotification('Tu carrito está vacío', 'error');
+        return;
+      }
+      
+      // Verificar si el usuario está logueado
+      if (!isAuthenticated()) {
+        showNotification('Debes iniciar sesión para continuar con el pedido', 'error');
+        // Mostrar información de depuración
+        console.log('Usuario no autenticado, redirigiendo a login');
+        
+        // Redirigir a la página de login/registro
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1500);
+        return;
+      }
+      
+      // Redirigir a la página de checkout
+      window.location.href = 'checkout.html';
+    });
+  }
   
   // Función para cargar y mostrar el carrito
   function loadCart() {

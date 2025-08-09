@@ -1,9 +1,11 @@
 import productManager from './productManager.js';
-import ProductCard from '../../components/ProductCard.js';
+import ProductCard, { handleImageError } from '../../components/ProductCard.js';
+import CartUtils from './cartUtils.js';
+import { showNotification } from './utils.js';
 
 // Función para cargar y mostrar productos en la página principal
 async function loadHomeProducts() {
-  const productGrid = document.querySelector('#products .product-grid');
+  const productGrid = document.getElementById('products');
   
   if (!productGrid) {
     console.error('No se encontró el contenedor de productos');
@@ -32,9 +34,9 @@ async function loadHomeProducts() {
             image: this.dataset.image
           };
           
-          // Aquí se debería agregar la lógica para agregar al carrito
-          // Por ahora solo mostramos un mensaje
-          alert(`Producto "${product.name}" agregado al carrito`);
+          // Agregar producto al carrito usando CartUtils
+          CartUtils.addToCart(product);
+          showNotification(`Producto "${product.name}" agregado al carrito`, 'success');
         });
       });
     } else {
@@ -42,13 +44,12 @@ async function loadHomeProducts() {
     }
   } catch (error) {
     console.error('Error al cargar productos:', error);
-    productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>';
+    productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, intente nuevamente.</div>';
   }
 }
 
 // Cargar productos cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-  loadHomeProducts();
-});
+document.addEventListener('DOMContentLoaded', loadHomeProducts);
 
-export default loadHomeProducts;
+// Exportar la función handleImageError al ámbito global
+window.handleImageError = handleImageError;

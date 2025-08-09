@@ -32,16 +32,47 @@ router.get('/', (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 12;
   const offset = (page - 1) * limit;
+  const category = req.query.category;
+  const search = req.query.search;
   
-  // Obtener productos con paginación
-  db.all(`SELECT * FROM products LIMIT ? OFFSET ?`, [limit, offset], (err, rows) => {
+  let query = 'SELECT * FROM products';
+  let countQuery = 'SELECT COUNT(*) as total FROM products';
+  const params = [];
+  const countParams = [];
+  
+  // Agregar filtros si existen
+  if (category) {
+    query += ' WHERE category = ?';
+    countQuery += ' WHERE category = ?';
+    params.push(category);
+    countParams.push(category);
+  }
+  
+  if (search) {
+    if (category) {
+      query += ' AND name LIKE ?';
+      countQuery += ' AND name LIKE ?';
+    } else {
+      query += ' WHERE name LIKE ?';
+      countQuery += ' WHERE name LIKE ?';
+    }
+    params.push(`%${search}%`);
+    countParams.push(`%${search}%`);
+  }
+  
+  // Agregar orden y paginación
+  query += ' ORDER BY id LIMIT ? OFFSET ?';
+  params.push(limit, offset);
+  
+  // Obtener productos con filtros y paginación
+  db.all(query, params, (err, rows) => {
     if (err) {
       console.error('Error al obtener productos:', err.message);
       return res.status(500).json({ error: 'Error al obtener productos' });
     }
     
-    // Contar el total de productos
-    db.get(`SELECT COUNT(*) as total FROM products`, (err, countRow) => {
+    // Contar el total de productos con los filtros aplicados
+    db.get(countQuery, countParams, (err, countRow) => {
       if (err) {
         console.error('Error al contar productos:', err.message);
         return res.status(500).json({ error: 'Error al contar productos' });

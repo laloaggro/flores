@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.token) {
-          // Guardar token en localStorage
-          localStorage.setItem('token', data.token);
+        if (data.user) {
+          // Guardar información del usuario en localStorage
+          localStorage.setItem('user', JSON.stringify(data.user));
           showNotification('Inicio de sesión exitoso', 'success');
           
           // Redirigir a la página de perfil después de 1 segundo
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.id) {
+        if (data.message && data.message.includes('exitoso')) {
           showNotification('Registro exitoso', 'success');
           
           // Limpiar formulario

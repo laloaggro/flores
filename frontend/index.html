@@ -13,143 +13,289 @@
     <header>
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="#home" class="logo"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</a>
+                <a href="#home" class="logo"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
                 <ul class="nav-links">
-                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="index.html" class="active">Inicio</a></li>
                     <li><a href="products.html">Productos</a></li>
-                    <li><a href="#about">Nosotros</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="index.html#about">Nosotros</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
                 </ul>
-                <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
-                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                    <span class="cart-count">0</span>
+                <div class="user-actions">
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <div class="user-info">
+                            <span id="userName"></span>
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <a href="profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                        </div>
+                    </div>
+                    <a href="login.html" class="login-link" id="loginLink">Iniciar Sesión</a>
+                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
+                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="cart-count">0</span>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
     <main>
-        <section id="home" class="hero" role="region" aria-labelledby="hero-heading">
+        <section id="home" class="hero">
             <div class="container">
                 <div class="hero-content">
-                    <h1 id="hero-heading">Arreglos Florales para Cada Ocasi&oacute;n</h1>
-                    <p>Flores frescas y hermosos diseños para alegrar tu día y expresar tus sentimientos</p>
-                    <a href="#products" class="btn btn-primary">Ver Productos</a>
+                    <h1>Arreglos Florales Victoria</h1>
+                    <p>Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana</p>
+                    <div class="hero-buttons">
+                        <a href="products.html" class="btn btn-primary">Ver Productos</a>
+                        <a href="#contacto" class="btn btn-secondary">Contactar</a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- La sección de productos será cargada dinámicamente -->
-        <section id="products" class="products" role="region" aria-labelledby="products-heading">
+        <section id="featured-products" class="featured-products">
             <div class="container">
-                <h2 id="products-heading" class="section-title">Nuestros Productos</h2>
-                <div class="product-grid">
+                <h2>Productos Destacados</h2>
+                <div id="products" class="product-grid">
                     <div class="loading-message">Cargando productos...</div>
                 </div>
-                <div class="product-note">
-                    <p><i class="fas fa-info-circle"></i> Todos nuestros arreglos florales son hechos con flores frescas y de la más alta calidad. Entregamos en toda la Región Metropolitana con un tiempo de anticipación mínimo de 2 horas.</p>
-                </div>
-                <div class="text-center">
-                    <a href="products.html" class="btn btn-primary">Ver Todos los Productos</a>
-                </div>
             </div>
         </section>
 
-        <section id="about" class="about" role="region" aria-labelledby="about-heading">
+        <section id="about" class="about">
             <div class="container">
-                <h2 id="about-heading" class="section-title">Sobre Nosotros</h2>
+                <h2>Sobre Nosotros</h2>
                 <div class="about-content">
                     <div class="about-text">
-                        <p>Arreglos Victoria es una florería familiar con más de 10 años de experiencia creando hermosos arreglos florales para todas las ocasiones especiales.</p>
-                        <p>Nos especializamos en diseños únicos y personalizados, utilizando solo las flores más frescas y de la más alta calidad. Cada arreglo es creado con pasión y dedicación por nuestro equipo de expertos floristas.</p>
-                        <p>Creemos que las flores tienen el poder de transmitir emociones y crear momentos inolvidables. Por eso, nos esforzamos por superar las expectativas de nuestros clientes en cada entrega.</p>
-                        <div class="about-features">
-                            <div class="feature">
-                                <i class="fas fa-seedling"></i>
-                                <h3>Flores Frescas</h3>
-                                <p>Flores recién cortadas garantizan la máxima duración y belleza</p>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-truck"></i>
-                                <h3>Entrega a Domicilio</h3>
-                                <p>Servicio de entrega rápido y confiable en toda la Región Metropolitana</p>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-paint-brush"></i>
-                                <h3>Diseños Personalizados</h3>
-                                <p>Arreglos únicos creados según tus preferencias y necesidades</p>
-                            </div>
-                        </div>
+                        <p>Somos una florería familiar con más de 10 años de experiencia en el mercado. Nos especializamos en arreglos florales únicos y personalizados para todas las ocasiones.</p>
+                        <p>En Arreglos Florales Victoria, nos enorgullece ofrecer:</p>
+                        <ul>
+                            <li>Flores frescas de la mejor calidad</li>
+                            <li>Diseños únicos y personalizados</li>
+                            <li>Entrega a domicilio en toda la Región Metropolitana</li>
+                            <li>Atención personalizada y profesional</li>
+                        </ul>
                     </div>
                     <div class="about-image">
-                        <img src="https://images.unsplash.com/photo-1457530378978-8bac673b8062?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Florería Arreglos Victoria">
+                        <img src="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Floristería Arreglos Victoria" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22 viewBox=%220 0 600 400%22%3E%3Crect width=%22600%22 height=%22400%22 fill=%22%23eee%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23aaa%22 font-size=%2224%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EImagen no disponible%3C/text%3E%3C/svg%3E';">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contacto" class="contact" role="region" aria-labelledby="contact-heading">
+        <section class="suppliers">
             <div class="container">
-                <h2 id="contact-heading" class="section-title">Contáctanos</h2>
+                <div class="suppliers-content">
+                    <h2>Nuestros Proveedores</h2>
+                    <div class="supplier-grid">
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <h3>Granjas Locales</h3>
+                            <p>Trabajamos directamente con granjas de la Región Metropolitana para obtener las flores más frescas y de calidad.</p>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h3>Proveedores de Materiales</h3>
+                            <p>Jarrones, Papelería y otros materiales para crear hermosos arreglos florales.</p>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <h3>Asociaciones Estratégicas</h3>
+                            <p>Colaboramos con otros profesionales del sector para ofrecer servicios complementarios.</p>
+                        </div>
+                    </div>
+                    
+                    <h2 style="margin-top: 3rem;">Nuestros Servicios</h2>
+                    <div class="supplier-grid">
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-flower-tulip"></i>
+                            </div>
+                            <h3>Floristas</h3>
+                            <ul style="text-align: left; margin-top: 15px;">
+                                <li>Arreglos Florales</li>
+                                <li>Mantenimiento de Plantas</li>
+                            </ul>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>Empleados</h3>
+                            <ul style="text-align: left; margin-top: 15px;">
+                                <li>Personal de Ventas: Atención al Cliente y Ventas Online</li>
+                            </ul>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Administradores</h3>
+                            <ul style="text-align: left; margin-top: 15px;">
+                                <li>Gestión de Inventarios</li>
+                                <li>Contabilidad</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h2 style="margin-top: 3rem;">Nuestros Productos</h2>
+                    <div class="supplier-grid">
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-rose"></i>
+                            </div>
+                            <h3>Tipos de Flores</h3>
+                            <ul style="text-align: left; margin-top: 15px;">
+                                <li>Rosas</li>
+                                <li>Lirios</li>
+                                <li>Tulipanes</li>
+                            </ul>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <h3>Inventario</h3>
+                            <ul style="text-align: left; margin-top: 15px;">
+                                <li>Materiales para Arreglos</li>
+                                <li>Espuma Floral</li>
+                                <li>Cinta Decorativa</li>
+                            </ul>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <h3>Herramientas</h3>
+                            <ul style="text-align: left; margin-top: 15px;">
+                                <li>Cortes de Flores</li>
+                                <li>Troncos Decorativos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="payment-methods">
+            <div class="container">
+                <div class="payment-methods-content">
+                    <h2>Formas de Pago</h2>
+                    <div class="payment-options">
+                        <div class="payment-option cash">
+                            <div class="payment-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <h3>Efectivo</h3>
+                            <p>Paga en efectivo al momento de la entrega de tu pedido.</p>
+                        </div>
+                        <div class="payment-option card">
+                            <div class="payment-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <h3>Tarjeta</h3>
+                            <p>Paga con tarjeta de crédito o débito de manera segura.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="survey">
+            <div class="container">
+                <div class="survey-content">
+                    <h2>¡Tu Opinión Nos Importa!</h2>
+                    <p>Ayúdanos a mejorar nuestros servicios compartiendo tu experiencia con Arreglos Florales Victoria.</p>
+                    <div class="survey-form">
+                        <form id="satisfactionSurvey">
+                            <div class="form-group">
+                                <label for="customerName">Nombre</label>
+                                <input type="text" id="customerName" name="name" required autocomplete="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="customerEmail">Email</label>
+                                <input type="email" id="customerEmail" name="email" required autocomplete="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="satisfactionLevel">Nivel de Satisfacción</label>
+                                <select id="satisfactionLevel" name="satisfaction" required autocomplete="off">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="5">Muy Satisfecho</option>
+                                    <option value="4">Satisfecho</option>
+                                    <option value="3">Neutral</option>
+                                    <option value="2">Insatisfecho</option>
+                                    <option value="1">Muy Insatisfecho</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="comments">Comentarios</label>
+                                <textarea id="comments" name="comments" placeholder="Cuéntanos tu experiencia..." autocomplete="off"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enviar Encuesta</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="contact">
+            <div class="container">
+                <h2>Contacto</h2>
                 <div class="contact-content">
                     <div class="contact-info">
                         <h3>Información de Contacto</h3>
-                        <div class="contact-detail">
+                        <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
                                 <h4>Dirección</h4>
                                 <p>Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</p>
                             </div>
                         </div>
-                        <div class="contact-detail">
+                        <div class="contact-item">
                             <i class="fas fa-phone"></i>
                             <div>
                                 <h4>Teléfono</h4>
                                 <p>+569 6360 3177</p>
                             </div>
                         </div>
-                        <div class="contact-detail">
+                        <div class="contact-item">
                             <i class="fas fa-envelope"></i>
                             <div>
                                 <h4>Email</h4>
                                 <p>arreglosvictoriafloreria@gmail.com</p>
                             </div>
                         </div>
-                        <div class="contact-detail">
-                            <i class="fab fa-whatsapp"></i>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
                             <div>
-                                <h4>WhatsApp</h4>
-                                <p>+569 6360 3177</p>
-                            </div>
-                        </div>
-                        <div class="social-links">
-                            <h4>Síguenos</h4>
-                            <div class="social-icons">
-                                <a href="https://www.instagram.com/arreglosvictoria/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                                <a href="https://wa.me/56963603177" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                                <h4>Horario</h4>
+                                <p>Lunes a Domingo: 9:00 AM - 8:00 PM</p>
                             </div>
                         </div>
                     </div>
                     <div class="contact-form">
-                        <h3>Envíanos un Mensaje</h3>
+                        <h3>Envíanos un mensaje</h3>
                         <form id="contactForm">
                             <div class="form-group">
-                                <label for="name">Nombre completo *</label>
-                                <input type="text" id="name" name="name" required>
+                                <input type="text" id="name" name="name" placeholder="Tu nombre" required autocomplete="name">
                             </div>
                             <div class="form-group">
-                                <label for="email">Email *</label>
-                                <input type="email" id="email" name="email" required>
+                                <input type="email" id="email" name="email" placeholder="Tu email" required autocomplete="email">
                             </div>
                             <div class="form-group">
-                                <label for="phone">Teléfono</label>
-                                <input type="tel" id="phone" name="phone">
+                                <input type="tel" id="phone" name="phone" placeholder="Tu teléfono" autocomplete="tel">
                             </div>
                             <div class="form-group">
-                                <label for="message">Mensaje *</label>
-                                <textarea id="message" name="message" rows="5" required></textarea>
+                                <textarea id="message" name="message" placeholder="Tu mensaje" rows="5" required autocomplete="off"></textarea>
                             </div>
-                            <div id="formMessage" class="form-message"></div>
                             <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                         </form>
                     </div>
@@ -157,28 +303,6 @@
             </div>
         </section>
     </main>
-
-    <div id="cartModal" class="cart-modal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Tu Carrito</h2>
-                <span class="cart-close">&times;</span>
-            </div>
-            <div class="cart-body">
-                <div class="cart-items">
-                    <!-- Los items del carrito se cargarán aquí dinámicamente -->
-                    <p class="empty-cart-message">Tu carrito está vacío</p>
-                </div>
-                <div class="cart-summary">
-                    <div class="cart-total">
-                        <span>Total:</span>
-                        <span class="total-amount">$0.00</span>
-                    </div>
-                    <button class="btn btn-primary checkout-button" disabled>Proceder al Pedido</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <footer>
         <div class="container">
@@ -190,29 +314,51 @@
                 <div class="footer-links">
                     <h4>Enlaces</h4>
                     <ul>
-                        <li><a href="#home">Inicio</a></li>
-                        <li><a href="#products">Productos</a></li>
-                        <li><a href="#about">Nosotros</a></li>
-                        <li><a href="#contacto">Contacto</a></li>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="products.html">Productos</a></li>
+                        <li><a href="index.html#about">Nosotros</a></li>
+                        <li><a href="index.html#contacto">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="footer-contact">
                     <h4>Contacto</h4>
-                    <p><i class="fas fa-envelope" aria-hidden="true"></i> <span aria-label="Correo electrónico">arreglosvictoriafloreria@gmail.com</span></p>
-                    <p><i class="fas fa-phone" aria-hidden="true"></i> <span aria-label="Teléfono">+569 6360 3177</span></p>
                     <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> <span aria-label="Dirección">Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</span></p>
+                    <p><i class="fas fa-phone" aria-hidden="true"></i> <span aria-label="Teléfono">+569 6360 3177</span></p>
+                    <p><i class="fas fa-envelope" aria-hidden="true"></i> <span aria-label="Correo electrónico">arreglosvictoriafloreria@gmail.com</span></p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Victoria. Todos los derechos reservados.</p>
+                <p>&copy; 2023 Arreglos Victoria. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/contact.js"></script>
+    <script src="assets/js/auth.js" type="module"></script>
     <script src="assets/js/cart.js" type="module"></script>
     <script src="assets/js/homeProducts.js" type="module"></script>
+    <script src="assets/js/contact.js" type="module"></script>
+    <script>
+        // Manejar el envío de la encuesta de satisfacción
+        document.getElementById('satisfactionSurvey').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obtener los valores del formulario
+            const name = document.getElementById('customerName').value;
+            const email = document.getElementById('customerEmail').value;
+            const satisfaction = document.getElementById('satisfactionLevel').value;
+            const comments = document.getElementById('comments').value;
+            
+            // Enviar los datos (en una implementación real, esto sería a un servidor)
+            console.log('Encuesta enviada:', { name, email, satisfaction, comments });
+            
+            // Mostrar mensaje de agradecimiento
+            alert('¡Gracias por tu opinión! Nos ayuda a mejorar nuestros servicios.');
+            
+            // Limpiar el formulario
+            this.reset();
+        });
+    </script>
 </body>
 </html>

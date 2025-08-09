@@ -53,7 +53,7 @@ function showNotification(message, type) {
 
 // Función para actualizar el contador del carrito
 function updateCartCount() {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cart = JSON.parse(localStorage.getItem('arreglosVictoriaCart')) || [];
   const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
   const cartCountElements = document.querySelectorAll('.cart-count');
   

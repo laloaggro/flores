@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!token || !user) {
         // Si no hay token o usuario, redirigir al login
-        window.location.href = '/login.html';
+        window.location.href = 'login.html';
         return;
     }
     
@@ -32,9 +32,9 @@ function displayUserInfo(user) {
     
     if (userNameElement) userNameElement.textContent = user.name || 'Usuario';
     if (userEmailElement) userEmailElement.textContent = user.email || '';
-    if (profileNameElement) profileNameElement.value = user.name || '';
-    if (profileEmailElement) profileEmailElement.value = user.email || '';
-    if (profilePhoneElement) profilePhoneElement.value = user.phone || '';
+    if (profileNameElement) profileNameElement.textContent = user.name || 'Usuario';
+    if (profileEmailElement) profileEmailElement.textContent = user.email || '';
+    if (profilePhoneElement) profilePhoneElement.textContent = user.phone || '';
 }
 
 // Configurar event listeners
@@ -48,7 +48,22 @@ function setupEventListeners() {
             localStorage.removeItem('user');
             
             // Redirigir a la página principal
-            window.location.href = '/index.html';
+            window.location.href = 'index.html';
+        });
+    }
+    
+    // Enlace de cerrar sesión en el menú
+    const logoutLink = document.getElementById('logoutLink');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Eliminar datos de sesión
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            
+            // Redirigir a la página principal
+            window.location.href = 'index.html';
         });
     }
     
@@ -100,107 +115,52 @@ function updateProfile() {
         name: formData.get('name'),
         email: formData.get('email'),
         phone: formData.get('phone'),
-        birthdate: formData.get('birthdate'),
-        bio: formData.get('bio')
+        address: formData.get('address')
     };
-    
-    // Mostrar mensaje de guardado
-    alert('Perfil actualizado correctamente');
     
     // Actualizar datos en localStorage
     const user = JSON.parse(localStorage.getItem('user')) || {};
     Object.assign(user, userData);
     localStorage.setItem('user', JSON.stringify(user));
+    
+    // Actualizar UI
+    displayUserInfo(user);
+    
+    // Mostrar mensaje de éxito
+    alert('Perfil actualizado correctamente');
 }
 
-// Cambiar avatar
-function changeAvatar() {
-    // En una implementación real, aquí se abriría un diálogo para seleccionar una imagen
-    alert('Funcionalidad de cambio de avatar no implementada en esta demo');
+// Cargar sección del perfil
+function loadProfileSection(sectionId) {
+    // Ocultar todas las secciones
+    document.querySelectorAll('.profile-content-section').forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    // Mostrar la sección seleccionada
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.style.display = 'block';
+    }
 }
 
 // Cargar estadísticas del usuario
 function loadUserStats() {
-    // En una implementación real, aquí se cargarían datos reales del servidor
+    // Simular carga de estadísticas
     const orderCountElement = document.getElementById('orderCount');
-    const favoriteCountElement = document.getElementById('favoriteCount');
+    const productCountElement = document.getElementById('productCount');
+    const totalSpentElement = document.getElementById('totalSpent');
     
-    if (orderCountElement) orderCountElement.textContent = '5'; // Ejemplo
-    if (favoriteCountElement) favoriteCountElement.textContent = '3'; // Ejemplo
+    if (orderCountElement) orderCountElement.textContent = '5';
+    if (productCountElement) productCountElement.textContent = '12';
+    if (totalSpentElement) totalSpentElement.textContent = '$125.000';
 }
 
-// Cargar sección del perfil
-function loadProfileSection(section) {
-    const contentElement = document.getElementById('profileContent');
-    if (!contentElement) return;
-    
-    // En una implementación real, aquí se cargaría contenido dinámico según la sección
-    switch (section) {
-        case 'orders':
-            contentElement.innerHTML = `
-                <h2><i class="fas fa-shopping-bag"></i> Mis Pedidos</h2>
-                <p>Aquí se mostrarían los pedidos del usuario.</p>
-            `;
-            break;
-        case 'favorites':
-            contentElement.innerHTML = `
-                <h2><i class="fas fa-heart"></i> Favoritos</h2>
-                <p>Aquí se mostrarían los productos favoritos del usuario.</p>
-            `;
-            break;
-        case 'addresses':
-            contentElement.innerHTML = `
-                <h2><i class="fas fa-map-marker-alt"></i> Direcciones</h2>
-                <p>Aquí se mostrarían las direcciones del usuario.</p>
-            `;
-            break;
-        case 'settings':
-            contentElement.innerHTML = `
-                <h2><i class="fas fa-cog"></i> Configuración</h2>
-                <p>Aquí se mostrarían las opciones de configuración del usuario.</p>
-            `;
-            break;
-        default:
-            // Recargar el formulario de perfil
-            contentElement.innerHTML = `
-                <h2><i class="fas fa-user"></i> Información Personal</h2>
-                <form id="profileForm" class="profile-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="profileName">Nombre Completo</label>
-                            <input type="text" id="profileName" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="profileEmail">Email</label>
-                            <input type="email" id="profileEmail" name="email" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="profilePhone">Teléfono</label>
-                            <input type="tel" id="profilePhone" name="phone">
-                        </div>
-                        <div class="form-group">
-                            <label for="profileBirthdate">Fecha de Nacimiento</label>
-                            <input type="date" id="profileBirthdate" name="birthdate">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="profileBio">Biografía</label>
-                        <textarea id="profileBio" name="bio" rows="4" placeholder="Cuéntanos un poco sobre ti..."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                </form>
-            `;
-            
-            // Reasignar event listener al formulario
-            const newProfileForm = document.getElementById('profileForm');
-            if (newProfileForm) {
-                newProfileForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    updateProfile();
-                });
-            }
-            break;
-    }
+// Cambiar avatar
+function changeAvatar() {
+    // Simular cambio de avatar
+    alert('Funcionalidad de cambio de avatar no implementada aún');
 }
+
+// Exportar funciones para uso global
+window.loadProfileSection = loadProfileSection;
