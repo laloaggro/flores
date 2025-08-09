@@ -1,4 +1,75 @@
-import { showNotification, updateCartCount, getUser, isAuthenticated, formatPrice } from './utils.js';
+// cartUtils.js
+const CartUtils = {
+  // Obtener el carrito desde localStorage
+  getCart() {
+    return JSON.parse(localStorage.getItem('cart')) || [];
+  },
+  
+  // Guardar el carrito en localStorage
+  saveCart(cart) {
+    CartUtils.saveCart(cart);
+  },
+  
+  // Obtener el total del carrito
+  getCartTotal() {
+    const cart = this.getCart();
+    return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  },
+  
+  // Actualizar la cantidad de un producto
+  updateQuantity(productId, change) {
+    let cart = this.getCart();
+    
+    const productIndex = cart.findIndex(item => item.id == productId);
+    
+    if (productIndex !== -1) {
+      cart[productIndex].quantity += change;
+      
+      // Si la cantidad es 0 o menos, eliminar el producto
+      if (cart[productIndex].quantity <= 0) {
+        cart.splice(productIndex, 1);
+      }
+      
+      // Guardar carrito actualizado
+      this.saveCart(cart);
+      
+      // Mostrar información de depuración
+      console.log('Cantidad actualizada para producto', productId, 'Nueva cantidad:', cart[productIndex]?.quantity || 0);
+    }
+  },
+  
+  // Eliminar un producto del carrito
+  removeFromCart(productId) {
+    let cart = this.getCart();
+    
+    const initialLength = cart.length;
+    cart = cart.filter(item => item.id != productId);
+    
+    // Guardar carrito actualizado
+    this.saveCart(cart);
+    
+    // Mostrar información de depuración
+    console.log('Producto eliminado del carrito', productId, 'Productos eliminados:', initialLength - cart.length);
+    
+    return initialLength - cart.length;
+  },
+  
+  // Actualizar el contador del carrito
+  updateCartCount() {
+    const cart = this.getCart();
+    const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    
+    cartCountElements.forEach(element => {
+      element.textContent = totalCount;
+    });
+    
+    // Mostrar información de depuración
+    console.log('Carrito actualizado. Total de productos:', totalCount);
+  }
+};
+import { showNotification, getUser, isAuthenticated, formatPrice } from './utils.js';
+import CartUtils from './cartUtils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos del DOM
@@ -27,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Agregar funcionalidad al botón 'Proceder al pedido'
   checkoutButton.addEventListener('click', function() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cart = CartUtils.getCart();
     
     if (cart.length === 0) {
       showNotification('Tu carrito está vacío', 'error');
@@ -56,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mostrar información de depuración
     console.log('Cargando carrito desde localStorage');
     
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cart = CartUtils.getCart();
     renderCart(cart);
   }
   
@@ -73,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Calcular total
-    const total = cartItemsData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const total = CartUtils.getCartTotal();
     
     // Renderizar items del carrito
     cartItems.innerHTML = cartItemsData.map(item => `
@@ -136,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Guardar carrito actualizado
-      localStorage.setItem('cart', JSON.stringify(cart));
+      CartUtils.saveCart(cart);
       
       // Mostrar información de depuración
       console.log('Cantidad actualizada para producto', productId, 'Nueva cantidad:', cart[parameter=productIndex]?.quantity || 0);
@@ -155,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cart = cart.filter(item => item.id != productId);
     
     // Guardar carrito actualizado
-    localStorage.setItem('cart', JSON.stringify(cart));
+    CartUtils.saveCart(cart);
     
     // Mostrar información de depuración
     console.log('Producto eliminado del carrito', productId, 'Productos eliminados:', initialLength - cart.length);
