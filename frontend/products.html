@@ -3,74 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos - Arreglos Victoria Florería</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <title>Productos - Arreglos Florales Victoria</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <div class="container">
-            <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="index.html" class="logo"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</a>
-                <ul class="nav-links">
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="products.html" class="active">Productos</a></li>
-                    <li><a href="index.html#about">Nosotros</a></li>
-                    <li><a href="index.html#contacto">Contacto</a></li>
-                </ul>
-                <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
-                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                    <span class="cart-count">0</span>
+        <div class="header-top">
+            <div class="container">
+                <div class="contact-info">
+                    <span><i class="fas fa-phone"></i> +56 9 8765 4321</span>
+                    <span><i class="fas fa-envelope"></i> info@arreglosfloralesvictoria.cl</span>
                 </div>
-            </nav>
+                <div class="social-media">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="logo">
+                    <h1><a href="/index.html">Arreglos Florales Victoria</a></h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="/index.html">Inicio</a></li>
+                        <li><a href="/products.html" class="active">Productos</a></li>
+                        <li><a href="/index.html#about">Nosotros</a></li>
+                        <li><a href="/index.html#contact">Contacto</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <button id="cartButton" class="cart-icon" aria-label="Carrito de compras">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </button>
+                    <button id="loginButton" class="login-btn">
+                        <i class="fas fa-user"></i> Ingresar
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Nuestros Arreglos</h1>
+                <p>Descubre nuestra exclusiva colección de arreglos florales</p>
+            </div>
+        </section>
+
         <section class="products-page">
             <div class="container">
-                <h1 class="section-title">Nuestros Productos</h1>
-                
-                <div class="products-filter">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Buscar productos...">
-                        <button id="searchButton"><i class="fas fa-search"></i></button>
+                <div class="products-content">
+                    <!-- Filtros de productos -->
+                    <div class="products-sidebar">
+                        <div class="product-filters">
+                            <h3>Filtros</h3>
+                            <div class="filter-group">
+                                <label for="categoryFilter">Categoría:</label>
+                                <select id="categoryFilter" class="filter-select">
+                                    <option value="">Todas las categorías</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="searchFilter">Buscar:</label>
+                                <input type="text" id="searchFilter" class="filter-input" placeholder="Nombre del producto...">
+                            </div>
+                            <div class="filter-actions">
+                                <button id="clearFilters" class="btn btn-secondary">Limpiar filtros</button>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="category-filter">
-                        <select id="categoryFilter">
-                            <option value="">Todas las categorías</option>
-                            <option value="Ramos">Ramos</option>
-                            <option value="Arreglos">Arreglos</option>
-                            <option value="Bodas">Bodas</option>
-                            <option value="Cumpleaños">Cumpleaños</option>
-                            <option value="Condolencias">Condolencias</option>
-                            <option value="Especiales">Especiales</option>
-                        </select>
+
+                    <!-- Productos -->
+                    <div class="products-main">
+                        <div id="productGrid" class="product-grid">
+                            <div class="loading-message">Cargando productos...</div>
+                        </div>
+
+                        <!-- Paginación superior -->
+                        <div class="pagination-wrapper top">
+                            <div class="page-info top"></div>
+                            <div class="pagination-buttons">
+                                <button class="btn btn-secondary prev-page" disabled>
+                                    <i class="fas fa-chevron-left"></i> Anterior
+                                </button>
+                                <button class="btn btn-secondary next-page">
+                                    Siguiente <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Paginación inferior -->
+                        <div class="pagination-wrapper bottom">
+                            <div class="page-info bottom"></div>
+                            <div class="pagination-buttons">
+                                <button class="btn btn-secondary prev-page bottom" disabled>
+                                    <i class="fas fa-chevron-left"></i> Anterior
+                                </button>
+                                <button class="btn btn-secondary next-page bottom">
+                                    Siguiente <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="pagination-controls">
-                    <button id="prevPage" disabled><i class="fas fa-chevron-left"></i> Anterior</button>
-                    <span id="pageInfo">Página 1</span>
-                    <button id="nextPage">Siguiente <i class="fas fa-chevron-right"></i></button>
-                </div>
-                
-                <div class="product-grid" id="productGrid">
-                    <!-- Los productos se cargarán aquí dinámicamente -->
-                    <div class="loading">Cargando productos...</div>
-                </div>
-                
-                <div class="pagination-controls">
-                    <button id="prevPageBottom" disabled><i class="fas fa-chevron-left"></i> Anterior</button>
-                    <span id="pageInfoBottom">Página 1</span>
-                    <button id="nextPageBottom">Siguiente <i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Arreglos Florales Victoria</h3>
+                    <p>Creando hermosos recuerdos con flores frescas y arreglos únicos desde 2010.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="/index.html">Inicio</a></li>
+                        <li><a href="/products.html">Productos</a></li>
+                        <li><a href="/index.html#about">Nosotros</a></li>
+                        <li><a href="/index.html#contact">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Principal 123, Santiago</li>
+                        <li><i class="fas fa-phone"></i> +56 9 8765 4321</li>
+                        <li><i class="fas fa-envelope"></i> info@arreglosfloralesvictoria.cl</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
     <div id="cartModal" class="cart-modal">
         <div class="cart-content">
             <div class="cart-header">
@@ -79,13 +164,12 @@
             </div>
             <div class="cart-body">
                 <div class="cart-items">
-                    <!-- Los items del carrito se cargarán aquí dinámicamente -->
                     <p class="empty-cart-message">Tu carrito está vacío</p>
                 </div>
                 <div class="cart-summary">
                     <div class="cart-total">
                         <span>Total:</span>
-                        <span class="total-amount">$0.00</span>
+                        <span class="total-amount">$0</span>
                     </div>
                     <button class="btn btn-primary checkout-button" disabled>Proceder al Pedido</button>
                 </div>
@@ -93,49 +177,8 @@
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h2><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</h2>
-                    <p>Florería & Delivery</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h3>Enlaces</h3>
-                        <ul>
-                            <li><a href="index.html">Inicio</a></li>
-                            <li><a href="products.html">Productos</a></li>
-                            <li><a href="index.html#about">Nosotros</a></li>
-                            <li><a href="index.html#contacto">Contacto</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Categorías</h3>
-                        <ul>
-                            <li><a href="#">Ramos</a></li>
-                            <li><a href="#">Arreglos</a></li>
-                            <li><a href="#">Bodas</a></li>
-                            <li><a href="#">Cumpleaños</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="footer-contact">
-                    <h3>Contacto</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Av. Recoleta 1234, Recoleta, Santiago</p>
-                    <p><i class="fas fa-phone"></i> +56 2 1234 5678</p>
-                    <p><i class="fas fa-envelope"></i> info@arreglosvictoria.cl</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Victoria. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/contact.js"></script>
-    <script src="assets/js/products.js" type="module"></script>
-    <script src="assets/js/cart.js" type="module"></script>
+    <script type="module" src="/assets/js/products.js"></script>
+    <script type="module" src="/assets/js/cart.js"></script>
+    <script type="module" src="/assets/js/login.js"></script>
 </body>
 </html>

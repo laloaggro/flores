@@ -1,4 +1,5 @@
 import productManager from '../assets/js/productManager.js';
+import ProductCard from './ProductCard.js';
 
 let cachedProducts = null;
 let isLoading = false;
@@ -24,7 +25,7 @@ const Products = async () => {
   // Usar caché si está disponible
   if (cachedProducts) {
     console.log('Usando productos en caché');
-    return renderTemplate(productManager.generateProductsHTML(cachedProducts));
+    return renderTemplate(generateProductsHTML(cachedProducts));
   }
 
   // Mostrar mensaje de carga si ya está en progreso
@@ -45,7 +46,7 @@ const Products = async () => {
       isLoading = false;
       
       console.log('Productos cargados exitosamente:', cachedProducts.length);
-      return renderTemplate(productManager.generateProductsHTML(cachedProducts));
+      return renderTemplate(generateProductsHTML(cachedProducts));
     }
   } catch (error) {
     isLoading = false;
@@ -54,9 +55,13 @@ const Products = async () => {
   }
 };
 
-// Función para generar HTML de productos (para compatibilidad)
+// Función para generar HTML de productos usando el componente ProductCard
 function generateProductsHTML(products) {
-  return productManager.generateProductsHTML(products);
+  if (!products || products.length === 0) {
+    return '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
+  }
+  
+  return products.map(product => ProductCard(product)).join('');
 }
 
 export { Products, generateProductsHTML };

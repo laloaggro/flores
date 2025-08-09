@@ -583,31 +583,12 @@ async function loadProductsSection() {
         
         console.log('Productos cargados exitosamente:', products.length);
         
-        // Generar HTML de los productos
+        // Generar HTML de los productos usando el componente ProductCard
         if (productGrid && products.length > 0) {
-            const productsHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="${product.image_url}" alt="${product.name}" loading="lazy">
-                    </div>
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <p>${product.description}</p>
-                        <div class="product-details">
-                            <span class="detail-item"><i class="fas fa-tag"></i> ${product.category}</span>
-                            <span class="detail-item"><i class="fas fa-calendar-alt"></i> ${new Date(product.created_at).toLocaleDateString('es-CL')}</span>
-                        </div>
-                        <span class="price">$${parseInt(product.price).toLocaleString('es-CL')}</span>
-                        <button class="btn btn-secondary add-to-cart" 
-                                data-id="${product.id}" 
-                                data-name="${product.name}" 
-                                data-price="${product.price}"
-                                data-image="${product.image_url}">
-                            <i class="fas fa-shopping-cart"></i> Agregar
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+            // Importar dinámicamente el componente ProductCard
+            const { default: ProductCard } = await import('../components/ProductCard.js');
+            
+            const productsHTML = products.map(product => ProductCard(product)).join('');
             
             productGrid.innerHTML = productsHTML;
             
