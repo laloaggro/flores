@@ -3,41 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Arreglos Victoria - Flores frescas y hermosos arreglos florales para cada ocasión especial. Entrega a domicilio en toda la Región Metropolitana.">
-    <meta name="keywords" content="florería, arreglos florales, flores, regalos, entrega a domicilio, Santiago, Chile, rosas, orquídeas">
-    <meta name="author" content="Arreglos Victoria">
-    <title>Arreglos Victoria Florería - Flores Frescas en Santiago</title>
+    <title>Arreglos Victoria Florería</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arreglosvictoria.cl/">
-    <meta property="og:title" content="Arreglos Victoria Florería - Flores Frescas en Santiago">
-    <meta property="og:description" content="Flores frescas y hermosos arreglos florales para cada ocasión especial. Entrega a domicilio en toda la Región Metropolitana.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://arreglosvictoria.cl/">
-    <meta property="twitter:title" content="Arreglos Victoria Florería - Flores Frescas en Santiago">
-    <meta property="twitter:description" content="Flores frescas y hermosos arreglos florales para cada ocasión especial. Entrega a domicilio en toda la Región Metropolitana.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
+    <meta name="description" content="Florería Arreglos Victoria - Flores frescas, arreglos florales únicos y entrega a domicilio en Recoleta, Región Metropolitana.">
 </head>
 <body>
-    <div id="app">
-        <!-- La aplicación se cargará aquí -->
-        <p style="text-align: center; padding: 20px;">Cargando contenido...</p>
+    <header>
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="Menú principal">
+                <a href="#home" class="logo"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</a>
+                <ul class="nav-links">
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="products.html">Productos</a></li>
+                    <li><a href="#about">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+                <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero" role="region" aria-labelledby="hero-heading">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 id="hero-heading">Arreglos Florales para Cada Ocasi&oacute;n</h1>
+                    <p>Flores frescas y hermosos diseños para alegrar tu día y expresar tus sentimientos</p>
+                    <a href="#products" class="btn btn-primary">Ver Productos</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- La sección de productos será cargada dinámicamente -->
+        <section id="products" class="products" role="region" aria-labelledby="products-heading">
+            <div class="container">
+                <h2 id="products-heading" class="section-title">Nuestros Productos</h2>
+                <div class="product-grid">
+                    <div class="loading-message">Cargando productos...</div>
+                </div>
+                <div class="product-note">
+                    <p><i class="fas fa-info-circle"></i> Todos nuestros arreglos florales son hechos con flores frescas y de la más alta calidad. Entregamos en toda la Región Metropolitana con un tiempo de anticipación mínimo de 2 horas.</p>
+                </div>
+                <div class="text-center">
+                    <a href="products.html" class="btn btn-primary">Ver Todos los Productos</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about" role="region" aria-labelledby="about-heading">
+            <div class="container">
+                <h2 id="about-heading" class="section-title">Sobre Nosotros</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Arreglos Victoria es una florería familiar con más de 10 años de experiencia creando hermosos arreglos florales para todas las ocasiones especiales.</p>
+                        <p>Nos especializamos en diseños únicos y personalizados, utilizando solo las flores más frescas y de la más alta calidad. Cada arreglo es creado con pasión y dedicación por nuestro equipo de expertos floristas.</p>
+                        <p>Creemos que las flores tienen el poder de transmitir emociones y crear momentos inolvidables. Por eso, nos esforzamos por superar las expectativas de nuestros clientes en cada entrega.</p>
+                        <div class="about-features">
+                            <div class="feature">
+                                <i class="fas fa-seedling"></i>
+                                <h3>Flores Frescas</h3>
+                                <p>Flores recién cortadas garantizan la máxima duración y belleza</p>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-truck"></i>
+                                <h3>Entrega a Domicilio</h3>
+                                <p>Servicio de entrega rápido y confiable en toda la Región Metropolitana</p>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-paint-brush"></i>
+                                <h3>Diseños Personalizados</h3>
+                                <p>Arreglos únicos creados según tus preferencias y necesidades</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1457530378978-8bac673b8062?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Florería Arreglos Victoria">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="contact" role="region" aria-labelledby="contact-heading">
+            <div class="container">
+                <h2 id="contact-heading" class="section-title">Contáctanos</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Información de Contacto</h3>
+                        <div class="contact-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Dirección</h4>
+                                <p>Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Teléfono</h4>
+                                <p>+569 6360 3177</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>arreglosvictoriafloreria@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fab fa-whatsapp"></i>
+                            <div>
+                                <h4>WhatsApp</h4>
+                                <p>+569 6360 3177</p>
+                            </div>
+                        </div>
+                        <div class="social-links">
+                            <h4>Síguenos</h4>
+                            <div class="social-icons">
+                                <a href="https://www.instagram.com/arreglosvictoria/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                                <a href="https://wa.me/56963603177" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h3>Envíanos un Mensaje</h3>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Nombre completo *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Teléfono</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mensaje *</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <div id="formMessage" class="form-message"></div>
+                            <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Tu Carrito</h2>
+                <span class="cart-close">&times;</span>
+            </div>
+            <div class="cart-body">
+                <div class="cart-items">
+                    <!-- Los items del carrito se cargarán aquí dinámicamente -->
+                    <p class="empty-cart-message">Tu carrito está vacío</p>
+                </div>
+                <div class="cart-summary">
+                    <div class="cart-total">
+                        <span>Total:</span>
+                        <span class="total-amount">$0.00</span>
+                    </div>
+                    <button class="btn btn-primary checkout-button" disabled>Proceder al Pedido</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script type="module">
-        import Home from './pages/home.js';
-        
-        // Esperar a que el DOM esté completamente cargado
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('app').innerHTML = Home();
-        });
-    </script>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</h2>
+                    <p>Florería & Delivery</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="#home">Inicio</a></li>
+                        <li><a href="#products">Productos</a></li>
+                        <li><a href="#about">Nosotros</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-envelope" aria-hidden="true"></i> <span aria-label="Correo electrónico">arreglosvictoriafloreria@gmail.com</span></p>
+                    <p><i class="fas fa-phone" aria-hidden="true"></i> <span aria-label="Teléfono">+569 6360 3177</span></p>
+                    <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> <span aria-label="Dirección">Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</span></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arreglos Victoria. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="assets/js/utils.js" type="module"></script>
+    <script src="assets/js/contact.js"></script>
+    <script src="assets/js/cart.js" type="module"></script>
+    <script src="assets/js/homeProducts.js" type="module"></script>
 </body>
 </html>

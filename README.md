@@ -1,107 +1,122 @@
-# 🌸 Arreglos Victoria Florería
+# Arreglos Victoria Florería
 
-Proyecto completo de florería con delivery. Frontend React + Backend Node.js.
+Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo de productos, carrito de compras y formulario de contacto.
 
-## 📁 Estructura del Proyecto
+## Estructura del proyecto
 
 ```
-arreglos-victoria/
+.
+├── backend/
+│   ├── config/
+│   ├── routes/
+│   ├── contact.php
+│   ├── contact-enhanced.php
+│   ├── server.js
+│   └── ...
 ├── frontend/
-│   ├── index.html
 │   ├── assets/
-│   │   ├── css/
-│   │   ├── images/
-│   │   └── js/
 │   ├── components/
-│   └── pages/
-└── backend/
-    ├── server.js
-    ├── package.json
-    ├── routes/
-    ├── controllers/
-    ├── models/
-    ├── db/
-    ├── middleware/
-    ├── utils/
-    └── config/
+│   └── index.html
+├── README.md
+├── PRODUCTION.md
+└── DOCUMENTATION.md
 ```
 
-## 🚀 Iniciar el Proyecto
+## Tecnologías utilizadas
 
-### Backend
+- Frontend: HTML, CSS (Flexbox/Grid), JavaScript (ES6+)
+- Backend: Node.js con Express, PHP
+- Correo: PHPMailer
+- Gestión de dependencias: npm, Composer
 
-1. Navegar al directorio del backend:
-   ```bash
-   cd backend
+## Instalación
+
+### Configuración del entorno
+
+1. Copiar el archivo de ejemplo de variables de entorno:
+   ```
+   cp backend/.env.example backend/.env
    ```
 
-2. Instalar dependencias:
-   ```bash
-   npm install
+2. Configurar las variables de entorno en `backend/.env`:
+   ```
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USERNAME=tu-correo@gmail.com
+   SMTP_PASSWORD=tu-contraseña-o-contraseña-de-aplicación
+   SMTP_ENCRYPTION=tls
    ```
 
-3. Iniciar el servidor:
-   ```bash
-   npm start
-   ```
-   
-   Para desarrollo con reinicio automático:
-   ```bash
-   npm run dev
-   ```
+## Instalación de dependencias
 
-### Frontend
+### Node.js (backend)
 
-1. Abrir el archivo `frontend/index.html` en un navegador, o
-2. Usar un servidor local como Live Server en VS Code
+```
+cd backend
+npm install
+```
 
-## 🌐 API Endpoints
+### PHP (para envío de correos)
 
-### Productos
+```
+cd backend
+# Si no tienes Composer instalado
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
 
-- `GET /api/products` - Obtener todos los productos
-- `GET /api/products/:id` - Obtener un producto por ID
+# Instalar dependencias de PHP
+php composer.phar install
+```
 
-### Órdenes
+## Ejecutar el servidor de desarrollo
 
-- `POST /api/orders` - Crear una nueva orden
-- `GET /api/orders` - Obtener todas las órdenes
+```
+cd backend
+npm start
+```
 
-## 🛠️ Tecnologías Utilizadas
+El servidor se ejecutará en `http://localhost:5000`
 
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Backend**: Node.js, Express.js
-- **Base de Datos**: MySQL (configurable)
-- **Otros**: CORS, DotEnv
+## Pruebas
 
-## 📦 Dependencias
+Para probar la funcionalidad de contacto sin enviar correos reales:
 
-### Backend
+```
+cd backend
+php dev-contact-test.php
+```
 
-- `express`: Framework web para Node.js
-- `cors`: Middleware para habilitar CORS
-- `dotenv`: Carga variables de entorno desde un archivo .env
-- `mysql2`: Cliente MySQL para Node.js
-- `sequelize`: ORM para Node.js
+Para verificar la configuración de producción:
 
-### Desarrollo
+```
+cd backend
+php check-production.php
+```
 
-- `nodemon`: Herramienta para reiniciar automáticamente la aplicación al detectar cambios
+## Documentación
 
-## 📝 Notas de Desarrollo
+Para una documentación más completa del proyecto, consulta los siguientes archivos:
 
-1. La estructura del proyecto sigue el patrón MVC (Modelo-Vista-Controlador)
-2. Los controladores manejan la lógica de negocio
-3. Los modelos representan la estructura de datos
-4. Las rutas definen los endpoints de la API
-5. La configuración se maneja según el entorno (desarrollo/producción)
+- [DOCUMENTATION.md](DOCUMENTATION.md) - Documentación general del proyecto
+- [PRODUCTION.md](PRODUCTION.md) - Instrucciones detalladas para despliegue en producción
 
-## 🤝 Contribuciones
+## Funcionalidades del sitio
 
-Las contribuciones son bienvenidas. Por favor, sigue estos pasos:
+1. **Catálogo de productos**: Muestra los arreglos florales disponibles con nombre, precio e imagen.
+2. **Carrito de compras**: Permite a los clientes agregar productos y realizar pedidos.
+3. **Formulario de contacto**: Permite a los clientes enviar mensajes directamente al negocio.
+4. **Sistema de pedidos**: Permite a los clientes realizar pedidos de productos.
+5. **Integración con redes sociales**: Enlaces a Instagram y WhatsApp.
 
-1. Haz un fork del proyecto
-2. Crea una rama para tu función (`git checkout -b feature/NuevaFuncion`)
-3. Realiza tus cambios y haz commit (`git commit -m 'Agrega nueva función'`)
-4. Haz push a la rama (`git push origin feature/NuevaFuncion`)
-5. Abre un Pull Request
+## Ramas del repositorio
+
+- `main/master`: Código en producción
+- `development`: Rama de desarrollo principal
+- `release-*`: Ramas para versiones específicas
+- `feature/*`: Ramas para nuevas funcionalidades
+- `hotfix/*`: Ramas para correcciones urgentes
+
+## Despliegue en producción
+
+Para instrucciones detalladas sobre cómo desplegar en producción, consulta [PRODUCTION.md](PRODUCTION.md) y [DOCUMENTATION.md](DOCUMENTATION.md).

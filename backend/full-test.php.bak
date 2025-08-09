@@ -1,0 +1,39 @@
+<?php
+// Simular una solicitud POST
+$_SERVER['REQUEST_METHOD'] = 'POST';
+
+// Simular datos de entrada
+$inputData = [
+    'name' => 'Usuario de Prueba',
+    'email' => 'test@ejemplo.com',
+    'phone' => '123456789',
+    'message' => 'Este es un mensaje de prueba para verificar la funcionalidad de contacto.'
+];
+
+// Convertir a JSON
+$inputJSON = json_encode($inputData);
+
+// Simular file_get_contents('php://input')
+$GLOBALS['HTTP_RAW_POST_DATA'] = $inputJSON;
+
+// Función para simular file_get_contents
+function mock_file_get_contents($stream) {
+    if ($stream === 'php://input') {
+        return $GLOBALS['HTTP_RAW_POST_DATA'];
+    }
+    return file_get_contents($stream);
+}
+
+// Reemplazar temporalmente la función
+rename(__FILE__, __FILE__ . '.bak');
+$content = file_get_contents(__FILE__ . '.bak');
+$content = str_replace("file_get_contents('php://input')", "mock_file_get_contents('php://input')", $content);
+file_put_contents(__FILE__, $content);
+
+// Incluir el script principal
+include 'contact-enhanced.php';
+
+// Restaurar el archivo original
+unlink(__FILE__);
+rename(__FILE__ . '.bak', __FILE__);
+?>
