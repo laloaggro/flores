@@ -29,94 +29,67 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 - Correo: PHPMailer
 - Gestión de dependencias: npm, Composer
 
-## Instalación
+## Características principales
 
-### Configuración del entorno
+### Catálogo de productos
+- Visualización de productos con imágenes, descripción y precio
+- Filtrado por categorías
+- Paginación para una mejor experiencia de usuario
 
-1. Copiar el archivo de ejemplo de variables de entorno:
-   ```
-   cp backend/.env.example backend/.env
-   ```
+### Carrito de compras
+- Añadir productos al carrito desde la página de productos
+- Visualizar y gestionar el contenido del carrito
+- Actualizar cantidades de productos
+- Eliminar productos del carrito
+- Calcular total de la compra
 
-2. Configurar las variables de entorno en `backend/.env`:
-   ```
-   SMTP_HOST=smtp.gmail.com
-   SMTP_PORT=587
-   SMTP_USERNAME=tu-correo@gmail.com
-   SMTP_PASSWORD=tu-contraseña-o-contraseña-de-aplicación
-   SMTP_ENCRYPTION=tls
-   ```
+### Sistema de pedidos
+- Proceso de checkout para finalizar compras
+- Guardado de historial de pedidos por usuario
+- Visualización de pedidos anteriores en el perfil de usuario
+- Estados de pedido para seguimiento
 
-## Instalación de dependencias
+### Autenticación de usuarios
+- Registro e inicio de sesión de usuarios
+- Perfil de usuario con datos personales
+- Persistencia de sesión
 
-### Node.js (backend)
+### Formulario de contacto
+- Envío de mensajes de contacto
+- Validación de datos del formulario
+- Recepción de mensajes por correo electrónico
 
-```
+## Últimas mejoras (v1.2)
+
+### Mejoras en el carrito de compras
+- Corrección de errores en la visualización del carrito
+- Mejora en la navegación y usabilidad del carrito
+- Añadido fallback para carga de componentes del carrito
+- Corrección de rutas de componentes
+- Mejoras en la gestión de eventos del carrito
+
+### Sistema de pedidos mejorado
+- Implementación del guardado y visualización de historial de pedidos
+- Añadido sistema de estados para pedidos
+- Visualización de detalles de pedidos en el perfil de usuario
+- Mejoras en la experiencia de checkout
+
+## Instalación y ejecución
+
+### Backend
+```bash
 cd backend
 npm install
-```
-
-### PHP (para envío de correos)
-
-```
-cd backend
-# Si no tienes Composer instalado
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php composer-setup.php
-php -r "unlink('composer-setup.php');"
-
-# Instalar dependencias de PHP
-php composer.phar install
-```
-
-## Ejecutar el servidor de desarrollo
-
-```
-cd backend
 npm start
 ```
 
-El servidor se ejecutará en `http://localhost:5000`
+### Frontend
+Abrir `frontend/index.html` en un navegador web o servirlo con un servidor web local.
 
-## Pruebas
+## Contribuciones
 
-Para probar la funcionalidad de contacto sin enviar correos reales:
+Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir qué te gustaría cambiar.
 
-```
-cd backend
-php dev-contact-test.php
-```
+## Licencia
 
-Para verificar la configuración de producción:
-
-```
-cd backend
-php check-production.php
-```
-
-## Documentación
-
-Para una documentación más completa del proyecto, consulta los siguientes archivos:
-
-- [DOCUMENTATION.md](DOCUMENTATION.md) - Documentación general del proyecto
-- [PRODUCTION.md](PRODUCTION.md) - Instrucciones detalladas para despliegue en producción
-
-## Funcionalidades del sitio
-
-1. **Catálogo de productos**: Muestra los arreglos florales disponibles con nombre, precio e imagen.
-2. **Carrito de compras**: Permite a los clientes agregar productos y realizar pedidos.
-3. **Formulario de contacto**: Permite a los clientes enviar mensajes directamente al negocio.
-4. **Sistema de pedidos**: Permite a los clientes realizar pedidos de productos.
-5. **Integración con redes sociales**: Enlaces a Instagram y WhatsApp.
-
-## Ramas del repositorio
-
-- `main/master`: Código en producción
-- `development`: Rama de desarrollo principal
-- `release-*`: Ramas para versiones específicas
-- `feature/*`: Ramas para nuevas funcionalidades
-- `hotfix/*`: Ramas para correcciones urgentes
-
-## Despliegue en producción
-
-Para instrucciones detalladas sobre cómo desplegar en producción, consulta [PRODUCTION.md](PRODUCTION.md) y [DOCUMENTATION.md](DOCUMENTATION.md).
+[MIT License](LICENSE)
