@@ -1,7 +1,7 @@
 // login.js - Manejo del inicio de sesión y registro de usuarios
 
 // Importar funciones necesarias de utils.js y auth.js
-import { showNotification, updateCartCount } from './utils.js';
+import { showNotification, updateCartCount, validateEmail, validatePhone } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,6 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
       // Validar campos
       if (!email || !password) {
         showNotification('Por favor complete todos los campos', 'error');
+        return;
+      }
+      
+      // Validar formato de email
+      if (!validateEmail(email)) {
+        showNotification('Formato de email inválido', 'error');
+        return;
+      }
+      
+      // Validar longitud mínima de contraseña
+      if (password.length < 6) {
+        showNotification('La contraseña debe tener al menos 6 caracteres', 'error');
         return;
       }
       
@@ -98,13 +110,32 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const name = document.getElementById('registerName').value;
       const email = document.getElementById('registerEmail').value;
+      const phone = document.getElementById('registerPhone').value;
       const password = document.getElementById('registerPassword').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
       const submitButton = registerForm.querySelector('button[type="submit"]');
       
       // Validar campos
-      if (!name || !email || !password || !confirmPassword) {
+      if (!name || !email || !phone || !password || !confirmPassword) {
         showNotification('Por favor complete todos los campos', 'error');
+        return;
+      }
+      
+      // Validar formato de email
+      if (!validateEmail(email)) {
+        showNotification('Formato de email inválido', 'error');
+        return;
+      }
+      
+      // Validar formato de teléfono
+      if (!validatePhone(phone)) {
+        showNotification('Formato de teléfono inválido', 'error');
+        return;
+      }
+      
+      // Validar longitud mínima de contraseña
+      if (password.length < 6) {
+        showNotification('La contraseña debe tener al menos 6 caracteres', 'error');
         return;
       }
       

@@ -3,9 +3,7 @@ import { updateCartCount } from './cart.js';
 
 // Función para inicializar el menú de usuario
 function initUserMenu() {
-  console.log('Inicializando menú de usuario');
   const user = getUser();
-  console.log('Usuario obtenido:', user);
   const userMenu = document.getElementById('userMenu');
   const loginLink = document.getElementById('loginLink');
   const userNameElement = document.getElementById('userName');
@@ -13,10 +11,7 @@ function initUserMenu() {
   const userInfo = document.querySelector('.user-info');
   const userDropdown = document.querySelector('.user-dropdown');
   
-  console.log('Elementos del DOM:', { userMenu, loginLink, userNameElement, logoutLink, userInfo, userDropdown });
-  
   if (isAuthenticated() && user && userMenu && loginLink) {
-    console.log('Usuario autenticado, actualizando menú');
     // Mostrar el menú de usuario
     userMenu.classList.add('visible');
     userMenu.style.display = 'block';
@@ -24,6 +19,7 @@ function initUserMenu() {
     
     // Mostrar el nombre del usuario
     if (userNameElement) {
+      // Usar textContent para prevenir XSS
       userNameElement.textContent = user.name || 'Usuario';
     }
     
@@ -31,83 +27,49 @@ function initUserMenu() {
     if (logoutLink) {
       logoutLink.addEventListener('click', function(e) {
         e.preventDefault();
-        handleLogout();
+        logout();
+        window.location.reload();
       });
     }
     
-    // Configurar el dropdown del menú de usuario
+    // Configurar el toggle del dropdown
     if (userInfo && userDropdown) {
-      // Eliminar event listeners anteriores si existen
-      userInfo.removeEventListener('click', toggleUserDropdown);
-      userInfo.addEventListener('click', toggleUserDropdown);
+      userInfo.addEventListener('click', function() {
+        userDropdown.classList.toggle('show');
+      });
       
-      // Cerrar el dropdown cuando se hace clic fuera de él
-      document.removeEventListener('click', closeUserDropdown);
-      document.addEventListener('click', closeUserDropdown);
+      // Cerrar el dropdown al hacer clic fuera
+      document.addEventListener('click', function(e) {
+        if (!userInfo.contains(e.target)) {
+          userDropdown.classList.remove('show');
+        }
+      });
     }
-  } else if (userMenu && loginLink) {
-    console.log('Usuario no autenticado, mostrando enlace de login');
-    // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
-    userMenu.classList.remove('visible');
-    userMenu.style.display = 'none';
+  } else if (loginLink) {
+    // Asegurarse de que el enlace de login sea visible
     loginLink.style.display = 'block';
-    
-    // Asegurarse de que el dropdown esté oculto
-    if (userDropdown) {
-      userDropdown.classList.remove('show');
-    }
   }
 }
 
-// Función para alternar el dropdown del menú de usuario
-function toggleUserDropdown(e) {
-  e.stopPropagation();
-  const userDropdown = document.querySelector('.user-dropdown');
-  if (userDropdown) {
-    userDropdown.classList.toggle('show');
-  }
-}
-
-// Función para cerrar el dropdown del menú de usuario
-function closeUserDropdown(e) {
-  const userDropdown = document.querySelector('.user-dropdown');
-  const userInfo = document.querySelector('.user-info');
-  
-  if (userDropdown && userInfo && !userInfo.contains(e.target)) {
-    userDropdown.classList.remove('show');
-  }
-}
-
-// Función para manejar el cierre de sesión
-function handleLogout() {
-  logout();
-  window.location.href = '/index.html';
-}
-
-// Función para verificar la autenticación del usuario
-function checkAuth() {
+// Función para verificar si el usuario está autenticado y redirigir si no lo está
+function requireAuth(redirectUrl = '/login.html') {
   if (!isAuthenticated()) {
-    // Redirigir al login si no está autenticado en páginas que lo requieren
-    if (window.location.pathname.includes('profile.html')) {
-      window.location.href = '/login.html';
-    }
+    window.location.href = redirectUrl;
+    return false;
   }
+  return true;
 }
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
   initUserMenu();
-  checkAuth();
   updateCartCount();
+  
+  // Aplicar protección a páginas que requieren autenticación
+  if (window.location.pathname.includes('profile.html')) {
+    requireAuth();
+  }
 });
 
-// También ejecutar initUserMenu inmediatamente si el DOM ya está cargado
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initUserMenu);
-} else {
-  // DOM ya está cargado
-  initUserMenu();
-}
-
 // Exportar funciones
-export { initUserMenu, handleLogout, checkAuth, getUser, isAuthenticated };
+export { initUserMenu, requireAuth, getUser, isAuthenticated };

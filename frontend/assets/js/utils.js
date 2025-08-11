@@ -70,7 +70,7 @@ function formatPrice(price) {
 
 // Función para actualizar el contador del carrito
 function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('arreglosVictoriaCart')) || [];
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
     const cartCount = document.querySelector('.cart-count');
     
@@ -115,5 +115,26 @@ function logout() {
     localStorage.removeItem('user');
 }
 
+// Función para verificar autenticación
+function requireAuth(redirectUrl = '/login.html') {
+    if (!isAuthenticated()) {
+        window.location.href = redirectUrl;
+        return false;
+    }
+    return true;
+}
+
+// Función para validar email
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Función para validar teléfono
+function validatePhone(phone) {
+    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
+    return phoneRegex.test(phone);
+}
+
 // Exportar funciones
-export { showNotification, formatPrice, updateCartCount, loadImageWithProxy, getUser, isAuthenticated, logout };
+export { showNotification, formatPrice, updateCartCount, loadImageWithProxy, getUser, isAuthenticated, logout, requireAuth, validateEmail, validatePhone };

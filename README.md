@@ -19,7 +19,8 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 │   └── index.html
 ├── README.md
 ├── PRODUCTION.md
-└── DOCUMENTATION.md
+├── DOCUMENTATION.md
+└── SECURITY.md
 ```
 
 ## Tecnologías utilizadas
@@ -28,6 +29,7 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 - Backend: Node.js con Express, PHP
 - Correo: PHPMailer
 - Gestión de dependencias: npm, Composer
+- Base de datos: SQLite
 
 ## Características principales
 
@@ -53,11 +55,25 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 - Registro e inicio de sesión de usuarios
 - Perfil de usuario con datos personales
 - Persistencia de sesión
+- Protección contra fuerza bruta
 
 ### Formulario de contacto
 - Envío de mensajes de contacto
 - Validación de datos del formulario
 - Recepción de mensajes por correo electrónico
+
+## Seguridad
+
+El sitio implementa varias medidas de seguridad:
+
+- Contraseñas almacenadas con hash bcrypt
+- Validación de entrada en frontend y backend
+- Protección contra fuerza bruta con límites de tasa
+- Verificación de sesión en páginas protegidas
+- Control de acceso a recursos basado en identidad de usuario
+- Protección contra acceso no autorizado a pedidos
+
+Para más detalles sobre las prácticas de seguridad, consulte [SECURITY.md](SECURITY.md).
 
 ## Últimas mejoras (v1.2)
 
@@ -73,6 +89,12 @@ Sitio web para la florería Arreglos Victoria, con funcionalidades de catálogo 
 - Añadido sistema de estados para pedidos
 - Visualización de detalles de pedidos en el perfil de usuario
 - Mejoras en la experiencia de checkout
+
+### Mejoras de seguridad
+- Implementación de límites de tasa para prevenir ataques de fuerza bruta
+- Validación mejorada de datos de entrada
+- Protección contra acceso no autorizado a pedidos
+- Verificación de sesión en páginas protegidas
 
 ## Instalación y ejecución
 

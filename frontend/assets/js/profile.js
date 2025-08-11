@@ -1,11 +1,9 @@
 // profile.js - Manejo de la página de perfil de usuario
-import { initUserMenu, getUser, isAuthenticated } from './auth.js';
+import { initUserMenu, getUser, isAuthenticated, requireAuth } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si el usuario está logueado
-    if (!isAuthenticated()) {
-        // Si no está autenticado, redirigir al login
-        window.location.href = 'login.html';
+    if (!requireAuth()) {
         return;
     }
     
@@ -91,6 +89,19 @@ function updateProfile() {
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
     
+    // Validaciones básicas
+    if (!name || !email) {
+        alert('Nombre y correo electrónico son obligatorios');
+        return;
+    }
+    
+    // Validar formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Formato de email inválido');
+        return;
+    }
+    
     // Obtener usuario actual
     let user = getUser();
     
@@ -155,6 +166,11 @@ function loadUserStats() {
 
 // Cargar pedidos del usuario
 function loadUserOrders() {
+    // Verificar autenticación
+    if (!requireAuth()) {
+        return;
+    }
+    
     // Obtener usuario actual
     const user = getUser();
     
@@ -226,6 +242,11 @@ function getStatusText(status) {
 
 // Mostrar detalles del pedido
 function showOrderDetails(orderId) {
+    // Verificar autenticación
+    if (!requireAuth()) {
+        return;
+    }
+    
     // En una implementación real, esto haría una llamada a la API para obtener los detalles
     const storedOrders = localStorage.getItem('userOrders');
     if (!storedOrders) return;
@@ -235,6 +256,13 @@ function showOrderDetails(orderId) {
     
     if (!order) {
         alert('Pedido no encontrado');
+        return;
+    }
+    
+    // Verificar que el pedido pertenece al usuario actual
+    const user = getUser();
+    if (order.userId != user.id) {
+        alert('No tienes permiso para ver este pedido');
         return;
     }
     

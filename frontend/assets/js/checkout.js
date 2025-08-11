@@ -1,4 +1,4 @@
-import { showNotification, updateCartCount, formatPrice, getUser, isAuthenticated } from './utils.js';
+import { showNotification, updateCartCount, formatPrice, getUser, isAuthenticated, requireAuth } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos del DOM
@@ -7,11 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const paymentForm = document.getElementById('paymentForm');
   
   // Verificar autenticación
-  if (!isAuthenticated()) {
-    showNotification('Debes iniciar sesión para continuar con el pedido', 'error');
-    setTimeout(() => {
-      window.location.href = 'login.html';
-    }, 1500);
+  if (!requireAuth()) {
     return;
   }
   
@@ -32,6 +28,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Validaciones básicas (en un entorno real, estas validaciones serían más robustas)
     if (!cardNumber || !expiryDate || !cvv || !cardName || !billingAddress) {
       showNotification('Por favor completa todos los campos', 'error');
+      return;
+    }
+    
+    // Validar formato de número de tarjeta (simplificado)
+    const cardRegex = /^\d{4} \d{4} \d{4} \d{4}$/;
+    if (!cardRegex.test(cardNumber)) {
+      showNotification('Formato de número de tarjeta inválido', 'error');
+      return;
+    }
+    
+    // Validar formato de fecha de expiración
+    const expiryRegex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+    if (!expiryRegex.test(expiryDate)) {
+      showNotification('Formato de fecha de expiración inválido', 'error');
+      return;
+    }
+    
+    // Validar formato de CVV
+    const cvvRegex = /^\d{3,4}$/;
+    if (!cvvRegex.test(cvv)) {
+      showNotification('Formato de CVV inválido', 'error');
       return;
     }
     
@@ -123,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
       paymentData: {
         cardName: paymentData.cardName,
         billingAddress: paymentData.billingAddress
-        // No almacenar información sensible real como números de tarjeta en producción
+        // Nota: En producción, no almacenar información sensible real como números de tarjeta
       },
       shippingAddress: user.address || paymentData.billingAddress
     };
