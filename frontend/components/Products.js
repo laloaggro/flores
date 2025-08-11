@@ -61,7 +61,12 @@ function generateProductsHTML(products) {
     return '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
   }
   
-  return products.map(product => ProductCard(product)).join('');
+  return products.map(product => {
+    // Usar el proxy de imágenes
+    const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(product.imageUrl)}`;
+    // Mantener el resto del HTML del producto igual
+    return ProductCard({...product, imageUrl: proxyUrl});
+  }).join('');
 }
 
 export { Products, generateProductsHTML };

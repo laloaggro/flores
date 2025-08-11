@@ -1,5 +1,5 @@
 import { showNotification, updateCartCount, formatPrice } from './utils.js';
-import productManager from './productManager.js';
+import { productManager } from './productManager.js';
 import CartUtils from './cartUtils.js';
 
 // Variables de estado
@@ -418,7 +418,7 @@ async function loadProducts() {
   showLoading(true);
   
   try {
-    const data = await productManager.loadProducts(currentPage, limit, currentCategory, currentSearch);
+    const data = await productManager.loadProducts(currentPage, currentCategory, currentSearch, limit);
     
     if (data) {
       displayProducts(data.products);

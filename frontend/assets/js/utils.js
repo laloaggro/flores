@@ -87,18 +87,29 @@ function updateCartCount() {
 
 // Función para cargar imágenes a través del proxy
 function loadImageWithProxy(imageUrl) {
-    // Si la imagen ya es una URL de proxy, devolverla tal cual
+    // Si ya está usando el proxy, devolverla tal cual
     if (imageUrl.includes('/api/image-proxy')) {
         return imageUrl;
     }
     
-    // Si es una imagen local, devolverla tal cual
-    if (imageUrl.startsWith('data:') || imageUrl.startsWith('/') || imageUrl.startsWith('assets/')) {
+    // Si es una imagen local o de datos, devolverla tal cual
+    if (imageUrl.startsWith('data:') || imageUrl.startsWith('/') || imageUrl.startsWith('./') || imageUrl.startsWith('../')) {
         return imageUrl;
     }
     
-    // Para imágenes externas, usar el proxy
-    return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+    // Verificar si es una URL válida
+    try {
+        const url = new URL(imageUrl);
+        // Usar el proxy para dominios de Unsplash
+        if (url.hostname === 'images.unsplash.com' || url.hostname === 'source.unsplash.com') {
+            return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+        }
+        // Para otras imágenes externas, intentar usar el proxy también
+        return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+    } catch (e) {
+        // Si no es una URL válida, devolverla tal cual
+        return imageUrl;
+    }
 }
 
 // Funciones de autenticación de usuario
