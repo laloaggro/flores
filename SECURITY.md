@@ -61,7 +61,7 @@ Para producción, se debe configurar HTTPS para todas las comunicaciones.
 
 ## Reportar Vulnerabilidades
 
-Si descubre una vulnerabilidad de seguridad, por favor envíe un correo electrónico a [tu-email@ejemplo.com] con la siguiente información:
+Si descubre una vulnerabilidad de seguridad, por favor envíe un correo electrónico a laloaggro@gmail.com con la siguiente información:
 
 1. Descripción de la vulnerabilidad
 2. Pasos para reproducir la vulnerabilidad
