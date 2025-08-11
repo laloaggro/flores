@@ -1,4 +1,8 @@
+// login.js - Manejo del inicio de sesión y registro de usuarios
+
+// Importar funciones necesarias de utils.js y auth.js
 import { showNotification, updateCartCount } from './utils.js';
+import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos del DOM
@@ -29,11 +33,12 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Manejar envío de formulario de login
   if (loginForm) {
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
+      const submitButton = loginForm.querySelector('button[type="submit"]');
       
       // Validar campos
       if (!email || !password) {
@@ -41,46 +46,61 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
       
-      // Enviar datos al servidor
-      fetch('/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.user) {
+      // Deshabilitar botón durante el proceso
+      submitButton.disabled = true;
+      submitButton.textContent = 'Iniciando sesión...';
+      
+      try {
+        // Enviar solicitud al servidor
+        const response = await fetch('/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
           // Guardar información del usuario en localStorage
           localStorage.setItem('user', JSON.stringify(data.user));
-          showNotification('Inicio de sesión exitoso', 'success');
           
-          // Redirigir a la página de perfil después de 1 segundo
+          // Mostrar notificación de éxito
+          showNotification(`¡Bienvenido ${data.user.name}!`, 'success');
+          
+          // Inicializar el menú de usuario
+          initUserMenu();
+          
+          // Redirigir al usuario después de un breve retraso
           setTimeout(() => {
-            window.location.href = 'profile.html';
-          }, 1000);
+            window.location.href = '/';
+          }, 1500);
         } else {
-          showNotification(data.error || 'Error en el inicio de sesión', 'error');
+          // Mostrar error
+          showNotification(data.error || 'Error al iniciar sesión', 'error');
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error en el inicio de sesión', 'error');
-      });
+      } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        showNotification('Error de conexión. Por favor intente nuevamente.', 'error');
+      } finally {
+        // Rehabilitar botón
+        submitButton.disabled = false;
+        submitButton.textContent = 'Iniciar Sesión';
+      }
     });
   }
   
   // Manejar envío de formulario de registro
   if (registerForm) {
-    registerForm.addEventListener('submit', function(e) {
+    registerForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const name = document.getElementById('registerName').value;
       const email = document.getElementById('registerEmail').value;
-      const phone = document.getElementById('registerPhone').value;
       const password = document.getElementById('registerPassword').value;
-      const confirmPassword = document.getElementById('registerConfirmPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const submitButton = registerForm.querySelector('button[type="submit"]');
       
       // Validar campos
       if (!name || !email || !password || !confirmPassword) {
@@ -93,39 +113,69 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
       
-      // Enviar datos al servidor
-      fetch('/api/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, email, phone, password })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message && data.message.includes('exitoso')) {
-          showNotification('Registro exitoso', 'success');
+      // Deshabilitar botón durante el proceso
+      submitButton.disabled = true;
+      submitButton.textContent = 'Registrando...';
+      
+      try {
+        // Enviar solicitud al servidor
+        const response = await fetch('/api/users/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Mostrar notificación de éxito
+          showNotification('¡Registro exitoso! Ahora puede iniciar sesión.', 'success');
           
           // Limpiar formulario
           registerForm.reset();
           
-          // Cambiar a formulario de login
-          if (registerContainer) registerContainer.classList.add('hidden');
-          if (loginContainer) loginContainer.classList.remove('hidden');
+          // Cambiar a la vista de inicio de sesión después de un breve retraso
+          setTimeout(() => {
+            document.getElementById('showLogin').click();
+          }, 2000);
         } else {
-          showNotification(data.error || 'Error en el registro', 'error');
+          // Mostrar error
+          showNotification(data.error || 'Error al registrarse', 'error');
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error en el registro', 'error');
-      });
+      } catch (error) {
+        console.error('Error al registrarse:', error);
+        showNotification('Error de conexión. Por favor intente nuevamente.', 'error');
+      } finally {
+        // Rehabilitar botón
+        submitButton.disabled = false;
+        submitButton.textContent = 'Registrarse';
+      }
     });
   }
-  
-  // Inicializar contador del carrito
-  updateCartCount();
 });
 
-// Inicializar contador del carrito
-updateCartCount();
+// Función para manejar el cierre de sesión
+function handleLogout() {
+  // Eliminar información del usuario del localStorage
+  localStorage.removeItem('user');
+  
+  // Mostrar notificación de éxito
+  showNotification('Sesión cerrada correctamente', 'success');
+  
+  // Recargar la página después de un breve retraso
+  setTimeout(() => {
+    // Si estamos en una página que requiere autenticación, redirigir al inicio
+    if (window.location.pathname.includes('profile') || 
+        window.location.pathname.includes('cart')) {
+      window.location.href = '/';
+    } else {
+      // Solo recargar la página para actualizar el menú
+      window.location.reload();
+    }
+  }, 1500);
+}
+
+// Exportar funciones que necesitamos usar en otros archivos
+export { handleLogout, initUserMenu, updateCartCount };

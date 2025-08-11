@@ -55,6 +55,12 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Función para mostrar mensajes en el formulario
   function showFormMessage(message, type) {
+    // Verificar que el elemento formMessage exista
+    if (!formMessage) {
+      console.warn('Elemento formMessage no encontrado');
+      return;
+    }
+    
     // Eliminar clases previas
     formMessage.className = 'form-message';
     

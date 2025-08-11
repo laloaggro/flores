@@ -48,6 +48,44 @@ app.use('/api/contact', (req, res, next) => {
 app.use('/api/products', productsRouter);
 app.use('/api/users', usersRouter);
 
+// Proxy para cargar imágenes de Unsplash y evitar problemas de CORS
+app.get('/api/image-proxy', async (req, res) => {
+    const { url } = req.query;
+    
+    if (!url) {
+        return res.status(400).json({ error: 'URL es requerida' });
+    }
+    
+    try {
+        // Verificar que la URL sea de Unsplash
+        const unsplashUrl = new URL(url);
+        if (unsplashUrl.hostname !== 'images.unsplash.com') {
+            return res.status(400).json({ error: 'Solo se permiten URLs de Unsplash' });
+        }
+        
+        // Hacer la solicitud a Unsplash
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            return res.status(response.status).json({ error: 'Error al cargar la imagen' });
+        }
+        
+        // Obtener el tipo de contenido
+        const contentType = response.headers.get('content-type');
+        
+        // Establecer los headers apropiados
+        res.set('Content-Type', contentType);
+        res.set('Cache-Control', 'public, max-age=31536000'); // Caché de 1 año
+        
+        // Enviar la imagen
+        const buffer = await response.buffer();
+        res.send(buffer);
+    } catch (error) {
+        console.error('Error al cargar imagen desde Unsplash:', error);
+        res.status(500).json({ error: 'Error al cargar la imagen' });
+    }
+});
+
 // Ruta para servir el index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));

@@ -88,6 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Simular éxito en el pago
       showNotification('¡Pago procesado exitosamente!', 'success');
       
+      // Guardar pedido
+      saveOrder(paymentData);
+      
       // Limpiar carrito
       localStorage.removeItem('cart');
       updateCartCount();
@@ -98,9 +101,43 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Redirigir a página de confirmación o inicio después de 2 segundos
       setTimeout(() => {
-        window.location.href = 'index.html';
+        window.location.href = 'profile.html#orders';
       }, 2000);
     }, 2000);
+  }
+  
+  // Guardar pedido
+  function saveOrder(paymentData) {
+    const user = getUser();
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // Crear objeto de pedido
+    const order = {
+      id: Date.now(), // ID único basado en timestamp
+      userId: user.id,
+      date: new Date().toISOString(),
+      items: cart,
+      total: total,
+      status: 'pending',
+      paymentData: {
+        cardName: paymentData.cardName,
+        billingAddress: paymentData.billingAddress
+        // No almacenar información sensible real como números de tarjeta en producción
+      },
+      shippingAddress: user.address || paymentData.billingAddress
+    };
+    
+    // Obtener pedidos existentes
+    let userOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+    
+    // Añadir nuevo pedido
+    userOrders.push(order);
+    
+    // Guardar en localStorage
+    localStorage.setItem('userOrders', JSON.stringify(userOrders));
+    
+    console.log('Pedido guardado:', order);
   }
   
   // Inicializar contador del carrito

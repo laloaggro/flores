@@ -43,6 +43,7 @@ class ProductManager {
     console.log('Iniciando carga de productos desde la base de datos');
 
     try {
+      // Corregir la URL para apuntar correctamente al backend
       let url = `/api/products?page=${page}&limit=${limit}`;
       
       if (category) {
@@ -99,72 +100,59 @@ class ProductManager {
   // Función para cargar imágenes de flores de una API externa
   async loadFlowerImages() {
     // Comenzar con un conjunto de imágenes locales verificadas
-    const localImages = [
-      '/assets/images/products/product_1.jpg',
-      '/assets/images/products/product_2.jpg',
-      '/assets/images/products/product_3.jpg',
-      '/assets/images/products/product_4.jpg',
-      '/assets/images/products/product_5.jpg'
+    const localFlowerImages = [
+      'assets/images/flowers/flower1.svg',
+      'assets/images/flowers/flower2.svg',
+      'assets/images/flowers/flower3.svg',
+      'assets/images/flowers/flower4.svg',
+      'assets/images/flowers/flower5.svg',
+      'assets/images/flowers/flower6.svg',
+      'assets/images/flowers/flower7.svg',
+      'assets/images/flowers/flower8.svg',
+      'assets/images/flowers/flower9.svg',
+      'assets/images/flowers/flower10.svg'
     ];
     
-    // Filtrar solo las imágenes locales que existen y tienen tamaño válido
-    const verifiedLocalImages = localImages.filter(image => {
-      // Excluir imágenes que sabemos que tienen tamaño 0KB
-      const zeroSizeImages = [
-        '/assets/images/products/product_6.jpg'
-      ];
-      return !zeroSizeImages.includes(image);
-    });
+    // Verificar que las imágenes locales existan y tengan tamaño > 0
+    this.flowerImages = [];
     
-    this.flowerImages = verifiedLocalImages;
-    
-    try {
-      // Intentar cargar solo unas pocas imágenes de la API de Unsplash
-      const flowerImageUrls = [];
-      
-      // Generar solo 3 URLs de imágenes de flores de Unsplash para reducir solicitudes
-      for (let i = 0; i < 3; i++) {
-        // Usar parámetros aleatorios para obtener diferentes imágenes
-        const randomParam = Math.random().toString(36).substring(2, 15);
-        flowerImageUrls.push(`https://source.unsplash.com/300x300/?flower,arrangement&sig=${randomParam}`);
-      }
-      
-      // Verificar si las imágenes se pueden cargar antes de agregarlas
-      const verifiedUrls = [];
-      for (const url of flowerImageUrls) {
-        try {
-          // Crear una promesa para verificar si la imagen se puede cargar
-          await new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = resolve;
-            img.onerror = reject;
-            img.src = url;
-          });
-          // Si llegamos aquí, la imagen se cargó correctamente
-          verifiedUrls.push(url);
-        } catch (error) {
-          // Si hay un error, simplemente no agregamos la URL
-          // Silenciar estos mensajes para reducir el ruido en la consola
+    for (const imagePath of localFlowerImages) {
+      try {
+        // Verificar si la imagen existe y tiene contenido
+        const response = await fetch(imagePath);
+        if (response.ok) {
+          const blob = await response.blob();
+          if (blob.size > 0) {
+            this.flowerImages.push(imagePath);
+          } else {
+            console.warn(`Imagen local ${imagePath} está vacía o corrupta`);
+          }
+        } else {
+          console.warn(`Imagen local ${imagePath} no encontrada`);
         }
+      } catch (error) {
+        console.warn(`Error al verificar imagen local ${imagePath}:`, error);
       }
-      
-      // Agregar las imágenes verificadas al conjunto existente solo si hay al menos una
-      if (verifiedUrls.length > 0) {
-        this.flowerImages = [...this.flowerImages, ...verifiedUrls];
-      }
-      
-      console.log('Imágenes de flores preparadas:', this.flowerImages.length);
-    } catch (error) {
-      // Silenciar errores de la API para reducir el ruido en la consola
-      // Mantener las imágenes locales verificadas como fallback
     }
+    
+    // Si no hay imágenes locales válidas, usar imágenes SVG como respaldo
+    if (this.flowerImages.length === 0) {
+      console.log('No se encontraron imágenes locales válidas, usando imágenes SVG de respaldo');
+      this.flowerImages = [
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"%3E%3Crect width="300" height="300" fill="%23e0e0e0"/%3E%3Ccircle cx="150" cy="150" r="80" fill="%23a5d6a7"/%3E%3Ccircle cx="110" cy="120" r="15" fill="%234caf50"/%3E%3Ccircle cx="190" cy="120" r="15" fill="%234caf50"/%3E%3Cpath d="M150 170 Q170 200 150 230 Q130 200 150 170" fill="%234caf50"/%3E%3C/svg%3E',
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"%3E%3Crect width="300" height="300" fill="%23e0e0e0"/%3E%3Ccircle cx="150" cy="150" r="90" fill="%23ffcc80"/%3E%3Ccircle cx="120" cy="130" r="12" fill="%23ff9800"/%3E%3Ccircle cx="180" cy="130" r="12" fill="%23ff9800"/%3E%3Cpath d="M150 180 Q170 210 150 240 Q130 210 150 180" fill="%23ff9800"/%3E%3C/svg%3E',
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"%3E%3Crect width="300" height="300" fill="%23e0e0e0"/%3E%3Ccircle cx="150" cy="150" r="85" fill="%23ce93d8"/%3E%3Ccircle cx="130" cy="140" r="10" fill="%237b1fa2"/%3E%3Ccircle cx="170" cy="140" r="10" fill="%237b1fa2"/%3E%3Cpath d="M150 170 Q165 190 150 210 Q135 190 150 170" fill="%237b1fa2"/%3E%3C/svg%3E'
+      ];
+    }
+    
+    console.log(`Cargadas ${this.flowerImages.length} imágenes de flores`);
   }
 
-  // Función para obtener la siguiente imagen de flor en rotación
+  // Función para obtener la siguiente imagen de flor (rotando)
   getNextFlowerImage() {
     if (this.flowerImages.length === 0) {
-      // Fallback absoluto si no hay imágenes disponibles
-      return '/assets/images/default-avatar.svg';
+      // Si no hay imágenes, devolver una imagen SVG por defecto
+      return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"%3E%3Crect width="300" height="300" fill="%23eeeeee"/%3E%3Ctext x="150" y="160" font-family="Arial" font-size="24" text-anchor="middle" fill="%23999999"%3ESin imagen%3C/text%3E%3C/svg%3E';
     }
     
     const image = this.flowerImages[this.lastImageIndex];
@@ -172,45 +160,10 @@ class ProductManager {
     return image;
   }
 
-  // Función para generar HTML de productos
-  generateProductsHTML(products) {
-    if (!products || products.length === 0) {
-      return '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
-    }
-
-    return products.map(product => `
-      <div class="product-card">
-        <div class="product-image">
-          <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="handleImageError(this)">
-        </div>
-        <div class="product-info">
-          <h3>${product.name}</h3>
-          <p>${product.description}</p>
-          <div class="product-details">
-            <span class="detail-item"><i class="fas fa-tag"></i> ${product.category}</span>
-            <span class="detail-item"><i class="fas fa-calendar-alt"></i> ${new Date(product.created_at).toLocaleDateString('es-CL')}</span>
-          </div>
-          <span class="price">$${parseInt(product.price).toLocaleString('es-CL')}</span>
-          <button class="btn btn-secondary add-to-cart" 
-                  data-id="${product.id}" 
-                  data-name="${product.name}" 
-                  data-price="${product.price}"
-                  data-image="${product.image_url}">
-            <i class="fas fa-shopping-cart"></i> Agregar
-          </button>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // Función para agregar producto al carrito
-  addToCart(product) {
-    CartUtils.addToCart(product);
-  }
-
-  // Función para obtener categorías únicas de productos
+  // Función para obtener todas las categorías
   async getCategories() {
     try {
+      // Corregir la URL para apuntar correctamente al backend
       const response = await fetch('/api/products/categories');
       
       if (!response.ok) {
@@ -218,45 +171,28 @@ class ProductManager {
       }
       
       const data = await response.json();
-      return data.categories; // Devolver directamente el array de categorías
+      console.log('Categorías cargadas exitosamente:', data.categories.length);
+      return data.categories;
     } catch (error) {
       console.error('Error al cargar categorías:', error);
-      return [];
+      throw error;
     }
   }
 
-  // Función para limpiar la caché
-  clearCache() {
-    this.cachedProducts = null;
+  // Función para formatear precios
+  formatPrice(price) {
+    return formatPrice(price);
+  }
+
+  // Función para mostrar notificaciones
+  showNotification(message, type) {
+    showNotification(message, type);
   }
 }
 
-// Función para manejar errores de carga de imágenes
-function handleImageError(imgElement) {
-  console.debug('Error al cargar imagen:', imgElement.src);
-  
-  // Intentar con una imagen de respaldo verificada
-  const fallbackImages = [
-    '/assets/images/products/product_2.jpg',
-    '/assets/images/products/product_1.jpg',
-    '/assets/images/products/product_3.jpg'
-  ];
-  
-  // Encontrar una imagen de respaldo que no sea la que falló
-  const workingFallback = fallbackImages.find(img => img !== imgElement.src);
-  
-  if (workingFallback) {
-    imgElement.src = workingFallback;
-  } else {
-    // Fallback absoluto
-    imgElement.src = '/assets/images/default-avatar.svg';
-  }
-  
-  imgElement.alt = 'Imagen no disponible';
-  imgElement.onerror = null; // Prevenir bucle infinito si también falla la imagen de marcador de posición
-}
-
-// Exportar una instancia única
+// Crear una instancia global del ProductManager
 const productManager = new ProductManager();
+
+// Exportar la instancia y funciones necesarias
 export default productManager;
-export { handleImageError };
+export { productManager };

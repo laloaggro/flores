@@ -1,15 +1,15 @@
 // profile.js - Manejo de la página de perfil de usuario
+import { initUserMenu, getUser, isAuthenticated } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si el usuario está logueado
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user'));
-    
-    if (!token || !user) {
-        // Si no hay token o usuario, redirigir al login
+    if (!isAuthenticated()) {
+        // Si no está autenticado, redirigir al login
         window.location.href = 'login.html';
         return;
     }
+    
+    const user = getUser();
     
     // Mostrar información del usuario
     displayUserInfo(user);
@@ -19,22 +19,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Cargar datos adicionales del usuario
     loadUserStats();
+    
+    // Inicializar el menú de usuario
+    initUserMenu();
 });
 
 // Mostrar información del usuario
 function displayUserInfo(user) {
     // Actualizar elementos del DOM con la información del usuario
-    const userNameElement = document.getElementById('userName');
-    const userEmailElement = document.getElementById('userEmail');
     const profileNameElement = document.getElementById('profileName');
-    const profileEmailElement = document.getElementById('profileEmail');
-    const profilePhoneElement = document.getElementById('profilePhone');
+    const userEmailElement = document.getElementById('userEmail');
+    const nameElement = document.getElementById('name');
+    const emailElement = document.getElementById('email');
+    const phoneElement = document.getElementById('phone');
+    const addressElement = document.getElementById('address');
     
-    if (userNameElement) userNameElement.textContent = user.name || 'Usuario';
-    if (userEmailElement) userEmailElement.textContent = user.email || '';
     if (profileNameElement) profileNameElement.textContent = user.name || 'Usuario';
-    if (profileEmailElement) profileEmailElement.textContent = user.email || '';
-    if (profilePhoneElement) profilePhoneElement.textContent = user.phone || '';
+    if (userEmailElement) userEmailElement.textContent = user.email || '';
+    if (nameElement) nameElement.value = user.name || '';
+    if (emailElement) emailElement.value = user.email || '';
+    if (phoneElement) phoneElement.value = user.phone || '';
+    if (addressElement) addressElement.value = user.address || '';
 }
 
 // Configurar event listeners
@@ -42,24 +47,9 @@ function setupEventListeners() {
     // Botón de cerrar sesión
     const logoutButton = document.getElementById('logoutButton');
     if (logoutButton) {
-        logoutButton.addEventListener('click', function() {
-            // Eliminar datos de sesión
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            
-            // Redirigir a la página principal
-            window.location.href = 'index.html';
-        });
-    }
-    
-    // Enlace de cerrar sesión en el menú
-    const logoutLink = document.getElementById('logoutLink');
-    if (logoutLink) {
-        logoutLink.addEventListener('click', function(e) {
+        logoutButton.addEventListener('click', function(e) {
             e.preventDefault();
-            
             // Eliminar datos de sesión
-            localStorage.removeItem('token');
             localStorage.removeItem('user');
             
             // Redirigir a la página principal
@@ -76,64 +66,56 @@ function setupEventListeners() {
         });
     }
     
-    // Botón de cambiar avatar
-    const changeAvatarButton = document.getElementById('changeAvatarButton');
-    if (changeAvatarButton) {
-        changeAvatarButton.addEventListener('click', function() {
-            changeAvatar();
-        });
-    }
-    
-    // Menú de perfil
-    const profileMenuItems = document.querySelectorAll('.profile-menu a');
-    profileMenuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
+    // Enlaces de navegación del perfil
+    const profileNavLinks = document.querySelectorAll('.profile-menu a');
+    profileNavLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
             e.preventDefault();
+            const sectionId = this.getAttribute('data-section');
+            loadProfileSection(sectionId);
             
-            // Remover clase active de todos los items
+            // Actualizar clase activa
             document.querySelectorAll('.profile-menu li').forEach(li => {
                 li.classList.remove('active');
             });
-            
-            // Agregar clase active al item seleccionado
             this.parentElement.classList.add('active');
-            
-            // Aquí se cargaría el contenido correspondiente
-            const section = this.getAttribute('href').substring(1);
-            loadProfileSection(section);
         });
     });
 }
 
-// Actualizar perfil
+// Actualizar perfil de usuario
 function updateProfile() {
-    const profileForm = document.getElementById('profileForm');
-    if (!profileForm) return;
+    // Obtener datos del formulario
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
     
-    const formData = new FormData(profileForm);
-    const userData = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        address: formData.get('address')
-    };
+    // Obtener usuario actual
+    let user = getUser();
     
-    // Actualizar datos en localStorage
-    const user = JSON.parse(localStorage.getItem('user')) || {};
-    Object.assign(user, userData);
+    // Actualizar datos del usuario
+    user.name = name;
+    user.email = email;
+    user.phone = phone;
+    user.address = address;
+    
+    // Guardar en localStorage
     localStorage.setItem('user', JSON.stringify(user));
     
-    // Actualizar UI
-    displayUserInfo(user);
-    
-    // Mostrar mensaje de éxito
+    // Mostrar notificación de éxito
     alert('Perfil actualizado correctamente');
+    
+    // Actualizar también el nombre en el encabezado
+    const profileNameElement = document.getElementById('profileName');
+    if (profileNameElement) profileNameElement.textContent = user.name || 'Usuario';
 }
 
 // Cargar sección del perfil
 function loadProfileSection(sectionId) {
     // Ocultar todas las secciones
-    document.querySelectorAll('.profile-content-section').forEach(section => {
+    const sections = document.querySelectorAll('.profile-content-section');
+    sections.forEach(section => {
         section.style.display = 'none';
     });
     
@@ -141,26 +123,183 @@ function loadProfileSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
         section.style.display = 'block';
+        
+        // Si es la sección de pedidos, cargar los pedidos
+        if (sectionId === 'orders') {
+            loadUserOrders();
+        }
     }
 }
 
-// Cargar estadísticas del usuario
+// Cargar estadísticas del usuario (simulación)
 function loadUserStats() {
-    // Simular carga de estadísticas
-    const orderCountElement = document.getElementById('orderCount');
-    const productCountElement = document.getElementById('productCount');
-    const totalSpentElement = document.getElementById('totalSpent');
+    // En una implementación real, esto haría una llamada a la API
+    const statsContainer = document.querySelector('.profile-stats');
+    if (statsContainer) {
+        statsContainer.innerHTML = `
+            <div class="stat">
+                <span class="stat-number" id="orderCount">5</span>
+                <span class="stat-label">Pedidos</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number" id="productCount">3</span>
+                <span class="stat-label">Productos</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number" id="totalSpent">$120.000</span>
+                <span class="stat-label">Gastado</span>
+            </div>
+        `;
+    }
+}
+
+// Cargar pedidos del usuario
+function loadUserOrders() {
+    // Obtener usuario actual
+    const user = getUser();
     
-    if (orderCountElement) orderCountElement.textContent = '5';
-    if (productCountElement) productCountElement.textContent = '12';
-    if (totalSpentElement) totalSpentElement.textContent = '$125.000';
+    // Obtener pedidos del usuario (simulación)
+    // En una implementación real, esto haría una llamada a la API
+    const orders = getStoredOrders(user.id);
+    
+    const ordersList = document.getElementById('ordersList');
+    if (!ordersList) return;
+    
+    if (orders.length === 0) {
+        ordersList.innerHTML = '<p class="no-orders-message">No tienes pedidos aún.</p>';
+        return;
+    }
+    
+    // Renderizar pedidos
+    ordersList.innerHTML = `
+        <div class="orders-table">
+            <div class="orders-header">
+                <div>ID Pedido</div>
+                <div>Fecha</div>
+                <div>Total</div>
+                <div>Estado</div>
+                <div>Acciones</div>
+            </div>
+            ${orders.map(order => `
+                <div class="order-row">
+                    <div>#${order.id}</div>
+                    <div>${new Date(order.date).toLocaleDateString('es-CL')}</div>
+                    <div>$${order.total.toLocaleString('es-CL')}</div>
+                    <div><span class="status ${order.status}">${getStatusText(order.status)}</span></div>
+                    <div><button class="btn btn-small view-details" data-order-id="${order.id}">Ver Detalles</button></div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    // Añadir event listeners a los botones de detalles
+    document.querySelectorAll('.view-details').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-order-id');
+            showOrderDetails(orderId);
+        });
+    });
 }
 
-// Cambiar avatar
-function changeAvatar() {
-    // Simular cambio de avatar
-    alert('Funcionalidad de cambio de avatar no implementada aún');
+// Obtener pedidos almacenados (simulación)
+function getStoredOrders(userId) {
+    // En una implementación real, esto haría una llamada a la API
+    const storedOrders = localStorage.getItem('userOrders');
+    if (!storedOrders) return [];
+    
+    const allOrders = JSON.parse(storedOrders);
+    return allOrders.filter(order => order.userId == userId);
 }
 
-// Exportar funciones para uso global
-window.loadProfileSection = loadProfileSection;
+// Obtener texto del estado
+function getStatusText(status) {
+    const statusMap = {
+        'pending': 'Pendiente',
+        'processing': 'Procesando',
+        'shipped': 'Enviado',
+        'delivered': 'Entregado',
+        'cancelled': 'Cancelado'
+    };
+    
+    return statusMap[status] || status;
+}
+
+// Mostrar detalles del pedido
+function showOrderDetails(orderId) {
+    // En una implementación real, esto haría una llamada a la API para obtener los detalles
+    const storedOrders = localStorage.getItem('userOrders');
+    if (!storedOrders) return;
+    
+    const allOrders = JSON.parse(storedOrders);
+    const order = allOrders.find(o => o.id == orderId);
+    
+    if (!order) {
+        alert('Pedido no encontrado');
+        return;
+    }
+    
+    // Crear modal con detalles del pedido
+    const modalHTML = `
+        <div id="orderDetailsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Detalles del Pedido #${order.id}</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="order-details">
+                        <div class="order-info">
+                            <h3>Información del Pedido</h3>
+                            <p><strong>Fecha:</strong> ${new Date(order.date).toLocaleDateString('es-CL')}</p>
+                            <p><strong>Estado:</strong> <span class="status ${order.status}">${getStatusText(order.status)}</span></p>
+                            <p><strong>Total:</strong> $${order.total.toLocaleString('es-CL')}</p>
+                        </div>
+                        
+                        <div class="order-items">
+                            <h3>Productos</h3>
+                            ${order.items.map(item => `
+                                <div class="order-item">
+                                    <div class="order-item-image">
+                                        <img src="${item.image}" alt="${item.name}">
+                                    </div>
+                                    <div class="order-item-details">
+                                        <h4>${item.name}</h4>
+                                        <p>${item.quantity} x $${item.price.toLocaleString('es-CL')}</p>
+                                    </div>
+                                    <div class="order-item-total">
+                                        $${(item.quantity * item.price).toLocaleString('es-CL')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="order-address">
+                            <h3>Dirección de Envío</h3>
+                            <p>${order.shippingAddress || 'Dirección no especificada'}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Insertar modal en el DOM
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Añadir event listeners al modal
+    const modal = document.getElementById('orderDetailsModal');
+    const closeBtn = modal.querySelector('.close');
+    
+    closeBtn.addEventListener('click', function() {
+        modal.remove();
+    });
+    
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+// Exportar funciones si es necesario
+export { displayUserInfo, setupEventListeners, loadProfileSection, loadUserStats };
