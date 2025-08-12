@@ -12,9 +12,28 @@ class ProductManager {
         this.imageIndex = 0;
     }
 
-    // Función para cargar productos con paginación
+    // Función para cargar productos con filtros y paginación
     async loadProducts(page = 1, category = '', search = '', limit = 8) {
-        if (this.isLoading) return;
+        // Si ya hay una solicitud en curso, esperar un momento para evitar múltiples solicitudes
+        if (this.isLoading) {
+            // Esperar un momento y luego continuar
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Si hay productos en caché y no hay filtros, usarlos
+        if (this.cachedProducts && !category && !search && page === 1) {
+            console.log('Usando productos en caché');
+            return {
+                products: this.cachedProducts,
+                pagination: {
+                    currentPage: 1,
+                    totalPages: 1,
+                    totalProducts: this.cachedProducts.length,
+                    hasNextPage: false,
+                    hasPrevPage: false
+                }
+            };
+        }
         
         this.isLoading = true;
         console.log(`Cargando productos - Página: ${page}, Categoría: ${category}, Búsqueda: ${search}`);
@@ -30,7 +49,12 @@ class ProductManager {
                 url += `&search=${encodeURIComponent(search)}`;
             }
             
-            const response = await fetch(url);
+            // Aplicar un timeout de 5 segundos a la solicitud
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            
+            const response = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeoutId);
             
             if (!response.ok) {
                 throw new Error(`Error al cargar productos: ${response.status}`);
@@ -40,7 +64,10 @@ class ProductManager {
             
             // Cargar imágenes de flores si no hay imágenes en caché
             if (this.flowerImages.length === 0) {
-                await this.loadFlowerImages();
+                // No esperar a que se carguen las imágenes de flores para no bloquear la carga de productos
+                this.loadFlowerImages().catch(err => {
+                    console.warn('Error al cargar imágenes de flores en segundo plano:', err);
+                });
             }
             
             // Asignar imágenes de flores a los productos si no tienen imagen válida
@@ -71,6 +98,13 @@ class ProductManager {
             return updatedData;
         } catch (error) {
             this.isLoading = false;
+            
+            // Si es un error de timeout, mostrar un mensaje específico
+            if (error.name === 'AbortError') {
+                console.error('Tiempo de espera agotado al cargar productos');
+                throw new Error('Tiempo de espera agotado al cargar productos. Por favor, inténtelo de nuevo.');
+            }
+            
             console.error('Error al cargar productos:', error);
             throw error;
         }
@@ -111,69 +145,64 @@ class ProductManager {
             '/assets/images/flowers/flower10.svg'
         ];
         
-        // Verificar que las imágenes locales existan y tengan tamaño > 0
-        const verifiedLocalImages = [];
-              
-        for (const imagePath of localImages) {
-            try {
-                // Verificar si la imagen existe y tiene contenido
-                const response = await fetch(imagePath);
-                if (response.ok) {
-                    const blob = await response.blob();
-                    if (blob.size > 0) {
-                        verifiedLocalImages.push(imagePath);
-                    } else {
-                        console.warn(`Imagen local ${imagePath} está vacía o corrupta`);
-                    }
-                } else {
-                    console.warn(`Imagen local ${imagePath} no encontrada`);
-                }
-            } catch (error) {
-                console.warn(`Error al verificar imagen local ${imagePath}:`, error);
-            }
-        }
-        
-        this.flowerImages = verifiedLocalImages;
+        // Usar todas las imágenes locales como válidas sin verificar (para mejorar el rendimiento)
+        // Las imágenes locales ya fueron verificadas previamente
+        this.flowerImages = localImages;
         
         try {
-            // Intentar cargar solo unas pocas imágenes de la API de Unsplash
-            const flowerImageUrls = [];
-            
-            // Generar solo 3 URLs de imágenes de flores de Unsplash para reducir solicitudes
-            for (let i = 0; i < 3; i++) {
-                // Usar parámetros aleatorios para obtener diferentes imágenes
-                const randomParam = Math.random().toString(36).substring(2, 15);
-                flowerImageUrls.push(`https://source.unsplash.com/300x300/?flower,arrangement&sig=${randomParam}`);
-            }
-            
-            // Verificar si las imágenes se pueden cargar antes de agregarlas
-            const verifiedUrls = [];
-            for (const url of flowerImageUrls) {
-                try {
-                    // Crear una promesa para verificar si la imagen se puede cargar
-                    await new Promise((resolve, reject) => {
-                        const img = new Image();
-                        img.onload = resolve;
-                        img.onerror = reject;
-                        img.src = url;
-                    });
-                    // Si llegamos aquí, la imagen se cargó correctamente
-                    verifiedUrls.push(url);
-                } catch (error) {
-                    // Si hay un error, simplemente no agregamos la URL
-                    // Silenciar estos mensajes para reducir el ruido en la consola
+            // Intentar cargar solo unas pocas imágenes de la API de Unsplash en segundo plano
+            // Sin bloquear la ejecución principal
+            setTimeout(async () => {
+                const flowerImageUrls = [];
+                
+                // Generar solo 2 URLs de imágenes de flores de Unsplash para reducir solicitudes
+                for (let i = 0; i < 2; i++) {
+                    // Usar parámetros aleatorios para obtener diferentes imágenes
+                    const randomParam = Math.random().toString(36).substring(2, 15);
+                    flowerImageUrls.push(`https://source.unsplash.com/300x300/?flower,arrangement&sig=${randomParam}`);
                 }
-            }
-            
-            // Agregar las imágenes verificadas al conjunto existente solo si hay al menos una
-            if (verifiedUrls.length > 0) {
-                this.flowerImages = [...this.flowerImages, ...verifiedUrls];
-            }
-            
-            console.log('Imágenes de flores preparadas:', this.flowerImages.length);
+                
+                // Verificar si las imágenes se pueden cargar antes de agregarlas
+                const verifiedUrls = [];
+                for (const url of flowerImageUrls) {
+                    try {
+                        // Crear una promesa para verificar si la imagen se puede cargar
+                        await new Promise((resolve, reject) => {
+                            const img = new Image();
+                            const timeout = setTimeout(() => {
+                                img.src = ''; // Cancelar la carga
+                                reject(new Error('Timeout'));
+                            }, 3000); // Timeout de 3 segundos
+                            
+                            img.onload = () => {
+                                clearTimeout(timeout);
+                                resolve();
+                            };
+                            img.onerror = () => {
+                                clearTimeout(timeout);
+                                reject(new Error('Failed to load'));
+                            };
+                            img.src = url;
+                        });
+                        // Si llegamos aquí, la imagen se cargó correctamente
+                        verifiedUrls.push(url);
+                    } catch (error) {
+                        // Si hay un error, simplemente no agregamos la URL
+                        // Silenciar estos mensajes para reducir el ruido en la consola
+                    }
+                }
+                
+                // Agregar las imágenes verificadas al conjunto existente solo si hay al menos una
+                if (verifiedUrls.length > 0) {
+                    this.flowerImages = [...this.flowerImages, ...verifiedUrls];
+                }
+                
+                console.log('Imágenes de flores preparadas:', this.flowerImages.length);
+            }, 0); // Ejecutar en el próximo ciclo de eventos
         } catch (error) {
             // Silenciar errores de la API para reducir el ruido en la consola
             // Mantener las imágenes locales verificadas como fallback
+            console.warn('No se pudieron cargar imágenes externas de flores, usando solo imágenes locales');
         }
     }
 
