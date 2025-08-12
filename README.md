@@ -203,11 +203,3 @@ Las contribuciones son bienvenidas. Por favor, abre un issue primero para discut
 ## Licencia
 
 ISC
-
-## Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir qué te gustaría cambiar.
-
-## Licencia
-
-[MIT License](LICENSE)
