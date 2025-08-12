@@ -1,5 +1,24 @@
 // utils.js - Funciones de utilidad compartidas
 
+// Determinar la URL base del API según el entorno
+const getApiBaseUrl = () => {
+  // En producción, usar la URL del backend (debe configurarse en Vercel)
+  if (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  
+  // Detectar si estamos en producción (Vercel, Netlify, etc.)
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    // En producción, el backend probablemente esté en un subdominio o dominio diferente
+    return 'https://tu-app-backend-production.up.railway.app'; // Cambiar esta URL por la real
+  }
+  
+  // En desarrollo, usar localhost
+  return 'http://localhost:5000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
+
 // Función para mostrar notificaciones
 function showNotification(message, type = 'info') {
     // Crear el contenedor de notificaciones si no existe
@@ -135,17 +154,95 @@ function requireAuth(redirectUrl = '/login.html') {
     return true;
 }
 
-// Función para validar email
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+// Funciones de autenticación de usuario
+function getUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
 }
 
-// Función para validar teléfono
-function validatePhone(phone) {
-    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
-    return phoneRegex.test(phone);
+function isAuthenticated() {
+    return !!getUser();
+}
+
+function requireAuth() {
+    if (!isAuthenticated()) {
+        showNotification('Debes iniciar sesión para acceder a esta página', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+        return false;
+    }
+    return true;
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    showNotification('Sesión cerrada correctamente', 'success');
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 1000);
+}
+
+// Función para obtener el token de autenticación
+function getAuthToken() {
+    const user = getUser();
+    return user ? user.token : null;
+}
+
+// Función para manejar errores de red
+function handleNetworkError(error) {
+    console.error('Error de red:', error);
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        showNotification('Error de conexión. Por favor, verifica tu conexión a internet.', 'error');
+    } else {
+        showNotification('Ocurrió un error. Por favor, inténtalo de nuevo.', 'error');
+    }
+}
+
+// Función para realizar solicitudes HTTP con manejo de errores
+async function apiRequest(endpoint, options = {}) {
+    try {
+        const url = `${API_BASE_URL}${endpoint}`;
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            },
+            ...options
+        };
+        
+        // Agregar token de autenticación si existe
+        const token = getAuthToken();
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        
+        const response = await fetch(url, config);
+        
+        // Manejar respuestas no exitosas
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        handleNetworkError(error);
+        throw error;
+    }
 }
 
 // Exportar funciones
-export { showNotification, formatPrice, updateCartCount, loadImageWithProxy, getUser, isAuthenticated, logout, requireAuth, validateEmail, validatePhone };
+export { 
+    showNotification, 
+    updateCartCount, 
+    formatPrice, 
+    loadImageWithProxy,
+    getUser, 
+    isAuthenticated, 
+    requireAuth, 
+    logout, 
+    getAuthToken,
+    apiRequest,
+    API_BASE_URL
+};
