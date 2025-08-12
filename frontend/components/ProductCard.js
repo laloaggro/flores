@@ -4,9 +4,12 @@ import CartUtils from '../../assets/js/cartUtils.js';
 // Componente para una tarjeta de producto individual
 const ProductCard = (product) => {
   return `
-    <div class="product-card">
+    <div class="product-card fade-in">
       <div class="product-image">
         <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="handleImageError(this)">
+        <div class="product-badge">
+          ${product.category}
+        </div>
       </div>
       <div class="product-info">
         <h3>${product.name}</h3>
@@ -21,7 +24,7 @@ const ProductCard = (product) => {
                 data-name="${product.name}" 
                 data-price="${product.price}"
                 data-image="${product.image_url}">
-          <i class="fas fa-shopping-cart"></i> Agregar
+          <i class="fas fa-shopping-cart"></i> Agregar al carrito
         </button>
       </div>
     </div>
@@ -73,30 +76,26 @@ document.addEventListener('click', function(e) {
     const product = {
       id: button.dataset.id,
       name: button.dataset.name,
-      price: button.dataset.price,
+      price: parseFloat(button.dataset.price),
       image: button.dataset.image
     };
     
+    // Agregar al carrito
     CartUtils.addToCart(product);
     
+    // Actualizar contador del carrito
+    CartUtils.updateCartCount();
+    
     // Mostrar notificación
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.innerHTML = `
-      <div class="notification-content">
-        <i class="fas fa-check-circle"></i>
-        <span>${product.name} agregado al carrito</span>
-      </div>
-    `;
+    CartUtils.showNotification(`${product.name} agregado al carrito`, 'success');
     
-    document.body.appendChild(notification);
-    
-    // Eliminar notificación después de 3 segundos
+    // Agregar efecto visual al botón
+    button.classList.add('pulse-animation');
     setTimeout(() => {
-      notification.remove();
-    }, 3000);
+      button.classList.remove('pulse-animation');
+    }, 2000);
   }
 });
 
+export { ProductCard, handleImageError };
 export default ProductCard;
-export { handleImageError };

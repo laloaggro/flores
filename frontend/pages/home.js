@@ -43,14 +43,57 @@ const Home = () => {
         <main>
           ${Categories()}
           ${Products()}
-          ${About()}
           ${Testimonials()}
+          ${About()}
           ${Blog()}
           ${Contact()}
         </main>
         ${Footer()}
         
-        <script src="assets/js/app.js"></script>
+        <script type="module">
+          // Inicializar funcionalidades
+          import { updateCartCount } from './assets/js/utils.js';
+          import CartUtils from './assets/js/cartUtils.js';
+          
+          // Actualizar contador del carrito al cargar la página
+          document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            
+            // Agregar efecto de desplazamiento suave para enlaces de anclaje
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+              anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                  target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }
+              });
+            });
+            
+            // Animaciones al desplazarse
+            const observerOptions = {
+              root: null,
+              rootMargin: '0px',
+              threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('fade-in');
+                }
+              });
+            }, observerOptions);
+            
+            // Observar elementos para animaciones
+            document.querySelectorAll('.product-card, .category-card, .gallery-item').forEach(el => {
+              observer.observe(el);
+            });
+          });
+        </script>
     </body>
     </html>
   `;
