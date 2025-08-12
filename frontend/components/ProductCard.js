@@ -36,11 +36,24 @@ function handleImageError(imgElement) {
   const fallbackImages = [
     '/assets/images/products/product_2.jpg',
     '/assets/images/products/product_1.jpg',
-    '/assets/images/products/product_3.jpg'
+    '/assets/images/products/product_3.jpg',
+    '/assets/images/products/product_4.jpg',
+    '/assets/images/products/product_5.jpg',
+    '/assets/images/products/product_10.svg',
+    '/assets/images/products/product_6.svg',
+    '/assets/images/products/product_7.svg',
+    '/assets/images/products/product_8.svg',
+    '/assets/images/products/product_9.svg'
   ];
   
-  // Encontrar una imagen de respaldo que no sea la que falló
-  const workingFallback = fallbackImages.find(img => img !== imgElement.src);
+  // Filtrar imágenes que no sean las que ya fallaron y que probablemente existan
+  const workingFallback = fallbackImages.find(img => {
+    // Verificar que no sea la imagen que ya falló
+    if (img === imgElement.src) return false;
+    
+    // Verificar que la imagen tenga una extensión válida
+    return img.endsWith('.jpg') || img.endsWith('.svg');
+  });
   
   if (workingFallback) {
     imgElement.src = workingFallback;

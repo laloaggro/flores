@@ -64,7 +64,9 @@ app.get('/api/image-proxy', async (req, res) => {
         const response = await fetch(url);
         
         if (!response.ok) {
-            return res.status(response.status).json({ error: 'Error al cargar la imagen' });
+            // Si falla la carga de la imagen externa, usar una imagen local de respaldo
+            console.warn(`Error al cargar imagen desde ${url}: ${response.status}`);
+            return res.redirect('/assets/images/default-avatar.svg');
         }
         
         // Obtener el tipo de contenido
@@ -72,7 +74,8 @@ app.get('/api/image-proxy', async (req, res) => {
         
         // Verificar que sea una imagen
         if (!contentType || !contentType.startsWith('image/')) {
-            return res.status(400).json({ error: 'La URL no apunta a una imagen válida' });
+            console.warn(`La URL no apunta a una imagen válida: ${url}`);
+            return res.redirect('/assets/images/default-avatar.svg');
         }
         
         // Establecer los headers apropiados
@@ -84,7 +87,8 @@ app.get('/api/image-proxy', async (req, res) => {
         res.send(buffer);
     } catch (error) {
         console.error('Error al cargar imagen:', error);
-        res.status(500).json({ error: 'Error al cargar la imagen' });
+        // En caso de error, redirigir a una imagen local de respaldo
+        return res.redirect('/assets/images/default-avatar.svg');
     }
 });
 
