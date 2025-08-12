@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pedido - Arreglos Victoria Florería</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="Menú principal">
+                <a href="index.html" class="logo"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="products.html">Productos</a></li>
+                    <li><a href="index.html#about">Nosotros</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+                <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="confirmation-section">
+            <div class="container">
+                <div class="confirmation-container">
+                    <div class="confirmation-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h1 class="confirmation-title">¡Pedido Confirmado!</h1>
+                    <p class="confirmation-message">Gracias por tu compra. Tu pedido ha sido procesado exitosamente.</p>
+                    
+                    <div class="order-details">
+                        <h2>Detalles del Pedido</h2>
+                        <div class="order-info">
+                            <p><strong>Número de pedido:</strong> <span id="orderId">-</span></p>
+                            <p><strong>Fecha:</strong> <span id="orderDate">-</span></p>
+                            <p><strong>Total:</strong> <span id="orderTotal" class="total-amount">-</span></p>
+                            <p><strong>Estado:</strong> <span class="status-completed">Completado</span></p>
+                        </div>
+                        
+                        <div class="order-items-summary">
+                            <h3>Productos</h3>
+                            <div id="orderItems" class="order-items-list">
+                                <!-- Los items se cargarán aquí dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="confirmation-actions">
+                        <a href="products.html" class="btn btn-primary">Continuar Comprando</a>
+                        <a href="profile.html#orders" class="btn btn-secondary">Ver Mis Pedidos</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { updateCartCount, formatPrice } from './assets/js/utils.js';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar contador del carrito
+            updateCartCount();
+            
+            // Obtener parámetros de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+            
+            // Mostrar información del pedido
+            displayOrderInfo(orderId);
+        });
+        
+        function displayOrderInfo(orderId) {
+            // En una implementación real, aquí se haría una llamada al servidor
+            // para obtener los detalles del pedido. Por ahora, usaremos datos de ejemplo.
+            
+            document.getElementById('orderId').textContent = orderId || '12345';
+            document.getElementById('orderDate').textContent = new Date().toLocaleDateString('es-ES');
+            document.getElementById('orderTotal').textContent = formatPrice(12500);
+            
+            // Mostrar items de ejemplo
+            const orderItemsContainer = document.getElementById('orderItems');
+            orderItemsContainer.innerHTML = `
+                <div class="order-item-summary">
+                    <div class="order-item-image">
+                        <img src="assets/images/products/product_1.svg" alt="Producto de ejemplo">
+                    </div>
+                    <div class="order-item-details">
+                        <h4>Ramo de Rosas Rojas</h4>
+                        <p>1 x ${formatPrice(7500)}</p>
+                    </div>
+                    <div class="order-item-total">
+                        ${formatPrice(7500)}
+                    </div>
+                </div>
+                <div class="order-item-summary">
+                    <div class="order-item-image">
+                        <img src="assets/images/products/product_2.svg" alt="Producto de ejemplo">
+                    </div>
+                    <div class="order-item-details">
+                        <h4>Arreglo de Girasoles</h4>
+                        <p>1 x ${formatPrice(5000)}</p>
+                    </div>
+                    <div class="order-item-total">
+                        ${formatPrice(5000)}
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const orderItems = document.querySelector('.order-items');
   const totalAmount = document.querySelector('.total-amount');
   const paymentForm = document.getElementById('paymentForm');
+  const payButton = paymentForm.querySelector('button[type="submit"]');
   
   // Verificar autenticación
   if (!requireAuth()) {
@@ -13,6 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Cargar resumen del pedido
   loadOrderSummary();
+  
+  // Formatear automáticamente los campos de tarjeta
+  document.getElementById('cardNumber').addEventListener('input', formatCardNumber);
+  document.getElementById('expiryDate').addEventListener('input', formatExpiryDate);
   
   // Manejar envío del formulario de pago
   paymentForm.addEventListener('submit', function(e) {
@@ -49,6 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const cvvRegex = /^\d{3,4}$/;
     if (!cvvRegex.test(cvv)) {
       showNotification('Formato de CVV inválido', 'error');
+      return;
+    }
+    
+    // Validar que la fecha de expiración no sea pasada
+    if (isCardExpired(expiryDate)) {
+      showNotification('La tarjeta está expirada', 'error');
       return;
     }
     
@@ -97,30 +108,47 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Procesar pago (simulado)
   function processPayment(paymentData) {
+    // Deshabilitar botón de pago y mostrar estado de carga
+    payButton.disabled = true;
+    const originalButtonText = payButton.textContent;
+    payButton.textContent = 'Procesando...';
+    
     // Mostrar mensaje de procesamiento
     showNotification('Procesando pago...', 'info');
     
     // Simular proceso de pago (en un entorno real, aquí se haría la llamada al API de pago)
     setTimeout(() => {
-      // Simular éxito en el pago
-      showNotification('¡Pago procesado exitosamente!', 'success');
+      // Simular éxito o fallo en el pago (90% éxito, 10% fallo)
+      const isSuccess = Math.random() > 0.1;
       
-      // Guardar pedido
-      saveOrder(paymentData);
-      
-      // Limpiar carrito
-      localStorage.removeItem('cart');
-      updateCartCount();
-      
-      // Mostrar información de depuración
-      console.log('Pago procesado para el usuario:', getUser());
-      console.log('Datos de pago:', paymentData);
-      
-      // Redirigir a página de confirmación o inicio después de 2 segundos
-      setTimeout(() => {
-        window.location.href = 'profile.html#orders';
-      }, 2000);
-    }, 2000);
+      if (isSuccess) {
+        // Simular éxito en el pago
+        showNotification('¡Pago procesado exitosamente!', 'success');
+        
+        // Guardar pedido
+        saveOrder(paymentData);
+        
+        // Limpiar carrito
+        localStorage.removeItem('cart');
+        updateCartCount();
+        
+        // Mostrar información de depuración
+        console.log('Pago procesado para el usuario:', getUser());
+        console.log('Datos de pago:', paymentData);
+        
+        // Redirigir a página de confirmación después de 2 segundos
+        setTimeout(() => {
+          window.location.href = 'order-confirmation.html?orderId=' + Date.now();
+        }, 2000);
+      } else {
+        // Simular fallo en el pago
+        showNotification('Error en el procesamiento del pago. Por favor, verifica tus datos e intenta nuevamente.', 'error');
+        
+        // Rehabilitar botón de pago
+        payButton.disabled = false;
+        payButton.textContent = originalButtonText;
+      }
+    }, 3000);
   }
   
   // Guardar pedido
@@ -136,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
       date: new Date().toISOString(),
       items: cart,
       total: total,
-      status: 'pending',
+      status: 'completed',
       paymentData: {
         cardName: paymentData.cardName,
         billingAddress: paymentData.billingAddress
@@ -155,6 +183,38 @@ document.addEventListener('DOMContentLoaded', function() {
     localStorage.setItem('userOrders', JSON.stringify(userOrders));
     
     console.log('Pedido guardado:', order);
+  }
+  
+  // Función para formatear número de tarjeta
+  function formatCardNumber(e) {
+    let value = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+    let formattedValue = '';
+    
+    for (let i = 0; i < value.length && i < 16; i++) {
+      if (i > 0 && i % 4 === 0) {
+        formattedValue += ' ';
+      }
+      formattedValue += value[i];
+    }
+    
+    e.target.value = formattedValue;
+  }
+  
+  // Función para formatear fecha de expiración
+  function formatExpiryDate(e) {
+    let value = e.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+    if (value.length > 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    e.target.value = value;
+  }
+  
+  // Función para verificar si la tarjeta está expirada
+  function isCardExpired(expiryDate) {
+    const [month, year] = expiryDate.split('/');
+    const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1);
+    const now = new Date();
+    return expiry < now;
   }
   
   // Inicializar contador del carrito
