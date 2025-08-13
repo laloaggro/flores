@@ -1,4 +1,4 @@
-import { API_BASE_URL, showNotification, isAuthenticated, requireAdmin } from './utils.js';
+import { API_BASE_URL, showNotification, isAuthenticated, requireAdmin, formatPrice } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 // Verificar autenticación y rol de administrador al cargar la página
@@ -88,6 +88,7 @@ function loadAdminContent() {
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Imagen</th>
                                             <th>Nombre</th>
                                             <th>Descripción</th>
                                             <th>Precio</th>
@@ -134,6 +135,7 @@ function loadAdminContent() {
                                             <th>Cliente</th>
                                             <th>Total</th>
                                             <th>Estado</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ordersTableBody">
@@ -182,14 +184,32 @@ function loadAdminContent() {
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="productImage">URL de la Imagen</label>
-                            <input type="text" id="productImage">
+                            <label for="productImage">Imagen del Producto</label>
+                            <input type="file" id="productImageFile" accept="image/*" class="form-control">
+                            <input type="text" id="productImageUrl" placeholder="O ingresa URL de la imagen">
+                            <div id="imagePreview" class="image-preview"></div>
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" id="cancelProductBtn">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Guardar Producto</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para detalles del pedido -->
+        <div id="orderDetailModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Detalles del Pedido</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div id="orderDetailContent"></div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="closeOrderDetailBtn">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -305,9 +325,10 @@ function displayProducts(products) {
     tableBody.innerHTML = products.map(product => `
         <tr>
             <td>${product.id}</td>
+            <td><img src="${product.image_url || '/assets/images/products/product_1.svg'}" alt="${product.name}" class="product-thumb"></td>
             <td>${product.name}</td>
             <td>${product.description}</td>
-            <td>$${parseInt(product.price).toLocaleString('es-CL')}</td>
+            <td>${formatPrice(product.price)}</td>
             <td>${product.category}</td>
             <td>
                 <button class="btn btn-secondary btn-small edit-product" data-id="${product.id}">
@@ -367,9 +388,64 @@ async function loadAccountingData() {
         
         // Cargar pedidos de ejemplo
         displayOrders([
-            { id: '001', date: '2023-06-15', customer: 'Juan Pérez', total: 15000, status: 'Completado' },
-            { id: '002', date: '2023-06-16', customer: 'María González', total: 22500, status: 'Completado' },
-            { id: '003', date: '2023-06-17', customer: 'Carlos López', total: 18750, status: 'Pendiente' }
+            { 
+                id: '001', 
+                date: '2023-06-15', 
+                customer: 'Juan Pérez', 
+                total: 15000, 
+                status: 'Completado',
+                items: [
+                    { name: 'Ramo de Rosas', quantity: 1, price: 10000 },
+                    { name: 'Tarjeta de Felicitación', quantity: 1, price: 5000 }
+                ],
+                shipping: {
+                    method: 'Retiro en tienda',
+                    address: 'Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana'
+                },
+                customerInfo: {
+                    name: 'Juan Pérez',
+                    phone: '+569 1234 5678',
+                    email: 'juan.perez@example.com'
+                }
+            },
+            { 
+                id: '002', 
+                date: '2023-06-16', 
+                customer: 'María González', 
+                total: 22500, 
+                status: 'Completado',
+                items: [
+                    { name: 'Arreglo Floral Grande', quantity: 1, price: 22500 }
+                ],
+                shipping: {
+                    method: 'Envío a domicilio',
+                    address: 'Calle Falsa 123, Santiago'
+                },
+                customerInfo: {
+                    name: 'María González',
+                    phone: '+569 8765 4321',
+                    email: 'maria.gonzalez@example.com'
+                }
+            },
+            { 
+                id: '003', 
+                date: '2023-06-17', 
+                customer: 'Carlos López', 
+                total: 18750, 
+                status: 'Pendiente',
+                items: [
+                    { name: 'Corona de Flores', quantity: 1, price: 18750 }
+                ],
+                shipping: {
+                    method: 'Envío a domicilio',
+                    address: 'Avenida Siempreviva 742, Springfield'
+                },
+                customerInfo: {
+                    name: 'Carlos López',
+                    phone: '+569 1111 2222',
+                    email: 'carlos.lopez@example.com'
+                }
+            }
         ]);
     } catch (error) {
         console.error('Error al cargar datos de contabilidad:', error);
@@ -387,10 +463,78 @@ function displayOrders(orders) {
             <td>${order.id}</td>
             <td>${order.date}</td>
             <td>${order.customer}</td>
-            <td>$${order.total.toLocaleString('es-CL')}</td>
+            <td>${formatPrice(order.total)}</td>
             <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
+            <td>
+                <button class="btn btn-secondary btn-small view-order" data-order='${JSON.stringify(order)}'>
+                    <i class="fas fa-eye"></i> Ver Detalle
+                </button>
+            </td>
         </tr>
     `).join('');
+    
+    // Agregar eventos a los botones de ver detalle
+    document.querySelectorAll('.view-order').forEach(button => {
+        button.addEventListener('click', () => viewOrderDetail(JSON.parse(button.dataset.order)));
+    });
+}
+
+// Ver detalle del pedido
+function viewOrderDetail(order) {
+    const modal = document.getElementById('orderDetailModal');
+    const content = document.getElementById('orderDetailContent');
+    
+    if (!modal || !content) return;
+    
+    content.innerHTML = `
+        <div class="order-detail">
+            <h3>Pedido #${order.id}</h3>
+            <div class="order-info">
+                <p><strong>Fecha:</strong> ${order.date}</p>
+                <p><strong>Estado:</strong> <span class="status ${order.status.toLowerCase()}">${order.status}</span></p>
+                <p><strong>Total:</strong> ${formatPrice(order.total)}</p>
+            </div>
+            
+            <div class="customer-info">
+                <h4>Información del Cliente</h4>
+                <p><strong>Nombre:</strong> ${order.customerInfo.name}</p>
+                <p><strong>Teléfono:</strong> ${order.customerInfo.phone}</p>
+                <p><strong>Email:</strong> ${order.customerInfo.email}</p>
+            </div>
+            
+            <div class="shipping-info">
+                <h4>Entrega</h4>
+                <p><strong>Método:</strong> ${order.shipping.method}</p>
+                <p><strong>Dirección:</strong> ${order.shipping.address}</p>
+            </div>
+            
+            <div class="order-items">
+                <h4>Productos</h4>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${order.items.map(item => `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.quantity}</td>
+                                <td>${formatPrice(item.price)}</td>
+                                <td>${formatPrice(item.quantity * item.price)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    
+    modal.style.display = 'block';
 }
 
 // Configurar eventos
@@ -416,23 +560,54 @@ function setupEventListeners() {
     // Cerrar modal con X
     const closeButtons = document.querySelectorAll('.close');
     closeButtons.forEach(button => {
-        button.addEventListener('click', closeProductModal);
+        button.addEventListener('click', function() {
+            this.closest('.modal').style.display = 'none';
+        });
     });
     
     // Cerrar modal haciendo clic fuera
-    const modal = document.getElementById('productModal');
-    if (modal) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
-                closeProductModal();
+                modal.style.display = 'none';
             }
         });
-    }
+    });
     
     // Búsqueda de productos
     const searchProduct = document.getElementById('searchProduct');
     if (searchProduct) {
         searchProduct.addEventListener('input', debounce(handleSearch, 300));
+    }
+    
+    // Vista previa de imagen
+    const imageFileInput = document.getElementById('productImageFile');
+    if (imageFileInput) {
+        imageFileInput.addEventListener('change', handleImagePreview);
+    }
+    
+    // Cerrar modal de detalle de pedido
+    const closeOrderDetailBtn = document.getElementById('closeOrderDetailBtn');
+    if (closeOrderDetailBtn) {
+        closeOrderDetailBtn.addEventListener('click', () => {
+            const modal = document.getElementById('orderDetailModal');
+            if (modal) modal.style.display = 'none';
+        });
+    }
+}
+
+// Vista previa de imagen
+function handleImagePreview(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('imagePreview');
+    
+    if (file && preview) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            preview.innerHTML = `<img src="${event.target.result}" alt="Vista previa" style="max-width: 200px; max-height: 200px;">`;
+        };
+        reader.readAsDataURL(file);
     }
 }
 
@@ -450,12 +625,22 @@ function openProductModal(product = null) {
         document.getElementById('productDescription').value = product.description;
         document.getElementById('productPrice').value = product.price;
         document.getElementById('productCategory').value = product.category;
-        document.getElementById('productImage').value = product.image_url || '';
+        document.getElementById('productImageUrl').value = product.image_url || '';
+        
+        // Mostrar vista previa si hay imagen
+        const preview = document.getElementById('imagePreview');
+        if (preview && product.image_url) {
+            preview.innerHTML = `<img src="${product.image_url}" alt="Vista previa" style="max-width: 200px; max-height: 200px;">`;
+        }
     } else {
         // Agregar nuevo producto
         modalTitle.textContent = 'Agregar Producto';
         productId.value = '';
         document.getElementById('productForm').reset();
+        
+        // Limpiar vista previa
+        const preview = document.getElementById('imagePreview');
+        if (preview) preview.innerHTML = '';
     }
     
     if (modal) {
@@ -481,8 +666,23 @@ async function handleProductFormSubmit(e) {
         description: document.getElementById('productDescription').value,
         price: parseFloat(document.getElementById('productPrice').value),
         category: document.getElementById('productCategory').value,
-        image_url: document.getElementById('productImage').value || '/assets/images/products/product_1.svg'
+        image_url: document.getElementById('productImageUrl').value || '/assets/images/products/product_1.svg'
     };
+    
+    // Si se seleccionó un archivo, procesarlo
+    const imageFile = document.getElementById('productImageFile').files[0];
+    if (imageFile) {
+        try {
+            // En una implementación real, aquí se subiría la imagen a un servidor
+            // y se obtendría la URL. Por ahora, simulamos esto.
+            const imageUrl = await uploadImage(imageFile);
+            productData.image_url = imageUrl;
+        } catch (error) {
+            console.error('Error al subir la imagen:', error);
+            showNotification('Error al subir la imagen', 'error');
+            return;
+        }
+    }
     
     try {
         let response;
@@ -522,6 +722,18 @@ async function handleProductFormSubmit(e) {
         console.error('Error al guardar el producto:', error);
         showNotification(error.message || 'Error al guardar el producto', 'error');
     }
+}
+
+// Simular la subida de imagen
+async function uploadImage(file) {
+    // En una implementación real, aquí se haría una llamada al backend
+    // para subir la imagen y obtener la URL.
+    // Por ahora, devolvemos una URL de ejemplo.
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(URL.createObjectURL(file));
+        }, 1000);
+    });
 }
 
 // Editar producto

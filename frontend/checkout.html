@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Arreglos Victoria Florería</title>
+    <title>Finalizar Compra - Arreglos Victoria Florería</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,92 +27,197 @@
         </div>
     </header>
 
-    <main>
-        <section class="checkout-section">
-            <div class="container">
-                <h1 class="section-title">Proceso de Pago</h1>
-                <div class="checkout-container">
-                    <div class="checkout-summary">
-                        <h2>Resumen del Pedido</h2>
-                        <div class="order-items">
-                            <!-- Los items se cargarán aquí dinámicamente -->
-                            <p class="empty-order-message">No hay productos en tu pedido</p>
+    <main class="checkout-page">
+        <div class="container">
+            <div class="checkout-header">
+                <h1>Finalizar Compra</h1>
+                <div class="checkout-steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Información</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Entrega</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Pago</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-content">
+                <div class="checkout-forms">
+                    <!-- Información del cliente -->
+                    <div class="checkout-section">
+                        <h2>Información de Contacto</h2>
+                        <form id="customerInfoForm">
+                            <div class="form-group">
+                                <label for="customerEmail">Dirección de correo electrónico *</label>
+                                <input type="email" id="customerEmail" required>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Método de entrega -->
+                    <div class="checkout-section">
+                        <h2>Método de Entrega</h2>
+                        <div class="shipping-methods">
+                            <div class="shipping-method" data-method="delivery">
+                                <div class="shipping-method-header">
+                                    <h3>Envío a Domicilio</h3>
+                                    <span class="shipping-cost">Gratis</span>
+                                </div>
+                                <div class="shipping-method-details">
+                                    <p>Entrega en 2-3 días hábiles</p>
+                                </div>
+                            </div>
+                            
+                            <div class="shipping-method selected" data-method="pickup">
+                                <div class="shipping-method-header">
+                                    <h3>Retiro en Tienda</h3>
+                                    <span class="shipping-cost">Gratis</span>
+                                </div>
+                                <div class="shipping-method-details">
+                                    <p>Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</p>
+                                    <p>Suele estar listo en 2 horas</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="order-total">
-                            <span>Total:</span>
-                            <span class="total-amount">$0.00</span>
-                        </div>
+
+                        <form id="shippingForm">
+                            <div class="form-group">
+                                <label for="recipientName">Nombre y apellido del destinatario *</label>
+                                <input type="text" id="recipientName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="recipientPhone">Teléfono del destinatario *</label>
+                                <div class="form-row">
+                                    <select id="phonePrefix">
+                                        <option value="+56">Chile +56</option>
+                                    </select>
+                                    <input type="tel" id="recipientPhone" placeholder="(9) 6360 3177" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="deliveryDate">Fecha de entrega *</label>
+                                <input type="date" id="deliveryDate" required>
+                            </div>
+                            
+                            <div class="form-group" id="addressFields">
+                                <label for="deliveryAddress">Dirección de la calle *</label>
+                                <input type="text" id="deliveryAddress" placeholder="Dirección completa" required>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Información adicional -->
+                    <div class="checkout-section">
+                        <h2>Información Adicional</h2>
+                        <form id="additionalInfoForm">
+                            <div class="form-group">
+                                <label for="presentation">Presentación</label>
+                                <select id="presentation">
+                                    <option value="normal">Normal</option>
+                                    <option value="anonymous">Anónimo</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="giftMessage">Mensaje de saludo (opcional)</label>
+                                <textarea id="giftMessage" rows="3" placeholder="Agrega un mensaje de saludo a tu regalo"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="deliveryNotes">Notas para el despachador (opcional)</label>
+                                <textarea id="deliveryNotes" rows="3" placeholder="Agrega alguna nota que el despachador necesite para entregar tu pedido, alguna referencia en el horario o del lugar"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Resumen del pedido -->
+                <div class="checkout-summary">
+                    <h2>Tu Pedido</h2>
+                    <div class="order-items-summary">
+                        <!-- Los items se cargarán aquí dinámicamente -->
+                        <p class="empty-order-message">No hay productos en tu pedido</p>
                     </div>
                     
-                    <div class="checkout-form">
-                        <h2>Datos de Pago</h2>
-                        <form id="paymentForm">
-                            <div class="form-group">
-                                <label for="cardNumber">Número de Tarjeta</label>
-                                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="expiryDate">Fecha de Expiración</label>
-                                    <input type="text" id="expiryDate" placeholder="MM/AA" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="cvv">CVV</label>
-                                    <input type="text" id="cvv" placeholder="123" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="cardName">Nombre en la Tarjeta</label>
-                                <input type="text" id="cardName" placeholder="Nombre completo" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="billingAddress">Dirección de Facturación</label>
-                                <textarea id="billingAddress" rows="3" placeholder="Dirección completa" required></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary btn-block">Pagar Ahora</button>
-                        </form>
-                        
-                        <div class="payment-methods">
-                            <h3>Métodos de Pago</h3>
-                            <div class="payment-icons">
-                                <i class="fab fa-cc-visa"></i>
-                                <i class="fab fa-cc-mastercard"></i>
-                                <i class="fab fa-cc-amex"></i>
-                                <i class="fab fa-cc-paypal"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div id="cartModal" class="cart-modal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Tu Carrito</h2>
-                <span class="cart-close">&times;</span>
-            </div>
-            <div class="cart-body">
-                <div class="cart-items">
-                    <!-- Los items del carrito se cargarán aquí dinámicamente -->
-                    <p class="empty-cart-message">Tu carrito está vacío</p>
-                </div>
-                <div class="cart-summary">
-                    <div class="cart-total">
+                    <div class="order-total">
                         <span>Total:</span>
                         <span class="total-amount">$0.00</span>
                     </div>
-                    <button class="btn btn-primary checkout-button" disabled>Proceder al Pedido</button>
+                    
+                    <!-- Métodos de pago -->
+                    <div class="checkout-section">
+                        <h2>Método de Pago</h2>
+                        <div class="payment-methods">
+                            <div class="payment-method selected" data-method="webpay">
+                                <div class="payment-method-header">
+                                    <div class="payment-method-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Webpay Plus</h3>
+                                        <p>Permite el pago de productos y/o servicios, con tarjetas de crédito, débito y prepago a través de Webpay Plus</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="transfer">
+                                <div class="payment-method-header">
+                                    <div class="payment-method-icon">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Transferencia Bancaria</h3>
+                                        <p>Pago mediante transferencia bancaria</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="mercadopago">
+                                <div class="payment-method-header">
+                                    <div class="payment-method-icon">
+                                        <i class="fab fa-cc-mastercard"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Mercado Pago</h3>
+                                        <p>Pago con Mercado Pago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method" data-method="card">
+                                <div class="payment-method-header">
+                                    <div class="payment-method-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Tarjeta de crédito y débito</h3>
+                                        <p>Pago con tarjeta de crédito o débito</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkout-actions">
+                        <a href="cart.html" class="btn btn-back">
+                            <i class="fas fa-arrow-left"></i> Volver al carrito
+                        </a>
+                        <button id="placeOrderBtn" class="btn btn-primary btn-checkout">
+                            Finalizar Compra
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <footer>
         <div class="container">
@@ -122,33 +227,22 @@
                     <p>Florería & Delivery</p>
                 </div>
                 <div class="footer-links">
-                    <div class="footer-column">
-                        <h3>Enlaces</h3>
-                        <ul>
-                            <li><a href="index.html">Inicio</a></li>
-                            <li><a href="products.html">Productos</a></li>
-                            <li><a href="index.html#about">Nosotros</a></li>
-                            <li><a href="index.html#contacto">Contacto</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Categorías</h3>
-                        <ul>
-                            <li><a href="#">Ramos</a></li>
-                            <li><a href="#">Arreglos</a></li>
-                            <li><a href="#">Bodas</a></li>
-                            <li><a href="#">Cumpleaños</a></li>
-                        </ul>
-                    </div>
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="products.html">Productos</a></li>
+                        <li><a href="index.html#about">Nosotros</a></li>
+                        <li><a href="index.html#contacto">Contacto</a></li>
+                    </ul>
                 </div>
                 <div class="footer-contact">
-                    <h3>Contacto</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Av. Recoleta 1234, Recoleta, Santiago</p>
-                    <p><i class="fas fa-phone"></i> +56 2 1234 5678</p>
-                    <p><i class="fas fa-envelope"></i> info@arreglosvictoria.cl</p>
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> <span aria-label="Dirección">Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</span></p>
+                    <p><i class="fas fa-phone" aria-hidden="true"></i> <span aria-label="Teléfono">+569 6360 3177</span></p>
+                    <p><i class="fas fa-envelope" aria-hidden="true"></i> <span aria-label="Correo electrónico">arreglosvictoriafloreria@gmail.com</span></p>
                 </div>
                 <div class="footer-social">
-                    <h3>Síguenos</h3>
+                    <h4>Síguenos</h4>
                     <div class="social-links">
                         <a href="https://www.facebook.com/profile.php?id=61578999845743" target="_blank" aria-label="Facebook">
                             <i class="fab fa-facebook-f"></i>
@@ -160,12 +254,14 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Victoria. Todos los derechos reservados.</p>
+                <p>&copy; 2023 Arreglos Victoria. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script src="assets/js/utils.js" type="module"></script>
+    <script src="assets/js/auth.js" type="module"></script>
     <script src="assets/js/cart.js" type="module"></script>
     <script src="assets/js/checkout.js" type="module"></script>
 </body>
