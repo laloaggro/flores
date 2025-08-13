@@ -17,8 +17,10 @@ function logMessage(message) {
 // Cargar variables de entorno
 dotenv.config();
 
-const app = express();
+// Usar el puerto proporcionado por Render o Railway, o 5000 por defecto
 const PORT = process.env.PORT || 5000;
+
+const app = express();
 
 // Middleware para parsear el body
 app.use(express.json());
@@ -110,6 +112,12 @@ app.listen(PORT, () => {
     const message = `🚀 Servidor backend corriendo en http://localhost:${PORT}`;
     logMessage(message);
     console.log(message);
+    
+    // Mostrar mensaje adicional en producción
+    if (process.env.NODE_ENV === 'production') {
+        console.log(`Entorno: Producción`);
+        console.log(`Puerto: ${PORT}`);
+    }
 });
 
 // Manejo de errores no capturados

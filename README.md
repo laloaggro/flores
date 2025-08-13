@@ -50,7 +50,23 @@ npm start
 
 ## Despliegue
 
-### Opción 1: Railway (recomendado - todo en un solo lugar)
+### Opción 1: Render (recomendado como alternativa gratuita a Railway)
+
+1. Crear una cuenta en [Render](https://render.com)
+2. Crear un nuevo Web Service
+3. Conectar tu repositorio de GitHub
+4. Configurar las siguientes opciones:
+   - Nombre: arreglos-victoria-backend
+   - Entorno: Node
+   - Región: Oregon (o la de tu preferencia)
+   - Branch: main
+   - Root Directory: backend
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+5. Agregar las variables de entorno necesarias en la sección "Advanced" (ver sección de variables de entorno)
+6. Hacer clic en "Create Web Service"
+
+### Opción 2: Railway (antes de que termine la prueba gratuita)
 
 1. Crear una cuenta en [Railway](https://railway.app)
 2. Crear un nuevo proyecto
@@ -63,11 +79,11 @@ El archivo `railway.json` ya está configurado para:
 - Ejecutar `npm start` en el directorio backend
 - Usar el puerto definido por la variable de entorno `PORT` o 5000 por defecto
 
-### Opción 2: Vercel + Railway (frontend y backend separados)
+### Opción 3: Vercel + Render (frontend y backend separados)
 
-#### Backend en Railway:
-1. Crear una cuenta en [Railway](https://railway.app)
-2. Crear un nuevo proyecto
+#### Backend en Render:
+1. Crear una cuenta en [Render](https://render.com)
+2. Crear un nuevo Web Service
 3. Conectar tu repositorio de GitHub
 4. Seleccionar el directorio `backend`
 5. Configurar las variables de entorno necesarias
@@ -83,6 +99,8 @@ Después de desplegar ambos servicios, actualiza la URL del backend en el archiv
 ```javascript
 // Cambiar esta línea por la URL real de tu backend desplegado
 return 'https://tu-app-backend-production.up.railway.app';
+// O si usas Render:
+return 'https://arreglos-victoria-backend.onrender.com';
 ```
 
 ## Opciones de Hosting Gratuito
@@ -107,7 +125,16 @@ return 'https://tu-app-backend-production.up.railway.app';
   - 100GB de ancho de banda mensual
   - Solo para frontend
 
-### 3. Railway (Para backend y frontend)
+### 3. Render (Para backend y frontend)
+- **Ventajas**:
+  - Puede ejecutar tu backend Node.js
+  - Integración con GitHub
+  - Plan gratuito generoso
+  - Fácil de usar
+- **Limitaciones**:
+  - Las aplicaciones web gratuitas duermen después de 15 minutos de inactividad
+
+### 4. Railway (Para backend y frontend)
 - **Ventajas**:
   - Puede ejecutar tu backend Node.js
   - Integración con GitHub
@@ -115,16 +142,17 @@ return 'https://tu-app-backend-production.up.railway.app';
   - Fácil de usar
 - **Limitaciones**:
   - Sin créditos, las aplicaciones duermen después de 1 hora de inactividad
+  - La prueba gratuita ha terminado
 
-### 4. Render (Para backend y frontend)
+### 5. Heroku (Para backend)
 - **Ventajas**:
-  - Alojamiento web estático gratuito
-  - Servicios web gratuitos con limitaciones
-  - Integración con GitHub
+  - Plataforma establecida
+  - Fácil de usar
 - **Limitaciones**:
-  - Las aplicaciones web gratuitas duermen después de 15 minutos de inactividad
+  - Requiere tarjeta de crédito
+  - Las aplicaciones duermen después de 30 minutos de inactividad
 
-### 5. GitHub Pages (Solo para frontend)
+### 6. GitHub Pages (Solo para frontend)
 - **Ventajas**:
   - Totalmente gratuito
   - Integración directa con GitHub
@@ -138,7 +166,7 @@ return 'https://tu-app-backend-production.up.railway.app';
 Dado que tu proyecto tiene tanto frontend como backend, recomiendo esta combinación:
 
 1. **Frontend**: Vercel o Netlify (muy fáciles de configurar)
-2. **Backend**: Railway (puede ejecutar tu servidor Node.js)
+2. **Backend**: Render (como alternativa gratuita a Railway)
 
 ## Variables de entorno
 
@@ -150,6 +178,8 @@ EMAIL_USER=tu_correo@gmail.com
 EMAIL_PASS=tu_contraseña_de_aplicacion
 EMAIL_FROM=tu_correo@gmail.com
 ```
+
+En Render, configura estas variables en la sección "Advanced" al crear tu Web Service.
 
 ## Estructura del proyecto
 
