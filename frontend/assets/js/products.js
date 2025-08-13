@@ -516,3 +516,41 @@ function updateResultsCount() {
     }
   }
 }
+
+// Exportar la función handleImageError al ámbito global
+window.handleImageError = function(imgElement) {
+  console.warn('Error al cargar imagen:', imgElement.src);
+  
+  // Intentar con una imagen de respaldo verificada
+  const fallbackImages = [
+    '/assets/images/products/product_2.jpg',
+    '/assets/images/products/product_1.jpg',
+    '/assets/images/products/product_3.jpg',
+    '/assets/images/products/product_4.jpg',
+    '/assets/images/products/product_5.jpg'
+  ];
+  
+  // Añadir imágenes de flores como respaldo adicional
+  for (let i = 1; i <= 10; i++) {
+    fallbackImages.push(`/assets/images/flowers/flower${i}.svg`);
+  }
+  
+  // Filtrar imágenes que no sean las que ya fallaron y que probablemente existan
+  const workingFallback = fallbackImages.find(img => {
+    // Verificar que no sea la imagen que ya falló
+    if (img === imgElement.src) return false;
+    
+    // Verificar que la imagen tenga una extensión válida
+    return img.endsWith('.jpg') || img.endsWith('.svg');
+  });
+  
+  if (workingFallback) {
+    imgElement.src = workingFallback;
+  } else {
+    // Fallback absoluto
+    imgElement.src = '/assets/images/default-avatar.svg';
+  }
+  
+  imgElement.alt = 'Imagen no disponible';
+  imgElement.onerror = null; // Prevenir bucle infinito si también falla la imagen de marcador de posición
+};

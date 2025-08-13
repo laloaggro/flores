@@ -116,10 +116,10 @@ function loadImageWithProxy(imageUrl) {
         const url = new URL(imageUrl);
         // Usar el proxy para dominios de Unsplash
         if (url.hostname === 'images.unsplash.com' || url.hostname === 'source.unsplash.com') {
-            return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+            return `${API_BASE_URL}/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
         }
         // Para otras imágenes externas, intentar usar el proxy también
-        return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+        return `${API_BASE_URL}/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
     } catch (e) {
         // Si no es una URL válida, devolverla tal cual
         return imageUrl;
