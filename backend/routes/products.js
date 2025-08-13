@@ -14,16 +14,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Conectar a la base de datos
-const dbPath = path.join(__dirname, '..', 'products.db');
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error('Error al conectar con la base de datos:', err.message);
-  } else {
-    console.log('Conectado a la base de datos de productos');
-  }
-});
-
 // Ruta para obtener todas las categorías únicas (sin autenticación requerida)
 router.get('/categories', (req, res) => {
   // Obtener categorías únicas
