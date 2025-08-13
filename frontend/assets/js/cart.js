@@ -1,4 +1,4 @@
-import { showNotification, getUser, isAuthenticated, formatPrice } from './utils.js';
+import { showNotification, isAuthenticated, formatPrice } from './utils.js';
 import CartUtils from './cartUtils.js';
 import CartComponent from '../../components/Cart.js';
 
