@@ -27,7 +27,7 @@ const Cart = (cartItems = []) => {
     
     return `
       <div class="cart-item" data-id="${item.id}">
-        <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.src='/assets/images/products/product_1.jpg'">
+        <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.src='/assets/images/default-avatar.svg'; this.onerror=null;">
         <div class="cart-item-details">
           <h4 class="cart-item-name">${item.name}</h4>
           <p class="cart-item-price">$${item.price.toLocaleString('es-CL')}</p>

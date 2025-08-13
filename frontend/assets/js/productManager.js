@@ -1,5 +1,5 @@
 // productManager.js - Gestión de productos y carga de datos
-import { loadImageWithProxy, API_BASE_URL } from './utils.js';
+import { API_BASE_URL } from './utils.js';
 
 class ProductManager {
     constructor() {
@@ -256,8 +256,32 @@ class ProductManager {
     }
 }
 
-// Crear una instancia global
-const productManager = new ProductManager();
+// Función para manejar errores de carga de imágenes
+function handleImageError(imgElement) {
+  console.warn('Error al cargar imagen:', imgElement.src);
+  
+  // Intentar con una imagen de respaldo verificada
+  const fallbackImages = [
+    '/assets/images/products/product_2.jpg',
+    '/assets/images/products/product_1.jpg',
+    '/assets/images/products/product_3.jpg'
+  ];
+  
+  // Encontrar una imagen de respaldo que no sea la que falló
+  const workingFallback = fallbackImages.find(img => img !== imgElement.src);
+  
+  if (workingFallback) {
+    imgElement.src = workingFallback;
+  } else {
+    // Fallback absoluto
+    imgElement.src = '/assets/images/default-avatar.svg';
+  }
+  
+  imgElement.alt = 'Imagen no disponible';
+  imgElement.onerror = null; // Prevenir bucle infinito si también falla la imagen de marcador de posición
+}
 
-// Exportar la instancia y la clase
-export { productManager, ProductManager };
+// Exportar una instancia única
+const productManager = new ProductManager();
+export default productManager;
+export { handleImageError };

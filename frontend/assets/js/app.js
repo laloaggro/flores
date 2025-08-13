@@ -795,7 +795,6 @@ import { updateCartCount, showNotification, loadImageWithProxy } from './utils.j
 import { productManager } from './productManager.js';
 
 // Variables globales
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 // Función para inicializar la aplicación
 function initApp() {
