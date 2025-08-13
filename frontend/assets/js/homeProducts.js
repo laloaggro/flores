@@ -17,7 +17,9 @@ async function loadHomeProducts() {
     productGrid.innerHTML = '<div class="loading-message">Cargando productos...</div>';
     
     // Cargar productos (8 productos para la página principal)
+    console.log('Cargando productos...');
     const data = await productManager.loadProducts(1, '', '', 8);
+    console.log('Datos de productos cargados:', data);
     
     if (data && data.products && data.products.length > 0) {
       // Generar HTML para los productos
@@ -40,6 +42,7 @@ async function loadHomeProducts() {
         });
       });
     } else {
+      console.log('No se encontraron productos');
       productGrid.innerHTML = '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
     }
   } catch (error) {
