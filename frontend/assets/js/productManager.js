@@ -17,6 +17,7 @@ class ProductManager {
         // Si ya hay una solicitud en curso, esperar un momento para evitar múltiples solicitudes
         if (this.isLoading) {
             // Esperar un momento y luego continuar
+            console.log('Ya hay una solicitud en curso, esperando...');
             await new Promise(resolve => setTimeout(resolve, 100));
         }
         
@@ -37,6 +38,7 @@ class ProductManager {
         
         this.isLoading = true;
         console.log(`Cargando productos - Página: ${page}, Categoría: ${category}, Búsqueda: ${search}`);
+        console.log(`URL de la API: ${API_BASE_URL}/api/products?page=${page}&limit=${limit}`);
         
         try {
             let url = `${API_BASE_URL}/api/products?page=${page}&limit=${limit}`;
@@ -49,6 +51,8 @@ class ProductManager {
                 url += `&search=${encodeURIComponent(search)}`;
             }
             
+            console.log('URL de solicitud:', url);
+            
             // Aplicar un timeout de 5 segundos a la solicitud
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -56,11 +60,14 @@ class ProductManager {
             const response = await fetch(url, { signal: controller.signal });
             clearTimeout(timeoutId);
             
+            console.log('Respuesta de la API:', response.status, response.statusText);
+            
             if (!response.ok) {
                 throw new Error(`Error al cargar productos: ${response.status}`);
             }
             
             const data = await response.json();
+            console.log('Datos recibidos de la API:', data);
             
             // Cargar imágenes de flores si no hay imágenes en caché
             if (this.flowerImages.length === 0) {
