@@ -17,7 +17,7 @@ async function loadHomeProducts() {
     productGrid.innerHTML = '<div class="loading-message">Cargando productos...</div>';
     
     // Cargar productos (8 productos para la página principal)
-    const data = await productManager.loadProducts(1, 8);
+    const data = await productManager.loadProducts(1, '', '', 8);
     
     if (data && data.products && data.products.length > 0) {
       // Generar HTML para los productos
