@@ -41,7 +41,8 @@ router.get('/', (req, res) => {
   const countParams = [];
   
   // Agregar filtros si existen
-  if (category) {
+  // Solo aplicar filtro de categoría si no es una cadena vacía
+  if (category && category !== '') {
     query += ' WHERE category = ?';
     countQuery += ' WHERE category = ?';
     params.push(category);
@@ -49,7 +50,7 @@ router.get('/', (req, res) => {
   }
   
   if (search) {
-    if (category) {
+    if (category && category !== '') {
       query += ' AND name LIKE ?';
       countQuery += ' AND name LIKE ?';
     } else {

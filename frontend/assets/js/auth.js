@@ -72,4 +72,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Exportar funciones
-export { initUserMenu, requireAuth, getUser, isAuthenticated };
+export { initUserMenu, requireAuth };

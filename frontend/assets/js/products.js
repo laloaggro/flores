@@ -418,16 +418,7 @@ async function loadProducts() {
   showLoading(true);
   
   try {
-    console.log('Cargando productos con parámetros:', {
-      currentPage,
-      currentCategory,
-      currentSearch,
-      limit
-    });
-    
     const data = await productManager.loadProducts(currentPage, currentCategory, currentSearch, limit);
-    
-    console.log('Datos recibidos del productManager:', data);
     
     if (data) {
       displayProducts(data.products);
