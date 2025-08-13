@@ -1,7 +1,7 @@
 // login.js - Manejo del inicio de sesión y registro de usuarios
 
 // Importar funciones necesarias de utils.js y auth.js
-import { showNotification, updateCartCount, validateEmail, validatePhone, API_BASE_URL } from './utils.js';
+import { showNotification, validateEmail, validatePhone, API_BASE_URL } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
