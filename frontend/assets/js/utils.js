@@ -217,6 +217,12 @@ async function apiRequest(endpoint, options = {}) {
     }
 }
 
+// Función para cerrar sesión
+const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+};
+
 // Exportar funciones y constantes
 export { 
   API_BASE_URL, 
@@ -225,5 +231,6 @@ export {
   isAdmin,
   requireAuth,
   requireAdmin,
-  formatPrice
+  formatPrice,
+  logout
 };
