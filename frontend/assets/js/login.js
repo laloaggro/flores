@@ -210,4 +210,4 @@ function handleLogout() {
 }
 
 // Exportar funciones que necesitamos usar en otros archivos
-export { handleLogout, initUserMenu, updateCartCount };
+export { handleLogout, initUserMenu };
