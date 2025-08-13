@@ -1,3 +1,8 @@
+const API_BASE_URL = 'http://localhost:3000'; // o la URL de tu API
+
+export { API_BASE_URL };
+import { API_BASE_URL } from './utils.js';
+
 document.addEventListener('DOMContentLoaded', function() {
   // Obtener el formulario de contacto
   const contactForm = document.getElementById('contactForm');
@@ -31,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showFormMessage('Enviando mensaje...', 'info');
     
     // Enviar datos al servidor
-    fetch('/api/contact', {
+    fetch(`${API_BASE_URL}/api/contact`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

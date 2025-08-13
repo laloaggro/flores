@@ -1,7 +1,7 @@
 // login.js - Manejo del inicio de sesión y registro de usuarios
 
 // Importar funciones necesarias de utils.js y auth.js
-import { showNotification, updateCartCount, validateEmail, validatePhone } from './utils.js';
+import { showNotification, updateCartCount, validateEmail, validatePhone, API_BASE_URL } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       try {
         // Enviar solicitud al servidor
-        const response = await fetch('/api/users/login', {
+        const response = await fetch(`${API_BASE_URL}/api/users/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const email = document.getElementById('registerEmail').value;
       const phone = document.getElementById('registerPhone').value;
       const password = document.getElementById('registerPassword').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
+      const confirmPassword = document.getElementById('registerConfirmPassword').value;
       const submitButton = registerForm.querySelector('button[type="submit"]');
       
       // Validar campos
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       try {
         // Enviar solicitud al servidor
-        const response = await fetch('/api/users/register', {
+        const response = await fetch(`${API_BASE_URL}/api/users/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

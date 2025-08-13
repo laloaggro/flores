@@ -1,5 +1,5 @@
 // productManager.js - Gestión de productos y carga de datos
-import { loadImageWithProxy } from './utils.js';
+import { loadImageWithProxy, API_BASE_URL } from './utils.js';
 
 class ProductManager {
     constructor() {
@@ -39,7 +39,7 @@ class ProductManager {
         console.log(`Cargando productos - Página: ${page}, Categoría: ${category}, Búsqueda: ${search}`);
         
         try {
-            let url = `/api/products?page=${page}&limit=${limit}`;
+            let url = `${API_BASE_URL}/api/products?page=${page}&limit=${limit}`;
             
             if (category) {
                 url += `&category=${encodeURIComponent(category)}`;
@@ -113,7 +113,7 @@ class ProductManager {
     // Función para obtener las categorías de productos
     async getCategories() {
         try {
-            const response = await fetch('/api/products/categories');
+            const response = await fetch(`${API_BASE_URL}/api/products/categories`);
             
             if (!response.ok) {
                 throw new Error(`Error al cargar categorías: ${response.status}`);
