@@ -2,15 +2,10 @@
 
 // Determinar la URL base del API según el entorno
 const getApiBaseUrl = () => {
-  // En producción, usar la URL del backend (debe configurarse en Vercel)
-  if (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) {
-    return process.env.REACT_APP_API_URL;
-  }
-  
-  // Detectar si estamos en producción (Vercel, Netlify, etc.)
+  // En producción, usar la URL del backend en Render
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    // En producción, el backend probablemente esté en un subdominio o dominio diferente
-    return 'https://tu-app-backend-production.up.railway.app'; // Cambiar esta URL por la real
+    // Cambia esta URL por la URL real de tu backend en Render
+    return 'https://arreglos-victoria-backend.onrender.com';
   }
   
   // En desarrollo, usar localhost
