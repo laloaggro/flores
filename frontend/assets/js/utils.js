@@ -138,44 +138,22 @@ function isAuthenticated() {
 
 function logout() {
     localStorage.removeItem('user');
+    showNotification('Sesión cerrada correctamente', 'success');
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 1000);
 }
 
 // Función para verificar autenticación
 function requireAuth(redirectUrl = '/login.html') {
     if (!isAuthenticated()) {
-        window.location.href = redirectUrl;
-        return false;
-    }
-    return true;
-}
-
-// Funciones de autenticación de usuario
-function getUser() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
-}
-
-function isAuthenticated() {
-    return !!getUser();
-}
-
-function requireAuth() {
-    if (!isAuthenticated()) {
         showNotification('Debes iniciar sesión para acceder a esta página', 'error');
         setTimeout(() => {
-            window.location.href = 'login.html';
+            window.location.href = redirectUrl;
         }, 2000);
         return false;
     }
     return true;
-}
-
-function logout() {
-    localStorage.removeItem('user');
-    showNotification('Sesión cerrada correctamente', 'success');
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 1000);
 }
 
 // Función para obtener el token de autenticación
