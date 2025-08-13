@@ -388,7 +388,7 @@ function displayProducts(products) {
         <p class="product-description">${product.description}</p>
         <div class="product-footer">
           <span class="product-price">${formatPrice(product.price)}</span>
-          <button class="add-to-cart" data-product-id="${product.id}">
+          <button class="btn btn-secondary add-to-cart" data-product-id="${product.id}">
             <i class="fas fa-shopping-cart"></i> Agregar
           </button>
         </div>
