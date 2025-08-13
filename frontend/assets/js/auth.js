@@ -1,9 +1,9 @@
-import { getUser, isAuthenticated, logout, isAdmin } from './utils.js';
+import { isAuthenticated, logout, isAdmin } from './utils.js';
 import { updateCartCount } from './cart.js';
 
 // Función para inicializar el menú de usuario
 function initUserMenu() {
-  const user = getUser();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userMenu = document.getElementById('userMenu');
   const loginLink = document.getElementById('loginLink');
   const userNameElement = document.getElementById('userName');
