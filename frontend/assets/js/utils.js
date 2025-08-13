@@ -139,6 +139,7 @@ function validatePhone(phone) {
 }
 
 // Funciones de autenticación de usuario
+/*
 function getUser() {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
@@ -147,6 +148,7 @@ function getUser() {
 function isAuthenticated() {
     return !!getUser();
 }
+*/
 
 function logout() {
     localStorage.removeItem('user');

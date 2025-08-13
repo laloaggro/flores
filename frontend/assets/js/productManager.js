@@ -49,6 +49,8 @@ class ProductManager {
                 url += `&search=${encodeURIComponent(search)}`;
             }
             
+            console.log('URL de solicitud:', url);
+            
             // Aplicar un timeout de 5 segundos a la solicitud
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -56,11 +58,14 @@ class ProductManager {
             const response = await fetch(url, { signal: controller.signal });
             clearTimeout(timeoutId);
             
+            console.log('Respuesta de la API:', response);
+            
             if (!response.ok) {
                 throw new Error(`Error al cargar productos: ${response.status}`);
             }
             
             const data = await response.json();
+            console.log('Datos recibidos:', data);
             
             // Cargar imágenes de flores si no hay imágenes en caché
             if (this.flowerImages.length === 0) {
@@ -98,14 +103,7 @@ class ProductManager {
             return updatedData;
         } catch (error) {
             this.isLoading = false;
-            
-            // Si es un error de timeout, mostrar un mensaje específico
-            if (error.name === 'AbortError') {
-                console.error('Tiempo de espera agotado al cargar productos');
-                throw new Error('Tiempo de espera agotado al cargar productos. Por favor, inténtelo de nuevo.');
-            }
-            
-            console.error('Error al cargar productos:', error);
+            console.error('Error completo al cargar productos:', error);
             throw error;
         }
     }
