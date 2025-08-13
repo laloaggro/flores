@@ -50,8 +50,11 @@ npm start
 
 ## Despliegue
 
-### Opción 1: Render (recomendado como alternativa gratuita a Railway)
+### Opción 1: Render (recomendado como alternativa gratuita)
 
+Para desplegar completamente tu sitio web en Render, necesitas crear dos servicios: uno para el backend (Web Service) y otro para el frontend (Static Site).
+
+#### Backend en Render (Web Service):
 1. Crear una cuenta en [Render](https://render.com)
 2. Crear un nuevo Web Service
 3. Conectar tu repositorio de GitHub
@@ -63,23 +66,34 @@ npm start
    - Root Directory: backend
    - Build Command: `npm install`
    - Start Command: `npm start`
-5. Agregar las variables de entorno necesarias en la sección "Advanced" (ver sección de variables de entorno)
+5. Agregar las variables de entorno necesarias en la sección "Advanced":
+   - `EMAIL_USER`: tu correo de Gmail
+   - `EMAIL_PASS`: tu contraseña de aplicación
+   - `EMAIL_FROM`: tu correo de Gmail
 6. Hacer clic en "Create Web Service"
 
-### Opción 2: Railway (antes de que termine la prueba gratuita)
+#### Frontend en Render (Static Site):
+1. En Render, crear un nuevo Static Site
+2. Conectar tu repositorio de GitHub
+3. Configurar las siguientes opciones:
+   - Nombre: arreglos-victoria-frontend
+   - Branch: main
+   - Root Directory: frontend
+   - Build Command: (dejar vacío)
+   - Publish Directory: ./ (o dejar vacío)
+4. Hacer clic en "Create Static Site"
 
-1. Crear una cuenta en [Railway](https://railway.app)
-2. Crear un nuevo proyecto
-3. Conectar tu repositorio de GitHub
-4. Seleccionar el proyecto y desplegar
-5. Railway automáticamente detectará la configuración y desplegará la aplicación
+#### Conectar frontend con backend:
+Después de desplegar ambos servicios:
+1. Obtener la URL de tu backend (algo como: https://arreglos-victoria-backend.onrender.com)
+2. Actualizar la URL del backend en el archivo `frontend/assets/js/utils.js`:
+   ```javascript
+   return 'https://TU-URL-DE-BACKEND.onrender.com';
+   ```
+3. Hacer commit y push de los cambios
+4. Render automáticamente volverá a desplegar el frontend
 
-El archivo `railway.json` ya está configurado para:
-- Usar Nixpacks como builder
-- Ejecutar `npm start` en el directorio backend
-- Usar el puerto definido por la variable de entorno `PORT` o 5000 por defecto
-
-### Opción 3: Vercel + Render (frontend y backend separados)
+### Opción 2: Vercel + Render (frontend y backend separados)
 
 #### Backend en Render:
 1. Crear una cuenta en [Render](https://render.com)
@@ -165,8 +179,8 @@ return 'https://arreglos-victoria-backend.onrender.com';
 
 Dado que tu proyecto tiene tanto frontend como backend, recomiendo esta combinación:
 
-1. **Frontend**: Vercel o Netlify (muy fáciles de configurar)
-2. **Backend**: Render (como alternativa gratuita a Railway)
+1. **Frontend**: Render Static Site o Vercel (muy fáciles de configurar)
+2. **Backend**: Render Web Service (como alternativa gratuita a Railway)
 
 ## Variables de entorno
 
@@ -179,7 +193,8 @@ EMAIL_PASS=tu_contraseña_de_aplicacion
 EMAIL_FROM=tu_correo@gmail.com
 ```
 
-En Render, configura estas variables en la sección "Advanced" al crear tu Web Service.
+En Render, configura estas variables en la sección "Environment" 
+al crear tu Web Service, no necesitas crear un archivo `.env` real.
 
 ## Estructura del proyecto
 
