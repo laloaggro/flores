@@ -126,6 +126,18 @@ function loadImageWithProxy(imageUrl) {
     }
 }
 
+// Función para validar formato de email
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Función para validar formato de teléfono
+function validatePhone(phone) {
+    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
+    return phoneRegex.test(phone);
+}
+
 // Funciones de autenticación de usuario
 function getUser() {
     const user = localStorage.getItem('user');
@@ -217,5 +229,7 @@ export {
     logout, 
     getAuthToken,
     apiRequest,
+    validateEmail,
+    validatePhone,
     API_BASE_URL
 };
