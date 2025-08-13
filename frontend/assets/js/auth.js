@@ -1,4 +1,4 @@
-import { getUser, isAuthenticated, logout } from './utils.js';
+import { getUser, isAuthenticated, logout, isAdmin } from './utils.js';
 import { updateCartCount } from './cart.js';
 
 // Función para inicializar el menú de usuario
@@ -21,6 +21,12 @@ function initUserMenu() {
     if (userNameElement) {
       // Usar textContent para prevenir XSS
       userNameElement.textContent = user.name || 'Usuario';
+    }
+    
+    // Mostrar enlace de administración si el usuario es administrador
+    const adminLink = document.getElementById('adminLink');
+    if (adminLink) {
+      adminLink.style.display = isAdmin() ? 'block' : 'none';
     }
     
     // Configurar el cierre de sesión

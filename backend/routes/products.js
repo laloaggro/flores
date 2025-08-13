@@ -1,7 +1,23 @@
+// Middleware para verificar si el usuario es administrador
+function isAdmin(req, res, next) {
+  // En una aplicación real, esto verificaría un token JWT o sesión
+  // y comprobaría si el usuario tiene rol de administrador
+  
+  // Para pruebas locales sin autenticación real
+  // TODO: Implementar autenticación real en producción
+  if (req.headers['x-admin-auth'] === 'true' || process.env.NODE_ENV !== 'production') {
+    return next();
+  }
+  
+  res.status(403).json({ error: 'Acceso denegado. Se requiere rol de administrador' });
+}
+
+module.exports = isAdmin;
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const router = express.Router();
+const isAdmin = require('../middleware/admin');
 
 // Conectar a la base de datos
 const dbPath = path.join(__dirname, '..', 'products.db');
@@ -13,7 +29,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Ruta para obtener todas las categorías únicas
+// Ruta para obtener todas las categorías únicas (sin autenticación requerida)
 router.get('/categories', (req, res) => {
   // Obtener categorías únicas
   db.all(`SELECT DISTINCT category FROM products ORDER BY category`, (err, rows) => {

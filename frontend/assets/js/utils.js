@@ -68,19 +68,13 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Función para formatear precios
-function formatPrice(price) {
-    // Asegurarse de que el precio sea un número
-    const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
-    
-    // Verificar que sea un número válido
-    if (isNaN(numericPrice)) {
-        return '$0';
-    }
-    
-    // Formatear como moneda chilena sin decimales
-    return '$' + Math.round(numericPrice).toLocaleString('es-CL');
-}
+// Formatear precio
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP'
+  }).format(price);
+};
 
 // Función para actualizar el contador del carrito
 function updateCartCount() {
@@ -138,41 +132,47 @@ function validatePhone(phone) {
     return phoneRegex.test(phone);
 }
 
-// Funciones de autenticación de usuario
-function getUser() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
-}
+// Verificar si el usuario está autenticado
+const isAuthenticated = () => {
+  const token = localStorage.getItem('token');
+  return !!token;
+};
 
-function isAuthenticated() {
-    return !!getUser();
-}
+// Verificar si el usuario es administrador
+const isAdmin = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  return user.role === 'admin';
+};
 
-function logout() {
-    localStorage.removeItem('user');
-    showNotification('Sesión cerrada correctamente', 'success');
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 1000);
-}
+// Requerir autenticación
+const requireAuth = () => {
+  if (!isAuthenticated()) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  return true;
+};
 
-// Función para verificar autenticación
-function requireAuth(redirectUrl = '/login.html') {
-    if (!isAuthenticated()) {
-        showNotification('Debes iniciar sesión para acceder a esta página', 'error');
-        setTimeout(() => {
-            window.location.href = redirectUrl;
-        }, 2000);
-        return false;
-    }
-    return true;
-}
+// Requerir rol de administrador
+const requireAdmin = () => {
+  if (!isAuthenticated()) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  
+  if (!isAdmin()) {
+    showNotification('Acceso denegado. Se requiere rol de administrador.', 'error');
+    window.location.href = 'index.html';
+    return false;
+  }
+  
+  return true;
+};
 
 // Función para obtener el token de autenticación
-function getAuthToken() {
-    const user = getUser();
-    return user ? user.token : null;
-}
+const getAuthToken = () => {
+  return localStorage.getItem('token');
+};
 
 // Función para manejar errores de red
 function handleNetworkError(error) {
@@ -217,19 +217,13 @@ async function apiRequest(endpoint, options = {}) {
     }
 }
 
-// Exportar funciones
+// Exportar funciones y constantes
 export { 
-    showNotification, 
-    updateCartCount, 
-    formatPrice, 
-    loadImageWithProxy,
-    getUser, 
-    isAuthenticated, 
-    requireAuth, 
-    logout, 
-    getAuthToken,
-    apiRequest,
-    validateEmail,
-    validatePhone,
-    API_BASE_URL
+  API_BASE_URL, 
+  showNotification, 
+  isAuthenticated, 
+  isAdmin,
+  requireAuth,
+  requireAdmin,
+  formatPrice
 };

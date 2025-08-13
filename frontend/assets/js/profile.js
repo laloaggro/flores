@@ -1,5 +1,5 @@
 // profile.js - Manejo de la página de perfil de usuario
-import { initUserMenu, getUser, isAuthenticated, requireAuth } from './auth.js';
+import { initUserMenu, getUser, isAuthenticated, requireAuth, isAdmin } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si el usuario está logueado
@@ -11,6 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Mostrar información del usuario
     displayUserInfo(user);
+    
+    // Mostrar u ocultar enlace de administración según el rol del usuario
+    const adminLink = document.getElementById('adminLink');
+    if (adminLink) {
+        if (user && user.role === 'admin') {
+            adminLink.style.display = 'block';
+        } else {
+            adminLink.style.display = 'none';
+        }
+    }
     
     // Configurar event listeners
     setupEventListeners();
