@@ -68,13 +68,15 @@ router.post('/register', async (req, res) => {
   // Validar formato de teléfono
   const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
   if (!phoneRegex.test(phone)) {
-    return res.status(400).json({ error: 'Formato de teléfono inválido' });
+    return res.status(400).json({ 
+      error: 'Formato de teléfono inválido. Debe contener al menos 8 dígitos numéricos' 
+    });
   }
   
   try {
     // Verificar si el email ya está registrado
     const existingUser = await new Promise((resolve, reject) => {
-      db.get(`SELECT id FROM users WHERE email = ?`, [email], (err, row) => {
+      db.get(`SELECT id, email FROM users WHERE email = ?`, [email], (err, row) => {
         if (err) {
           reject(err);
         } else {
@@ -84,7 +86,10 @@ router.post('/register', async (req, res) => {
     });
     
     if (existingUser) {
-      return res.status(400).json({ error: 'El email ya está registrado' });
+      console.log(`Intento de registro con email ya existente: ${email}`);
+      return res.status(400).json({ 
+        error: `El email ${email} ya está registrado. Por favor, inicie sesión o use otro email.` 
+      });
     }
     
     // Hashear la contraseña
@@ -103,13 +108,19 @@ router.post('/register', async (req, res) => {
       stmt.finalize();
     });
     
+    console.log(`Nuevo usuario registrado: ${name} (${email})`);
     res.status(201).json({
       message: 'Usuario registrado exitosamente',
       userId: result.lastID
     });
   } catch (error) {
     console.error('Error al registrar usuario:', error.message);
-    res.status(500).json({ error: 'Error al registrar usuario' });
+    if (error.message.includes('UNIQUE constraint failed')) {
+      return res.status(400).json({ 
+        error: 'El email ya está registrado. Por favor, use otro email o inicie sesión.' 
+      });
+    }
+    res.status(500).json({ error: 'Error interno del servidor al registrar usuario. Por favor, inténtelo más tarde.' });
   }
 });
 

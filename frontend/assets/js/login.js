@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ name, email, password })
+          body: JSON.stringify({ name, email, phone, password })
         });
         
         const data = await response.json();
@@ -172,12 +172,13 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('showLogin').click();
           }, 2000);
         } else {
-          // Mostrar error
-          showNotification(data.error || 'Error al registrarse', 'error');
+          // Mostrar error específico del servidor
+          console.log('Error en registro:', data);
+          showNotification(data.error || 'Error al registrarse. Por favor, inténtelo más tarde.', 'error');
         }
       } catch (error) {
         console.error('Error al registrarse:', error);
-        showNotification('Error de conexión. Por favor intente nuevamente.', 'error');
+        showNotification('Error de conexión. Por favor verifique su conexión e intente nuevamente.', 'error');
       } finally {
         // Rehabilitar botón
         submitButton.disabled = false;
