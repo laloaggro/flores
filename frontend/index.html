@@ -65,6 +65,14 @@
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="Menú principal">
                 <a href="#home" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
+                
+                <!-- Botón de menú hamburguesa -->
+                <button class="hamburger" aria-label="Menú" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <ul class="nav-links">
                     <li><a href="index.html" class="active" aria-current="page">Inicio</a></li>
                     <li><a href="products.html">Productos</a></li>
@@ -106,102 +114,84 @@
             </div>
         </section>
 
-        <section id="featured-products" class="featured-products" aria-labelledby="featured-products-heading">
+        <section id="featured-products" class="featured-products">
             <div class="container">
-                <h2 id="featured-products-heading">Productos Destacados</h2>
-                <div id="products" class="product-grid">
-                    <div class="loading-message">Cargando productos...</div>
+                <h2 class="section-title">Productos Destacados</h2>
+                <div class="product-grid" id="featuredProducts">
+                    <!-- Los productos se cargarán aquí dinámicamente -->
                 </div>
             </div>
         </section>
 
-        <section id="about" class="about" aria-labelledby="about-heading">
+        <section id="about" class="about">
             <div class="container">
-                <h2 id="about-heading">Sobre Nosotros</h2>
                 <div class="about-content">
                     <div class="about-text">
-                        <p>Somos una florería familiar con más de 10 años de experiencia en el mercado. Nos especializamos en arreglos florales únicos y personalizados para todas las ocasiones.</p>
-                        <p>En Arreglos Florales Victoria, nos enorgullece ofrecer:</p>
-                        <ul>
-                            <li>Flores frescas de la mejor calidad</li>
-                            <li>Diseños únicos y personalizados</li>
-                            <li>Entrega a domicilio en toda la Región Metropolitana</li>
-                            <li>Atención personalizada y profesional</li>
-                        </ul>
+                        <h2 class="section-title">Sobre Nosotros</h2>
+                        <p>En Arreglos Florales Victoria llevamos más de 10 años creando hermosos arreglos florales para las ocasiones más especiales. Nuestra pasión por las flores y la atención al detalle nos distingue en el mercado.</p>
+                        <p>Utilizamos solo flores frescas de la más alta calidad, cortadas diariamente y combinadas con creatividad y estilo para crear composiciones únicas que encantarán a tus seres queridos.</p>
+                        <div class="about-stats">
+                            <div class="stat">
+                                <h3>10+</h3>
+                                <p>Años de Experiencia</p>
+                            </div>
+                            <div class="stat">
+                                <h3>500+</h3>
+                                <p>Clientes Satisfechos</p>
+                            </div>
+                            <div class="stat">
+                                <h3>100%</h3>
+                                <p>Flores Frescas</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="about-image">
-                        <img src="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Floristería Arreglos Victoria" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22 viewBox=%220 0 600 400%22%3E%3Crect width=%22600%22 height=%22400%22 fill=%22%23eee%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23aaa%22 font-size=%2224%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EImagen no disponible%3C/text%3E%3C/svg%3E';">
+                        <img src="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Florista trabajando en arreglos florales">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="suppliers" aria-labelledby="suppliers-heading">
+        <section id="contacto" class="contact">
             <div class="container">
-                <h2 id="suppliers-heading">Nuestros Proveedores</h2>
-                <div class="suppliers-content">
-                    <div class="supplier-grid">
-                        <div class="supplier-card">
-                            <div class="supplier-icon">
-                                <i class="fas fa-seedling" aria-hidden="true"></i>
-                            </div>
-                            <h3>Granjas Locales</h3>
-                            <p>Trabajamos directamente con granjas de la Región Metropolitana para obtener las flores más frescas y de calidad.</p>
-                        </div>
-                        <div class="supplier-card">
-                            <div class="supplier-icon">
-                                <i class="fas fa-handshake" aria-hidden="true"></i>
-                            </div>
-                            <h3>Proveedores Certificados</h3>
-                            <p>Todos nuestros proveedores están certificados en prácticas sostenibles y éticas.</p>
-                        </div>
-                        <div class="supplier-card">
-                            <div class="supplier-icon">
-                                <i class="fas fa-recycle" aria-hidden="true"></i>
-                            </div>
-                            <h3>Sostenibilidad</h3>
-                            <p>Promovemos el reciclaje y el uso responsable de recursos en todos nuestros procesos.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contacto" class="contact" aria-labelledby="contact-heading">
-            <div class="container">
-                <h2 id="contact-heading">Contáctanos</h2>
+                <h2 class="section-title">Contáctanos</h2>
                 <div class="contact-content">
                     <div class="contact-info">
+                        <h3>Información de Contacto</h3>
                         <div class="contact-item">
-                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                            <i class="fas fa-map-marker-alt"></i>
                             <div>
-                                <h3>Ubicación</h3>
-                                <p>Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</p>
+                                <h4>Dirección</h4>
+                                <p>Av. Valdivieso 593, Recoleta, Región Metropolitana</p>
                             </div>
                         </div>
                         <div class="contact-item">
-                            <i class="fas fa-phone" aria-hidden="true"></i>
+                            <i class="fas fa-phone"></i>
                             <div>
-                                <h3>Teléfono</h3>
+                                <h4>Teléfono</h4>
                                 <p>+569 6360 3177</p>
                             </div>
                         </div>
                         <div class="contact-item">
-                            <i class="fas fa-envelope" aria-hidden="true"></i>
+                            <i class="fas fa-clock"></i>
                             <div>
-                                <h3>Email</h3>
-                                <p>arreglosvictoriafloreria@gmail.com</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-clock" aria-hidden="true"></i>
-                            <div>
-                                <h3>Horario</h3>
+                                <h4>Horario</h4>
                                 <p>Lunes a Sábado: 9:00 AM - 7:00 PM</p>
                             </div>
                         </div>
+                        <div class="map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.715667637789!2d-70.64444432440353!3d-33.43781947332158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5560a18778f%3A0x2dc9ab0c703d89a7!2sAv.%20Valdivieso%20593%2C%20Recoleta%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1658780324853!5m2!1ses!2scl" 
+                                width="100%" 
+                                height="250" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                title="Ubicación de Arreglos Florales Victoria"></iframe>
+                        </div>
                     </div>
                     <div class="contact-form">
+                        <h3>Envíanos un Mensaje</h3>
                         <form id="contactForm">
                             <div class="form-group">
                                 <label for="name">Nombre</label>
@@ -217,6 +207,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                         </form>
+                        <div id="formMessage" class="form-message"></div>
                     </div>
                 </div>
             </div>
@@ -228,11 +219,11 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Arreglos Florales Victoria</h3>
-                    <p>Creando hermosos recuerdos con flores frescas y arreglos únicos desde 2010.</p>
+                    <p>Flores frescas y arreglos florales únicos para las ocasiones más especiales.</p>
                     <div class="social-links">
-                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="footer-section">
@@ -246,10 +237,10 @@
                 </div>
                 <div class="footer-section">
                     <h4>Información de Contacto</h4>
-                    <ul class="contact-info">
-                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i> +569 6360 3177</li>
-                        <li><i class="fas fa-envelope" aria-hidden="true"></i> arreglosvictoriafloreria@gmail.com</li>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Valdivieso 593, Recoleta</li>
+                        <li><i class="fas fa-phone"></i> +569 6360 3177</li>
+                        <li><i class="fas fa-clock"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</li>
                     </ul>
                 </div>
             </div>
@@ -259,6 +250,8 @@
         </div>
     </footer>
 
+    <script src="assets/js/mobile-menu.js" type="module"></script>
+    <script src="assets/js/utils.js" type="module"></script>
     <script src="assets/js/auth.js" type="module"></script>
     <script src="assets/js/home.js" type="module"></script>
 </body>

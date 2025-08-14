@@ -13,41 +13,49 @@
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="Menú principal">
                 <a href="../index.html" class="logo"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
-                <ul class="nav-links">
-                    <li><a href="../index.html">Inicio</a></li>
-                    <li><a href="../products.html">Productos</a></li>
-                    <li><a href="../index.html#about">Nosotros</a></li>
-                    <li><a href="../index.html#contacto">Contacto</a></li>
-                </ul>
-                <div class="user-actions">
-                    <div class="user-menu" id="userMenu" style="display: none;">
-                        <div class="user-info">
-                            <span id="userName"></span>
-                            <i class="fas fa-caret-down"></i>
+                
+                <!-- Botón de menú hamburguesa -->
+                <button class="hamburger" aria-label="Menú" aria-expanded="false" aria-controls="main-nav">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <div class="nav-menu" id="main-nav">
+                    <ul class="nav-links">
+                        <li><a href="../index.html">Inicio</a></li>
+                        <li><a href="../products.html">Productos</a></li>
+                        <li><a href="../index.html#about">Nosotros</a></li>
+                        <li><a href="../index.html#contacto">Contacto</a></li>
+                    </ul>
+                    <div class="user-actions">
+                        <div class="user-menu" id="userMenu" style="display: none;">
+                            <div class="user-info">
+                                <span id="userName"></span>
+                                <i class="fas fa-caret-down"></i>
+                            </div>
+                            <div class="user-dropdown">
+                                <a href="../profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                                <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                            </div>
                         </div>
-                        <div class="user-dropdown">
-                            <a href="../profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
-                            <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                        <a href="../login.html" class="login-link" id="loginLink">Iniciar Sesión</a>
+                        <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
+                            <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                            <span class="cart-count">0</span>
                         </div>
-                    </div>
-                    <a href="../login.html" class="login-link" id="loginLink">Iniciar Sesión</a>
-                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
-                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                        <span class="cart-count">0</span>
                     </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <main>
-        <section class="admin-section">
-            <div class="container">
-                <div class="admin-container">
-                    <div class="admin-header">
-                        <h1>Panel de Administración</h1>
-                        <p>Gestiona productos, pedidos y usuarios</p>
-                    </div>
+    <main class="admin-page">
+        <div class="container">
+            <div class="admin-header">
+                <h1>Panel de Administración</h1>
+                <p>Bienvenido al panel de administración de Arreglos Victoria</p>
+            </div>
 
                     <div class="admin-content">
                         <div class="admin-sidebar">
