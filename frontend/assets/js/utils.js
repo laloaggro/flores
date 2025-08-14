@@ -135,7 +135,11 @@ function validatePhone(phone) {
 // Verificar si el usuario está autenticado
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
-  if (!token) return false;
+  if (!token) {
+    // Si no hay token, asegurarse de limpiar cualquier dato de usuario residual
+    localStorage.removeItem('user');
+    return false;
+  }
   
   // Verificar si el token es válido (no está expirado)
   try {
@@ -151,6 +155,13 @@ const isAuthenticated = () => {
     return true;
   } catch (e) {
     // Si no es un JWT válido, asumir que es un token simple
+    // Pero verificar que tenga una longitud razonable
+    if (token.length < 10) {
+      // Token demasiado corto, probablemente inválido
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      return false;
+    }
     return true;
   }
 };

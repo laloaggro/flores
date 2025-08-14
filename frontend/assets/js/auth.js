@@ -16,6 +16,12 @@ function initUserMenu() {
     userNameElement.textContent = '';
   }
   
+  // Verificar si hay datos residuales en localStorage y limpiarlos si no hay token válido
+  if (!isAuthenticated()) {
+    // Limpiar datos residuales
+    localStorage.removeItem('user');
+  }
+  
   if (isAuthenticated() && user && userMenu && loginLink) {
     // Mostrar el menú de usuario
     userMenu.style.display = 'block';
