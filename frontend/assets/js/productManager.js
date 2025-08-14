@@ -82,9 +82,6 @@ class ProductManager {
                 // Si el producto no tiene una imagen válida, asignar una de la API de flores
                 if (!product.image_url || product.image_url.includes('placeholder') || product.image_url.includes('product_')) {
                     product.image_url = this.getNextFlowerImage();
-                } else {
-                    // Usar el proxy para todas las imágenes externas
-                    product.image_url = loadImageWithProxy(product.image_url);
                 }
                 return product;
             });
@@ -222,7 +219,7 @@ class ProductManager {
         
         const image = this.flowerImages[this.imageIndex];
         this.imageIndex = (this.imageIndex + 1) % this.flowerImages.length;
-        return loadImageWithProxy(image);
+        return image;
     }
 
     // Función para renderizar productos en la página
