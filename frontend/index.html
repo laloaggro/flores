@@ -334,6 +334,11 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="assets/js/utils.js" type="module"></script>
+    <script src="assets/js/auth.js" type="module"></script>
+    <script src="assets/js/cart.js" type="module"></script>
+    <script src="assets/js/homeProducts.js" type="module"></script>
+    <script src="assets/js/contact.js" type="module"></script>
     <script>
         // Manejar el envío de la encuesta de satisfacción
         document.getElementById('satisfactionSurvey').addEventListener('submit', function(e) {
@@ -354,43 +359,6 @@
             // Limpiar el formulario
             this.reset();
         });
-
-        // Manejar el envío del formulario de contacto
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Obtener los valores del formulario
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const message = document.getElementById('message').value;
-            
-            // Enviar los datos al servidor
-            fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name, email, phone, message })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.');
-                    // Limpiar el formulario
-                    document.getElementById('contactForm').reset();
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
-            });
-        });
     </script>
-    <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/cart.js" type="module"></script>
-    <script src="assets/js/homeProducts.js" type="module"></script>
 </body>
 </html>

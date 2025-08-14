@@ -2,11 +2,12 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si el usuario está logueado
+    const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
     
-    if (!user) {
-        // Si no hay usuario, redirigir al login
-        window.location.href = '/login.html';
+    if (!token || !user) {
+        // Si no hay token o usuario, redirigir al login
+        window.location.href = 'login.html';
         return;
     }
     
@@ -43,10 +44,11 @@ function setupEventListeners() {
     if (logoutButton) {
         logoutButton.addEventListener('click', function() {
             // Eliminar datos de sesión
+            localStorage.removeItem('token');
             localStorage.removeItem('user');
             
             // Redirigir a la página principal
-            window.location.href = '/index.html';
+            window.location.href = 'index.html';
         });
     }
     
@@ -57,10 +59,11 @@ function setupEventListeners() {
             e.preventDefault();
             
             // Eliminar datos de sesión
+            localStorage.removeItem('token');
             localStorage.removeItem('user');
             
             // Redirigir a la página principal
-            window.location.href = '/index.html';
+            window.location.href = 'index.html';
         });
     }
     

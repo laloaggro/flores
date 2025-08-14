@@ -12,141 +12,227 @@ const getApiBaseUrl = () => {
   return 'http://localhost:5000';
 };
 
+const API_BASE_URL = getApiBaseUrl();
+
 // Función para mostrar notificaciones
-function showNotification(message, type) {
-  // Crear elemento de notificación
-  const notification = document.createElement('div');
-  notification.className = `notification ${type}`;
-  notification.textContent = message;
-  
-  // Agregar estilo a la notificación
-  notification.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 20px;
-    border-radius: 5px;
-    color: white;
-    font-weight: 500;
-    z-index: 10000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
-  `;
-  
-  // Estilos específicos por tipo
-  if (type === 'success') {
-    notification.style.background = '#4caf50';
-  } else if (type === 'error') {
-    notification.style.background = '#f44336';
-  } else {
-    notification.style.background = '#2196f3';
-  }
-  
-  // Agregar al body
-  document.body.appendChild(notification);
-  
-  // Mostrar con animación
-  setTimeout(() => {
-    notification.style.transform = 'translateX(0)';
-  }, 10);
-  
-  // Eliminar después de 3 segundos
-  setTimeout(() => {
-    notification.style.transform = 'translateX(100%)';
-    setTimeout(() => {
-      if (notification.parentNode) {
-        notification.parentNode.removeChild(notification);
-      }
-    }, 300);
-  }, 3000);
-}
-
-// Función para actualizar el contador del carrito
-function updateCartCount() {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const totalItems = cart.reduce((total, item) => total + (item.quantity || 0), 0);
-  const cartCountElements = document.querySelectorAll('.cart-count');
-  
-  cartCountElements.forEach(element => {
-    if (totalItems > 0) {
-      element.textContent = totalItems;
-      element.classList.remove('hidden');
-    } else {
-      element.classList.add('hidden');
+function showNotification(message, type = 'info') {
+    // Crear el contenedor de notificaciones si no existe
+    let notificationContainer = document.getElementById('notificationContainer');
+    if (!notificationContainer) {
+        notificationContainer = document.createElement('div');
+        notificationContainer.id = 'notificationContainer';
+        notificationContainer.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            width: 300px;
+        `;
+        document.body.appendChild(notificationContainer);
     }
-  });
+    
+    // Crear la notificación
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.style.cssText = `
+        background: ${type === 'error' ? '#f44336' : type === 'success' ? '#4caf50' : '#2196f3'};
+        color: white;
+        padding: 16px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+    `;
+    notification.textContent = message;
+    
+    // Añadir al contenedor
+    notificationContainer.appendChild(notification);
+    
+    // Mostrar con animación
+    setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateX(0)';
+    }, 10);
+    
+    // Eliminar después de 3 segundos
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
 }
 
-// Función para obtener información del usuario
-function getUser() {
-  return JSON.parse(localStorage.getItem('user')) || null;
-}
-
-// Función para verificar si el usuario está autenticado
-function isAuthenticated() {
-  return !!getUser();
-}
-
-// Función para cerrar sesión
-function logout() {
-  localStorage.removeItem('user');
-  updateCartCount();
-  console.log('Usuario desconectado');
-}
-
-// Función para formatear precios en formato chileno
-function formatPrice(price) {
+// Formatear precio
+const formatPrice = (price) => {
   return new Intl.NumberFormat('es-CL', {
     style: 'currency',
     currency: 'CLP'
   }).format(price);
+};
+
+// Función para actualizar el contador del carrito
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    const cartCount = document.querySelector('.cart-count');
+    
+    if (cartCount) {
+        // Actualizar contador
+        if (totalItems > 0) {
+            cartCount.textContent = totalItems;
+            cartCount.classList.remove('hidden');
+        } else {
+            cartCount.classList.add('hidden');
+        }
+    }
 }
 
-// Función para realizar solicitudes HTTP con token
-async function apiRequest(endpoint, options = {}) {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}${endpoint}`;
-  
-  // Configuración por defecto
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers
-    },
-    ...options
-  };
-  
-  // Agregar token de autenticación si existe
-  const user = getUser();
-  if (user && user.token) {
-    config.headers.Authorization = `Bearer ${user.token}`;
-  }
-  
-  try {
-    const response = await fetch(url, config);
-    
-    // Manejar respuestas no exitosas
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || `Error ${response.status}: ${response.statusText}`);
+// Función para cargar imágenes a través del proxy
+function loadImageWithProxy(imageUrl) {
+    // Si ya está usando el proxy, devolverla tal cual
+    if (imageUrl.includes('/api/image-proxy')) {
+        return imageUrl;
     }
     
-    return await response.json();
-  } catch (error) {
-    console.error('Error en la solicitud API:', error);
-    throw error;
-  }
+    // Si es una imagen local o de datos, devolverla tal cual
+    if (imageUrl.startsWith('data:') || imageUrl.startsWith('/') || imageUrl.startsWith('./') || imageUrl.startsWith('../')) {
+        return imageUrl;
+    }
+    
+    // Verificar si es una URL válida
+    try {
+        const url = new URL(imageUrl);
+        // Usar el proxy para dominios de Unsplash
+        if (url.hostname === 'images.unsplash.com' || url.hostname === 'source.unsplash.com') {
+            return `${API_BASE_URL}/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+        }
+        // Para otras imágenes externas, intentar usar el proxy también
+        return `${API_BASE_URL}/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+    } catch (e) {
+        // Si no es una URL válida, devolverla tal cual
+        return imageUrl;
+    }
 }
 
-// Exportar funciones
+// Función para validar formato de email
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Función para validar formato de teléfono
+function validatePhone(phone) {
+    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
+    return phoneRegex.test(phone);
+}
+
+// Verificar si el usuario está autenticado
+const isAuthenticated = () => {
+  const token = localStorage.getItem('token');
+  return !!token;
+};
+
+// Verificar si el usuario es administrador
+const isAdmin = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  return user.role === 'admin';
+};
+
+// Requerir autenticación
+const requireAuth = () => {
+  if (!isAuthenticated()) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  return true;
+};
+
+// Requerir rol de administrador
+const requireAdmin = () => {
+  if (!isAuthenticated()) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  
+  if (!isAdmin()) {
+    showNotification('Acceso denegado. Se requiere rol de administrador.', 'error');
+    window.location.href = 'index.html';
+    return false;
+  }
+  
+  return true;
+};
+
+// Función para obtener el token de autenticación
+const getAuthToken = () => {
+  return localStorage.getItem('token');
+};
+
+// Función para manejar errores de red
+function handleNetworkError(error) {
+    console.error('Error de red:', error);
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        showNotification('Error de conexión. Por favor, verifica tu conexión a internet.', 'error');
+    } else {
+        showNotification('Ocurrió un error. Por favor, inténtalo de nuevo.', 'error');
+    }
+}
+
+// Función para realizar solicitudes HTTP con manejo de errores
+async function apiRequest(endpoint, options = {}) {
+    try {
+        const url = `${API_BASE_URL}${endpoint}`;
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            },
+            ...options
+        };
+        
+        // Agregar token de autenticación si existe
+        const token = getAuthToken();
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        
+        const response = await fetch(url, config);
+        
+        // Manejar respuestas no exitosas
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        handleNetworkError(error);
+        throw error;
+    }
+}
+
+// Función para cerrar sesión
+const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+};
+
+// Exportar funciones y constantes
 export { 
+  API_BASE_URL, 
   showNotification, 
-  updateCartCount, 
-  getUser, 
   isAuthenticated, 
-  logout,
+  isAdmin,
+  requireAuth,
+  requireAdmin,
   formatPrice,
-  apiRequest,
-  getApiBaseUrl
+  logout,
+  validateEmail,
+  validatePhone
 };

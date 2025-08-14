@@ -68,4 +68,25 @@ const Cart = (cartItems = []) => {
   `;
 };
 
+// Función para guardar el carrito en localStorage
+function saveCartToLocalStorage(cartItems) {
+  try {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  } catch (error) {
+    console.error('Error al guardar el carrito en localStorage:', error);
+  }
+}
+
+// Función para cargar el carrito desde localStorage
+function loadCartFromLocalStorage() {
+  try {
+    const cartItems = localStorage.getItem('cartItems');
+    return cartItems ? JSON.parse(cartItems) : [];
+  } catch (error) {
+    console.error('Error al cargar el carrito desde localStorage:', error);
+    return [];
+  }
+}
+
 export default Cart;
+export { saveCartToLocalStorage, loadCartFromLocalStorage };

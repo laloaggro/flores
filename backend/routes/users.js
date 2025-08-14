@@ -2,7 +2,6 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -16,9 +15,8 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Crear la tabla de usuarios si no existe y actualizarla si es necesario
+// Crear la tabla de usuarios si no existe
 db.serialize(() => {
-  // Crear la tabla si no existe
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -31,15 +29,6 @@ db.serialize(() => {
       console.error('Error al crear la tabla de usuarios:', err.message);
     } else {
       console.log('Tabla de usuarios verificada o creada');
-    }
-  });
-  
-  // Añadir la columna role si no existe
-  db.run(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'`, (err) => {
-    if (err && !err.message.includes('duplicate column name')) {
-      console.error('Error al añadir la columna role:', err.message);
-    } else if (!err) {
-      console.log('Columna role añadida a la tabla de usuarios');
     }
   });
 });
@@ -85,8 +74,8 @@ router.post('/register', async (req, res) => {
     
     // Insertar nuevo usuario
     const result = await new Promise((resolve, reject) => {
-      const stmt = db.prepare(`INSERT INTO users (name, email, phone, password, role) VALUES (?, ?, ?, ?, ?)`);
-      stmt.run(name, email, phone, hashedPassword, 'user', function(err) {
+      const stmt = db.prepare(`INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)`);
+      stmt.run(name, email, phone, hashedPassword, function(err) {
         if (err) {
           reject(err);
         } else {
@@ -118,7 +107,7 @@ router.post('/login', async (req, res) => {
   try {
     // Buscar usuario por email
     const user = await new Promise((resolve, reject) => {
-      db.get(`SELECT id, name, email, phone, password, role FROM users WHERE email = ?`, [email], (err, row) => {
+      db.get(`SELECT id, name, email, phone, password FROM users WHERE email = ?`, [email], (err, row) => {
         if (err) {
           reject(err);
         } else {
@@ -138,28 +127,12 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
     
-    // Generar token JWT
-    const token = jwt.sign(
-      { 
-        id: user.id, 
-        email: user.email, 
-        name: user.name,
-        role: user.role || 'user'
-      }, 
-      process.env.JWT_SECRET || 'secreto_por_defecto',
-      { expiresIn: '24h' }
-    );
-    
     // No enviar la contraseña en la respuesta
     const { password: _, ...userWithoutPassword } = user;
     
     res.json({
       message: 'Inicio de sesión exitoso',
-      token: token,
-      user: {
-        ...userWithoutPassword,
-        role: userWithoutPassword.role || 'user'
-      }
+      user: userWithoutPassword
     });
   } catch (error) {
     console.error('Error al iniciar sesión:', error.message);
@@ -169,7 +142,7 @@ router.post('/login', async (req, res) => {
 
 // Ruta para obtener todos los usuarios (solo para pruebas)
 router.get('/', (req, res) => {
-  db.all(`SELECT id, name, email, phone, role, created_at FROM users`, (err, rows) => {
+  db.all(`SELECT id, name, email, phone, created_at FROM users`, (err, rows) => {
     if (err) {
       console.error('Error al obtener usuarios:', err.message);
       return res.status(500).json({ error: 'Error al obtener usuarios' });

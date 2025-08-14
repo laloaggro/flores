@@ -110,12 +110,17 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">
-                    <h2><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Victoria</h2>
-                    <p>Florería & Delivery</p>
+                <div class="footer-section">
+                    <h3>Arreglos Florales Victoria</h3>
+                    <p>Creando hermosos recuerdos con flores frescas y arreglos únicos desde 2010.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
                 </div>
-                <div class="footer-links">
-                    <h4>Enlaces</h4>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
                     <ul>
                         <li><a href="index.html">Inicio</a></li>
                         <li><a href="products.html">Productos</a></li>
@@ -123,23 +128,258 @@
                         <li><a href="index.html#contacto">Contacto</a></li>
                     </ul>
                 </div>
-                <div class="footer-contact">
-                    <h4>Contacto</h4>
-                    <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> <span aria-label="Dirección">Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</span></p>
-                    <p><i class="fas fa-phone" aria-hidden="true"></i> <span aria-label="Teléfono">+569 6360 3177</span></p>
-                    <p><i class="fas fa-envelope" aria-hidden="true"></i> <span aria-label="Correo electrónico">arreglosvictoriafloreria@gmail.com</span></p>
+                <div class="footer-section">
+                    <h4>Información de Contacto</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</li>
+                        <li><i class="fas fa-phone"></i> +569 6360 3177</li>
+                        <li><i class="fas fa-envelope"></i> arreglosvictoriafloreria@gmail.com</li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 Arreglos Victoria. Todos los derechos reservados.</p>
+                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/cart.js" type="module"></script>
-    <script src="assets/js/products.js" type="module"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/cartUtils.js"></script>
+    <script src="assets/js/productManager.js"></script>
+    <script>
+        // Inicializar cuando el DOM esté cargado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar autenticación
+            initAuth();
+            
+            // Inicializar carrito
+            window.cartUtils = CartUtils;
+            cartUtils.init();
+            
+            // Configurar event listeners para el carrito
+            const cartIcon = document.querySelector('.cart-icon');
+            if (cartIcon) {
+                cartIcon.addEventListener('click', function() {
+                    const cartModal = document.getElementById('cartModal');
+                    if (cartModal) {
+                        cartModal.remove();
+                    }
+                    
+                    // Crear y mostrar el modal del carrito
+                    const modalContainer = document.createElement('div');
+                    modalContainer.innerHTML = Cart(cartUtils.getCartItems());
+                    document.body.appendChild(modalContainer.firstElementChild);
+                    
+                    // Adjuntar event listeners
+                    cartUtils.attachCartEventListeners();
+                    cartUtils.toggleCartModal();
+                });
+            }
+            
+            // Cargar categorías
+            loadCategories();
+            
+            // Cargar productos
+            loadProducts(1);
+            
+            // Configurar filtros
+            setupFilters();
+        });
+        
+        // Variables para la paginación
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentCategory = '';
+        let currentSearch = '';
+        
+        // Cargar categorías
+        async function loadCategories() {
+            try {
+                const response = await fetch('/api/products/categories');
+                if (!response.ok) {
+                    throw new Error('Error al cargar categorías');
+                }
+                
+                const data = await response.json();
+                const categoryFilter = document.getElementById('categoryFilter');
+                
+                // Limpiar opciones existentes
+                categoryFilter.innerHTML = '<option value="">Todas las categorías</option>';
+                
+                // Agregar categorías al select
+                data.categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categoryFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error al cargar categorías:', error);
+            }
+        }
+        
+        // Cargar productos
+        async function loadProducts(page = 1) {
+            try {
+                // Mostrar mensaje de carga
+                document.getElementById('productGrid').innerHTML = '<div class="loading-message">Cargando productos...</div>';
+                
+                // Construir URL con parámetros
+                const params = new URLSearchParams();
+                params.append('page', page);
+                params.append('limit', 12);
+                
+                if (currentCategory) {
+                    params.append('category', currentCategory);
+                }
+                
+                if (currentSearch) {
+                    params.append('search', currentSearch);
+                }
+                
+                const response = await fetch(`/api/products?${params.toString()}`);
+                if (!response.ok) {
+                    throw new Error('Error al cargar productos');
+                }
+                
+                const data = await response.json();
+                
+                // Actualizar variables de paginación
+                currentPage = data.pagination.currentPage;
+                totalPages = data.pagination.totalPages;
+                
+                // Renderizar productos
+                renderProducts(data.products);
+                
+                // Actualizar información de paginación
+                updatePagination();
+            } catch (error) {
+                console.error('Error al cargar productos:', error);
+                document.getElementById('productGrid').innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>';
+            }
+        }
+        
+        // Renderizar productos
+        function renderProducts(products) {
+            const productGrid = document.getElementById('productGrid');
+            
+            if (!products || products.length === 0) {
+                productGrid.innerHTML = '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
+                return;
+            }
+            
+            productGrid.innerHTML = products.map(product => `
+                <div class="product-card" data-id="${product.id}">
+                    <div class="product-image">
+                        <img src="${product.image_url}" 
+                             alt="${product.name}" 
+                             loading="lazy" 
+                             onerror="this.src='/assets/images/default-avatar.svg'; this.onerror=null;">
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-details">
+                            <span class="detail-item"><i class="fas fa-tag"></i> ${product.category}</span>
+                            <span class="detail-item"><i class="fas fa-ruler-combined"></i> ${product.size || 'Tamaño estándar'}</span>
+                        </div>
+                        <span class="price">$${parseFloat(product.price).toLocaleString('es-CL')}</span>
+                        <button class="btn btn-secondary add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image_url}">
+                            <i class="fas fa-shopping-cart"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Adjuntar event listeners a los botones "Agregar al carrito"
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const product = {
+                        id: this.dataset.id,
+                        name: this.dataset.name,
+                        price: this.dataset.price,
+                        image: this.dataset.image
+                    };
+                    
+                    cartUtils.addToCart(product);
+                });
+            });
+        }
+        
+        // Actualizar información de paginación
+        function updatePagination() {
+            // Actualizar información de resultados
+            const resultsCount = document.getElementById('resultsCount');
+            resultsCount.textContent = `Mostrando página ${currentPage} de ${totalPages}`;
+            
+            // Actualizar botones de paginación superior
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+            document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+            
+            // Actualizar botones de paginación inferior
+            document.getElementById('prevPageBottom').disabled = currentPage === 1;
+            document.getElementById('nextPageBottom').disabled = currentPage === totalPages;
+            document.getElementById('pageInfoBottom').textContent = `Página ${currentPage} de ${totalPages}`;
+        }
+        
+        // Configurar filtros
+        function setupFilters() {
+            // Filtro por categoría
+            document.getElementById('categoryFilter').addEventListener('change', function() {
+                currentCategory = this.value;
+                currentPage = 1;
+                loadProducts(currentPage);
+            });
+            
+            // Filtro de búsqueda
+            const searchFilter = document.getElementById('searchFilter');
+            let searchTimeout;
+            
+            searchFilter.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentSearch = this.value;
+                    currentPage = 1;
+                    loadProducts(currentPage);
+                }, 500); // Esperar 500ms después de que el usuario deje de escribir
+            });
+            
+            // Botón para limpiar filtros
+            document.getElementById('clearFiltersBtn').addEventListener('click', function() {
+                document.getElementById('categoryFilter').value = '';
+                document.getElementById('searchFilter').value = '';
+                currentCategory = '';
+                currentSearch = '';
+                currentPage = 1;
+                loadProducts(currentPage);
+            });
+            
+            // Botones de paginación
+            document.getElementById('prevPage').addEventListener('click', function() {
+                if (currentPage > 1) {
+                    loadProducts(currentPage - 1);
+                }
+            });
+            
+            document.getElementById('nextPage').addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    loadProducts(currentPage + 1);
+                }
+            });
+            
+            document.getElementById('prevPageBottom').addEventListener('click', function() {
+                if (currentPage > 1) {
+                    loadProducts(currentPage - 1);
+                }
+            });
+            
+            document.getElementById('nextPageBottom').addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    loadProducts(currentPage + 1);
+                }
+            });
+        }
+    </script>
 </body>
 </html>

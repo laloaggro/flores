@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Arreglos Victoria Florería</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="Menú principal">
+                <a href="../index.html" class="logo"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Inicio</a></li>
+                    <li><a href="../products.html">Productos</a></li>
+                    <li><a href="../index.html#about">Nosotros</a></li>
+                    <li><a href="../index.html#contacto">Contacto</a></li>
+                </ul>
+                <div class="user-actions">
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <div class="user-info">
+                            <span id="userName"></span>
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <a href="../profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                        </div>
+                    </div>
+                    <a href="../login.html" class="login-link" id="loginLink">Iniciar Sesión</a>
+                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras">
+                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <div class="container">
+                <div class="admin-container">
+                    <div class="admin-header">
+                        <h1>Panel de Administración</h1>
+                        <p>Gestiona productos, pedidos y usuarios</p>
+                    </div>
+
+                    <div class="admin-content">
+                        <div class="admin-sidebar">
+                            <ul class="admin-menu">
+                                <li class="active">
+                                    <a href="#dashboard" data-section="dashboard">
+                                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#products" data-section="products">
+                                        <i class="fas fa-box"></i> Productos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#orders" data-section="orders">
+                                        <i class="fas fa-shopping-cart"></i> Pedidos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#users" data-section="users">
+                                        <i class="fas fa-users"></i> Usuarios
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#settings" data-section="settings">
+                                        <i class="fas fa-cog"></i> Configuración
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="admin-main">
+                            <div id="dashboard" class="admin-content-section active">
+                                <h2>Dashboard</h2>
+                                <div class="admin-stats">
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span class="stat-number" id="productCount">0</span>
+                                            <span class="stat-label">Productos</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span class="stat-number" id="orderCount">0</span>
+                                            <span class="stat-label">Pedidos</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span class="stat-number" id="userCount">0</span>
+                                            <span class="stat-label">Usuarios</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-dollar-sign"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span class="stat-number" id="revenueCount">$0</span>
+                                            <span class="stat-label">Ingresos</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="products" class="admin-content-section">
+                                <h2>Gestión de Productos</h2>
+                                <div class="admin-actions">
+                                    <button id="addProductBtn" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Agregar Producto
+                                    </button>
+                                </div>
+                                <div class="admin-table-container">
+                                    <table class="admin-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Categoría</th>
+                                                <th>Precio</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="productsTableBody">
+                                            <tr>
+                                                <td colspan="5">Cargando productos...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="orders" class="admin-content-section">
+                                <h2>Gestión de Pedidos</h2>
+                                <div class="admin-table-container">
+                                    <table class="admin-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Usuario</th>
+                                                <th>Fecha</th>
+                                                <th>Total</th>
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ordersTableBody">
+                                            <tr>
+                                                <td colspan="6">Cargando pedidos...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="users" class="admin-content-section">
+                                <h2>Gestión de Usuarios</h2>
+                                <div class="admin-table-container">
+                                    <table class="admin-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Email</th>
+                                                <th>Teléfono</th>
+                                                <th>Rol</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="usersTableBody">
+                                            <tr>
+                                                <td colspan="6">Cargando usuarios...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="settings" class="admin-content-section">
+                                <h2>Configuración</h2>
+                                <div class="settings-form">
+                                    <div class="form-group">
+                                        <label for="siteName">Nombre del Sitio</label>
+                                        <input type="text" id="siteName" class="form-input" value="Arreglos Florales Victoria">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactEmail">Email de Contacto</label>
+                                        <input type="email" id="contactEmail" class="form-input" value="arreglosvictoriafloreria@gmail.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactPhone">Teléfono de Contacto</label>
+                                        <input type="text" id="contactPhone" class="form-input" value="+569 6360 3177">
+                                    </div>
+                                    <button class="btn btn-primary">Guardar Configuración</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Arreglos Florales Victoria</h3>
+                    <p>Creando hermosos recuerdos con flores frescas y arreglos únicos desde 2010.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="../index.html">Inicio</a></li>
+                        <li><a href="../products.html">Productos</a></li>
+                        <li><a href="../index.html#about">Nosotros</a></li>
+                        <li><a href="../index.html#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Información de Contacto</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</li>
+                        <li><i class="fas fa-phone"></i> +569 6360 3177</li>
+                        <li><i class="fas fa-envelope"></i> arreglosvictoriafloreria@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/admin.js"></script>
+</body>
+</html>
