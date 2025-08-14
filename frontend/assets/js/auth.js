@@ -1,7 +1,20 @@
+// Forzar limpieza completa del localStorage al cargar este script
+(function() {
+  // Limpiar todos los datos de usuario almacenados
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  localStorage.removeItem('cart');
+})();
+
 import { updateCartCount, getUser, isAuthenticated, logout, isAdmin } from './utils.js';
 
 // Función para inicializar el menú de usuario
 function initUserMenu() {
+  // Forzar limpieza adicional
+  if (!isAuthenticated()) {
+    localStorage.removeItem('user');
+  }
+  
   const user = getUser();
   const userMenu = document.getElementById('userMenu');
   const loginLink = document.getElementById('loginLink');
@@ -148,12 +161,18 @@ function addAdminLinkToMenu() {
 // Función para manejar el cierre de sesión
 function handleLogout() {
   logout();
+  // Forzar limpieza completa
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
   window.location.href = '/index.html';
 }
 
 // Función para verificar la autenticación del usuario
 function checkAuth() {
   if (!isAuthenticated()) {
+    // Limpiar datos residuales
+    localStorage.removeItem('user');
+    
     // Redirigir al login si no está autenticado en páginas que lo requieren
     if (window.location.pathname.includes('profile.html')) {
       window.location.href = '/login.html';

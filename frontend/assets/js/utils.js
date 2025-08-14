@@ -2,6 +2,7 @@
 
 // Limpiar datos residuales al cargar la aplicación
 (function() {
+  // Forzar limpieza completa de datos de usuario
   const token = localStorage.getItem('token');
   const user = localStorage.getItem('user');
   
@@ -27,6 +28,20 @@
         localStorage.removeItem('token');
         localStorage.removeItem('user');
       }
+    }
+  }
+  
+  // Limpiar cualquier otro dato sospechoso
+  if (user) {
+    try {
+      const userData = JSON.parse(user);
+      // Si los datos del usuario no tienen las propiedades esperadas, limpiar
+      if (!userData.id && !userData.email && !userData.name) {
+        localStorage.removeItem('user');
+      }
+    } catch (e) {
+      // Si no se puede parsear como JSON, limpiar
+      localStorage.removeItem('user');
     }
   }
 })();
