@@ -144,6 +144,18 @@ const isAdmin = () => {
   return user.role === 'admin';
 };
 
+// Función para obtener el usuario actual
+const getUser = () => {
+  const userStr = localStorage.getItem('user');
+  if (!userStr) return null;
+  
+  try {
+    return JSON.parse(userStr);
+  } catch (e) {
+    return null;
+  }
+};
+
 // Requerir autenticación
 const requireAuth = () => {
   if (!isAuthenticated()) {
@@ -229,10 +241,12 @@ export {
   showNotification, 
   isAuthenticated, 
   isAdmin,
+  getUser,
   requireAuth,
   requireAdmin,
   formatPrice,
   logout,
+  updateCartCount,
   validateEmail,
   validatePhone
 };
