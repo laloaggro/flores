@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar el menú de usuario
     initUserMenu();
+    
+    // Configurar eventos de productos
+    setupProductEvents();
 });
 
 // Verificar si el usuario tiene acceso de administrador
@@ -66,30 +69,130 @@ function initAdminPanel() {
     
     // Cargar usuarios
     loadUsers();
-    
-    // Configurar event listeners para botones de acción
-    setupActionButtons();
 }
 
-// Cargar estadísticas del dashboard
-async function loadStats() {
+// Configurar eventos de productos
+function setupProductEvents() {
+    // Evento para el botón de agregar producto
+    const addProductBtn = document.getElementById('addProductBtn');
+    if (addProductBtn) {
+        addProductBtn.addEventListener('click', function() {
+            // Mostrar formulario para agregar producto
+            showAddProductForm();
+        });
+    }
+}
+
+// Mostrar formulario para agregar producto
+function showAddProductForm() {
+    // Crear modal para agregar producto
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'addProductModal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Nuevo Producto</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label for="productName">Nombre:</label>
+                        <input type="text" id="productName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Categoría:</label>
+                        <input type="text" id="productCategory" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice">Precio:</label>
+                        <input type="number" id="productPrice" class="form-input" min="0" step="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productImage">URL de Imagen:</label>
+                        <input type="text" id="productImage" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Descripción:</label>
+                        <textarea id="productDescription" class="form-input" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Agregar Producto</button>
+                </form>
+            </div>
+        </div>
+    `;
+    
+    // Añadir modal al documento
+    document.body.appendChild(modal);
+    
+    // Configurar eventos del modal
+    const closeBtn = modal.querySelector('.close');
+    closeBtn.addEventListener('click', function() {
+        modal.remove();
+    });
+    
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    // Configurar envío del formulario
+    const form = document.getElementById('addProductForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        addProduct();
+    });
+    
+    // Mostrar modal
+    modal.style.display = 'block';
+}
+
+// Agregar producto
+async function addProduct() {
     try {
-        // Simular carga de estadísticas
-        setTimeout(() => {
-            document.getElementById('productCount').textContent = '24';
-            document.getElementById('orderCount').textContent = '18';
-            document.getElementById('userCount').textContent = '42';
-            document.getElementById('revenueCount').textContent = '$2.450.000';
-        }, 1000);
+        const formData = new FormData(document.getElementById('addProductForm'));
+        const productData = {
+            name: formData.get('productName'),
+            category: formData.get('productCategory'),
+            price: parseFloat(formData.get('productPrice')),
+            image: formData.get('productImage'),
+            description: formData.get('productDescription')
+        };
+        
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(productData)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Error al agregar producto');
+        }
+        
+        // Cerrar modal
+        document.getElementById('addProductModal').remove();
+        
+        // Mostrar mensaje de éxito
+        showMessage('Producto agregado correctamente', 'success');
+        
+        // Recargar lista de productos
+        loadProducts();
     } catch (error) {
-        console.error('Error al cargar estadísticas:', error);
+        console.error('Error al agregar producto:', error);
+        showMessage('Error al agregar producto', 'error');
     }
 }
 
 // Cargar productos
 async function loadProducts() {
     try {
-        const response = await fetch('/api/products?page=1&limit=10');
+        const response = await fetch('/api/products');
         if (!response.ok) {
             throw new Error('Error al cargar productos');
         }
@@ -105,24 +208,52 @@ async function loadProducts() {
                     <td>${product.category}</td>
                     <td>$${parseFloat(product.price).toLocaleString('es-CL')}</td>
                     <td>
-                        <button class="btn btn-sm btn-secondary edit-product" data-id="${product.id}">
-                            <i class="fas fa-edit"></i> Editar
+                        <button class="btn-icon edit-product" data-id="${product.id}">
+                            <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger delete-product" data-id="${product.id}">
-                            <i class="fas fa-trash"></i> Eliminar
+                        <button class="btn-icon delete-product" data-id="${product.id}">
+                            <i class="fas fa-trash"></i>
                         </button>
                     </td>
                 </tr>
             `).join('');
+            
+            // Añadir eventos a los botones de editar y eliminar
+            document.querySelectorAll('.edit-product').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-id');
+                    editProduct(productId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-product').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-id');
+                    deleteProduct(productId);
+                });
+            });
         } else {
             tbody.innerHTML = '<tr><td colspan="5">No hay productos disponibles</td></tr>';
         }
-        
-        // Configurar event listeners para los botones de acción
-        setupActionButtons();
     } catch (error) {
         console.error('Error al cargar productos:', error);
         document.getElementById('productsTableBody').innerHTML = '<tr><td colspan="5">Error al cargar productos</td></tr>';
+    }
+}
+
+// Editar producto
+function editProduct(productId) {
+    // Mostrar formulario para editar producto
+    showMessage(`Funcionalidad de edición para producto ID: ${productId} - En desarrollo`, 'info');
+}
+
+// Eliminar producto
+function deleteProduct(productId) {
+    if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+        // Lógica para eliminar el producto
+        showMessage(`Producto ID: ${productId} eliminado - En desarrollo`, 'success');
+        // Recargar lista de productos
+        loadProducts();
     }
 }
 
@@ -140,8 +271,8 @@ async function loadOrders() {
                     <td>$45.990</td>
                     <td><span class="status pending">Pendiente</span></td>
                     <td>
-                        <button class="btn btn-sm btn-secondary edit-order" data-id="1">
-                            <i class="fas fa-edit"></i> Editar
+                        <button class="btn-icon edit-order" data-id="1">
+                            <i class="fas fa-edit"></i>
                         </button>
                     </td>
                 </tr>
@@ -152,15 +283,12 @@ async function loadOrders() {
                     <td>$32.500</td>
                     <td><span class="status completed">Completado</span></td>
                     <td>
-                        <button class="btn btn-sm btn-secondary edit-order" data-id="2">
-                            <i class="fas fa-edit"></i> Editar
+                        <button class="btn-icon edit-order" data-id="2">
+                            <i class="fas fa-edit"></i>
                         </button>
                     </td>
                 </tr>
             `;
-            
-            // Configurar event listeners para los botones de acción
-            setupActionButtons();
         }, 1000);
     } catch (error) {
         console.error('Error al cargar pedidos:', error);
@@ -177,38 +305,29 @@ async function loadUsers() {
             tbody.innerHTML = `
                 <tr>
                     <td>1</td>
-                    <td>Juan Pérez</td>
-                    <td>juan@example.com</td>
-                    <td>+56912345678</td>
+                    <td>Administrador</td>
+                    <td>admin@arreglosvictoria.com</td>
+                    <td>+56963603177</td>
                     <td>admin</td>
                     <td>
-                        <button class="btn btn-sm btn-secondary edit-user" data-id="1">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
-                        <button class="btn btn-sm btn-danger delete-user" data-id="1">
-                            <i class="fas fa-trash"></i> Eliminar
+                        <button class="btn-icon edit-user" data-id="1">
+                            <i class="fas fa-edit"></i>
                         </button>
                     </td>
                 </tr>
                 <tr>
                     <td>2</td>
-                    <td>María González</td>
-                    <td>maria@example.com</td>
+                    <td>Juan Pérez</td>
+                    <td>juan.perez@example.com</td>
                     <td>+56987654321</td>
                     <td>user</td>
                     <td>
-                        <button class="btn btn-sm btn-secondary edit-user" data-id="2">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
-                        <button class="btn btn-sm btn-danger delete-user" data-id="2">
-                            <i class="fas fa-trash"></i> Eliminar
+                        <button class="btn-icon edit-user" data-id="2">
+                            <i class="fas fa-edit"></i>
                         </button>
                     </td>
                 </tr>
             `;
-            
-            // Configurar event listeners para los botones de acción
-            setupActionButtons();
         }, 1000);
     } catch (error) {
         console.error('Error al cargar usuarios:', error);
@@ -242,95 +361,6 @@ function setupMenuNavigation() {
             document.getElementById(targetSection).classList.add('active');
         });
     });
-}
-
-// Configurar botones de acción
-function setupActionButtons() {
-    // Botón de agregar producto
-    const addProductBtn = document.getElementById('addProductBtn');
-    if (addProductBtn) {
-        addProductBtn.addEventListener('click', showAddProductModal);
-    }
-    
-    // Botones de editar producto
-    document.querySelectorAll('.edit-product').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            showEditProductModal(productId);
-        });
-    });
-    
-    // Botones de eliminar producto
-    document.querySelectorAll('.delete-product').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            deleteProduct(productId);
-        });
-    });
-    
-    // Botones de editar usuario
-    document.querySelectorAll('.edit-user').forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            showEditUserModal(userId);
-        });
-    });
-    
-    // Botones de eliminar usuario
-    document.querySelectorAll('.delete-user').forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            deleteUser(userId);
-        });
-    });
-    
-    // Botones de editar pedido
-    document.querySelectorAll('.edit-order').forEach(button => {
-        button.addEventListener('click', function() {
-            const orderId = this.getAttribute('data-id');
-            showEditOrderModal(orderId);
-        });
-    });
-}
-
-// Mostrar modal para agregar producto
-function showAddProductModal() {
-    alert('Funcionalidad para agregar producto aún no implementada');
-    // Aquí se implementaría la lógica para mostrar un modal de agregar producto
-}
-
-// Mostrar modal para editar producto
-function showEditProductModal(productId) {
-    alert(`Funcionalidad para editar producto con ID ${productId} aún no implementada`);
-    // Aquí se implementaría la lógica para mostrar un modal de edición de producto
-}
-
-// Eliminar producto
-function deleteProduct(productId) {
-    if (confirm(`¿Estás seguro de que deseas eliminar el producto con ID ${productId}?`)) {
-        alert(`Funcionalidad para eliminar producto con ID ${productId} aún no implementada`);
-        // Aquí se implementaría la lógica para eliminar un producto
-    }
-}
-
-// Mostrar modal para editar usuario
-function showEditUserModal(userId) {
-    alert(`Funcionalidad para editar usuario con ID ${userId} aún no implementada`);
-    // Aquí se implementaría la lógica para mostrar un modal de edición de usuario
-}
-
-// Eliminar usuario
-function deleteUser(userId) {
-    if (confirm(`¿Estás seguro de que deseas eliminar el usuario con ID ${userId}?`)) {
-        alert(`Funcionalidad para eliminar usuario con ID ${userId} aún no implementada`);
-        // Aquí se implementaría la lógica para eliminar un usuario
-    }
-}
-
-// Mostrar modal para editar pedido
-function showEditOrderModal(orderId) {
-    alert(`Funcionalidad para editar pedido con ID ${orderId} aún no implementada`);
-    // Aquí se implementaría la lógica para mostrar un modal de edición de pedido
 }
 
 // Función para mostrar mensajes al usuario
