@@ -4,27 +4,35 @@ import CartUtils from '../../assets/js/cartUtils.js';
 // Componente para una tarjeta de producto individual
 const ProductCard = (product) => {
   return `
-    <div class="product-card">
+    <article class="product-card" itemscope itemtype="http://schema.org/Product">
       <div class="product-image">
-        <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="handleImageError(this)">
+        <img src="${product.image_url}" 
+             alt="${product.name}" 
+             loading="lazy" 
+             itemprop="image"
+             onerror="handleImageError(this)">
       </div>
       <div class="product-info">
-        <h3>${product.name}</h3>
-        <p>${product.description}</p>
+        <h3 itemprop="name">${product.name}</h3>
+        <p itemprop="description">${product.description}</p>
         <div class="product-details">
-          <span class="detail-item"><i class="fas fa-tag"></i> ${product.category}</span>
+          <span class="detail-item" itemprop="category"><i class="fas fa-tag"></i> ${product.category}</span>
           <span class="detail-item"><i class="fas fa-calendar-alt"></i> ${new Date(product.created_at).toLocaleDateString('es-CL')}</span>
         </div>
-        <span class="price">$${parseInt(product.price).toLocaleString('es-CL')}</span>
+        <span class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <span itemprop="price" content="${product.price}">$${parseInt(product.price).toLocaleString('es-CL')}</span>
+          <meta itemprop="priceCurrency" content="CLP">
+        </span>
         <button class="btn btn-secondary add-to-cart" 
                 data-id="${product.id}" 
                 data-name="${product.name}" 
                 data-price="${product.price}"
-                data-image="${product.image_url}">
-          <i class="fas fa-shopping-cart"></i> Agregar
+                data-image="${product.image_url}"
+                aria-label="Agregar ${product.name} al carrito">
+          <i class="fas fa-shopping-cart" aria-hidden="true"></i> Agregar
         </button>
       </div>
-    </div>
+    </article>
   `;
 };
 
@@ -49,41 +57,8 @@ function handleImageError(imgElement) {
     imgElement.src = '/assets/images/default-avatar.svg';
   }
   
-  imgElement.alt = 'Imagen no disponible';
-  imgElement.onerror = null; // Prevenir bucle infinito si también falla la imagen de marcador de posición
+  // Añadir atributo aria-label para indicar que la imagen no se pudo cargar
+  imgElement.setAttribute('aria-label', 'Imagen no disponible');
 }
 
-// Delegación de eventos para los botones de "Agregar al carrito"
-document.addEventListener('click', function(e) {
-  if (e.target.closest('.add-to-cart')) {
-    const button = e.target.closest('.add-to-cart');
-    const product = {
-      id: button.dataset.id,
-      name: button.dataset.name,
-      price: button.dataset.price,
-      image: button.dataset.image
-    };
-    
-    CartUtils.addToCart(product);
-    
-    // Mostrar notificación
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.innerHTML = `
-      <div class="notification-content">
-        <i class="fas fa-check-circle"></i>
-        <span>${product.name} agregado al carrito</span>
-      </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Eliminar notificación después de 3 segundos
-    setTimeout(() => {
-      notification.remove();
-    }, 3000);
-  }
-});
-
 export default ProductCard;
-export { handleImageError };
