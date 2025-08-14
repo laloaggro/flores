@@ -232,5 +232,7 @@ export {
   requireAuth,
   requireAdmin,
   formatPrice,
-  logout
+  logout,
+  validateEmail,
+  validatePhone
 };

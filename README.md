@@ -233,6 +233,22 @@ al crear tu Web Service, no necesitas crear un archivo `.env` real.
 - Mejor organización del código
 - Uso eficiente de recursos
 
+## Solución de problemas comunes
+
+### Problemas con imágenes
+- Si las imágenes no se cargan, verifica que las rutas sean correctas
+- El sistema usa imágenes locales como fallback cuando las externas fallan
+- Las imágenes se cargan a través de un proxy para evitar problemas de CORS
+
+### Problemas de autenticación
+- Verifica que las credenciales sean correctas
+- Asegúrate de que el backend esté corriendo correctamente
+- Comprueba la conexión a internet
+
+### Problemas con el carrito de compras
+- El carrito se almacena en localStorage
+- Si hay problemas, intenta limpiar el localStorage y recargar la página
+
 ## Desarrollo
 
 Para iniciar el servidor en modo desarrollo:

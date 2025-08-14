@@ -1,5 +1,5 @@
 import { showNotification, updateCartCount, formatPrice } from './utils.js';
-import { productManager } from './productManager.js';
+import productManager from './productManager.js';
 import CartUtils from './cartUtils.js';
 
 // Variables de estado
