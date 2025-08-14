@@ -64,10 +64,47 @@
                                     <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
                                 </div>
                                 <div class="form-links">
-                                    <a href="register.html">¿No tienes cuenta? Regístrate</a>
+                                    <a href="#" id="showRegister">¿No tienes cuenta? Regístrate</a>
                                     <a href="#">¿Olvidaste tu contraseña?</a>
                                 </div>
                             </form>
+                            
+                            <div class="auth-form-container register-form-container hidden">
+                                <form class="auth-form" id="registerForm">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="registerFirstName">Nombre</label>
+                                            <input type="text" id="registerFirstName" name="firstName" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="registerLastName">Apellido</label>
+                                            <input type="text" id="registerLastName" name="lastName" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="registerEmail">Email</label>
+                                        <input type="email" id="registerEmail" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="registerPhone">Teléfono</label>
+                                        <input type="tel" id="registerPhone" name="phone" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="registerPassword">Contraseña</label>
+                                        <input type="password" id="registerPassword" name="password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="registerConfirmPassword">Confirmar Contraseña</label>
+                                        <input type="password" id="registerConfirmPassword" name="confirmPassword" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Registrarse</button>
+                                    </div>
+                                    <div class="form-links">
+                                        <a href="#" id="showLogin">¿Ya tienes cuenta? Inicia sesión</a>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                         
                         <div class="auth-image">

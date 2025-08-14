@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      fetch('/api/users/login', {
+      fetch('http://localhost:5000/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -83,17 +83,22 @@ document.addEventListener('DOMContentLoaded', function() {
     registerForm.addEventListener('submit', function(e) {
       e.preventDefault();
       
-      const name = document.getElementById('registerName').value;
-      const email = document.getElementById('registerEmail').value;
-      const phone = document.getElementById('registerPhone').value;
-      const password = document.getElementById('registerPassword').value;
-      const confirmPassword = document.getElementById('registerConfirmPassword').value;
+      // Corregir los IDs para que coincidan con el HTML
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
       
       // Validar campos
-      if (!name || !email || !password || !confirmPassword) {
+      if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
         showNotification('Por favor complete todos los campos', 'error');
         return;
       }
+      
+      // Combinar nombre y apellido
+      const name = firstName + ' ' + lastName;
       
       if (password !== confirmPassword) {
         showNotification('Las contraseñas no coinciden', 'error');
@@ -101,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      fetch('/api/users/register', {
+      fetch('http://localhost:5000/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
