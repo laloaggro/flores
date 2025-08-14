@@ -7,6 +7,8 @@ function initUserMenu() {
   const loginLink = document.getElementById('loginLink');
   const userNameElement = document.getElementById('userName');
   const logoutLink = document.getElementById('logoutLink');
+  const userInfo = document.querySelector('.user-info');
+  const userDropdown = document.querySelector('.user-dropdown');
   
   if (isAuthenticated() && user && userMenu && loginLink) {
     // Mostrar el menú de usuario
@@ -30,10 +32,36 @@ function initUserMenu() {
         handleLogout();
       });
     }
+    
+    // Configurar el toggle del dropdown con clic
+    if (userInfo && userDropdown) {
+      // Prevenir que el clic en el botón cierre el dropdown inmediatamente
+      userInfo.addEventListener('click', function(e) {
+        e.stopPropagation();
+        userDropdown.classList.toggle('show');
+      });
+      
+      // Cerrar el dropdown cuando se hace clic fuera de él
+      document.addEventListener('click', function(e) {
+        if (userDropdown.classList.contains('show')) {
+          userDropdown.classList.remove('show');
+        }
+      });
+      
+      // Prevenir que el clic en el dropdown lo cierre cuando se está usando
+      userDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    }
   } else if (userMenu && loginLink) {
     // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
     userMenu.style.display = 'none';
     loginLink.style.display = 'block';
+    
+    // Asegurarse de que el dropdown esté oculto
+    if (userDropdown) {
+      userDropdown.classList.remove('show');
+    }
   }
 }
 

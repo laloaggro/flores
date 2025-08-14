@@ -2120,8 +2120,20 @@ footer {
     }
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
 .user-info:hover {
-  background-color: #e0e0e0;
+  background-color: var(--secondary);
 }
 
 .user-dropdown {
@@ -2129,15 +2141,15 @@ footer {
   top: 100%;
   right: 0;
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  box-shadow: var(--shadow);
   padding: 10px 0;
-  min-width: 180px;
-  z-index: 1000;
+  min-width: 200px;
+  z-index: 100;
   display: none;
 }
 
-.user-menu:hover .user-dropdown {
+.user-dropdown.show {
   display: block;
 }
 
@@ -2146,13 +2158,12 @@ footer {
   align-items: center;
   gap: 10px;
   padding: 10px 15px;
-  color: #333;
-  text-decoration: none;
-  transition: background-color 0.3s;
+  color: var(--dark);
+  transition: background-color 0.3s ease;
 }
 
 .user-dropdown a:hover {
-  background-color: #f5f5f5;
+  background-color: var(--gray);
 }
 
 .login-link {
