@@ -33,6 +33,28 @@ db.serialize(() => {
       console.log('Tabla de usuarios verificada o creada');
     }
   });
+  
+  // Verificar si la columna 'role' existe, y añadirla si no existe
+  db.all("PRAGMA table_info(users)", (err, columns) => {
+    if (err) {
+      console.error('Error al obtener información de la tabla:', err.message);
+      return;
+    }
+    
+    // Verificar si la columna 'role' existe
+    const roleColumnExists = columns.some(column => column.name === 'role');
+    
+    if (!roleColumnExists) {
+      // Añadir la columna 'role' si no existe
+      db.run("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'", (err) => {
+        if (err) {
+          console.error('Error al añadir columna role:', err.message);
+        } else {
+          console.log('Columna role añadida a la tabla users');
+        }
+      });
+    }
+  });
 });
 
 // Ruta para registrar un nuevo usuario
