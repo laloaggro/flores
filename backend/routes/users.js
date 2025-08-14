@@ -18,7 +18,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 
 // Crear la tabla de usuarios si no existe y actualizarla si es necesario
 db.serialize(() => {
-  // Crear tabla si no existe
+  // Crear la tabla si no existe
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -34,10 +34,10 @@ db.serialize(() => {
     }
   });
   
-  // Añadir columna role si no existe
+  // Añadir la columna role si no existe
   db.run(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'`, (err) => {
     if (err && !err.message.includes('duplicate column name')) {
-      console.error('Error al añadir columna role:', err.message);
+      console.error('Error al añadir la columna role:', err.message);
     } else if (!err) {
       console.log('Columna role añadida a la tabla de usuarios');
     }
