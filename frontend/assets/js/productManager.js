@@ -1,5 +1,19 @@
 // productManager.js - Gestión de productos y carga de datos
-import { API_BASE_URL } from './utils.js';
+import { showNotification, updateCartCount } from './utils.js';
+
+// Determinar la URL base del API según el entorno
+const getApiBaseUrl = () => {
+  // En producción, usar la URL del backend en Render
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    // Cambia esta URL por la URL real de tu backend en Render
+    return 'https://arreglos-victoria-backend.onrender.com';
+  }
+  
+  // En desarrollo, usar localhost
+  return 'http://localhost:5000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 class ProductManager {
   constructor() {
@@ -90,12 +104,12 @@ class ProductManager {
       
       // Guardar en caché solo si es la primera página sin filtros
       if (!category && !search && page === 1) {
-        this.cachedProducts = updatedData.products;
+        this.cachedProducts = data.products;
       }
       
       this.isLoading = false;
-      console.log('Productos cargados exitosamente:', updatedData.products.length);
-      return updatedData;
+      console.log('Productos cargados exitosamente:', data.products.length);
+      return data;
     } catch (error) {
       this.isLoading = false;
       console.error('Error al cargar productos:', error);
