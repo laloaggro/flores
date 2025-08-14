@@ -51,14 +51,21 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.user) {
+        if (data.user && data.token) {
           // Guardar información del usuario en localStorage
           localStorage.setItem('user', JSON.stringify(data.user));
+          localStorage.setItem('token', data.token);
           showNotification('Inicio de sesión exitoso', 'success');
           
-          // Redirigir a la página de perfil después de 1 segundo
+          // Redirigir según el rol del usuario
           setTimeout(() => {
-            window.location.href = 'profile.html';
+            if (data.user.role === 'admin') {
+              // Redirigir al panel de administración
+              window.location.href = 'pages/admin.html';
+            } else {
+              // Redirigir a la página de perfil para usuarios normales
+              window.location.href = 'profile.html';
+            }
           }, 1000);
         } else {
           showNotification(data.error || 'Error en el inicio de sesión', 'error');

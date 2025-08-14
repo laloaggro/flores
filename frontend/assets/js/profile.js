@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
+    // Verificar si el usuario es administrador
+    if (user.role === 'admin') {
+        // Redirigir al panel de administración
+        window.location.href = 'pages/admin.html';
+        return;
+    }
+    
     // Mostrar información del usuario
     displayUserInfo(user);
     

@@ -1,4 +1,4 @@
-import { updateCartCount, getUser, isAuthenticated, logout } from './utils.js';
+import { updateCartCount, getUser, isAuthenticated, logout, isAdmin } from './utils.js';
 
 // Función para inicializar el menú de usuario
 function initUserMenu() {
@@ -18,6 +18,11 @@ function initUserMenu() {
       userNameElement.textContent = user.name || 'Usuario';
     }
     
+    // Agregar enlace al panel de administración si el usuario es administrador
+    if (isAdmin()) {
+      addAdminLinkToMenu();
+    }
+    
     // Configurar el cierre de sesión
     if (logoutLink) {
       logoutLink.addEventListener('click', function(e) {
@@ -29,6 +34,26 @@ function initUserMenu() {
     // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
     userMenu.style.display = 'none';
     loginLink.style.display = 'block';
+  }
+}
+
+// Función para agregar enlace al panel de administración en el menú
+function addAdminLinkToMenu() {
+  const userDropdown = document.querySelector('.user-dropdown');
+  if (userDropdown) {
+    // Verificar si el enlace ya existe
+    const existingAdminLink = document.querySelector('.admin-link');
+    if (!existingAdminLink) {
+      // Crear enlace al panel de administración
+      const adminLink = document.createElement('a');
+      adminLink.href = 'pages/admin.html';
+      adminLink.className = 'admin-link';
+      adminLink.innerHTML = '<i class="fas fa-cog"></i> Panel de Administración';
+      
+      // Insertar el enlace antes del enlace de cierre de sesión
+      const logoutLink = document.getElementById('logoutLink');
+      userDropdown.insertBefore(adminLink, logoutLink);
+    }
   }
 }
 
