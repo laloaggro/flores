@@ -1,4 +1,4 @@
-import { showNotification, updateCartCount } from './utils.js';
+import { showNotification, updateCartCount, API_BASE_URL } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos del DOM
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      fetch('http://localhost:5000/api/users/register', {
+      fetch(`${API_BASE_URL}/api/users/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

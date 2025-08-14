@@ -1,6 +1,6 @@
 // productManager.js - Módulo unificado para la gestión de productos
 
-import { showNotification, formatPrice } from './utils.js';
+import { showNotification, formatPrice, API_BASE_URL } from './utils.js';
 import CartUtils from './cartUtils.js';
 
 class ProductManager {
@@ -43,7 +43,7 @@ class ProductManager {
     console.log('Iniciando carga de productos desde la base de datos');
 
     try {
-      let url = `/api/products?page=${page}&limit=${limit}`;
+      let url = `${API_BASE_URL}/api/products?page=${page}&limit=${limit}`;
       
       if (category) {
         url += `&category=${encodeURIComponent(category)}`;
@@ -99,72 +99,33 @@ class ProductManager {
   // Función para cargar imágenes de flores de una API externa
   async loadFlowerImages() {
     // Comenzar con un conjunto de imágenes locales verificadas
-    const localImages = [
-      '/assets/images/products/product_1.jpg',
-      '/assets/images/products/product_2.jpg',
-      '/assets/images/products/product_3.jpg',
-      '/assets/images/products/product_4.jpg',
-      '/assets/images/products/product_5.jpg'
+    this.flowerImages = [
+      'https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
+      'https://images.unsplash.com/photo-1593488953269-05061b49f8a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
+      'https://images.unsplash.com/photo-1593488952230-c25d5c9dcd25?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
+      'https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
+      'https://images.unsplash.com/photo-1593488953269-05061b49f8a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
+      'https://images.unsplash.com/photo-1593488952230-c25d5c9dcd25?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80'
     ];
     
-    // Filtrar solo las imágenes locales que existen y tienen tamaño válido
-    const verifiedLocalImages = localImages.filter(image => {
-      // Excluir imágenes que sabemos que tienen tamaño 0KB
-      const zeroSizeImages = [
-        '/assets/images/products/product_6.jpg'
-      ];
-      return !zeroSizeImages.includes(image);
-    });
-    
-    this.flowerImages = verifiedLocalImages;
-    
+    // Intentar cargar imágenes adicionales de la API de Unsplash
     try {
-      // Intentar cargar solo unas pocas imágenes de la API de Unsplash
-      const flowerImageUrls = [];
-      
-      // Generar solo 3 URLs de imágenes de flores de Unsplash para reducir solicitudes
-      for (let i = 0; i < 3; i++) {
-        // Usar parámetros aleatorios para obtener diferentes imágenes
-        const randomParam = Math.random().toString(36).substring(2, 15);
-        flowerImageUrls.push(`https://source.unsplash.com/300x300/?flower,arrangement&sig=${randomParam}`);
+      const response = await fetch('https://api.unsplash.com/photos/random?query=flowers&count=6&client_id=YOUR_UNSPLASH_ACCESS_KEY');
+      if (response.ok) {
+        const data = await response.json();
+        const newImages = data.map(photo => photo.urls.small);
+        this.flowerImages = [...this.flowerImages, ...newImages];
       }
-      
-      // Verificar si las imágenes se pueden cargar antes de agregarlas
-      const verifiedUrls = [];
-      for (const url of flowerImageUrls) {
-        try {
-          // Crear una promesa para verificar si la imagen se puede cargar
-          await new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = resolve;
-            img.onerror = reject;
-            img.src = url;
-          });
-          // Si llegamos aquí, la imagen se cargó correctamente
-          verifiedUrls.push(url);
-        } catch (error) {
-          // Si hay un error, simplemente no agregamos la URL
-          // Silenciar estos mensajes para reducir el ruido en la consola
-        }
-      }
-      
-      // Agregar las imágenes verificadas al conjunto existente solo si hay al menos una
-      if (verifiedUrls.length > 0) {
-        this.flowerImages = [...this.flowerImages, ...verifiedUrls];
-      }
-      
-      console.log('Imágenes de flores preparadas:', this.flowerImages.length);
     } catch (error) {
-      // Silenciar errores de la API para reducir el ruido en la consola
-      // Mantener las imágenes locales verificadas como fallback
+      console.warn('No se pudieron cargar imágenes adicionales de la API de Unsplash:', error);
+      // Usar las imágenes locales como respaldo
     }
   }
 
-  // Función para obtener la siguiente imagen de flor en rotación
+  // Función para obtener la siguiente imagen de flores en rotación
   getNextFlowerImage() {
     if (this.flowerImages.length === 0) {
-      // Fallback absoluto si no hay imágenes disponibles
-      return '/assets/images/default-avatar.svg';
+      return 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\' viewBox=\'0 0 600 400\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' fill=\'%23aaa\' font-size=\'30\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ENo Image%3C/text%3E%3C/svg%3E';
     }
     
     const image = this.flowerImages[this.lastImageIndex];
@@ -172,91 +133,144 @@ class ProductManager {
     return image;
   }
 
-  // Función para generar HTML de productos
-  generateProductsHTML(products) {
-    if (!products || products.length === 0) {
-      return '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
-    }
-
-    return products.map(product => `
-      <div class="product-card">
-        <div class="product-image">
-          <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="handleImageError(this)">
-        </div>
-        <div class="product-info">
-          <h3>${product.name}</h3>
-          <p>${product.description}</p>
-          <div class="product-details">
-            <span class="detail-item"><i class="fas fa-tag"></i> ${product.category}</span>
-            <span class="detail-item"><i class="fas fa-calendar-alt"></i> ${new Date(product.created_at).toLocaleDateString('es-CL')}</span>
-          </div>
-          <span class="price">$${parseInt(product.price).toLocaleString('es-CL')}</span>
-          <button class="btn btn-secondary add-to-cart" 
-                  data-id="${product.id}" 
-                  data-name="${product.name}" 
-                  data-price="${product.price}"
-                  data-image="${product.image_url}">
-            <i class="fas fa-shopping-cart"></i> Agregar
-          </button>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // Función para agregar producto al carrito
-  addToCart(product) {
-    CartUtils.addToCart(product);
-  }
-
-  // Función para obtener categorías únicas de productos
-  async getCategories() {
+  // Función para cargar un producto específico por ID
+  async loadProductById(id) {
     try {
-      const response = await fetch('/api/products/categories');
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`);
+      
+      if (!response.ok) {
+        throw new Error(`Error al cargar el producto: ${response.status}`);
+      }
+      
+      const product = await response.json();
+      
+      // Asignar imagen de flor si no tiene una imagen válida
+      if (!product.image_url || product.image_url.includes('placeholder') || product.image_url.includes('product_')) {
+        product.image_url = this.getNextFlowerImage();
+      }
+      
+      return product;
+    } catch (error) {
+      console.error('Error al cargar producto por ID:', error);
+      throw error;
+    }
+  }
+
+  // Función para crear un nuevo producto
+  async createProduct(productData) {
+    try {
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`${API_BASE_URL}/api/products`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(productData)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al crear el producto');
+      }
+      
+      const newProduct = await response.json();
+      
+      // Limpiar caché para forzar recarga
+      this.cachedProducts = null;
+      
+      return newProduct;
+    } catch (error) {
+      console.error('Error al crear producto:', error);
+      throw error;
+    }
+  }
+
+  // Función para actualizar un producto existente
+  async updateProduct(id, productData) {
+    try {
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(productData)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al actualizar el producto');
+      }
+      
+      const updatedProduct = await response.json();
+      
+      // Limpiar caché para forzar recarga
+      this.cachedProducts = null;
+      
+      return updatedProduct;
+    } catch (error) {
+      console.error('Error al actualizar producto:', error);
+      throw error;
+    }
+  }
+
+  // Función para eliminar un producto
+  async deleteProduct(id) {
+    try {
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al eliminar el producto');
+      }
+      
+      // Limpiar caché para forzar recarga
+      this.cachedProducts = null;
+      
+      return true;
+    } catch (error) {
+      console.error('Error al eliminar producto:', error);
+      throw error;
+    }
+  }
+
+  // Función para cargar categorías
+  async loadCategories() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/products/categories`);
       
       if (!response.ok) {
         throw new Error(`Error al cargar categorías: ${response.status}`);
       }
       
-      const data = await response.json();
-      return data.categories; // Devolver directamente el array de categorías
+      const categories = await response.json();
+      return categories;
     } catch (error) {
       console.error('Error al cargar categorías:', error);
-      return [];
+      throw error;
     }
   }
-
-  // Función para limpiar la caché
-  clearCache() {
-    this.cachedProducts = null;
-  }
 }
 
-// Función para manejar errores de carga de imágenes
-function handleImageError(imgElement) {
-  console.debug('Error al cargar imagen:', imgElement.src);
-  
-  // Intentar con una imagen de respaldo verificada
-  const fallbackImages = [
-    '/assets/images/products/product_2.jpg',
-    '/assets/images/products/product_1.jpg',
-    '/assets/images/products/product_3.jpg'
-  ];
-  
-  // Encontrar una imagen de respaldo que no sea la que falló
-  const workingFallback = fallbackImages.find(img => img !== imgElement.src);
-  
-  if (workingFallback) {
-    imgElement.src = workingFallback;
-  } else {
-    // Fallback absoluto
-    imgElement.src = '/assets/images/default-avatar.svg';
-  }
-  
-  imgElement.alt = 'Imagen no disponible';
-  imgElement.onerror = null; // Prevenir bucle infinito si también falla la imagen de marcador de posición
-}
-
-// Exportar una instancia única
+// Crear una instancia única del ProductManager
 const productManager = new ProductManager();
+
+// Función para manejar errores de imagen (exportada para uso global)
+function handleImageError(img) {
+  img.src = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\' viewBox=\'0 0 600 400\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' fill=\'%23aaa\' font-size=\'30\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ENo Image%3C/text%3E%3C/svg%3E';
+}
+
+// Exportar la instancia y la función
 export default productManager;
 export { handleImageError };

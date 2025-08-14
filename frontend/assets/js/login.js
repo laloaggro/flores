@@ -1,4 +1,4 @@
-import { showNotification, updateCartCount } from './utils.js';
+import { showNotification, updateCartCount, API_BASE_URL } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos del DOM
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      fetch('http://localhost:5000/api/users/login', {
+      fetch(`${API_BASE_URL}/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -84,12 +84,12 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       
       // Corregir los IDs para que coincidan con el HTML
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const email = document.getElementById('email').value;
-      const phone = document.getElementById('phone').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
+      const firstName = document.getElementById('registerFirstName').value;
+      const lastName = document.getElementById('registerLastName').value;
+      const email = document.getElementById('registerEmail').value;
+      const phone = document.getElementById('registerPhone').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('registerConfirmPassword').value;
       
       // Validar campos
       if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      fetch('http://localhost:5000/api/users/register', {
+      fetch(`${API_BASE_URL}/api/users/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
