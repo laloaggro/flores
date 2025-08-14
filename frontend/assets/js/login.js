@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .catch(error => {
         console.error('Error:', error);
-        showNotification('Error en el inicio de sesión', 'error');
+        showNotification('Error en el inicio de sesión. Verifique que el servidor esté ejecutándose.', 'error');
       });
     });
   }
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .catch(error => {
         console.error('Error:', error);
-        showNotification('Error en el registro', 'error');
+        showNotification('Error en el registro. Verifique que el servidor esté ejecutándose.', 'error');
       });
     });
   }
