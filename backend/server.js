@@ -71,11 +71,7 @@ app.get('/api/image-proxy', async (req, res) => {
         const imageUrl = new URL(url);
         
         // Hacer la solicitud a la imagen
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (compatible; ImageProxy/1.0)'
-            }
-        });
+        const response = await fetch(url);
         
         if (!response.ok) {
             // Si falla la carga de la imagen externa, usar una imagen local de respaldo
@@ -111,14 +107,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Ruta para servir productos
-app.get('/products', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/products.html'));
-});
-
-// Ruta para servir login
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/login.html'));
+// Ruta para servir cualquier archivo HTML
+app.get('/:page.html', (req, res) => {
+    const page = req.params.page;
+    const allowedPages = ['index', 'products', 'login', 'profile', 'admin', 'checkout', 'order-confirmation'];
+    
+    if (allowedPages.includes(page)) {
+        res.sendFile(path.join(__dirname, '../frontend', `${page}.html`));
+    } else {
+        res.status(404).send('Página no encontrada');
+    }
 });
 
 // Iniciar el servidor

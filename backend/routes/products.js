@@ -2,6 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const router = express.Router();
+const isAdmin = require('../middleware/admin');
 
 // Conectar a la base de datos
 const dbPath = path.join(__dirname, '..', 'products.db');
@@ -13,7 +14,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Ruta para obtener todas las categorías únicas
+// Ruta para obtener todas las categorías únicas (sin autenticación requerida)
 router.get('/categories', (req, res) => {
   // Obtener categorías únicas
   db.all(`SELECT DISTINCT category FROM products ORDER BY category`, (err, rows) => {
@@ -41,7 +42,8 @@ router.get('/', (req, res) => {
   const countParams = [];
   
   // Agregar filtros si existen
-  if (category) {
+  // Solo aplicar filtro de categoría si no es una cadena vacía
+  if (category && category !== '') {
     query += ' WHERE category = ?';
     countQuery += ' WHERE category = ?';
     params.push(category);
@@ -49,7 +51,7 @@ router.get('/', (req, res) => {
   }
   
   if (search) {
-    if (category) {
+    if (category && category !== '') {
       query += ' AND name LIKE ?';
       countQuery += ' AND name LIKE ?';
     } else {
@@ -71,6 +73,17 @@ router.get('/', (req, res) => {
       return res.status(500).json({ error: 'Error al obtener productos' });
     }
     
+    // Procesar las imágenes de los productos para usar rutas locales por defecto
+    const processedRows = rows.map(row => {
+      // Si no tiene imagen o la imagen es de placeholder, usar una imagen local
+      if (!row.image_url || row.image_url.includes('placeholder') || row.image_url.includes('product_')) {
+        // Asignar una imagen local basada en el ID del producto para variedad
+        const imageNumber = (row.id % 10) + 1;
+        row.image_url = `/assets/images/flowers/flower${Math.min(imageNumber, 10)}.svg`;
+      }
+      return row;
+    });
+    
     // Contar el total de productos con los filtros aplicados
     db.get(countQuery, countParams, (err, countRow) => {
       if (err) {
@@ -82,7 +95,7 @@ router.get('/', (req, res) => {
       const totalPages = Math.ceil(total / limit);
       
       res.json({
-        products: rows,
+        products: processedRows,
         pagination: {
           currentPage: page,
           totalPages: totalPages,
@@ -109,6 +122,13 @@ router.get('/:id', (req, res) => {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
     
+    // Procesar la imagen del producto para usar rutas locales por defecto
+    if (!row.image_url || row.image_url.includes('placeholder') || row.image_url.includes('product_')) {
+      // Asignar una imagen local basada en el ID del producto para variedad
+      const imageNumber = (row.id % 10) + 1;
+      row.image_url = `/assets/images/flowers/flower${Math.min(imageNumber, 10)}.svg`;
+    }
+    
     res.json(row);
   });
 });
@@ -127,6 +147,17 @@ router.get('/category/:category', (req, res) => {
       return res.status(500).json({ error: 'Error al obtener productos por categoría' });
     }
     
+    // Procesar las imágenes de los productos para usar rutas locales por defecto
+    const processedRows = rows.map(row => {
+      // Si no tiene imagen o la imagen es de placeholder, usar una imagen local
+      if (!row.image_url || row.image_url.includes('placeholder') || row.image_url.includes('product_')) {
+        // Asignar una imagen local basada en el ID del producto para variedad
+        const imageNumber = (row.id % 10) + 1;
+        row.image_url = `/assets/images/flowers/flower${Math.min(imageNumber, 10)}.svg`;
+      }
+      return row;
+    });
+    
     // Contar el total de productos en la categoría
     db.get(`SELECT COUNT(*) as total FROM products WHERE category = ?`, [category], (err, countRow) => {
       if (err) {
@@ -138,7 +169,7 @@ router.get('/category/:category', (req, res) => {
       const totalPages = Math.ceil(total / limit);
       
       res.json({
-        products: rows,
+        products: processedRows,
         pagination: {
           currentPage: page,
           totalPages: totalPages,
@@ -165,6 +196,17 @@ router.get('/search/:query', (req, res) => {
       return res.status(500).json({ error: 'Error al buscar productos' });
     }
     
+    // Procesar las imágenes de los productos para usar rutas locales por defecto
+    const processedRows = rows.map(row => {
+      // Si no tiene imagen o la imagen es de placeholder, usar una imagen local
+      if (!row.image_url || row.image_url.includes('placeholder') || row.image_url.includes('product_')) {
+        // Asignar una imagen local basada en el ID del producto para variedad
+        const imageNumber = (row.id % 10) + 1;
+        row.image_url = `/assets/images/flowers/flower${Math.min(imageNumber, 10)}.svg`;
+      }
+      return row;
+    });
+    
     // Contar el total de productos encontrados
     db.get(`SELECT COUNT(*) as total FROM products WHERE name LIKE ?`, [query], (err, countRow) => {
       if (err) {
@@ -176,7 +218,7 @@ router.get('/search/:query', (req, res) => {
       const totalPages = Math.ceil(total / limit);
       
       res.json({
-        products: rows,
+        products: processedRows,
         pagination: {
           currentPage: page,
           totalPages: totalPages,

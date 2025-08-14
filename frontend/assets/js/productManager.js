@@ -1,6 +1,5 @@
 // productManager.js - Gestión de productos y carga de datos
 import { API_BASE_URL } from './utils.js';
-import CartUtils from './cartUtils.js';
 
 class ProductManager {
   constructor() {
@@ -88,20 +87,6 @@ class ProductManager {
         this.flowerImages = localImages;
       }
       
-      // Asignar imágenes de flores a los productos si no tienen imagen válida
-      const productsWithImages = data.products.map(product => {
-        // Si el producto no tiene una imagen válida, asignar una de la API de flores
-        if (!product.image_url || product.image_url.includes('placeholder') || product.image_url.includes('product_')) {
-          product.image_url = this.getNextFlowerImage();
-        }
-        return product;
-      });
-      
-      // Actualizar los datos con los productos modificados
-      const updatedData = {
-        ...data,
-        products: productsWithImages
-      };
       
       // Guardar en caché solo si es la primera página sin filtros
       if (!category && !search && page === 1) {
@@ -118,31 +103,6 @@ class ProductManager {
     }
   }
 
-  // Función para cargar imágenes de flores de una API externa
-  async loadFlowerImages() {
-    // Comenzar con un conjunto de imágenes locales verificadas
-    const localImages = [
-      '/assets/images/flowers/flower1.svg',
-      '/assets/images/flowers/flower2.svg',
-      '/assets/images/flowers/flower3.svg',
-      '/assets/images/flowers/flower4.svg',
-      '/assets/images/flowers/flower5.svg',
-      '/assets/images/flowers/flower6.svg',
-      '/assets/images/flowers/flower7.svg',
-      '/assets/images/flowers/flower8.svg',
-      '/assets/images/flowers/flower9.svg',
-      '/assets/images/flowers/flower10.svg'
-    ];
-    
-    this.flowerImages = localImages;
-    
-    try {
-      // No intentar cargar imágenes externas para evitar errores 404
-      console.log('Usando solo imágenes locales para evitar problemas de red');
-    } catch (error) {
-      // Silenciar errores
-    }
-  }
 
   // Función para obtener la siguiente imagen de flor en la secuencia
   getNextFlowerImage() {
@@ -216,17 +176,6 @@ class ProductManager {
   }
 }
 
-// Función para manejar errores de carga de imágenes
-function handleImageError(imgElement) {
-  console.debug('Error al cargar imagen:', imgElement.src);
-  
-  // Usar imagen de respaldo local
-  imgElement.src = '/assets/images/default-avatar.svg';
-  imgElement.alt = 'Imagen no disponible';
-  imgElement.onerror = null; // Prevenir bucle infinito
-}
-
 // Exportar una instancia única
 const productManager = new ProductManager();
 export default productManager;
-export { handleImageError };
