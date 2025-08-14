@@ -1,5 +1,36 @@
 // utils.js - Funciones de utilidad compartidas
 
+// Limpiar datos residuales al cargar la aplicación
+(function() {
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
+  
+  // Si no hay token pero hay datos de usuario, limpiarlos
+  if (!token && user) {
+    localStorage.removeItem('user');
+  }
+  
+  // Si hay token pero es inválido, limpiar ambos
+  if (token) {
+    try {
+      // Intentar parsear como JWT
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const currentTime = Date.now() / 1000;
+      if (payload.exp < currentTime) {
+        // Token expirado, limpiar
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    } catch (e) {
+      // No es un JWT válido, verificar longitud
+      if (token.length < 10) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    }
+  }
+})();
+
 // Determinar la URL base del API según el entorno
 const getApiBaseUrl = () => {
   // En producción, usar la URL del backend en Render

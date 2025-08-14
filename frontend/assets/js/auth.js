@@ -7,23 +7,22 @@ function initUserMenu() {
   const loginLink = document.getElementById('loginLink');
   const userNameElement = document.getElementById('userName');
   const logoutLink = document.getElementById('logoutLink');
-  const userInfo = document.querySelector('.user-info');
   const userDropdown = document.querySelector('.user-dropdown');
   const userMenuButton = document.getElementById('userMenuButton');
   
-  // Limpiar cualquier contenido previo del menú
+  // Si no existen los elementos necesarios, salir de la función
+  if (!userMenu || !loginLink) {
+    return;
+  }
+  
+  // Limpiar cualquier contenido previo
   if (userNameElement) {
     userNameElement.textContent = '';
   }
   
-  // Verificar si hay datos residuales en localStorage y limpiarlos si no hay token válido
-  if (!isAuthenticated()) {
-    // Limpiar datos residuales
-    localStorage.removeItem('user');
-  }
-  
-  if (isAuthenticated() && user && userMenu && loginLink) {
-    // Mostrar el menú de usuario
+  // Verificar autenticación y mostrar elementos apropiados
+  if (isAuthenticated() && user) {
+    // Usuario autenticado - mostrar menú de usuario
     userMenu.style.display = 'block';
     loginLink.style.display = 'none';
     
@@ -47,11 +46,16 @@ function initUserMenu() {
     
     // Manejar clic en el botón de usuario (si existe)
     if (userMenuButton && userDropdown) {
-      userMenuButton.addEventListener('click', function(e) {
+      // Eliminar event listeners previos para evitar duplicados
+      const newMenuButton = userMenuButton.cloneNode(true);
+      userMenuButton.parentNode.replaceChild(newMenuButton, userMenuButton);
+      const freshMenuButton = document.getElementById('userMenuButton');
+      
+      freshMenuButton.addEventListener('click', function(e) {
         e.stopPropagation();
         userMenu.classList.toggle('show');
         const isExpanded = userMenu.classList.contains('show');
-        userMenuButton.setAttribute('aria-expanded', isExpanded);
+        freshMenuButton.setAttribute('aria-expanded', isExpanded);
         
         // Si el menú se abre, enfocar el primer elemento
         if (isExpanded) {
@@ -66,9 +70,9 @@ function initUserMenu() {
       document.addEventListener('click', function(e) {
         if (userMenu.classList.contains('show') && 
             !userMenu.contains(e.target) && 
-            e.target !== userMenuButton) {
+            e.target !== freshMenuButton) {
           userMenu.classList.remove('show');
-          userMenuButton.setAttribute('aria-expanded', 'false');
+          freshMenuButton.setAttribute('aria-expanded', 'false');
         }
       });
       
@@ -91,27 +95,29 @@ function initUserMenu() {
           case 'Escape':
             e.preventDefault();
             userMenu.classList.remove('show');
-            userMenuButton.setAttribute('aria-expanded', 'false');
-            userMenuButton.focus();
+            freshMenuButton.setAttribute('aria-expanded', 'false');
+            freshMenuButton.focus();
             break;
         }
       });
     }
-
-  } else if (userMenu && loginLink) {
-    // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
+  } else {
+    // Usuario no autenticado - mostrar enlace de inicio de sesión
     userMenu.style.display = 'none';
     loginLink.style.display = 'block';
     
     // Asegurarse de que el dropdown esté oculto
-    if (userDropdown) {
-      userDropdown.classList.remove('show');
+    if (userMenu.classList.contains('show')) {
+      userMenu.classList.remove('show');
     }
     
     // Limpiar cualquier contenido del nombre de usuario
     if (userNameElement) {
       userNameElement.textContent = '';
     }
+    
+    // Limpiar datos residuales de usuario en localStorage
+    localStorage.removeItem('user');
   }
 }
 
