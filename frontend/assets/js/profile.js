@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!user) {
         // Si no hay usuario, redirigir al login
-        window.location.href = 'login.html';
+        window.location.href = '/login.html';
         return;
     }
     
@@ -46,7 +46,7 @@ function setupEventListeners() {
             localStorage.removeItem('user');
             
             // Redirigir a la página principal
-            window.location.href = 'index.html';
+            window.location.href = '/index.html';
         });
     }
     
@@ -60,7 +60,7 @@ function setupEventListeners() {
             localStorage.removeItem('user');
             
             // Redirigir a la página principal
-            window.location.href = 'index.html';
+            window.location.href = '/index.html';
         });
     }
     

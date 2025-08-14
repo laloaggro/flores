@@ -119,6 +119,11 @@ app.get('/:page.html', (req, res) => {
     }
 });
 
+// Para cualquier otra ruta, servir index.html (para aplicaciones de una sola página)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
 // Iniciar el servidor
 app.listen(PORT, () => {
     const message = `🚀 Servidor backend corriendo en http://localhost:${PORT}`;

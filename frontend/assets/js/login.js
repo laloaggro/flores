@@ -51,14 +51,18 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.user) {
-          // Guardar información del usuario en localStorage
-          localStorage.setItem('user', JSON.stringify(data.user));
+        if (data.user && data.token) {
+          // Guardar información del usuario y token en localStorage
+          const userData = {
+            ...data.user,
+            token: data.token
+          };
+          localStorage.setItem('user', JSON.stringify(userData));
           showNotification('Inicio de sesión exitoso', 'success');
           
           // Redirigir a la página de perfil después de 1 segundo
           setTimeout(() => {
-            window.location.href = 'profile.html';
+            window.location.href = '/profile.html';
           }, 1000);
         } else {
           showNotification(data.error || 'Error en el inicio de sesión', 'error');
