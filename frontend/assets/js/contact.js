@@ -1,8 +1,3 @@
-const API_BASE_URL = 'http://localhost:3000'; // o la URL de tu API
-
-export { API_BASE_URL };
-import { API_BASE_URL } from './utils.js';
-
 document.addEventListener('DOMContentLoaded', function() {
   // Obtener el formulario de contacto
   const contactForm = document.getElementById('contactForm');
@@ -36,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showFormMessage('Enviando mensaje...', 'info');
     
     // Enviar datos al servidor
-    fetch(`${API_BASE_URL}/api/contact`, {
+    fetch('/api/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -60,12 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Función para mostrar mensajes en el formulario
   function showFormMessage(message, type) {
-    // Verificar que el elemento formMessage exista
-    if (!formMessage) {
-      console.warn('Elemento formMessage no encontrado');
-      return;
-    }
-    
     // Eliminar clases previas
     formMessage.className = 'form-message';
     

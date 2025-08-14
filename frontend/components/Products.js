@@ -39,13 +39,7 @@ const Products = async () => {
   console.log('Iniciando carga de productos desde la base de datos');
 
   try {
-    // Aplicar un timeout de 5 segundos para evitar demoras excesivas
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Tiempo de espera agotado')), 5000)
-    );
-    
-    const dataPromise = productManager.loadProducts(1, 8);
-    const data = await Promise.race([dataPromise, timeoutPromise]);
+    const data = await productManager.loadProducts(1, 8);
     
     if (data) {
       cachedProducts = data.products;
@@ -57,9 +51,7 @@ const Products = async () => {
   } catch (error) {
     isLoading = false;
     console.error('Error al cargar productos:', error);
-    
-    // En caso de error o timeout, mostrar productos de ejemplo
-    return renderTemplate(generateFallbackProducts());
+    return renderTemplate('<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>');
   }
 };
 
@@ -69,56 +61,7 @@ function generateProductsHTML(products) {
     return '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
   }
   
-  return products.map(product => {
-    // Para productos con imágenes locales, no usar el proxy
-    if (product.image_url && (product.image_url.startsWith('/') || product.image_url.startsWith('./'))) {
-      return ProductCard(product);
-    }
-    
-    // Usar el proxy solo para imágenes externas
-    const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(product.image_url)}`;
-    return ProductCard({...product, image_url: proxyUrl});
-  }).join('');
-}
-
-// Función para generar productos de respaldo en caso de error
-function generateFallbackProducts() {
-  const fallbackProducts = [
-    {
-      id: 1,
-      name: "Ramo de Rosas Rojas",
-      description: "Hermoso ramo de rosas rojas frescas, ideal para ocasiones especiales",
-      price: 12000,
-      image_url: "/assets/images/flowers/flower1.svg",
-      category: "Ramos"
-    },
-    {
-      id: 2,
-      name: "Arreglo de Girasoles",
-      description: "Brillante arreglo de girasoles frescos que alegrará cualquier espacio",
-      price: 15000,
-      image_url: "/assets/images/flowers/flower2.svg",
-      category: "Arreglos"
-    },
-    {
-      id: 3,
-      name: "Tulipanes Coloridos",
-      description: "Elegante combinación de tulipanes de colores vibrantes",
-      price: 10000,
-      image_url: "/assets/images/flowers/flower3.svg",
-      category: "Ramos"
-    },
-    {
-      id: 4,
-      name: "Lirios Blancos",
-      description: "Refinado arreglo de lirios blancos, símbolo de pureza y elegancia",
-      price: 13500,
-      image_url: "/assets/images/flowers/flower4.svg",
-      category: "Arreglos"
-    }
-  ];
-  
-  return fallbackProducts.map(product => ProductCard(product)).join('');
+  return products.map(product => ProductCard(product)).join('');
 }
 
 export { Products, generateProductsHTML };

@@ -2,7 +2,6 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const router = express.Router();
-const isAdmin = require('../middleware/admin');
 
 // Conectar a la base de datos
 const dbPath = path.join(__dirname, '..', 'products.db');
@@ -14,7 +13,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Ruta para obtener todas las categorías únicas (sin autenticación requerida)
+// Ruta para obtener todas las categorías únicas
 router.get('/categories', (req, res) => {
   // Obtener categorías únicas
   db.all(`SELECT DISTINCT category FROM products ORDER BY category`, (err, rows) => {
@@ -42,8 +41,7 @@ router.get('/', (req, res) => {
   const countParams = [];
   
   // Agregar filtros si existen
-  // Solo aplicar filtro de categoría si no es una cadena vacía
-  if (category && category !== '') {
+  if (category) {
     query += ' WHERE category = ?';
     countQuery += ' WHERE category = ?';
     params.push(category);
@@ -51,7 +49,7 @@ router.get('/', (req, res) => {
   }
   
   if (search) {
-    if (category && category !== '') {
+    if (category) {
       query += ' AND name LIKE ?';
       countQuery += ' AND name LIKE ?';
     } else {

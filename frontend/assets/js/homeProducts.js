@@ -1,6 +1,5 @@
 import productManager from './productManager.js';
-import ProductCard, { handleImageError } from '../../components/ProductCard.js';
-import CartUtils from './cartUtils.js';
+import ProductCard from '../../components/ProductCard.js';
 import { showNotification } from './utils.js';
 
 // Función para cargar y mostrar productos en la página principal
@@ -30,14 +29,38 @@ async function loadHomeProducts() {
       document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', function() {
           const product = {
-            id: this.dataset.id,
+            id: parseInt(this.dataset.id),
             name: this.dataset.name,
             price: parseFloat(this.dataset.price),
             image: this.dataset.image
           };
           
-          // Agregar producto al carrito usando CartUtils
-          CartUtils.addToCart(product);
+          // Agregar producto al carrito usando localStorage
+          let cart = JSON.parse(localStorage.getItem('cart')) || [];
+          const existingItemIndex = cart.findIndex(item => item.id === product.id);
+          
+          if (existingItemIndex > -1) {
+            // Si el producto ya está en el carrito, aumentar la cantidad
+            cart[existingItemIndex].quantity += 1;
+          } else {
+            // Si es un producto nuevo, agregarlo al carrito
+            cart.push({
+              ...product,
+              quantity: 1
+            });
+          }
+          
+          // Guardar el carrito actualizado en localStorage
+          localStorage.setItem('cart', JSON.stringify(cart));
+          
+          // Actualizar el contador del carrito
+          const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+          const cartCount = document.querySelector('.cart-count');
+          if (cartCount) {
+            cartCount.textContent = totalItems;
+            cartCount.classList.remove('hidden');
+          }
+          
           showNotification(`Producto "${product.name}" agregado al carrito`, 'success');
         });
       });
@@ -52,7 +75,33 @@ async function loadHomeProducts() {
 }
 
 // Cargar productos cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', loadHomeProducts);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadHomeProducts);
+} else {
+  loadHomeProducts();
+}
 
 // Exportar la función handleImageError al ámbito global
-window.handleImageError = handleImageError;
+window.handleImageError = (imgElement) => {
+  // Intentar con una imagen de respaldo verificada
+  const fallbackImages = [
+    '/assets/images/flowers/flower1.svg',
+    '/assets/images/flowers/flower2.svg',
+    '/assets/images/flowers/flower3.svg',
+    '/assets/images/flowers/flower4.svg',
+    '/assets/images/flowers/flower5.svg'
+  ];
+  
+  // Encontrar una imagen de respaldo que no sea la que falló
+  const workingFallback = fallbackImages.find(img => img !== imgElement.src);
+  
+  if (workingFallback) {
+    imgElement.src = workingFallback;
+  } else {
+    // Fallback absoluto
+    imgElement.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"%3E%3Crect width="300" height="300" fill="%23e0e0e0"/%3E%3Ccircle cx="150" cy="150" r="80" fill="%23a5d6a7"/%3E%3Ccircle cx="110" cy="120" r="15" fill="%234caf50"/%3E%3Ccircle cx="190" cy="120" r="15" fill="%234caf50"/%3E%3Cpath d="M150 170 Q170 200 150 230 Q130 200 150 170" fill="%234caf50"/%3E%3C/svg%3E';
+  }
+  
+  imgElement.alt = 'Imagen no disponible';
+  imgElement.onerror = null; // Prevenir bucle infinito si también falla la imagen de marcador de posición
+};

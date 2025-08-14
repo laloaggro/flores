@@ -1,81 +1,67 @@
-import { isAuthenticated, logout, isAdmin } from './utils.js';
-import { updateCartCount } from './cart.js';
+import { updateCartCount, getUser, isAuthenticated, logout } from './utils.js';
 
 // Función para inicializar el menú de usuario
 function initUserMenu() {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = getUser();
   const userMenu = document.getElementById('userMenu');
   const loginLink = document.getElementById('loginLink');
   const userNameElement = document.getElementById('userName');
   const logoutLink = document.getElementById('logoutLink');
-  const userInfo = document.querySelector('.user-info');
-  const userDropdown = document.querySelector('.user-dropdown');
   
   if (isAuthenticated() && user && userMenu && loginLink) {
     // Mostrar el menú de usuario
-    userMenu.classList.add('visible');
     userMenu.style.display = 'block';
     loginLink.style.display = 'none';
     
     // Mostrar el nombre del usuario
     if (userNameElement) {
-      // Usar textContent para prevenir XSS
       userNameElement.textContent = user.name || 'Usuario';
-    }
-    
-    // Mostrar enlace de administración si el usuario es administrador
-    const adminLink = document.getElementById('adminLink');
-    if (adminLink) {
-      adminLink.style.display = isAdmin() ? 'block' : 'none';
     }
     
     // Configurar el cierre de sesión
     if (logoutLink) {
       logoutLink.addEventListener('click', function(e) {
         e.preventDefault();
-        logout();
-        window.location.reload();
+        handleLogout();
       });
     }
-    
-    // Configurar el toggle del dropdown
-    if (userInfo && userDropdown) {
-      userInfo.addEventListener('click', function() {
-        userDropdown.classList.toggle('show');
-      });
-      
-      // Cerrar el dropdown al hacer clic fuera
-      document.addEventListener('click', function(e) {
-        if (!userInfo.contains(e.target)) {
-          userDropdown.classList.remove('show');
-        }
-      });
-    }
-  } else if (loginLink) {
-    // Asegurarse de que el enlace de login sea visible
+  } else if (userMenu && loginLink) {
+    // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
+    userMenu.style.display = 'none';
     loginLink.style.display = 'block';
   }
 }
 
-// Función para verificar si el usuario está autenticado y redirigir si no lo está
-function requireAuth(redirectUrl = '/login.html') {
+// Función para manejar el cierre de sesión
+function handleLogout() {
+  logout();
+  window.location.href = '/index.html';
+}
+
+// Función para verificar la autenticación del usuario
+function checkAuth() {
   if (!isAuthenticated()) {
-    window.location.href = redirectUrl;
-    return false;
+    // Redirigir al login si no está autenticado en páginas que lo requieren
+    if (window.location.pathname.includes('profile.html')) {
+      window.location.href = '/login.html';
+    }
   }
-  return true;
 }
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
   initUserMenu();
+  checkAuth();
   updateCartCount();
-  
-  // Aplicar protección a páginas que requieren autenticación
-  if (window.location.pathname.includes('profile.html')) {
-    requireAuth();
-  }
 });
 
+// También ejecutar initUserMenu inmediatamente si el DOM ya está cargado
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initUserMenu);
+} else {
+  // DOM ya está cargado
+  initUserMenu();
+}
+
 // Exportar funciones
-export { initUserMenu, requireAuth };
+export { initUserMenu, handleLogout, checkAuth };
