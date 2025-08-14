@@ -2,6 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -23,12 +24,34 @@ db.serialize(() => {
     email TEXT UNIQUE NOT NULL,
     phone TEXT,
     password TEXT NOT NULL,
+    role TEXT DEFAULT 'user',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`, (err) => {
     if (err) {
       console.error('Error al crear la tabla de usuarios:', err.message);
     } else {
       console.log('Tabla de usuarios verificada o creada');
+    }
+  });
+  
+  // Crear un usuario administrador por defecto si no existe ninguno
+  db.get(`SELECT COUNT(*) as count FROM users`, (err, row) => {
+    if (!err && row.count === 0) {
+      const defaultAdminPassword = 'admin123';
+      bcrypt.hash(defaultAdminPassword, 10, (err, hashedPassword) => {
+        if (!err) {
+          db.run(`INSERT INTO users (name, email, phone, password, role) VALUES (?, ?, ?, ?, ?)`,
+            ['Administrador', 'admin@arreglosvictoria.com', '+56963603177', hashedPassword, 'admin'],
+            (err) => {
+              if (err) {
+                console.error('Error al crear usuario administrador:', err.message);
+              } else {
+                console.log('Usuario administrador creado por defecto');
+              }
+            }
+          );
+        }
+      });
     }
   });
 });
@@ -107,7 +130,7 @@ router.post('/login', async (req, res) => {
   try {
     // Buscar usuario por email
     const user = await new Promise((resolve, reject) => {
-      db.get(`SELECT id, name, email, phone, password FROM users WHERE email = ?`, [email], (err, row) => {
+      db.get(`SELECT id, name, email, phone, password, role FROM users WHERE email = ?`, [email], (err, row) => {
         if (err) {
           reject(err);
         } else {
@@ -127,12 +150,25 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
     
+    // Generar token JWT
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name,
+        role: user.role
+      }, 
+      process.env.JWT_SECRET || 'secreto_por_defecto',
+      { expiresIn: '24h' }
+    );
+    
     // No enviar la contraseña en la respuesta
     const { password: _, ...userWithoutPassword } = user;
     
     res.json({
       message: 'Inicio de sesión exitoso',
-      user: userWithoutPassword
+      user: userWithoutPassword,
+      token: token
     });
   } catch (error) {
     console.error('Error al iniciar sesión:', error.message);
@@ -142,7 +178,7 @@ router.post('/login', async (req, res) => {
 
 // Ruta para obtener todos los usuarios (solo para pruebas)
 router.get('/', (req, res) => {
-  db.all(`SELECT id, name, email, phone, created_at FROM users`, (err, rows) => {
+  db.all(`SELECT id, name, email, phone, role, created_at FROM users`, (err, rows) => {
     if (err) {
       console.error('Error al obtener usuarios:', err.message);
       return res.status(500).json({ error: 'Error al obtener usuarios' });
