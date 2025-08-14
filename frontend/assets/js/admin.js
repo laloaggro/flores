@@ -243,17 +243,158 @@ async function loadProducts() {
 
 // Editar producto
 function editProduct(productId) {
-    // Mostrar formulario para editar producto
-    showMessage(`Funcionalidad de edición para producto ID: ${productId} - En desarrollo`, 'info');
+    // Obtener los datos del producto
+    fetch(`/api/products/${productId}`)
+        .then(response => response.json())
+        .then(product => {
+            // Mostrar formulario para editar producto
+            showEditProductForm(product);
+        })
+        .catch(error => {
+            console.error('Error al obtener producto:', error);
+            showMessage('Error al obtener datos del producto', 'error');
+        });
+}
+
+// Mostrar formulario para editar producto
+function showEditProductForm(product) {
+    // Crear modal para editar producto
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'editProductModal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Producto</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editProductForm">
+                    <input type="hidden" id="productId" value="${product.id}">
+                    <div class="form-group">
+                        <label for="editProductName">Nombre:</label>
+                        <input type="text" id="editProductName" class="form-input" value="${product.name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductCategory">Categoría:</label>
+                        <input type="text" id="editProductCategory" class="form-input" value="${product.category}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductPrice">Precio:</label>
+                        <input type="number" id="editProductPrice" class="form-input" min="0" step="100" value="${product.price}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductImage">URL de Imagen:</label>
+                        <input type="text" id="editProductImage" class="form-input" value="${product.image || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductDescription">Descripción:</label>
+                        <textarea id="editProductDescription" class="form-input" rows="3">${product.description || ''}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+                </form>
+            </div>
+        </div>
+    `;
+    
+    // Añadir modal al documento
+    document.body.appendChild(modal);
+    
+    // Configurar eventos del modal
+    const closeBtn = modal.querySelector('.close');
+    closeBtn.addEventListener('click', function() {
+        modal.remove();
+    });
+    
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    // Configurar envío del formulario
+    const form = document.getElementById('editProductForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        updateProduct(product.id);
+    });
+    
+    // Mostrar modal
+    modal.style.display = 'block';
+}
+
+// Actualizar producto
+async function updateProduct(productId) {
+    try {
+        const formData = new FormData(document.getElementById('editProductForm'));
+        const productData = {
+            id: productId,
+            name: formData.get('editProductName'),
+            category: formData.get('editProductCategory'),
+            price: parseFloat(formData.get('editProductPrice')),
+            image: formData.get('editProductImage'),
+            description: formData.get('editProductDescription')
+        };
+        
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(productData)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Error al actualizar producto');
+        }
+        
+        // Cerrar modal
+        document.getElementById('editProductModal').remove();
+        
+        // Mostrar mensaje de éxito
+        showMessage('Producto actualizado correctamente', 'success');
+        
+        // Recargar lista de productos
+        loadProducts();
+    } catch (error) {
+        console.error('Error al actualizar producto:', error);
+        showMessage('Error al actualizar producto', 'error');
+    }
 }
 
 // Eliminar producto
 function deleteProduct(productId) {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
         // Lógica para eliminar el producto
-        showMessage(`Producto ID: ${productId} eliminado - En desarrollo`, 'success');
+        removeProduct(productId);
+    }
+}
+
+// Eliminar producto de la base de datos
+async function removeProduct(productId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/products/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Error al eliminar producto');
+        }
+        
+        // Mostrar mensaje de éxito
+        showMessage('Producto eliminado correctamente', 'success');
+        
         // Recargar lista de productos
         loadProducts();
+    } catch (error) {
+        console.error('Error al eliminar producto:', error);
+        showMessage('Error al eliminar producto', 'error');
     }
 }
 

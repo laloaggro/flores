@@ -1,6 +1,7 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 // Conectar a la base de datos
@@ -12,6 +13,35 @@ const db = new sqlite3.Database(dbPath, (err) => {
     console.log('Conectado a la base de datos de productos');
   }
 });
+
+// Middleware para verificar el token y el rol de administrador
+const authenticateAdmin = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ error: 'No se proporcionó token de autenticación' });
+  }
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secreto_por_defecto');
+    
+    // Verificar si el usuario es administrador
+    if (decoded.role !== 'admin') {
+      return res.status(403).json({ error: 'Acceso denegado. Se requiere rol de administrador' });
+    }
+    
+    req.user = decoded;
+    next();
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expirado' });
+    }
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ error: 'Token inválido' });
+    }
+    return res.status(500).json({ error: 'Error al verificar el token' });
+  }
+};
 
 // Ruta para obtener todas las categorías únicas
 router.get('/categories', (req, res) => {
@@ -185,6 +215,118 @@ router.get('/search/:query', (req, res) => {
           hasPrevPage: page > 1
         }
       });
+    });
+  });
+});
+
+// Ruta para crear un nuevo producto (solo para administradores)
+router.post('/', authenticateAdmin, (req, res) => {
+  const { name, description, price, category, image } = req.body;
+  
+  // Validar campos requeridos
+  if (!name || !price || !category) {
+    return res.status(400).json({ 
+      error: 'Los campos nombre, precio y categoría son obligatorios' 
+    });
+  }
+  
+  // Insertar nuevo producto
+  const stmt = db.prepare(`INSERT INTO products (name, description, price, category, image) VALUES (?, ?, ?, ?, ?)`);
+  stmt.run([name, description, price, category, image], function(err) {
+    if (err) {
+      console.error('Error al crear producto:', err.message);
+      return res.status(500).json({ error: 'Error al crear producto' });
+    }
+    
+    // Devolver el producto creado con su ID
+    res.status(201).json({
+      id: this.lastID,
+      name,
+      description,
+      price,
+      category,
+      image
+    });
+  });
+  stmt.finalize();
+});
+
+// Ruta para actualizar un producto (solo para administradores)
+router.put('/:id', authenticateAdmin, (req, res) => {
+  const id = req.params.id;
+  const { name, description, price, category, image } = req.body;
+  
+  // Validar campos requeridos
+  if (!name || !price || !category) {
+    return res.status(400).json({ 
+      error: 'Los campos nombre, precio y categoría son obligatorios' 
+    });
+  }
+  
+  // Verificar si el producto existe
+  db.get(`SELECT id FROM products WHERE id = ?`, [id], (err, row) => {
+    if (err) {
+      console.error('Error al verificar producto:', err.message);
+      return res.status(500).json({ error: 'Error al verificar producto' });
+    }
+    
+    if (!row) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    
+    // Actualizar el producto
+    const stmt = db.prepare(`UPDATE products SET name = ?, description = ?, price = ?, category = ?, image = ? WHERE id = ?`);
+    stmt.run([name, description, price, category, image, id], function(err) {
+      if (err) {
+        console.error('Error al actualizar producto:', err.message);
+        return res.status(500).json({ error: 'Error al actualizar producto' });
+      }
+      
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'Producto no encontrado' });
+      }
+      
+      // Devolver el producto actualizado
+      res.json({
+        id,
+        name,
+        description,
+        price,
+        category,
+        image
+      });
+    });
+    stmt.finalize();
+  });
+});
+
+// Ruta para eliminar un producto (solo para administradores)
+router.delete('/:id', authenticateAdmin, (req, res) => {
+  const id = req.params.id;
+  
+  // Verificar si el producto existe
+  db.get(`SELECT id FROM products WHERE id = ?`, [id], (err, row) => {
+    if (err) {
+      console.error('Error al verificar producto:', err.message);
+      return res.status(500).json({ error: 'Error al verificar producto' });
+    }
+    
+    if (!row) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    
+    // Eliminar el producto
+    db.run(`DELETE FROM products WHERE id = ?`, [id], function(err) {
+      if (err) {
+        console.error('Error al eliminar producto:', err.message);
+        return res.status(500).json({ error: 'Error al eliminar producto' });
+      }
+      
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'Producto no encontrado' });
+      }
+      
+      res.json({ message: 'Producto eliminado correctamente' });
     });
   });
 });
