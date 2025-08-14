@@ -66,6 +66,9 @@ function initAdminPanel() {
     
     // Cargar usuarios
     loadUsers();
+    
+    // Configurar event listeners para botones de acción
+    setupActionButtons();
 }
 
 // Cargar estadísticas del dashboard
@@ -102,11 +105,11 @@ async function loadProducts() {
                     <td>${product.category}</td>
                     <td>$${parseFloat(product.price).toLocaleString('es-CL')}</td>
                     <td>
-                        <button class="btn-icon edit-product" data-id="${product.id}">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn btn-sm btn-secondary edit-product" data-id="${product.id}">
+                            <i class="fas fa-edit"></i> Editar
                         </button>
-                        <button class="btn-icon delete-product" data-id="${product.id}">
-                            <i class="fas fa-trash"></i>
+                        <button class="btn btn-sm btn-danger delete-product" data-id="${product.id}">
+                            <i class="fas fa-trash"></i> Eliminar
                         </button>
                     </td>
                 </tr>
@@ -114,6 +117,9 @@ async function loadProducts() {
         } else {
             tbody.innerHTML = '<tr><td colspan="5">No hay productos disponibles</td></tr>';
         }
+        
+        // Configurar event listeners para los botones de acción
+        setupActionButtons();
     } catch (error) {
         console.error('Error al cargar productos:', error);
         document.getElementById('productsTableBody').innerHTML = '<tr><td colspan="5">Error al cargar productos</td></tr>';
@@ -134,8 +140,8 @@ async function loadOrders() {
                     <td>$45.990</td>
                     <td><span class="status pending">Pendiente</span></td>
                     <td>
-                        <button class="btn-icon edit-order" data-id="1">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn btn-sm btn-secondary edit-order" data-id="1">
+                            <i class="fas fa-edit"></i> Editar
                         </button>
                     </td>
                 </tr>
@@ -146,12 +152,15 @@ async function loadOrders() {
                     <td>$32.500</td>
                     <td><span class="status completed">Completado</span></td>
                     <td>
-                        <button class="btn-icon edit-order" data-id="2">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn btn-sm btn-secondary edit-order" data-id="2">
+                            <i class="fas fa-edit"></i> Editar
                         </button>
                     </td>
                 </tr>
             `;
+            
+            // Configurar event listeners para los botones de acción
+            setupActionButtons();
         }, 1000);
     } catch (error) {
         console.error('Error al cargar pedidos:', error);
@@ -173,11 +182,11 @@ async function loadUsers() {
                     <td>+56912345678</td>
                     <td>admin</td>
                     <td>
-                        <button class="btn-icon edit-user" data-id="1">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn btn-sm btn-secondary edit-user" data-id="1">
+                            <i class="fas fa-edit"></i> Editar
                         </button>
-                        <button class="btn-icon delete-user" data-id="1">
-                            <i class="fas fa-trash"></i>
+                        <button class="btn btn-sm btn-danger delete-user" data-id="1">
+                            <i class="fas fa-trash"></i> Eliminar
                         </button>
                     </td>
                 </tr>
@@ -188,15 +197,18 @@ async function loadUsers() {
                     <td>+56987654321</td>
                     <td>user</td>
                     <td>
-                        <button class="btn-icon edit-user" data-id="2">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn btn-sm btn-secondary edit-user" data-id="2">
+                            <i class="fas fa-edit"></i> Editar
                         </button>
-                        <button class="btn-icon delete-user" data-id="2">
-                            <i class="fas fa-trash"></i>
+                        <button class="btn btn-sm btn-danger delete-user" data-id="2">
+                            <i class="fas fa-trash"></i> Eliminar
                         </button>
                     </td>
                 </tr>
             `;
+            
+            // Configurar event listeners para los botones de acción
+            setupActionButtons();
         }, 1000);
     } catch (error) {
         console.error('Error al cargar usuarios:', error);
@@ -230,6 +242,95 @@ function setupMenuNavigation() {
             document.getElementById(targetSection).classList.add('active');
         });
     });
+}
+
+// Configurar botones de acción
+function setupActionButtons() {
+    // Botón de agregar producto
+    const addProductBtn = document.getElementById('addProductBtn');
+    if (addProductBtn) {
+        addProductBtn.addEventListener('click', showAddProductModal);
+    }
+    
+    // Botones de editar producto
+    document.querySelectorAll('.edit-product').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            showEditProductModal(productId);
+        });
+    });
+    
+    // Botones de eliminar producto
+    document.querySelectorAll('.delete-product').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            deleteProduct(productId);
+        });
+    });
+    
+    // Botones de editar usuario
+    document.querySelectorAll('.edit-user').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.getAttribute('data-id');
+            showEditUserModal(userId);
+        });
+    });
+    
+    // Botones de eliminar usuario
+    document.querySelectorAll('.delete-user').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.getAttribute('data-id');
+            deleteUser(userId);
+        });
+    });
+    
+    // Botones de editar pedido
+    document.querySelectorAll('.edit-order').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-id');
+            showEditOrderModal(orderId);
+        });
+    });
+}
+
+// Mostrar modal para agregar producto
+function showAddProductModal() {
+    alert('Funcionalidad para agregar producto aún no implementada');
+    // Aquí se implementaría la lógica para mostrar un modal de agregar producto
+}
+
+// Mostrar modal para editar producto
+function showEditProductModal(productId) {
+    alert(`Funcionalidad para editar producto con ID ${productId} aún no implementada`);
+    // Aquí se implementaría la lógica para mostrar un modal de edición de producto
+}
+
+// Eliminar producto
+function deleteProduct(productId) {
+    if (confirm(`¿Estás seguro de que deseas eliminar el producto con ID ${productId}?`)) {
+        alert(`Funcionalidad para eliminar producto con ID ${productId} aún no implementada`);
+        // Aquí se implementaría la lógica para eliminar un producto
+    }
+}
+
+// Mostrar modal para editar usuario
+function showEditUserModal(userId) {
+    alert(`Funcionalidad para editar usuario con ID ${userId} aún no implementada`);
+    // Aquí se implementaría la lógica para mostrar un modal de edición de usuario
+}
+
+// Eliminar usuario
+function deleteUser(userId) {
+    if (confirm(`¿Estás seguro de que deseas eliminar el usuario con ID ${userId}?`)) {
+        alert(`Funcionalidad para eliminar usuario con ID ${userId} aún no implementada`);
+        // Aquí se implementaría la lógica para eliminar un usuario
+    }
+}
+
+// Mostrar modal para editar pedido
+function showEditOrderModal(orderId) {
+    alert(`Funcionalidad para editar pedido con ID ${orderId} aún no implementada`);
+    // Aquí se implementaría la lógica para mostrar un modal de edición de pedido
 }
 
 // Función para mostrar mensajes al usuario
