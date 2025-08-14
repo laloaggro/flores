@@ -1,4 +1,5 @@
 // admin.js - Funcionalidad del panel de administración
+import { initUserMenu } from '../assets/js/auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si el usuario es administrador
@@ -9,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Manejar la navegación del menú
     setupMenuNavigation();
+    
+    // Inicializar el menú de usuario
+    initUserMenu();
 });
 
 // Verificar si el usuario tiene acceso de administrador
