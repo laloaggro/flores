@@ -28,7 +28,7 @@ router.get('/categories', (req, res) => {
   });
 });
 
-// Ruta para obtener todos los productos
+// Ruta para obtener todos los productos (sin autenticación requerida)
 router.get('/', (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 12;
@@ -108,7 +108,7 @@ router.get('/', (req, res) => {
   });
 });
 
-// Ruta para obtener un producto por ID
+// Ruta para obtener un producto por ID (sin autenticación requerida)
 router.get('/:id', (req, res) => {
   const id = req.params.id;
   
@@ -133,7 +133,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// Ruta para obtener productos por categoría
+// Ruta para obtener productos por categoría (sin autenticación requerida)
 router.get('/category/:category', (req, res) => {
   const category = req.params.category;
   const page = parseInt(req.query.page) || 1;
@@ -182,7 +182,7 @@ router.get('/category/:category', (req, res) => {
   });
 });
 
-// Ruta para buscar productos por nombre
+// Ruta para buscar productos por nombre (sin autenticación requerida)
 router.get('/search/:query', (req, res) => {
   const query = `%${req.params.query}%`;
   const page = parseInt(req.query.page) || 1;
@@ -230,5 +230,11 @@ router.get('/search/:query', (req, res) => {
     });
   });
 });
+
+// Aquí se pueden añadir rutas protegidas por el middleware isAdmin
+// Por ejemplo, para crear, actualizar o eliminar productos:
+// router.post('/', isAdmin, (req, res) => { ... });
+// router.put('/:id', isAdmin, (req, res) => { ... });
+// router.delete('/:id', isAdmin, (req, res) => { ... });
 
 module.exports = router;
