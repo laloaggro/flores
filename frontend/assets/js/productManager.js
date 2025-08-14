@@ -122,109 +122,42 @@ class ProductManager {
   async loadFlowerImages() {
     // Comenzar con un conjunto de imágenes locales verificadas
     const localImages = [
-      '/assets/images/products/product_1.jpg',
-      '/assets/images/products/product_2.jpg',
-      '/assets/images/products/product_3.jpg',
-      '/assets/images/products/product_4.jpg',
-      '/assets/images/products/product_5.jpg'
+      '/assets/images/flowers/flower1.svg',
+      '/assets/images/flowers/flower2.svg',
+      '/assets/images/flowers/flower3.svg',
+      '/assets/images/flowers/flower4.svg',
+      '/assets/images/flowers/flower5.svg',
+      '/assets/images/flowers/flower6.svg',
+      '/assets/images/flowers/flower7.svg',
+      '/assets/images/flowers/flower8.svg',
+      '/assets/images/flowers/flower9.svg',
+      '/assets/images/flowers/flower10.svg'
     ];
     
-    // Filtrar solo las imágenes locales que existen y tienen tamaño válido
-    const verifiedLocalImages = localImages.filter(image => {
-      // Excluir imágenes que sabemos que tienen tamaño 0KB
-      const zeroSizeImages = [
-        '/assets/images/products/product_6.jpg'
-      ];
-      return !zeroSizeImages.includes(image);
-    });
-    
-    this.flowerImages = verifiedLocalImages;
+    this.flowerImages = localImages;
     
     try {
-      // Intentar cargar solo unas pocas imágenes de la API de Unsplash
-      const flowerImageUrls = [];
-      
-      // Generar solo 3 URLs de imágenes de flores de Unsplash para reducir solicitudes
-      for (let i = 0; i < 3; i++) {
-        // Usar parámetros aleatorios para obtener diferentes imágenes
-        const randomParam = Math.random().toString(36).substring(2, 15);
-        flowerImageUrls.push(`https://source.unsplash.com/300x300/?flower,arrangement&sig=${randomParam}`);
-      }
-      
-      // Verificar si las imágenes se pueden cargar antes de agregarlas
-      const verifiedUrls = [];
-      for (const url of flowerImageUrls) {
-        try {
-          // Crear una promesa para verificar si la imagen se puede cargar
-          await new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = resolve;
-            img.onerror = reject;
-            img.src = url;
-          });
-          // Si llegamos aquí, la imagen se cargó correctamente
-          verifiedUrls.push(url);
-        } catch (error) {
-          // Si hay un error, simplemente no agregamos la URL
-          // Silenciar estos mensajes para reducir el ruido en la consola
-        }
-      }
-      
-      // Agregar las imágenes verificadas al conjunto existente solo si hay al menos una
-      if (verifiedUrls.length > 0) {
-        this.flowerImages = [...this.flowerImages, ...verifiedUrls];
-      }
-      
-      console.log('Imágenes de flores preparadas:', this.flowerImages.length);
+      // No intentar cargar imágenes externas para evitar errores 404
+      console.log('Usando solo imágenes locales para evitar problemas de red');
     } catch (error) {
-      // Silenciar errores de la API para reducir el ruido en la consola
-      // Mantener las imágenes locales verificadas como fallback
-    }
-  }
-
-  // Función para cargar una imagen usando un proxy
-  async loadImageWithProxy(url) {
-    try {
-      // Usar el proxy local para evitar problemas de CORS
-      const proxyUrl = `/api/proxy/image?url=${encodeURIComponent(url)}`;
-      
-      // Aplicar un timeout de 5 segundos a la solicitud
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
-      const response = await fetch(proxyUrl, { signal: controller.signal });
-      clearTimeout(timeoutId);
-      
-      if (!response.ok) {
-        throw new Error(`Error al cargar imagen: ${response.status}`);
-      }
-      
-      // Devolver la URL de la imagen procesada por el proxy
-      return proxyUrl;
-    } catch (error) {
-      console.error('Error al cargar imagen con proxy:', error);
-      
-      // Si hay un error, devolver una imagen de marcador de posición
-      return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"%3E%3Crect width="300" height="300" fill="%23e0e0e0"/%3E%3Ccircle cx="150" cy="150" r="80" fill="%23a5d6a7"/%3E%3Ccircle cx="110" cy="120" r="15" fill="%234caf50"/%3E%3Ccircle cx="190" cy="120" r="15" fill="%234caf50"/%3E%3Cpath d="M150 170 Q170 200 150 230 Q130 200 150 170" fill="%234caf50"/%3E%3C/svg%3E';
+      // Silenciar errores
     }
   }
 
   // Función para obtener la siguiente imagen de flor en la secuencia
-  async getNextFlowerImage() {
+  getNextFlowerImage() {
     if (this.flowerImages.length === 0) {
       // Si no hay imágenes, usar una imagen de marcador de posición
-      return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"%3E%3Crect width="300" height="300" fill="%23e0e0e0"/%3E%3Ccircle cx="150" cy="150" r="80" fill="%23a5d6a7"/%3E%3Ccircle cx="110" cy="120" r="15" fill="%234caf50"/%3E%3Ccircle cx="190" cy="120" r="15" fill="%234caf50"/%3E%3Cpath d="M150 170 Q170 200 150 230 Q130 200 150 170" fill="%234caf50"/%3E%3C/svg%3E';
+      return '/assets/images/default-avatar.svg';
     }
     
     const image = this.flowerImages[this.imageIndex];
     this.imageIndex = (this.imageIndex + 1) % this.flowerImages.length;
-    
-    // Usar el proxy para cargar la imagen
-    return this.loadImageWithProxy(image);
+    return image;
   }
 
   // Función para renderizar productos en la página
-  async renderProducts(products, container) {
+  renderProducts(products, container) {
     if (!container) return;
     
     if (products.length === 0) {
@@ -232,18 +165,10 @@ class ProductManager {
       return;
     }
     
-    // Crear una copia de los productos con imágenes procesadas
-    const processedProducts = await Promise.all(products.map(async product => {
-      if (!product.image_url || product.image_url.includes('placeholder') || product.image_url.includes('product_')) {
-        product.image_url = await this.getNextFlowerImage();
-      }
-      return product;
-    }));
-    
-    container.innerHTML = processedProducts.map(product => `
+    container.innerHTML = products.map(product => `
       <div class="product-card" data-id="${product.id}">
         <div class="product-image">
-          <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22 viewBox=%220 0 300 300%22%3E%3Crect width=%22300%22 height=%22300%22 fill=%22%23e0e0e0%22/%3E%3Ccircle cx=%22150%22 cy=%22150%22 r=%2280%22 fill=%22%23a5d6a7%22/%3E%3Ccircle cx=%22110%22 cy=%22120%22 r=%2215%22 fill=%22%234caf50%22/%3E%3Ccircle cx=%22190%22 cy=%22120%22 r=%2215%22 fill=%22%234caf50%22/%3E%3Cpath d=%22M150 170 Q170 200 150 230 Q130 200 150 170%22 fill=%22%234caf50%22/%3E%3C/svg%3E'; this.onerror=null;">
+          <img src="${product.image_url}" alt="${product.name}" loading="lazy" onerror="this.src='/assets/images/default-avatar.svg'; this.onerror=null;">
         </div>
         <div class="product-info">
           <h3>${product.name}</h3>
@@ -295,25 +220,10 @@ class ProductManager {
 function handleImageError(imgElement) {
   console.debug('Error al cargar imagen:', imgElement.src);
   
-  // Intentar con una imagen de respaldo verificada
-  const fallbackImages = [
-    '/assets/images/products/product_2.jpg',
-    '/assets/images/products/product_1.jpg',
-    '/assets/images/products/product_3.jpg'
-  ];
-  
-  // Encontrar una imagen de respaldo que no sea la que falló
-  const workingFallback = fallbackImages.find(img => img !== imgElement.src);
-  
-  if (workingFallback) {
-    imgElement.src = workingFallback;
-  } else {
-    // Fallback absoluto
-    imgElement.src = '/assets/images/default-avatar.svg';
-  }
-  
+  // Usar imagen de respaldo local
+  imgElement.src = '/assets/images/default-avatar.svg';
   imgElement.alt = 'Imagen no disponible';
-  imgElement.onerror = null; // Prevenir bucle infinito si también falla la imagen de marcador de posición
+  imgElement.onerror = null; // Prevenir bucle infinito
 }
 
 // Exportar una instancia única

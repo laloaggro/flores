@@ -12,61 +12,57 @@ const getApiBaseUrl = () => {
   return 'http://localhost:5000';
 };
 
-// URL base del API
-const API_BASE_URL = getApiBaseUrl();
-
 // Función para mostrar notificaciones
-function showNotification(message, type = 'info') {
-    // Crear el contenedor de notificaciones si no existe
-    let notificationContainer = document.getElementById('notificationContainer');
-    if (!notificationContainer) {
-        notificationContainer = document.createElement('div');
-        notificationContainer.id = 'notificationContainer';
-        notificationContainer.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            width: 300px;
-        `;
-        document.body.appendChild(notificationContainer);
-    }
-    
-    // Crear la notificación
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.style.cssText = `
-        background: ${type === 'error' ? '#f44336' : type === 'success' ? '#4caf50' : '#2196f3'};
-        color: white;
-        padding: 16px;
-        margin-bottom: 10px;
-        border-radius: 4px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        opacity: 0;
-        transform: translateX(100%);
-        transition: all 0.3s ease;
-    `;
-    notification.textContent = message;
-    
-    // Añadir al contenedor
-    notificationContainer.appendChild(notification);
-    
-    // Mostrar con animación
+function showNotification(message, type) {
+  // Crear elemento de notificación
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+  
+  // Agregar estilo a la notificación
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  `;
+  
+  // Colores según el tipo
+  if (type === 'success') {
+    notification.style.backgroundColor = '#48bb78';
+  } else if (type === 'error') {
+    notification.style.backgroundColor = '#e53e3e';
+  } else {
+    notification.style.backgroundColor = '#3182ce';
+  }
+  
+  // Agregar notificación al cuerpo
+  document.body.appendChild(notification);
+  
+  // Animar entrada
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+  }, 10);
+  
+  // Eliminar notificación después de 3 segundos
+  setTimeout(() => {
+    notification.style.transform = 'translateX(100%)';
     setTimeout(() => {
-        notification.style.opacity = '1';
-        notification.style.transform = 'translateX(0)';
-    }, 10);
-    
-    // Eliminar después de 3 segundos
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+  
+  // Mostrar información de depuración
+  console.log('Notificación mostrada:', message, 'Tipo:', type);
 }
 
 // Función para actualizar el contador del carrito
@@ -108,17 +104,12 @@ function formatPrice(price) {
   }).format(price);
 }
 
-// Exportar funciones y constantes
+// Exportar funciones
 export { 
-  API_BASE_URL, 
   showNotification, 
+  updateCartCount, 
+  getUser, 
   isAuthenticated, 
-  isAdmin,
-  requireAuth,
-  requireAdmin,
-  formatPrice,
   logout,
-  validateEmail,
-  validatePhone,
-  loadImageWithProxy
+  formatPrice
 };
