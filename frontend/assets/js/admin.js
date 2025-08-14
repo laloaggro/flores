@@ -1,5 +1,5 @@
 // admin.js - Funcionalidad del panel de administración
-import { initUserMenu } from '../assets/js/auth.js';
+import { initUserMenu, API_BASE_URL } from '../assets/js/auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si el usuario es administrador
@@ -16,6 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar eventos de productos
     setupProductEvents();
+    
+    // Forzar la inicialización del menú de usuario después de un breve retraso
+    setTimeout(() => {
+        initUserMenu();
+        showAdminMenu();
+    }, 100);
 });
 
 // Verificar si el usuario tiene acceso de administrador
@@ -28,7 +34,7 @@ async function checkAdminAccess() {
             return;
         }
         
-        const response = await fetch('/api/users/profile', {
+        const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -50,9 +56,34 @@ async function checkAdminAccess() {
         
         // Mostrar el nombre del administrador
         document.getElementById('userName').textContent = userData.name;
+        
+        // Asegurarse de que el menú de usuario se muestre correctamente
+        showAdminMenu();
     } catch (error) {
         console.error('Error al verificar acceso de administrador:', error);
         window.location.href = '../login.html';
+    }
+}
+
+// Función para mostrar el menú de administrador correctamente
+function showAdminMenu() {
+    const userMenu = document.getElementById('userMenu');
+    const loginLink = document.getElementById('loginLink');
+    
+    if (userMenu && loginLink) {
+        // Mostrar el menú de usuario y ocultar el enlace de inicio de sesión
+        userMenu.style.display = 'block';
+        loginLink.style.display = 'none';
+        
+        // Asegurarse de que el nombre de usuario se muestre
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement && !userNameElement.textContent) {
+            // Obtener el nombre del usuario del localStorage si no está ya establecido
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.name) {
+                userNameElement.textContent = user.name;
+            }
+        }
     }
 }
 
