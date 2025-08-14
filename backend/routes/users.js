@@ -33,28 +33,6 @@ db.serialize(() => {
       console.log('Tabla de usuarios verificada o creada');
     }
   });
-  
-  // Verificar si la columna 'role' existe, y añadirla si no existe
-  db.all("PRAGMA table_info(users)", (err, columns) => {
-    if (err) {
-      console.error('Error al obtener información de la tabla:', err.message);
-      return;
-    }
-    
-    // Verificar si la columna 'role' existe
-    const roleColumnExists = columns.some(column => column.name === 'role');
-    
-    if (!roleColumnExists) {
-      // Añadir la columna 'role' si no existe
-      db.run("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'", (err) => {
-        if (err) {
-          console.error('Error al añadir columna role:', err.message);
-        } else {
-          console.log('Columna role añadida a la tabla users');
-        }
-      });
-    }
-  });
 });
 
 // Ruta para registrar un nuevo usuario
@@ -98,8 +76,8 @@ router.post('/register', async (req, res) => {
     
     // Insertar nuevo usuario
     const result = await new Promise((resolve, reject) => {
-      const stmt = db.prepare(`INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)`);
-      stmt.run(name, email, phone, hashedPassword, function(err) {
+      const stmt = db.prepare(`INSERT INTO users (name, email, phone, password, role) VALUES (?, ?, ?, ?, ?)`);
+      stmt.run(name, email, phone, hashedPassword, 'user', function(err) {
         if (err) {
           reject(err);
         } else {
@@ -157,7 +135,7 @@ router.post('/login', async (req, res) => {
         id: user.id, 
         email: user.email, 
         name: user.name,
-        role: user.role
+        role: user.role || 'user'
       }, 
       process.env.JWT_SECRET || 'secreto_por_defecto',
       { expiresIn: '24h' }
@@ -169,7 +147,10 @@ router.post('/login', async (req, res) => {
     res.json({
       message: 'Inicio de sesión exitoso',
       token: token,
-      user: userWithoutPassword
+      user: {
+        ...userWithoutPassword,
+        role: userWithoutPassword.role || 'user'
+      }
     });
   } catch (error) {
     console.error('Error al iniciar sesión:', error.message);
