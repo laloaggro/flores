@@ -478,13 +478,23 @@ async function loadUsers() {
 
 // Configurar navegación del menú
 function setupMenuNavigation() {
-    const menuLinks = document.querySelectorAll('.admin-menu a');
+    // Esperar a que el DOM esté completamente cargado
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMenuNavigation);
+    } else {
+        // DOM ya está cargado
+        initMenuNavigation();
+    }
+}
+
+function initMenuNavigation() {
+    const menuLinks = document.querySelectorAll('.admin-menu a[data-section]');
     
     menuLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Remover clase activa de todos los elementos
+            // Remover clase activa de todos los elementos del menú
             document.querySelectorAll('.admin-menu li').forEach(li => {
                 li.classList.remove('active');
             });
@@ -492,14 +502,17 @@ function setupMenuNavigation() {
             // Agregar clase activa al elemento seleccionado
             this.parentElement.classList.add('active');
             
-            // Ocultar todas las secciones
+            // Ocultar todas las secciones de contenido
             document.querySelectorAll('.admin-content-section').forEach(section => {
                 section.classList.remove('active');
             });
             
             // Mostrar la sección seleccionada
             const targetSection = this.getAttribute('data-section');
-            document.getElementById(targetSection).classList.add('active');
+            const sectionElement = document.getElementById(targetSection);
+            if (sectionElement) {
+                sectionElement.classList.add('active');
+            }
         });
     });
 }
