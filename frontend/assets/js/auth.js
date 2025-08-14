@@ -163,6 +163,11 @@ function checkAuth() {
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
+  // Forzar limpieza de datos residuales
+  if (!isAuthenticated()) {
+    localStorage.removeItem('user');
+  }
+  
   initUserMenu();
   checkAuth();
   updateCartCount();
