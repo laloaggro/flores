@@ -176,6 +176,35 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Ruta para obtener el perfil del usuario (verificación de token)
+router.get('/profile', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ error: 'No se proporcionó token de autenticación' });
+  }
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secreto_por_defecto');
+    const { id, email, name, role } = decoded;
+    
+    res.json({
+      id,
+      email,
+      name,
+      role
+    });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expirado' });
+    }
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ error: 'Token inválido' });
+    }
+    return res.status(500).json({ error: 'Error al verificar el token' });
+  }
+});
+
 // Ruta para obtener todos los usuarios (solo para pruebas)
 router.get('/', (req, res) => {
   db.all(`SELECT id, name, email, phone, role, created_at FROM users`, (err, rows) => {
