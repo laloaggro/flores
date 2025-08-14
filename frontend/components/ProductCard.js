@@ -6,12 +6,16 @@ const ProductCard = (product) => {
   return `
     <article class="product-card" itemscope itemtype="http://schema.org/Product">
       <div class="product-image">
-        <img src="${product.image_url}" 
-             alt="${product.name}" 
-             loading="lazy" 
-             itemprop="image"
-             onerror="handleImageError(this)">
-      </div>
+        <picture>
+          <source srcset="${product.image_url.replace(/\.(jpg|jpeg|png)/i, '.webp')}" type="image/webp">
+          <img src="${product.image_url}" 
+               alt="${product.name}" 
+               loading="lazy" 
+               itemprop="image"
+               width="300"
+               height="200"
+               onerror="this.onerror=null;this.src='/assets/images/default-avatar.svg';this.setAttribute('aria-label', 'Imagen no disponible');">
+        </picture>
       <div class="product-info">
         <h3 itemprop="name">${product.name}</h3>
         <p itemprop="description">${product.description}</p>
@@ -37,28 +41,4 @@ const ProductCard = (product) => {
 };
 
 // Función para manejar errores de carga de imágenes
-function handleImageError(imgElement) {
-  console.warn('Error al cargar imagen:', imgElement.src);
-  
-  // Intentar con una imagen de respaldo verificada
-  const fallbackImages = [
-    '/assets/images/products/product_2.jpg',
-    '/assets/images/products/product_1.jpg',
-    '/assets/images/products/product_3.jpg'
-  ];
-  
-  // Encontrar una imagen de respaldo que no sea la que falló
-  const workingFallback = fallbackImages.find(img => img !== imgElement.src);
-  
-  if (workingFallback) {
-    imgElement.src = workingFallback;
-  } else {
-    // Fallback absoluto
-    imgElement.src = '/assets/images/default-avatar.svg';
-  }
-  
-  // Añadir atributo aria-label para indicar que la imagen no se pudo cargar
-  imgElement.setAttribute('aria-label', 'Imagen no disponible');
-}
-
 export default ProductCard;

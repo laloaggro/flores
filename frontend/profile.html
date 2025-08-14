@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
     <header>
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="Menú principal">
@@ -53,9 +55,14 @@
                 <div class="profile-container">
                     <div class="profile-header">
                         <div class="profile-avatar">
-                            <img id="avatarImage" src="assets/images/default-avatar.svg" alt="Avatar de usuario">
-                            <button id="changeAvatarButton" class="change-avatar-btn">
-                                <i class="fas fa-camera"></i>
+                            <img id="avatarImage" 
+                                 src="assets/images/default-avatar.svg" 
+                                 alt="Avatar de usuario"
+                                 width="150"
+                                 height="150"
+                                 loading="lazy">
+                            <button id="changeAvatarButton" class="change-avatar-btn" aria-label="Cambiar avatar">
+                                <i class="fas fa-camera" aria-hidden="true"></i>
                             </button>
                         </div>
                         <div class="profile-info">

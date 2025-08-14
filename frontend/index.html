@@ -61,6 +61,7 @@
     </script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     <header>
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="Menú principal">
@@ -100,7 +101,7 @@
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         <section id="home" class="hero" aria-labelledby="hero-heading">
             <div class="container">
                 <div class="hero-content">
@@ -146,7 +147,14 @@
                         </div>
                     </div>
                     <div class="about-image">
-                        <img src="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Florista trabajando en arreglos florales">
+                        <picture>
+                            <source srcset="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80.webp" type="image/webp">
+                            <img src="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                 alt="Florista trabajando en arreglos florales" 
+                                 width="800" 
+                                 height="600"
+                                 loading="lazy">
+                        </picture>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,7 @@ function initUserMenu() {
   const logoutLink = document.getElementById('logoutLink');
   const userInfo = document.querySelector('.user-info');
   const userDropdown = document.querySelector('.user-dropdown');
+  const userMenuButton = document.getElementById('userMenuButton');
   
   if (isAuthenticated() && user && userMenu && loginLink) {
     // Mostrar el menú de usuario
@@ -33,26 +34,55 @@ function initUserMenu() {
       });
     }
     
-    // Configurar el toggle del dropdown con clic
-    if (userInfo && userDropdown) {
-      // Prevenir que el clic en el botón cierre el dropdown inmediatamente
-      userInfo.addEventListener('click', function(e) {
+    // Manejar clic en el botón de usuario
+    userMenuButton.addEventListener('click', function(e) {
         e.stopPropagation();
-        userDropdown.classList.toggle('show');
-      });
-      
-      // Cerrar el dropdown cuando se hace clic fuera de él
-      document.addEventListener('click', function(e) {
-        if (userDropdown.classList.contains('show')) {
-          userDropdown.classList.remove('show');
+        userMenu.classList.toggle('show');
+        const isExpanded = userMenu.classList.contains('show');
+        userMenuButton.setAttribute('aria-expanded', isExpanded);
+        
+        // Si el menú se abre, enfocar el primer elemento
+        if (isExpanded) {
+            const firstLink = userDropdown.querySelector('a');
+            if (firstLink) {
+                firstLink.focus();
+            }
         }
-      });
-      
-      // Prevenir que el clic en el dropdown lo cierre cuando se está usando
-      userDropdown.addEventListener('click', function(e) {
-        e.stopPropagation();
-      });
-    }
+    });
+
+    // Cerrar el menú si se hace clic fuera de él
+    document.addEventListener('click', function(e) {
+        if (!userMenu.contains(e.target) && e.target !== userMenuButton) {
+            userMenu.classList.remove('show');
+            userMenuButton.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Manejar navegación por teclado en el menú de usuario
+    userDropdown.addEventListener('keydown', function(e) {
+        const links = userDropdown.querySelectorAll('a');
+        const currentIndex = Array.from(links).indexOf(document.activeElement);
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                const nextIndex = (currentIndex + 1) % links.length;
+                links[nextIndex].focus();
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                const prevIndex = (currentIndex - 1 + links.length) % links.length;
+                links[prevIndex].focus();
+                break;
+            case 'Escape':
+                e.preventDefault();
+                userMenu.classList.remove('show');
+                userMenuButton.setAttribute('aria-expanded', 'false');
+                userMenuButton.focus();
+                break;
+        }
+    });
+
   } else if (userMenu && loginLink) {
     // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
     userMenu.style.display = 'none';
