@@ -135,17 +135,36 @@ function validatePhone(phone) {
 // Verificar si el usuario está autenticado
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
-  return !!token;
+  if (!token) return false;
+  
+  // Verificar si el token es válido (no está expirado)
+  try {
+    // Si el token es un JWT, verificar su expiración
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Date.now() / 1000;
+    if (payload.exp < currentTime) {
+      // Token expirado, limpiar localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      return false;
+    }
+    return true;
+  } catch (e) {
+    // Si no es un JWT válido, asumir que es un token simple
+    return true;
+  }
 };
 
 // Verificar si el usuario es administrador
 const isAdmin = () => {
+  if (!isAuthenticated()) return false;
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   return user.role === 'admin';
 };
 
 // Función para obtener el usuario actual
 const getUser = () => {
+  if (!isAuthenticated()) return null;
   const userStr = localStorage.getItem('user');
   if (!userStr) return null;
   

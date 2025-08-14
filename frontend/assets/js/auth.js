@@ -11,6 +11,11 @@ function initUserMenu() {
   const userDropdown = document.querySelector('.user-dropdown');
   const userMenuButton = document.getElementById('userMenuButton');
   
+  // Limpiar cualquier contenido previo del menú
+  if (userNameElement) {
+    userNameElement.textContent = '';
+  }
+  
   if (isAuthenticated() && user && userMenu && loginLink) {
     // Mostrar el menú de usuario
     userMenu.style.display = 'block';
@@ -95,6 +100,11 @@ function initUserMenu() {
     // Asegurarse de que el dropdown esté oculto
     if (userDropdown) {
       userDropdown.classList.remove('show');
+    }
+    
+    // Limpiar cualquier contenido del nombre de usuario
+    if (userNameElement) {
+      userNameElement.textContent = '';
     }
   }
 }
