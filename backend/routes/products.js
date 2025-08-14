@@ -2,6 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const router = express.Router();
+const isAdmin = require('../middleware/admin');
 
 // Conectar a la base de datos
 const dbPath = path.join(__dirname, '..', 'products.db');
@@ -13,7 +14,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Ruta para obtener todas las categorías únicas
+// Ruta para obtener todas las categorías únicas (sin autenticación requerida)
 router.get('/categories', (req, res) => {
   // Obtener categorías únicas
   db.all(`SELECT DISTINCT category FROM products ORDER BY category`, (err, rows) => {
@@ -27,7 +28,7 @@ router.get('/categories', (req, res) => {
   });
 });
 
-// Ruta para obtener todos los productos
+// Ruta para obtener todos los productos (sin autenticación requerida)
 router.get('/', (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 12;
@@ -41,7 +42,8 @@ router.get('/', (req, res) => {
   const countParams = [];
   
   // Agregar filtros si existen
-  if (category) {
+  // Solo aplicar filtro de categoría si no es una cadena vacía
+  if (category && category !== '') {
     query += ' WHERE category = ?';
     countQuery += ' WHERE category = ?';
     params.push(category);
@@ -49,7 +51,7 @@ router.get('/', (req, res) => {
   }
   
   if (search) {
-    if (category) {
+    if (category && category !== '') {
       query += ' AND name LIKE ?';
       countQuery += ' AND name LIKE ?';
     } else {
@@ -71,6 +73,17 @@ router.get('/', (req, res) => {
       return res.status(500).json({ error: 'Error al obtener productos' });
     }
     
+    // Procesar las imágenes de los productos para usar rutas locales por defecto
+    const processedRows = rows.map(row => {
+      // Si no tiene imagen o la imagen es de placeholder, usar una imagen local
+      if (!row.image_url || row.image_url.includes('placeholder') || row.image_url.includes('product_')) {
+        // Asignar una imagen local basada en el ID del producto para variedad
+        const imageNumber = (row.id % 10) + 1;
+        row.image_url = `/assets/images/flowers/flower${Math.min(imageNumber, 10)}.svg`;
+      }
+      return row;
+    });
+    
     // Contar el total de productos con los filtros aplicados
     db.get(countQuery, countParams, (err, countRow) => {
       if (err) {
@@ -82,24 +95,22 @@ router.get('/', (req, res) => {
       const totalPages = Math.ceil(total / limit);
       
       res.json({
-        products: rows,
+        products: processedRows,
         pagination: {
           currentPage: page,
           totalPages: totalPages,
-          totalProducts: total,
-          hasNextPage: page < totalPages,
-          hasPrevPage: page > 1
+          totalItems: total
         }
       });
     });
   });
 });
 
-// Ruta para obtener un producto por ID
+// Ruta para obtener un producto por ID (sin autenticación requerida)
 router.get('/:id', (req, res) => {
-  const id = req.params.id;
+  const productId = req.params.id;
   
-  db.get(`SELECT * FROM products WHERE id = ?`, [id], (err, row) => {
+  db.get('SELECT * FROM products WHERE id = ?', [productId], (err, row) => {
     if (err) {
       console.error('Error al obtener producto:', err.message);
       return res.status(500).json({ error: 'Error al obtener producto' });
@@ -109,81 +120,138 @@ router.get('/:id', (req, res) => {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
     
+    // Procesar la imagen del producto para usar rutas locales por defecto
+    if (!row.image_url || row.image_url.includes('placeholder') || row.image_url.includes('product_')) {
+      const imageNumber = (row.id % 10) + 1;
+      row.image_url = `/assets/images/flowers/flower${Math.min(imageNumber, 10)}.svg`;
+    }
+    
     res.json(row);
   });
 });
 
-// Ruta para obtener productos por categoría
-router.get('/category/:category', (req, res) => {
-  const category = req.params.category;
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 12;
-  const offset = (page - 1) * limit;
+// Ruta para crear un nuevo producto (solo administradores)
+router.post('/', isAdmin, (req, res) => {
+  const { name, description, price, category, size, image_url } = req.body;
   
-  // Obtener productos por categoría con paginación
-  db.all(`SELECT * FROM products WHERE category = ? LIMIT ? OFFSET ?`, [category, limit, offset], (err, rows) => {
+  // Validaciones básicas
+  if (!name || !description || !price || !category) {
+    return res.status(400).json({ 
+      error: 'Los campos nombre, descripción, precio y categoría son obligatorios' 
+    });
+  }
+  
+  // Validar que el precio sea un número
+  const priceNumber = parseFloat(price);
+  if (isNaN(priceNumber) || priceNumber <= 0) {
+    return res.status(400).json({ 
+      error: 'El precio debe ser un número válido mayor que cero' 
+    });
+  }
+  
+  // Insertar nuevo producto
+  const stmt = db.prepare(`INSERT INTO products 
+    (name, description, price, category, size, image_url) 
+    VALUES (?, ?, ?, ?, ?, ?)`);
+    
+  stmt.run([name, description, priceNumber, category, size || null, image_url || null], function(err) {
     if (err) {
-      console.error('Error al obtener productos por categoría:', err.message);
-      return res.status(500).json({ error: 'Error al obtener productos por categoría' });
+      console.error('Error al crear producto:', err.message);
+      return res.status(500).json({ error: 'Error al crear producto' });
     }
     
-    // Contar el total de productos en la categoría
-    db.get(`SELECT COUNT(*) as total FROM products WHERE category = ?`, [category], (err, countRow) => {
+    res.status(201).json({
+      message: 'Producto creado exitosamente',
+      productId: this.lastID
+    });
+  });
+  
+  stmt.finalize();
+});
+
+// Ruta para actualizar un producto (solo administradores)
+router.put('/:id', isAdmin, (req, res) => {
+  const productId = req.params.id;
+  const { name, description, price, category, size, image_url } = req.body;
+  
+  // Validaciones básicas
+  if (!name || !description || !price || !category) {
+    return res.status(400).json({ 
+      error: 'Los campos nombre, descripción, precio y categoría son obligatorios' 
+    });
+  }
+  
+  // Validar que el precio sea un número
+  const priceNumber = parseFloat(price);
+  if (isNaN(priceNumber) || priceNumber <= 0) {
+    return res.status(400).json({ 
+      error: 'El precio debe ser un número válido mayor que cero' 
+    });
+  }
+  
+  // Verificar si el producto existe
+  db.get('SELECT id FROM products WHERE id = ?', [productId], (err, row) => {
+    if (err) {
+      console.error('Error al verificar producto:', err.message);
+      return res.status(500).json({ error: 'Error al verificar producto' });
+    }
+    
+    if (!row) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    
+    // Actualizar producto
+    const stmt = db.prepare(`UPDATE products SET 
+      name = ?, description = ?, price = ?, category = ?, size = ?, image_url = ?
+      WHERE id = ?`);
+      
+    stmt.run([name, description, priceNumber, category, size || null, image_url || null, productId], function(err) {
       if (err) {
-        console.error('Error al contar productos por categoría:', err.message);
-        return res.status(500).json({ error: 'Error al contar productos por categoría' });
+        console.error('Error al actualizar producto:', err.message);
+        return res.status(500).json({ error: 'Error al actualizar producto' });
       }
       
-      const total = countRow.total;
-      const totalPages = Math.ceil(total / limit);
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'Producto no encontrado' });
+      }
       
       res.json({
-        products: rows,
-        pagination: {
-          currentPage: page,
-          totalPages: totalPages,
-          totalProducts: total,
-          hasNextPage: page < totalPages,
-          hasPrevPage: page > 1
-        }
+        message: 'Producto actualizado exitosamente'
       });
     });
+    
+    stmt.finalize();
   });
 });
 
-// Ruta para buscar productos por nombre
-router.get('/search/:query', (req, res) => {
-  const query = `%${req.params.query}%`;
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 12;
-  const offset = (page - 1) * limit;
+// Ruta para eliminar un producto (solo administradores)
+router.delete('/:id', isAdmin, (req, res) => {
+  const productId = req.params.id;
   
-  // Buscar productos por nombre
-  db.all(`SELECT * FROM products WHERE name LIKE ? LIMIT ? OFFSET ?`, [query, limit, offset], (err, rows) => {
+  // Verificar si el producto existe
+  db.get('SELECT id FROM products WHERE id = ?', [productId], (err, row) => {
     if (err) {
-      console.error('Error al buscar productos:', err.message);
-      return res.status(500).json({ error: 'Error al buscar productos' });
+      console.error('Error al verificar producto:', err.message);
+      return res.status(500).json({ error: 'Error al verificar producto' });
     }
     
-    // Contar el total de productos encontrados
-    db.get(`SELECT COUNT(*) as total FROM products WHERE name LIKE ?`, [query], (err, countRow) => {
+    if (!row) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    
+    // Eliminar producto
+    db.run('DELETE FROM products WHERE id = ?', [productId], function(err) {
       if (err) {
-        console.error('Error al contar productos encontrados:', err.message);
-        return res.status(500).json({ error: 'Error al contar productos encontrados' });
+        console.error('Error al eliminar producto:', err.message);
+        return res.status(500).json({ error: 'Error al eliminar producto' });
       }
       
-      const total = countRow.total;
-      const totalPages = Math.ceil(total / limit);
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'Producto no encontrado' });
+      }
       
       res.json({
-        products: rows,
-        pagination: {
-          currentPage: page,
-          totalPages: totalPages,
-          totalProducts: total,
-          hasNextPage: page < totalPages,
-          hasPrevPage: page > 1
-        }
+        message: 'Producto eliminado exitosamente'
       });
     });
   });
