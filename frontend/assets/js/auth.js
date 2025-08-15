@@ -14,6 +14,7 @@ function initUserMenu() {
   const logoutLink = document.getElementById('logoutLink');
   const userDropdown = document.querySelector('.user-dropdown');
   const userMenuButton = document.querySelector('.user-info');
+  const caretIcon = userMenuButton ? userMenuButton.querySelector('.fas.fa-caret-down') : null;
   
   // Si no existen los elementos necesarios, salir de la función
   if (!userMenu || !loginLink) {
@@ -34,6 +35,11 @@ function initUserMenu() {
     // Mostrar el nombre del usuario
     if (userNameElement) {
       userNameElement.textContent = user.name || 'Usuario';
+    }
+    
+    // Mostrar el ícono del menú desplegable
+    if (caretIcon) {
+      caretIcon.style.display = 'inline';
     }
     
     // Agregar enlace al panel de administración si el usuario es administrador
@@ -115,6 +121,11 @@ function initUserMenu() {
     // Usuario no autenticado - mostrar enlace de inicio de sesión
     userMenu.style.display = 'none';
     loginLink.style.display = 'block';
+    
+    // Ocultar el ícono del menú desplegable
+    if (caretIcon) {
+      caretIcon.style.display = 'none';
+    }
     
     // Asegurarse de que el dropdown esté oculto
     if (userDropdown && userDropdown.classList.contains('show')) {
