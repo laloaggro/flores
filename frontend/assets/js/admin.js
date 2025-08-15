@@ -1,5 +1,5 @@
 // admin.js - Funcionalidad del panel de administración
-import { API_BASE_URL, isAuthenticated, isAdmin } from './utils.js';
+import { API_BASE_URL, isAuthenticated, isAdmin, getAuthToken } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -208,13 +208,17 @@ async function addProduct() {
         }
         
         // Cerrar modal
-        document.getElementById('addProductModal').remove();
+        const modal = document.getElementById('addProductModal');
+        if (modal) {
+            modal.remove();
+        }
         
         // Mostrar mensaje de éxito
         showMessage('Producto agregado correctamente', 'success');
         
         // Recargar lista de productos
-        loadProducts();
+        loadAllProducts();
+        loadDashboardData();
     } catch (error) {
         console.error('Error al agregar producto:', error);
         showMessage('Error al agregar producto', 'error');
@@ -383,13 +387,17 @@ async function updateProduct(productId) {
         }
         
         // Cerrar modal
-        document.getElementById('editProductModal').remove();
+        const modal = document.getElementById('editProductModal');
+        if (modal) {
+            modal.remove();
+        }
         
         // Mostrar mensaje de éxito
         showMessage('Producto actualizado correctamente', 'success');
         
         // Recargar lista de productos
-        loadProducts();
+        loadAllProducts();
+        loadDashboardData();
     } catch (error) {
         console.error('Error al actualizar producto:', error);
         showMessage('Error al actualizar producto', 'error');
@@ -423,7 +431,8 @@ async function removeProduct(productId) {
         showMessage('Producto eliminado correctamente', 'success');
         
         // Recargar lista de productos
-        loadProducts();
+        loadAllProducts();
+        loadDashboardData();
     } catch (error) {
         console.error('Error al eliminar producto:', error);
         showMessage('Error al eliminar producto', 'error');
@@ -558,10 +567,14 @@ function showMessage(message, type = 'info') {
     
     // Agregar al inicio del contenedor principal
     const container = document.querySelector('.admin-container');
-    container.insertBefore(messageElement, container.firstChild);
-    
-    // Eliminar el mensaje después de 5 segundos
-    setTimeout(() => {
-        messageElement.remove();
-    }, 5000);
+    if (container) {
+        container.insertBefore(messageElement, container.firstChild);
+        
+        // Eliminar el mensaje después de 5 segundos
+        setTimeout(() => {
+            if (messageElement.parentNode) {
+                messageElement.remove();
+            }
+        }, 5000);
+    }
 }
