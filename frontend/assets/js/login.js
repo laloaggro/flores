@@ -42,19 +42,26 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      const formData = new FormData();
-      formData.append('email', email);
-      formData.append('password', password);
-      
-      fetch(`${API_BASE_URL}/api-php/login.php`, {
+      fetch(`${API_BASE_URL}/api/users/login`, {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
       })
-      .then(response => response.json())
+      .then(response => {
+        // Verificar si la respuesta es JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('La respuesta no es JSON válido');
+        }
+        return response.json();
+      })
       .then(data => {
-        if (data.success) {
+        if (data.user && data.token) {
           // Guardar información del usuario en localStorage
           localStorage.setItem('user', JSON.stringify(data.user));
+          localStorage.setItem('token', data.token);
           showNotification('Inicio de sesión exitoso', 'success');
           
           // Redirigir según el rol del usuario
@@ -68,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           }, 1000);
         } else {
-          showNotification(data.message || 'Error en el inicio de sesión', 'error');
+          showNotification(data.error || 'Error en el inicio de sesión', 'error');
         }
       })
       .catch(error => {
@@ -84,17 +91,21 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       
       // Corregir los IDs para que coincidan con el HTML
-      const name = document.getElementById('registerName').value;
+      const firstName = document.getElementById('registerFirstName').value;
+      const lastName = document.getElementById('registerLastName').value;
       const email = document.getElementById('registerEmail').value;
       const phone = document.getElementById('registerPhone').value;
       const password = document.getElementById('registerPassword').value;
       const confirmPassword = document.getElementById('registerConfirmPassword').value;
       
       // Validar campos
-      if (!name || !email || !phone || !password || !confirmPassword) {
+      if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
         showNotification('Por favor complete todos los campos', 'error');
         return;
       }
+      
+      // Combinar nombre y apellido
+      const name = firstName + ' ' + lastName;
       
       if (password !== confirmPassword) {
         showNotification('Las contraseñas no coinciden', 'error');
@@ -102,19 +113,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('phone', phone);
-      formData.append('password', password);
-      
-      fetch(`${API_BASE_URL}/api-php/register.php`, {
+      fetch(`${API_BASE_URL}/api/users/register`, {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, phone, password })
       })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {
+        if (data.message && data.message.includes('exitoso')) {
           showNotification('Registro exitoso', 'success');
           
           // Limpiar formulario
@@ -124,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (registerContainer) registerContainer.classList.add('hidden');
           if (loginContainer) loginContainer.classList.remove('hidden');
         } else {
-          showNotification(data.message || 'Error en el registro', 'error');
+          showNotification(data.error || 'Error en el registro', 'error');
         }
       })
       .catch(error => {
