@@ -42,19 +42,19 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      fetch(`${API_BASE_URL}/api/users/login`, {
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('password', password);
+      
+      fetch(`${API_BASE_URL}/api-php/login.php`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
+        body: formData
       })
       .then(response => response.json())
       .then(data => {
-        if (data.user && data.token) {
+        if (data.success) {
           // Guardar información del usuario en localStorage
           localStorage.setItem('user', JSON.stringify(data.user));
-          localStorage.setItem('token', data.token);
           showNotification('Inicio de sesión exitoso', 'success');
           
           // Redirigir según el rol del usuario
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           }, 1000);
         } else {
-          showNotification(data.error || 'Error en el inicio de sesión', 'error');
+          showNotification(data.message || 'Error en el inicio de sesión', 'error');
         }
       })
       .catch(error => {
@@ -84,21 +84,17 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       
       // Corregir los IDs para que coincidan con el HTML
-      const firstName = document.getElementById('registerFirstName').value;
-      const lastName = document.getElementById('registerLastName').value;
+      const name = document.getElementById('registerName').value;
       const email = document.getElementById('registerEmail').value;
       const phone = document.getElementById('registerPhone').value;
       const password = document.getElementById('registerPassword').value;
       const confirmPassword = document.getElementById('registerConfirmPassword').value;
       
       // Validar campos
-      if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
+      if (!name || !email || !phone || !password || !confirmPassword) {
         showNotification('Por favor complete todos los campos', 'error');
         return;
       }
-      
-      // Combinar nombre y apellido
-      const name = firstName + ' ' + lastName;
       
       if (password !== confirmPassword) {
         showNotification('Las contraseñas no coinciden', 'error');
@@ -106,16 +102,19 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      fetch(`${API_BASE_URL}/api/users/register`, {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('phone', phone);
+      formData.append('password', password);
+      
+      fetch(`${API_BASE_URL}/api-php/register.php`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, email, phone, password })
+        body: formData
       })
       .then(response => response.json())
       .then(data => {
-        if (data.message && data.message.includes('exitoso')) {
+        if (data.success) {
           showNotification('Registro exitoso', 'success');
           
           // Limpiar formulario
@@ -125,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (registerContainer) registerContainer.classList.add('hidden');
           if (loginContainer) loginContainer.classList.remove('hidden');
         } else {
-          showNotification(data.error || 'Error en el registro', 'error');
+          showNotification(data.message || 'Error en el registro', 'error');
         }
       })
       .catch(error => {

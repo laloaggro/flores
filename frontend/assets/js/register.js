@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Enviar datos al servidor
-      fetch(`${API_BASE_URL}/api/users/register`, {
+      fetch(`${API_BASE_URL}/php/api/registro.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -6,7 +6,7 @@
   localStorage.removeItem('cart');
 })();
 
-import { updateCartCount, getUser, isAuthenticated, logout, isAdmin } from './utils.js';
+import { updateCartCount, getUser, isAuthenticated, logout, isAdmin, API_BASE_URL } from './utils.js';
 
 // Función para inicializar el menú de usuario
 function initUserMenu() {
@@ -160,11 +160,31 @@ function addAdminLinkToMenu() {
 
 // Función para manejar el cierre de sesión
 function handleLogout() {
-  logout();
-  // Forzar limpieza completa
-  localStorage.removeItem('user');
-  localStorage.removeItem('token');
-  window.location.href = '/index.html';
+  // Enviar solicitud al servidor para cerrar sesión
+  fetch(`${API_BASE_URL}/api/users/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Limpiar datos de sesión local
+    logout();
+    // Forzar limpieza completa
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    window.location.href = '/index.html';
+  })
+  .catch(error => {
+    console.error('Error al cerrar sesión:', error);
+    // Aún si hay error, limpiar datos locales
+    logout();
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    window.location.href = '/index.html';
+  });
 }
 
 // Función para verificar la autenticación del usuario
@@ -201,4 +221,4 @@ if (document.readyState === 'loading') {
 }
 
 // Exportar funciones
-export { initUserMenu, handleLogout, checkAuth };
+export { initUserMenu, handleLogout, checkAuth, API_BASE_URL };

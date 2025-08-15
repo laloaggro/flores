@@ -275,27 +275,42 @@ function handleNetworkError(error) {
 // Función para realizar solicitudes HTTP con manejo de errores
 async function apiRequest(endpoint, options = {}) {
     try {
-        const url = `${API_BASE_URL}${endpoint}`;
-        const config = {
+        const token = getAuthToken();
+        const defaultOptions = {
             headers: {
                 'Content-Type': 'application/json',
-                ...options.headers
-            },
-            ...options
+            }
         };
         
         // Agregar token de autenticación si existe
-        const token = getAuthToken();
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            defaultOptions.headers['Authorization'] = `Bearer ${token}`;
         }
         
-        const response = await fetch(url, config);
+        // Combinar opciones
+        const mergedOptions = {
+            ...defaultOptions,
+            ...options,
+            headers: {
+                ...defaultOptions.headers,
+                ...options.headers
+            }
+        };
+        
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, mergedOptions);
         
         // Manejar respuestas no exitosas
         if (!response.ok) {
+            if (response.status === 401) {
+                // Token inválido o expirado
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+                throw new Error('No autorizado');
+            }
+            
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+            throw new Error(errorData.message || `Error HTTP: ${response.status}`);
         }
         
         return await response.json();
@@ -311,110 +326,22 @@ const logout = () => {
   localStorage.removeItem('user');
 };
 
-// Función para inicializar el salto al contenido principal
-function initSkipLink() {
-    const skipLink = document.querySelector('.skip-link');
-    if (skipLink) {
-        skipLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const mainContent = document.getElementById('main-content') || document.querySelector('main');
-            if (mainContent) {
-                mainContent.setAttribute('tabindex', '-1');
-                mainContent.focus();
-            }
-        });
-    }
-}
-
-// Función para manejar la navegación por teclado en menús
-function handleKeyboardNavigation(menuSelector, menuItemSelector) {
-    const menu = document.querySelector(menuSelector);
-    if (!menu) return;
-
-    const menuItems = menu.querySelectorAll(menuItemSelector);
-    if (menuItems.length === 0) return;
-
-    menu.addEventListener('keydown', (e) => {
-        const currentIndex = Array.from(menuItems).indexOf(document.activeElement);
-        
-        switch (e.key) {
-            case 'ArrowDown':
-                e.preventDefault();
-                const nextIndex = (currentIndex + 1) % menuItems.length;
-                menuItems[nextIndex].focus();
-                break;
-            case 'ArrowUp':
-                e.preventDefault();
-                const prevIndex = (currentIndex - 1 + menuItems.length) % menuItems.length;
-                menuItems[prevIndex].focus();
-                break;
-            case 'Home':
-                e.preventDefault();
-                menuItems[0].focus();
-                break;
-            case 'End':
-                e.preventDefault();
-                menuItems[menuItems.length - 1].focus();
-                break;
-        }
-    });
-}
-
-// Función para inicializar todos los mejoras de accesibilidad
-function initAccessibility() {
-    initSkipLink();
-    
-    // Inicializar navegación por teclado para diferentes menús
-    handleKeyboardNavigation('.nav-links', 'a');
-    handleKeyboardNavigation('.user-dropdown', 'a');
-    handleKeyboardNavigation('.profile-menu', 'a');
-    handleKeyboardNavigation('.admin-menu', 'a');
-    
-    // Asegurar que todos los botones tengan aria-label si no tienen texto visible
-    document.querySelectorAll('button:not([aria-label])').forEach(button => {
-        const text = button.textContent.trim();
-        if (!text && button.querySelector('i')) {
-            const icon = button.querySelector('i');
-            const iconClass = icon.className;
-            
-            // Mapear clases de iconos a descripciones
-            const iconDescriptions = {
-                'fa-shopping-cart': 'Carrito de compras',
-                'fa-user': 'Perfil de usuario',
-                'fa-sign-out-alt': 'Cerrar sesión',
-                'fa-camera': 'Cambiar avatar',
-                'fa-plus': 'Agregar',
-                'fa-edit': 'Editar',
-                'fa-trash': 'Eliminar',
-                'fa-search': 'Buscar'
-            };
-            
-            for (const [iconClassPart, description] of Object.entries(iconDescriptions)) {
-                if (iconClass.includes(iconClassPart)) {
-                    button.setAttribute('aria-label', description);
-                    break;
-                }
-            }
-        }
-    });
-}
-
-// Inicializar accesibilidad cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-    initAccessibility();
-});
-
+// Exportar funciones y constantes
 export { 
-  API_BASE_URL, 
   showNotification, 
-  isAuthenticated, 
-  isAdmin,
-  getUser,
-  requireAuth,
-  requireAdmin,
-  formatPrice,
-  logout,
-  updateCartCount,
+  formatPrice, 
+  updateCartCount, 
+  loadImageWithProxy,
   validateEmail,
-  validatePhone
+  validatePhone,
+  isAuthenticated, 
+  isAdmin, 
+  getUser, 
+  requireAuth, 
+  requireAdmin, 
+  getAuthToken, 
+  handleNetworkError, 
+  apiRequest,
+  logout,
+  API_BASE_URL
 };
