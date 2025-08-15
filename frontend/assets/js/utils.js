@@ -1,51 +1,5 @@
 // utils.js - Funciones de utilidad compartidas
 
-// Limpiar datos residuales al cargar la aplicación
-(function() {
-  // Forzar limpieza completa de datos de usuario
-  const token = localStorage.getItem('token');
-  const user = localStorage.getItem('user');
-  
-  // Si no hay token pero hay datos de usuario, limpiarlos
-  if (!token && user) {
-    localStorage.removeItem('user');
-  }
-  
-  // Si hay token pero es inválido, limpiar ambos
-  if (token) {
-    try {
-      // Intentar parsear como JWT
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const currentTime = Date.now() / 1000;
-      if (payload.exp < currentTime) {
-        // Token expirado, limpiar
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      }
-    } catch (e) {
-      // No es un JWT válido, verificar longitud
-      if (token.length < 10) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      }
-    }
-  }
-  
-  // Limpiar cualquier otro dato sospechoso
-  if (user) {
-    try {
-      const userData = JSON.parse(user);
-      // Si los datos del usuario no tienen las propiedades esperadas, limpiar
-      if (!userData.id && !userData.email && !userData.name) {
-        localStorage.removeItem('user');
-      }
-    } catch (e) {
-      // Si no se puede parsear como JSON, limpiar
-      localStorage.removeItem('user');
-    }
-  }
-})();
-
 // Determinar la URL base del API según el entorno
 const getApiBaseUrl = () => {
   // En producción, usar la URL del backend en Render
@@ -124,76 +78,38 @@ const formatPrice = (price) => {
 
 // Función para actualizar el contador del carrito
 function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-    const cartCount = document.querySelector('.cart-count');
-    
-    if (cartCount) {
-        // Actualizar contador
-        if (totalItems > 0) {
-            cartCount.textContent = totalItems;
-            cartCount.classList.remove('hidden');
-        } else {
-            cartCount.classList.add('hidden');
-        }
-    }
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const count = cart.reduce((total, item) => total + item.quantity, 0);
+  const cartCountElements = document.querySelectorAll('.cart-count');
+  cartCountElements.forEach(element => {
+    element.textContent = count;
+  });
 }
 
-// Función para cargar imágenes a través del proxy
-function loadImageWithProxy(imageUrl) {
-    // Si ya está usando el proxy, devolverla tal cual
-    if (imageUrl.includes('/api/image-proxy')) {
-        return imageUrl;
-    }
-    
-    // Si es una imagen local o de datos, devolverla tal cual
-    if (imageUrl.startsWith('data:') || imageUrl.startsWith('/') || imageUrl.startsWith('./') || imageUrl.startsWith('../')) {
-        return imageUrl;
-    }
-    
-    // Verificar si es una URL válida
-    try {
-        const url = new URL(imageUrl);
-        // Usar el proxy para dominios de Unsplash
-        if (url.hostname === 'images.unsplash.com' || url.hostname === 'source.unsplash.com') {
-            return `${API_BASE_URL}/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
-        }
-        // Para otras imágenes externas, intentar usar el proxy también
-        return `${API_BASE_URL}/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
-    } catch (e) {
-        // Si no es una URL válida, devolverla tal cual
-        return imageUrl;
-    }
-}
+// Validar email
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+};
 
-// Función para validar formato de email
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Función para validar formato de teléfono
-function validatePhone(phone) {
-    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
-    return phoneRegex.test(phone);
-}
+// Validar teléfono
+const validatePhone = (phone) => {
+  // Aceptar formatos chilenos: +56 9 1234 5678, +56912345678, 9 1234 5678, etc.
+  const re = /^(\+56)?[\s\-]?[9\d][\s\-]?\d{4}[\s\-]?\d{4}$/;
+  return re.test(phone.replace(/\s+/g, ' ').trim());
+};
 
 // Verificar si el usuario está autenticado
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
-  if (!token) {
-    // Si no hay token, asegurarse de limpiar cualquier dato de usuario residual
-    localStorage.removeItem('user');
-    return false;
-  }
+  if (!token) return false;
   
-  // Verificar si el token es válido (no está expirado)
   try {
-    // Si el token es un JWT, verificar su expiración
+    // Intentar parsear como JWT
     const payload = JSON.parse(atob(token.split('.')[1]));
     const currentTime = Date.now() / 1000;
     if (payload.exp < currentTime) {
-      // Token expirado, limpiar localStorage
+      // Token expirado, limpiar
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       return false;

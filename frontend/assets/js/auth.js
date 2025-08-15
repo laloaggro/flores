@@ -1,11 +1,3 @@
-// Forzar limpieza completa del localStorage al cargar este script
-(function() {
-  // Limpiar todos los datos de usuario almacenados
-  localStorage.removeItem('user');
-  localStorage.removeItem('token');
-  localStorage.removeItem('cart');
-})();
-
 import { updateCartCount, getUser, isAuthenticated, logout, isAdmin, API_BASE_URL } from './utils.js';
 
 // Función para inicializar el menú de usuario
