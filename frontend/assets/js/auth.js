@@ -51,7 +51,12 @@ function initUserMenu() {
     
     // Configurar el cierre de sesión
     if (logoutLink) {
-      logoutLink.addEventListener('click', function(e) {
+      // Eliminar event listeners previos para evitar duplicados
+      const newLogoutLink = logoutLink.cloneNode(true);
+      logoutLink.parentNode.replaceChild(newLogoutLink, logoutLink);
+      const freshLogoutLink = document.getElementById('logoutLink');
+      
+      freshLogoutLink.addEventListener('click', function(e) {
         e.preventDefault();
         handleLogout();
       });
