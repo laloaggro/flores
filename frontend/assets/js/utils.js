@@ -247,7 +247,6 @@ export {
   showNotification, 
   formatPrice, 
   updateCartCount, 
-  loadImageWithProxy,
   validateEmail,
   validatePhone,
   isAuthenticated, 
