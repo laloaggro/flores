@@ -407,6 +407,7 @@ header {
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
 }
 
 .product-card:hover {
@@ -419,20 +420,52 @@ header {
     outline-offset: 2px;
 }
 
+.product-card:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Mejorar accesibilidad para usuarios que navegan con teclado */
+.product-card:focus-within::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+}
+
 .product-image {
     height: 250px;
     overflow: hidden;
+    position: relative;
 }
 
+.product-image picture,
 .product-image img {
     width: 100%;
     height: 100%;
+    display: block;
+}
+
+.product-image img {
     object-fit: cover;
     transition: transform 0.5s ease;
+    background-color: #f8f9fa; /* Color de fondo para imágenes transparentes */
 }
 
 .product-card:hover .product-image img {
     transform: scale(1.1);
+}
+
+/* Estilos para imágenes que no se pudieron cargar */
+.product-image img[aria-label="Imagen no disponible"] {
+    object-fit: contain;
+    background-color: #e9ecef;
 }
 
 .product-info {
@@ -443,11 +476,30 @@ header {
 .product-info h3 {
     margin-bottom: 10px;
     color: var(--dark);
+    font-size: 1.25rem;
+    line-height: 1.4;
 }
 
 .product-info p {
     color: var(--dark);
     margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.product-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.875rem;
+    color: var(--secondary);
 }
 
 .price {
@@ -456,6 +508,61 @@ header {
     color: var(--primary);
     display: block;
     margin-bottom: 1rem;
+}
+
+/* Mejoras para contraste y accesibilidad */
+@media (prefers-contrast: high) {
+    .product-card {
+        border: 1px solid #000;
+    }
+    
+    .product-info h3,
+    .product-info p,
+    .detail-item {
+        color: #000;
+    }
+    
+    .price {
+        color: #006400; /* Verde más oscuro para mejor contraste */
+    }
+}
+
+/* Reducir movimiento para usuarios que lo prefieren */
+@media (prefers-reduced-motion: reduce) {
+    .product-card {
+        transition: none;
+    }
+    
+    .product-image img {
+        transition: none;
+    }
+    
+    .product-card:hover {
+        transform: none;
+    }
+    
+    .product-card:hover .product-image img {
+        transform: none;
+    }
+}
+
+/* Ajustes para usuarios con preferencia de tamaño de fuente mayor */
+@media (prefers-font-size: large) {
+    .product-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    .product-info p {
+        font-size: 1.125rem;
+    }
+    
+    .detail-item {
+        font-size: 1rem;
+    }
+    
+    .price {
+        font-size: 1.75rem;
+    }
 }
 
 /* Cart Modal */

@@ -1,7 +1,7 @@
 // imageUtils.js - Utilidades para optimización de imágenes
 
 /**
- * Crear un elemento de imagen responsivo con carga diferida y formato WebP
+ * Crear un elemento de imagen responsivo con carga diferida y múltiples formatos
  * @param {string} src - URL de la imagen original
  * @param {string} alt - Texto alternativo
  * @param {object} options - Opciones adicionales (clases, etc.)
@@ -11,7 +11,8 @@ function createResponsiveImage(src, alt, options = {}) {
   const {
     classes = '',
     sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
-    loading = 'lazy'
+    loading = 'lazy',
+    role = 'img'
   } = options;
 
   // Generar URLs para diferentes formatos
@@ -30,6 +31,9 @@ function createResponsiveImage(src, alt, options = {}) {
         sizes="${sizes}"
         width="800"
         height="600"
+        decoding="async"
+        fetchpriority="auto"
+        role="${role}"
         onerror="handleImageError(this)"
       >
     </picture>
@@ -62,6 +66,10 @@ function handleImageError(imgElement) {
   
   // Añadir atributo aria-label para indicar que la imagen no se pudo cargar
   imgElement.setAttribute('aria-label', 'Imagen no disponible');
+  
+  // Asegurar que la imagen tenga dimensiones adecuadas
+  imgElement.style.objectFit = 'contain';
+  imgElement.style.backgroundColor = '#e9ecef';
 }
 
 /**
@@ -73,7 +81,9 @@ function initLazyLoading() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target;
-          img.src = img.dataset.src;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+          }
           img.classList.remove('lazy');
           imageObserver.unobserve(img);
         }
@@ -86,4 +96,71 @@ function initLazyLoading() {
   }
 }
 
-export { createResponsiveImage, handleImageError, initLazyLoading };
+/**
+ * Precargar imagen crítica
+ * @param {string} src - URL de la imagen
+ * @returns {Promise} - Promesa que se resuelve cuando la imagen se carga
+ */
+function preloadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+    img.src = src;
+  });
+}
+
+/**
+ * Optimizar imágenes para diferentes densidades de pantalla
+ * @param {string} baseSrc - URL base de la imagen
+ * @param {string} alt - Texto alternativo
+ * @param {object} options - Opciones adicionales
+ * @returns {string} - HTML del elemento de imagen responsivo
+ */
+function createDensityOptimizedImage(baseSrc, alt, options = {}) {
+  const {
+    classes = '',
+    loading = 'lazy'
+  } = options;
+  
+  // Generar URLs para diferentes densidades
+  const src1x = baseSrc;
+  const src2x = baseSrc.replace(/(\.[^.]+)$/, '@2x$1');
+  const src3x = baseSrc.replace(/(\.[^.]+)$/, '@3x$1');
+  
+  // Generar URLs para diferentes formatos
+  const webp1x = src1x.replace(/\.(jpg|jpeg|png)/i, '.webp');
+  const webp2x = src2x.replace(/\.(jpg|jpeg|png)/i, '.webp');
+  const webp3x = src3x.replace(/\.(jpg|jpeg|png)/i, '.webp');
+  
+  const avif1x = src1x.replace(/\.(jpg|jpeg|png)/i, '.avif');
+  const avif2x = src2x.replace(/\.(jpg|jpeg|png)/i, '.avif');
+  const avif3x = src3x.replace(/\.(jpg|jpeg|png)/i, '.avif');
+  
+  return `
+    <picture>
+      <source srcset="${avif1x}, ${avif2x} 2x, ${avif3x} 3x" type="image/avif">
+      <source srcset="${webp1x}, ${webp2x} 2x, ${webp3x} 3x" type="image/webp">
+      <source srcset="${src1x}, ${src2x} 2x, ${src3x} 3x" type="image/jpeg">
+      <img 
+        src="${src1x}" 
+        alt="${alt}"
+        class="${classes}"
+        loading="${loading}"
+        width="800"
+        height="600"
+        decoding="async"
+        fetchpriority="auto"
+        onerror="handleImageError(this)"
+      >
+    </picture>
+  `;
+}
+
+export { 
+  createResponsiveImage, 
+  handleImageError, 
+  initLazyLoading,
+  preloadImage,
+  createDensityOptimizedImage
+};

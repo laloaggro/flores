@@ -32,6 +32,14 @@ function initUserMenu() {
     userMenu.style.display = 'block';
     loginLink.style.display = 'none';
     
+    // Añadir atributos de accesibilidad al menú de usuario
+    if (userMenuButton) {
+      userMenuButton.setAttribute('aria-expanded', 'false');
+      userMenuButton.setAttribute('aria-haspopup', 'true');
+      userMenuButton.setAttribute('role', 'button');
+      userMenuButton.setAttribute('tabindex', '0');
+    }
+    
     // Mostrar el nombre del usuario
     if (userNameElement) {
       userNameElement.textContent = user.name || 'Usuario';
@@ -40,6 +48,7 @@ function initUserMenu() {
     // Mostrar el ícono del menú desplegable
     if (caretIcon) {
       caretIcon.style.display = 'inline';
+      caretIcon.setAttribute('aria-hidden', 'true');
     }
     
     // Agregar enlace al panel de administración si el usuario es administrador
@@ -58,6 +67,10 @@ function initUserMenu() {
         e.preventDefault();
         handleLogout();
       });
+      
+      // Añadir atributos de accesibilidad
+      freshLogoutLink.setAttribute('role', 'menuitem');
+      freshLogoutLink.setAttribute('tabindex', '-1');
     }
     
     // Manejar clic en el botón de usuario (si existe)
@@ -79,6 +92,14 @@ function initUserMenu() {
           if (firstLink) {
             firstLink.focus();
           }
+        }
+      });
+      
+      // Manejar la navegación con teclado
+      freshUserMenuButton.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          freshUserMenuButton.click();
         }
       });
       
@@ -116,6 +137,9 @@ function initUserMenu() {
             break;
         }
       });
+      
+      // Añadir roles y atributos de accesibilidad al dropdown
+      userDropdown.setAttribute('role', 'menu');
     }
   } else {
     // Usuario no autenticado - mostrar enlace de inicio de sesión
@@ -154,6 +178,8 @@ function addAdminLinkToMenu() {
       adminLink.href = 'pages/admin.html';
       adminLink.className = 'admin-link';
       adminLink.innerHTML = '<i class="fas fa-cog"></i> Panel de Administración';
+      adminLink.setAttribute('role', 'menuitem');
+      adminLink.setAttribute('tabindex', '-1');
       
       // Insertar el enlace antes del enlace de cierre de sesión
       const logoutLink = document.getElementById('logoutLink');

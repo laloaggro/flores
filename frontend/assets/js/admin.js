@@ -33,6 +33,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const targetSection = document.getElementById(`${sectionId}-section`);
         if (targetSection) {
             targetSection.classList.add('active');
+            // Enfocar el encabezado de la sección para mejor navegación
+            const heading = targetSection.querySelector('h2');
+            if (heading) {
+                heading.setAttribute('tabindex', '-1');
+                heading.focus();
+            }
         }
         
         // Actualizar enlaces activos
@@ -40,8 +46,24 @@ document.addEventListener('DOMContentLoaded', function() {
             link.classList.remove('active');
             if (link.getAttribute('data-section') === sectionId) {
                 link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
             }
         });
+        
+        // Cargar datos específicos de la sección
+        switch(sectionId) {
+            case 'products':
+                loadAllProducts();
+                break;
+            case 'orders':
+                loadOrders();
+                break;
+            case 'users':
+                loadUsers();
+                break;
+        }
     }
     
     // Agregar event listeners a los enlaces del menú
@@ -51,10 +73,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const sectionId = this.getAttribute('data-section');
             changeSection(sectionId);
         });
+        
+        // Añadir atributos de accesibilidad
+        link.setAttribute('role', 'tab');
+        link.setAttribute('aria-selected', 'false');
     });
     
     // Cargar datos del dashboard
     loadDashboardData();
+    
+    // Configurar eventos de productos
+    setupProductEvents();
 });
 
 // Función para cargar datos del dashboard
@@ -85,17 +114,30 @@ async function loadDashboardData() {
                 <td>$${product.price.toFixed(2)}</td>
                 <td>${product.category}</td>
                 <td>
-                    <button class="btn-icon view-btn" title="Ver">
-                        <i class="fas fa-eye"></i>
+                    <button class="btn-icon view-btn" title="Ver" aria-label="Ver detalles de ${product.name}">
+                        <i class="fas fa-eye" aria-hidden="true"></i>
                     </button>
-                    <button class="btn-icon edit-btn" title="Editar">
-                        <i class="fas fa-edit"></i>
+                    <button class="btn-icon edit-btn" title="Editar" data-id="${product.id}" aria-label="Editar ${product.name}">
+                        <i class="fas fa-edit" aria-hidden="true"></i>
                     </button>
-                    <button class="btn-icon delete-btn" title="Eliminar">
-                        <i class="fas fa-trash"></i>
+                    <button class="btn-icon delete-btn" title="Eliminar" data-id="${product.id}" aria-label="Eliminar ${product.name}">
+                        <i class="fas fa-trash" aria-hidden="true"></i>
                     </button>
                 </td>
             `;
+            
+            // Agregar eventos a los botones
+            const editBtn = row.querySelector('.edit-btn');
+            const deleteBtn = row.querySelector('.delete-btn');
+            
+            editBtn.addEventListener('click', () => {
+                editProduct(product.id);
+            });
+            
+            deleteBtn.addEventListener('click', () => {
+                deleteProduct(product.id);
+            });
+            
             productsTableBody.appendChild(row);
         });
     } catch (error) {
@@ -107,11 +149,28 @@ async function loadDashboardData() {
 function setupProductEvents() {
     // Evento para el botón de agregar producto
     const addProductBtn = document.getElementById('addProductBtn');
+    const addProductModalBtn = document.getElementById('addProductModalBtn');
+    
     if (addProductBtn) {
         addProductBtn.addEventListener('click', function() {
             // Mostrar formulario para agregar producto
             showAddProductForm();
         });
+        
+        // Añadir atributos de accesibilidad
+        addProductBtn.setAttribute('aria-label', 'Agregar nuevo producto');
+        addProductBtn.setAttribute('role', 'button');
+    }
+    
+    if (addProductModalBtn) {
+        addProductModalBtn.addEventListener('click', function() {
+            // Mostrar formulario para agregar producto
+            showAddProductForm();
+        });
+        
+        // Añadir atributos de accesibilidad
+        addProductModalBtn.setAttribute('aria-label', 'Agregar nuevo producto');
+        addProductModalBtn.setAttribute('role', 'button');
     }
 }
 
@@ -121,25 +180,28 @@ function showAddProductForm() {
     const modal = document.createElement('div');
     modal.className = 'modal';
     modal.id = 'addProductModal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-labelledby', 'addProductModalTitle');
+    modal.setAttribute('aria-modal', 'true');
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Agregar Nuevo Producto</h3>
-                <span class="close">&times;</span>
+                <h3 id="addProductModalTitle">Agregar Nuevo Producto</h3>
+                <button class="close" aria-label="Cerrar">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="addProductForm">
                     <div class="form-group">
                         <label for="productName">Nombre:</label>
-                        <input type="text" id="productName" class="form-input" required>
+                        <input type="text" id="productName" class="form-input" required aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="productCategory">Categoría:</label>
-                        <input type="text" id="productCategory" class="form-input" required>
+                        <input type="text" id="productCategory" class="form-input" required aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="productPrice">Precio:</label>
-                        <input type="number" id="productPrice" class="form-input" min="0" step="100" required>
+                        <input type="number" id="productPrice" class="form-input" min="0" step="100" required aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="productImage">URL de Imagen:</label>
@@ -164,8 +226,18 @@ function showAddProductForm() {
         modal.remove();
     });
     
+    // Añadir atributos de accesibilidad al botón de cierre
+    closeBtn.setAttribute('aria-label', 'Cerrar modal');
+    
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    // Manejar la tecla Escape para cerrar el modal
+    window.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.parentNode) {
             modal.remove();
         }
     });
@@ -179,6 +251,12 @@ function showAddProductForm() {
     
     // Mostrar modal
     modal.style.display = 'block';
+    
+    // Enfocar el primer campo del formulario
+    const firstInput = modal.querySelector('input, textarea, select');
+    if (firstInput) {
+        firstInput.focus();
+    }
 }
 
 // Agregar producto
@@ -193,8 +271,8 @@ async function addProduct() {
             description: formData.get('productDescription')
         };
         
-        const token = localStorage.getItem('token');
-        const response = await fetch('/api/products', {
+        const token = getAuthToken();
+        const response = await fetch(`${API_BASE_URL}/api/products`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -225,62 +303,76 @@ async function addProduct() {
     }
 }
 
-// Cargar productos
-async function loadProducts() {
+// Cargar todos los productos
+async function loadAllProducts() {
     try {
-        const response = await fetch('/api/products');
+        const response = await fetch(`${API_BASE_URL}/api/products`);
         if (!response.ok) {
             throw new Error('Error al cargar productos');
         }
         
         const data = await response.json();
-        const tbody = document.getElementById('productsTableBody');
+        const products = data.products || data;
+        const tbody = document.getElementById('allProductsTableBody');
         
-        if (data.products && data.products.length > 0) {
-            tbody.innerHTML = data.products.map(product => `
-                <tr>
-                    <td>${product.id}</td>
-                    <td>${product.name}</td>
-                    <td>${product.category}</td>
-                    <td>$${parseFloat(product.price).toLocaleString('es-CL')}</td>
-                    <td>
-                        <button class="btn-icon edit-product" data-id="${product.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-icon delete-product" data-id="${product.id}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-            
-            // Añadir eventos a los botones de editar y eliminar
-            document.querySelectorAll('.edit-product').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.getAttribute('data-id');
-                    editProduct(productId);
+        if (tbody) {
+            if (products && products.length > 0) {
+                tbody.innerHTML = products.map(product => `
+                    <tr>
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td>${product.description || ''}</td>
+                        <td>$${parseFloat(product.price).toLocaleString('es-CL')}</td>
+                        <td>${product.category}</td>
+                        <td><img src="${product.image || ''}" alt="${product.name}" width="50" loading="lazy"></td>
+                        <td>
+                            <button class="btn-icon edit-product" data-id="${product.id}" aria-label="Editar ${product.name}" title="Editar">
+                                <i class="fas fa-edit" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn-icon delete-product" data-id="${product.id}" aria-label="Eliminar ${product.name}" title="Eliminar">
+                                <i class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                // Añadir eventos a los botones de editar y eliminar
+                document.querySelectorAll('.edit-product').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = this.getAttribute('data-id');
+                        editProduct(productId);
+                    });
+                    
+                    // Añadir atributos de accesibilidad
+                    button.setAttribute('role', 'button');
                 });
-            });
-            
-            document.querySelectorAll('.delete-product').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.getAttribute('data-id');
-                    deleteProduct(productId);
+                
+                document.querySelectorAll('.delete-product').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = this.getAttribute('data-id');
+                        deleteProduct(productId);
+                    });
+                    
+                    // Añadir atributos de accesibilidad
+                    button.setAttribute('role', 'button');
                 });
-            });
-        } else {
-            tbody.innerHTML = '<tr><td colspan="5">No hay productos disponibles</td></tr>';
+            } else {
+                tbody.innerHTML = '<tr><td colspan="7">No hay productos disponibles</td></tr>';
+            }
         }
     } catch (error) {
         console.error('Error al cargar productos:', error);
-        document.getElementById('productsTableBody').innerHTML = '<tr><td colspan="5">Error al cargar productos</td></tr>';
+        const tbody = document.getElementById('allProductsTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="7">Error al cargar productos</td></tr>';
+        }
     }
 }
 
 // Editar producto
 function editProduct(productId) {
     // Obtener los datos del producto
-    fetch(`/api/products/${productId}`)
+    fetch(`${API_BASE_URL}/api/products/${productId}`)
         .then(response => response.json())
         .then(product => {
             // Mostrar formulario para editar producto
@@ -298,26 +390,29 @@ function showEditProductForm(product) {
     const modal = document.createElement('div');
     modal.className = 'modal';
     modal.id = 'editProductModal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-labelledby', 'editProductModalTitle');
+    modal.setAttribute('aria-modal', 'true');
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Editar Producto</h3>
-                <span class="close">&times;</span>
+                <h3 id="editProductModalTitle">Editar Producto</h3>
+                <button class="close" aria-label="Cerrar">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="editProductForm">
                     <input type="hidden" id="productId" value="${product.id}">
                     <div class="form-group">
                         <label for="editProductName">Nombre:</label>
-                        <input type="text" id="editProductName" class="form-input" value="${product.name}" required>
+                        <input type="text" id="editProductName" class="form-input" value="${product.name}" required aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="editProductCategory">Categoría:</label>
-                        <input type="text" id="editProductCategory" class="form-input" value="${product.category}" required>
+                        <input type="text" id="editProductCategory" class="form-input" value="${product.category}" required aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="editProductPrice">Precio:</label>
-                        <input type="number" id="editProductPrice" class="form-input" min="0" step="100" value="${product.price}" required>
+                        <input type="number" id="editProductPrice" class="form-input" min="0" step="100" value="${product.price}" required aria-required="true">
                     </div>
                     <div class="form-group">
                         <label for="editProductImage">URL de Imagen:</label>
@@ -342,8 +437,18 @@ function showEditProductForm(product) {
         modal.remove();
     });
     
+    // Añadir atributos de accesibilidad al botón de cierre
+    closeBtn.setAttribute('aria-label', 'Cerrar modal');
+    
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
+            modal.remove();
+        }
+    });
+    
+    // Manejar la tecla Escape para cerrar el modal
+    window.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.parentNode) {
             modal.remove();
         }
     });
@@ -357,6 +462,12 @@ function showEditProductForm(product) {
     
     // Mostrar modal
     modal.style.display = 'block';
+    
+    // Enfocar el primer campo del formulario
+    const firstInput = modal.querySelector('input, textarea, select');
+    if (firstInput) {
+        firstInput.focus();
+    }
 }
 
 // Actualizar producto
@@ -364,7 +475,6 @@ async function updateProduct(productId) {
     try {
         const formData = new FormData(document.getElementById('editProductForm'));
         const productData = {
-            id: productId,
             name: formData.get('editProductName'),
             category: formData.get('editProductCategory'),
             price: parseFloat(formData.get('editProductPrice')),
@@ -372,8 +482,8 @@ async function updateProduct(productId) {
             description: formData.get('editProductDescription')
         };
         
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/products/${productId}`, {
+        const token = getAuthToken();
+        const response = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -415,8 +525,8 @@ function deleteProduct(productId) {
 // Eliminar producto de la base de datos
 async function removeProduct(productId) {
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/products/${productId}`, {
+        const token = getAuthToken();
+        const response = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -453,8 +563,8 @@ async function loadOrders() {
                     <td>$45.990</td>
                     <td><span class="status pending">Pendiente</span></td>
                     <td>
-                        <button class="btn-icon edit-order" data-id="1">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn-icon edit-order" data-id="1" aria-label="Editar pedido 1" title="Editar">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
                         </button>
                     </td>
                 </tr>
@@ -465,8 +575,8 @@ async function loadOrders() {
                     <td>$32.500</td>
                     <td><span class="status completed">Completado</span></td>
                     <td>
-                        <button class="btn-icon edit-order" data-id="2">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn-icon edit-order" data-id="2" aria-label="Editar pedido 2" title="Editar">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
                         </button>
                     </td>
                 </tr>
@@ -492,8 +602,8 @@ async function loadUsers() {
                     <td>+56963603177</td>
                     <td>admin</td>
                     <td>
-                        <button class="btn-icon edit-user" data-id="1">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn-icon edit-user" data-id="1" aria-label="Editar usuario 1" title="Editar">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
                         </button>
                     </td>
                 </tr>
@@ -504,8 +614,8 @@ async function loadUsers() {
                     <td>+56987654321</td>
                     <td>user</td>
                     <td>
-                        <button class="btn-icon edit-user" data-id="2">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn-icon edit-user" data-id="2" aria-label="Editar usuario 2" title="Editar">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
                         </button>
                     </td>
                 </tr>
@@ -564,6 +674,8 @@ function showMessage(message, type = 'info') {
     const messageElement = document.createElement('div');
     messageElement.className = `alert alert-${type}`;
     messageElement.textContent = message;
+    messageElement.setAttribute('role', 'alert');
+    messageElement.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
     
     // Agregar al inicio del contenedor principal
     const container = document.querySelector('.admin-container');
