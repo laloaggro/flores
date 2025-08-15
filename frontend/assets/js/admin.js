@@ -1,105 +1,106 @@
 // admin.js - Funcionalidad del panel de administración
-import { initUserMenu, API_BASE_URL } from '../assets/js/auth.js';
+import { API_BASE_URL, isAuthenticated, isAdmin } from './utils.js';
+import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Verificar si el usuario es administrador
-    checkAdminAccess();
+    // Verificar autenticación
+    if (!isAuthenticated()) {
+        window.location.href = '../login.html';
+        return;
+    }
     
-    // Inicializar el panel de administración
-    initAdminPanel();
-    
-    // Manejar la navegación del menú
-    setupMenuNavigation();
+    // Verificar rol de administrador
+    if (!isAdmin()) {
+        window.location.href = '../index.html';
+        return;
+    }
     
     // Inicializar el menú de usuario
     initUserMenu();
     
-    // Configurar eventos de productos
-    setupProductEvents();
+    // Resto del código de admin.js
+    const menuLinks = document.querySelectorAll('.admin-menu a');
+    const contentSections = document.querySelectorAll('.admin-content-section');
     
-    // Forzar la inicialización del menú de usuario después de un breve retraso
-    setTimeout(() => {
-        initUserMenu();
-        showAdminMenu();
-    }, 100);
-});
-
-// Verificar si el usuario tiene acceso de administrador
-async function checkAdminAccess() {
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            // Redirigir al login si no hay token
-            window.location.href = '../login.html';
-            return;
-        }
-        
-        const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+    // Función para cambiar de sección
+    function changeSection(sectionId) {
+        // Ocultar todas las secciones
+        contentSections.forEach(section => {
+            section.classList.remove('active');
         });
         
-        if (!response.ok) {
-            throw new Error('No autorizado');
+        // Mostrar la sección seleccionada
+        const targetSection = document.getElementById(`${sectionId}-section`);
+        if (targetSection) {
+            targetSection.classList.add('active');
         }
         
-        const userData = await response.json();
-        
-        // Verificar si el usuario es administrador
-        if (userData.role !== 'admin') {
-            // Mostrar mensaje de error y redirigir
-            alert('Acceso denegado. Necesitas permisos de administrador.');
-            window.location.href = '../index.html';
-            return;
-        }
-        
-        // Mostrar el nombre del administrador
-        document.getElementById('userName').textContent = userData.name;
-        
-        // Asegurarse de que el menú de usuario se muestre correctamente
-        showAdminMenu();
-    } catch (error) {
-        console.error('Error al verificar acceso de administrador:', error);
-        window.location.href = '../login.html';
-    }
-}
-
-// Función para mostrar el menú de administrador correctamente
-function showAdminMenu() {
-    const userMenu = document.getElementById('userMenu');
-    const loginLink = document.getElementById('loginLink');
-    
-    if (userMenu && loginLink) {
-        // Mostrar el menú de usuario y ocultar el enlace de inicio de sesión
-        userMenu.style.display = 'block';
-        loginLink.style.display = 'none';
-        
-        // Asegurarse de que el nombre de usuario se muestre
-        const userNameElement = document.getElementById('userName');
-        if (userNameElement && !userNameElement.textContent) {
-            // Obtener el nombre del usuario del localStorage si no está ya establecido
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (user.name) {
-                userNameElement.textContent = user.name;
+        // Actualizar enlaces activos
+        menuLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-section') === sectionId) {
+                link.classList.add('active');
             }
-        }
+        });
     }
-}
+    
+    // Agregar event listeners a los enlaces del menú
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const sectionId = this.getAttribute('data-section');
+            changeSection(sectionId);
+        });
+    });
+    
+    // Cargar datos del dashboard
+    loadDashboardData();
+});
 
-// Inicializar el panel de administración
-function initAdminPanel() {
-    // Cargar estadísticas
-    loadStats();
-    
-    // Cargar productos
-    loadProducts();
-    
-    // Cargar pedidos
-    loadOrders();
-    
-    // Cargar usuarios
-    loadUsers();
+// Función para cargar datos del dashboard
+async function loadDashboardData() {
+    try {
+        // Cargar estadísticas
+        const statsResponse = await fetch(`${API_BASE_URL}/api/products/stats`);
+        const stats = await statsResponse.json();
+        
+        document.getElementById('totalProducts').textContent = stats.totalProducts || 0;
+        document.getElementById('totalOrders').textContent = stats.totalOrders || 0;
+        document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+        document.getElementById('totalRevenue').textContent = `$${(stats.totalRevenue || 0).toFixed(2)}`;
+        
+        // Cargar productos recientes
+        const productsResponse = await fetch(`${API_BASE_URL}/api/products?limit=5`);
+        const productsData = await productsResponse.json();
+        const products = productsData.products || productsData;
+        
+        const productsTableBody = document.getElementById('productsTableBody');
+        productsTableBody.innerHTML = '';
+        
+        products.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.id}</td>
+                <td>${product.name}</td>
+                <td>$${product.price.toFixed(2)}</td>
+                <td>${product.category}</td>
+                <td>
+                    <button class="btn-icon view-btn" title="Ver">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-icon edit-btn" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete-btn" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            productsTableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error al cargar datos del dashboard:', error);
+    }
 }
 
 // Configurar eventos de productos

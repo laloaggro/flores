@@ -2222,6 +2222,13 @@ footer {
     }
 }
 
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -2232,6 +2239,7 @@ footer {
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  position: relative;
 }
 
 .user-info:hover {
@@ -2262,6 +2270,7 @@ footer {
   padding: 10px 15px;
   color: var(--dark);
   transition: background-color 0.3s ease;
+  text-decoration: none;
 }
 
 .user-dropdown a:hover {

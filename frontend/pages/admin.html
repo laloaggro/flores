@@ -52,91 +52,102 @@
         </div>
     </header>
 
-    <main class="admin-page">
-        <div class="container">
-            <div class="admin-header">
-                <h1>Panel de Administración</h1>
-                <p>Bienvenido al panel de administración de Arreglos Victoria</p>
-            </div>
-
+    <main>
+        <section class="admin-section">
+            <div class="container">
+                <div class="admin-container">
+                    <div class="admin-header">
+                        <h1>Panel de Administración</h1>
+                        <p>Gestiona tus productos, pedidos y configuraciones</p>
+                    </div>
+                    
                     <div class="admin-content">
-                        <div class="admin-sidebar">
+                        <aside class="admin-sidebar">
                             <ul class="admin-menu">
-                                <li class="active">
-                                    <a href="#dashboard" data-section="dashboard">
-                                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#products" data-section="products">
-                                        <i class="fas fa-box"></i> Productos
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#orders" data-section="orders">
-                                        <i class="fas fa-shopping-cart"></i> Pedidos
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#users" data-section="users">
-                                        <i class="fas fa-users"></i> Usuarios
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#settings" data-section="settings">
-                                        <i class="fas fa-cog"></i> Configuración
-                                    </a>
-                                </li>
+                                <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                                <li><a href="#" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
+                                <li><a href="#" data-section="orders"><i class="fas fa-shopping-cart"></i> Pedidos</a></li>
+                                <li><a href="#" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
+                                <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
                             </ul>
-                        </div>
-
-                        <div class="admin-main">
-                            <div id="dashboard" class="admin-content-section active">
+                        </aside>
+                        
+                        <main class="admin-main">
+                            <!-- Dashboard Section -->
+                            <section id="dashboard-section" class="admin-content-section active">
                                 <h2>Dashboard</h2>
+                                
                                 <div class="admin-stats">
                                     <div class="stat-card">
                                         <div class="stat-icon">
                                             <i class="fas fa-box"></i>
                                         </div>
                                         <div class="stat-info">
-                                            <span class="stat-number" id="productCount">0</span>
+                                            <span class="stat-number" id="totalProducts">0</span>
                                             <span class="stat-label">Productos</span>
                                         </div>
                                     </div>
+                                    
                                     <div class="stat-card">
                                         <div class="stat-icon">
                                             <i class="fas fa-shopping-cart"></i>
                                         </div>
                                         <div class="stat-info">
-                                            <span class="stat-number" id="orderCount">0</span>
+                                            <span class="stat-number" id="totalOrders">0</span>
                                             <span class="stat-label">Pedidos</span>
                                         </div>
                                     </div>
+                                    
                                     <div class="stat-card">
                                         <div class="stat-icon">
                                             <i class="fas fa-users"></i>
                                         </div>
                                         <div class="stat-info">
-                                            <span class="stat-number" id="userCount">0</span>
+                                            <span class="stat-number" id="totalUsers">0</span>
                                             <span class="stat-label">Usuarios</span>
                                         </div>
                                     </div>
+                                    
                                     <div class="stat-card">
                                         <div class="stat-icon">
                                             <i class="fas fa-dollar-sign"></i>
                                         </div>
                                         <div class="stat-info">
-                                            <span class="stat-number" id="revenueCount">$0</span>
+                                            <span class="stat-number" id="totalRevenue">$0</span>
                                             <span class="stat-label">Ingresos</span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div id="products" class="admin-content-section">
-                                <h2>Gestión de Productos</h2>
+                                
                                 <div class="admin-actions">
                                     <button id="addProductBtn" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Agregar Producto
+                                    </button>
+                                </div>
+                                
+                                <div class="admin-table-container">
+                                    <table class="admin-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Precio</th>
+                                                <th>Categoría</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="productsTableBody">
+                                            <!-- Los productos se cargarán aquí dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                            
+                            <!-- Products Section -->
+                            <section id="products-section" class="admin-content-section">
+                                <h2>Gestión de Productos</h2>
+                                <div class="admin-actions">
+                                    <button id="addProductModalBtn" class="btn btn-primary">
                                         <i class="fas fa-plus"></i> Agregar Producto
                                     </button>
                                 </div>
@@ -146,21 +157,22 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Nombre</th>
-                                                <th>Categoría</th>
+                                                <th>Descripción</th>
                                                 <th>Precio</th>
+                                                <th>Categoría</th>
+                                                <th>Imagen</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="productsTableBody">
-                                            <tr>
-                                                <td colspan="5">Cargando productos...</td>
-                                            </tr>
+                                        <tbody id="allProductsTableBody">
+                                            <!-- Los productos se cargarán aquí dinámicamente -->
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-
-                            <div id="orders" class="admin-content-section">
+                            </section>
+                            
+                            <!-- Orders Section -->
+                            <section id="orders-section" class="admin-content-section">
                                 <h2>Gestión de Pedidos</h2>
                                 <div class="admin-table-container">
                                     <table class="admin-table">
@@ -175,15 +187,14 @@
                                             </tr>
                                         </thead>
                                         <tbody id="ordersTableBody">
-                                            <tr>
-                                                <td colspan="6">Cargando pedidos...</td>
-                                            </tr>
+                                            <!-- Los pedidos se cargarán aquí dinámicamente -->
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-
-                            <div id="users" class="admin-content-section">
+                            </section>
+                            
+                            <!-- Users Section -->
+                            <section id="users-section" class="admin-content-section">
                                 <h2>Gestión de Usuarios</h2>
                                 <div class="admin-table-container">
                                     <table class="admin-table">
@@ -198,75 +209,84 @@
                                             </tr>
                                         </thead>
                                         <tbody id="usersTableBody">
-                                            <tr>
-                                                <td colspan="6">Cargando usuarios...</td>
-                                            </tr>
+                                            <!-- Los usuarios se cargarán aquí dinámicamente -->
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-
-                            <div id="settings" class="admin-content-section">
+                            </section>
+                            
+                            <!-- Settings Section -->
+                            <section id="settings-section" class="admin-content-section">
                                 <h2>Configuración</h2>
-                                <div class="settings-form">
+                                <form class="settings-form">
                                     <div class="form-group">
                                         <label for="siteName">Nombre del Sitio</label>
                                         <input type="text" id="siteName" class="form-input" value="Arreglos Florales Victoria">
                                     </div>
                                     <div class="form-group">
-                                        <label for="contactEmail">Email de Contacto</label>
-                                        <input type="email" id="contactEmail" class="form-input" value="arreglosvictoriafloreria@gmail.com">
+                                        <label for="siteEmail">Email de Contacto</label>
+                                        <input type="email" id="siteEmail" class="form-input" value="info@arreglosvictoria.com">
                                     </div>
                                     <div class="form-group">
-                                        <label for="contactPhone">Teléfono de Contacto</label>
-                                        <input type="text" id="contactPhone" class="form-input" value="+569 6360 3177">
+                                        <label for="sitePhone">Teléfono de Contacto</label>
+                                        <input type="text" id="sitePhone" class="form-input" value="+56 9 1234 5678">
                                     </div>
-                                    <button class="btn btn-primary">Guardar Configuración</button>
-                                </div>
-                            </div>
-                        </div>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </form>
+                            </section>
+                        </main>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Arreglos Florales Victoria</h3>
-                    <p>Creando hermosos recuerdos con flores frescas y arreglos únicos desde 2010.</p>
-                    <div class="social-links">
-                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Enlaces Rápidos</h4>
-                    <ul>
-                        <li><a href="../index.html">Inicio</a></li>
-                        <li><a href="../products.html">Productos</a></li>
-                        <li><a href="../index.html#about">Nosotros</a></li>
-                        <li><a href="../index.html#contacto">Contacto</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Información de Contacto</h4>
-                    <ul class="contact-info">
-                        <li><i class="fas fa-map-marker-alt"></i> Av. Valdivieso 593, 8441510 Recoleta, Región Metropolitana</li>
-                        <li><i class="fas fa-phone"></i> +569 6360 3177</li>
-                        <li><i class="fas fa-envelope"></i> arreglosvictoriafloreria@gmail.com</li>
-                    </ul>
-                </div>
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Agregar Producto</h3>
+                <span class="close">&times;</span>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    <div class="form-group">
+                        <label for="productName">Nombre</label>
+                        <input type="text" id="productName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Descripción</label>
+                        <textarea id="productDescription" class="form-input" rows="3" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productPrice">Precio</label>
+                            <input type="number" id="productPrice" class="form-input" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">Categoría</label>
+                            <select id="productCategory" class="form-input" required>
+                                <option value="">Seleccionar categoría</option>
+                                <option value=" Ramos">Ramos</option>
+                                <option value="Arreglos">Arreglos</option>
+                                <option value="Especiales">Especiales</option>
+                                <option value="Plantas">Plantas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="productImage">URL de la Imagen</label>
+                        <input type="url" id="productImage" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                </form>
             </div>
         </div>
-    </footer>
+    </div>
 
+    <script src="../assets/js/utils.js" type="module"></script>
+    <script src="../assets/js/auth.js" type="module"></script>
     <script src="../assets/js/admin.js" type="module"></script>
 </body>
 </html>

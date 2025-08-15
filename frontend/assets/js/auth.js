@@ -21,7 +21,7 @@ function initUserMenu() {
   const userNameElement = document.getElementById('userName');
   const logoutLink = document.getElementById('logoutLink');
   const userDropdown = document.querySelector('.user-dropdown');
-  const userMenuButton = document.getElementById('userMenuButton');
+  const userMenuButton = document.querySelector('.user-info');
   
   // Si no existen los elementos necesarios, salir de la función
   if (!userMenu || !loginLink) {
@@ -65,15 +65,15 @@ function initUserMenu() {
     // Manejar clic en el botón de usuario (si existe)
     if (userMenuButton && userDropdown) {
       // Eliminar event listeners previos para evitar duplicados
-      const newMenuButton = userMenuButton.cloneNode(true);
-      userMenuButton.parentNode.replaceChild(newMenuButton, userMenuButton);
-      const freshMenuButton = document.getElementById('userMenuButton');
+      const newUserMenuButton = userMenuButton.cloneNode(true);
+      userMenuButton.parentNode.replaceChild(newUserMenuButton, userMenuButton);
+      const freshUserMenuButton = document.querySelector('.user-info');
       
-      freshMenuButton.addEventListener('click', function(e) {
+      freshUserMenuButton.addEventListener('click', function(e) {
         e.stopPropagation();
-        userMenu.classList.toggle('show');
-        const isExpanded = userMenu.classList.contains('show');
-        freshMenuButton.setAttribute('aria-expanded', isExpanded);
+        userDropdown.classList.toggle('show');
+        const isExpanded = userDropdown.classList.contains('show');
+        freshUserMenuButton.setAttribute('aria-expanded', isExpanded);
         
         // Si el menú se abre, enfocar el primer elemento
         if (isExpanded) {
@@ -86,11 +86,11 @@ function initUserMenu() {
       
       // Cerrar el menú si se hace clic fuera de él
       document.addEventListener('click', function(e) {
-        if (userMenu.classList.contains('show') && 
-            !userMenu.contains(e.target) && 
-            e.target !== freshMenuButton) {
-          userMenu.classList.remove('show');
-          freshMenuButton.setAttribute('aria-expanded', 'false');
+        if (userDropdown.classList.contains('show') && 
+            !userDropdown.contains(e.target) && 
+            e.target !== freshUserMenuButton) {
+          userDropdown.classList.remove('show');
+          freshUserMenuButton.setAttribute('aria-expanded', 'false');
         }
       });
       
@@ -112,9 +112,9 @@ function initUserMenu() {
             break;
           case 'Escape':
             e.preventDefault();
-            userMenu.classList.remove('show');
-            freshMenuButton.setAttribute('aria-expanded', 'false');
-            freshMenuButton.focus();
+            userDropdown.classList.remove('show');
+            freshUserMenuButton.setAttribute('aria-expanded', 'false');
+            freshUserMenuButton.focus();
             break;
         }
       });
@@ -125,8 +125,8 @@ function initUserMenu() {
     loginLink.style.display = 'block';
     
     // Asegurarse de que el dropdown esté oculto
-    if (userMenu.classList.contains('show')) {
-      userMenu.classList.remove('show');
+    if (userDropdown && userDropdown.classList.contains('show')) {
+      userDropdown.classList.remove('show');
     }
     
     // Limpiar cualquier contenido del nombre de usuario
