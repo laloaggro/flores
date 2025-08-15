@@ -1,0 +1,6 @@
+Para solucionar este problema, debes limpiar completamente el almacenamiento local del navegador. Puedes hacerlo de las siguientes maneras:
+1. Abrir las herramientas de desarrollador (F12)
+2. Ir a la pestaña 'Application' (Aplicación)
+3. En el menú izquierdo, seleccionar 'Local Storage' > 'file://'
+4. Hacer clic derecho y seleccionar 'Clear' (Limpiar)
+5. Recargar la página

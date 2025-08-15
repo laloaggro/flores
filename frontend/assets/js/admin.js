@@ -261,15 +261,24 @@ function showAddProductForm() {
 
 // Agregar producto
 async function addProduct() {
+    const form = document.getElementById('addProductForm');
+    if (!form) return;
+    
     try {
-        const formData = new FormData(document.getElementById('addProductForm'));
+        const formData = new FormData(form);
         const productData = {
             name: formData.get('productName'),
-            category: formData.get('productCategory'),
             price: parseFloat(formData.get('productPrice')),
+            category: formData.get('productCategory'),
             image: formData.get('productImage'),
             description: formData.get('productDescription')
         };
+        
+        // Validar campos requeridos
+        if (!productData.name || !productData.price || !productData.category) {
+            showMessage('Por favor complete todos los campos obligatorios', 'error');
+            return;
+        }
         
         const token = getAuthToken();
         const response = await fetch(`${API_BASE_URL}/api/products`, {
@@ -281,8 +290,10 @@ async function addProduct() {
             body: JSON.stringify(productData)
         });
         
+        const result = await response.json();
+        
         if (!response.ok) {
-            throw new Error('Error al agregar producto');
+            throw new Error(result.error || 'Error al agregar producto');
         }
         
         // Cerrar modal
@@ -299,7 +310,7 @@ async function addProduct() {
         loadDashboardData();
     } catch (error) {
         console.error('Error al agregar producto:', error);
-        showMessage('Error al agregar producto', 'error');
+        showMessage(error.message || 'Error al agregar producto', 'error');
     }
 }
 
@@ -472,15 +483,24 @@ function showEditProductForm(product) {
 
 // Actualizar producto
 async function updateProduct(productId) {
+    const form = document.getElementById('editProductForm');
+    if (!form) return;
+    
     try {
-        const formData = new FormData(document.getElementById('editProductForm'));
+        const formData = new FormData(form);
         const productData = {
             name: formData.get('editProductName'),
-            category: formData.get('editProductCategory'),
             price: parseFloat(formData.get('editProductPrice')),
+            category: formData.get('editProductCategory'),
             image: formData.get('editProductImage'),
             description: formData.get('editProductDescription')
         };
+        
+        // Validar campos requeridos
+        if (!productData.name || !productData.price || !productData.category) {
+            showMessage('Por favor complete todos los campos obligatorios', 'error');
+            return;
+        }
         
         const token = getAuthToken();
         const response = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
@@ -492,8 +512,10 @@ async function updateProduct(productId) {
             body: JSON.stringify(productData)
         });
         
+        const result = await response.json();
+        
         if (!response.ok) {
-            throw new Error('Error al actualizar producto');
+            throw new Error(result.error || 'Error al actualizar producto');
         }
         
         // Cerrar modal
@@ -510,7 +532,7 @@ async function updateProduct(productId) {
         loadDashboardData();
     } catch (error) {
         console.error('Error al actualizar producto:', error);
-        showMessage('Error al actualizar producto', 'error');
+        showMessage(error.message || 'Error al actualizar producto', 'error');
     }
 }
 
@@ -588,42 +610,228 @@ async function loadOrders() {
     }
 }
 
+// Configurar eventos de usuarios
+function setupUserEvents() {
+    // Botón para agregar usuario
+    const addUserBtn = document.getElementById('addUserBtn');
+    if (addUserBtn) {
+        addUserBtn.addEventListener('click', () => {
+            showUserModal();
+        });
+    }
+    
+    // Formulario de usuario
+    const userForm = document.getElementById('userForm');
+    if (userForm) {
+        userForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await saveUser();
+        });
+    }
+    
+    // Cerrar modal al hacer clic en la X
+    const closeModal = document.querySelector('#userModal .close');
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            document.getElementById('userModal').style.display = 'none';
+        });
+    }
+    
+    // Cerrar modal al hacer clic fuera del contenido
+    const userModal = document.getElementById('userModal');
+    if (userModal) {
+        userModal.addEventListener('click', (e) => {
+            if (e.target === userModal) {
+                userModal.style.display = 'none';
+            }
+        });
+    }
+}
+
+// Mostrar modal para crear/editar usuario
+function showUserModal(user = null) {
+    const modal = document.getElementById('userModal');
+    const title = document.getElementById('userModalTitle');
+    const userId = document.getElementById('userId');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+    const userPhone = document.getElementById('userPhone');
+    const userPassword = document.getElementById('userPassword');
+    const userRole = document.getElementById('userRole');
+    const passwordHelp = document.getElementById('passwordHelp');
+    
+    if (user) {
+        // Editar usuario existente
+        title.textContent = 'Editar Usuario';
+        userId.value = user.id;
+        userName.value = user.name;
+        userEmail.value = user.email;
+        userPhone.value = user.phone || '';
+        userRole.value = user.role || 'user';
+        userPassword.value = '';
+        passwordHelp.style.display = 'block';
+        userPassword.removeAttribute('required');
+    } else {
+        // Crear nuevo usuario
+        title.textContent = 'Agregar Usuario';
+        userId.value = '';
+        userName.value = '';
+        userEmail.value = '';
+        userPhone.value = '';
+        userRole.value = 'user';
+        userPassword.value = '';
+        passwordHelp.style.display = 'block';
+        userPassword.setAttribute('required', 'required');
+    }
+    
+    modal.style.display = 'block';
+}
+
+// Guardar usuario (crear o actualizar)
+async function saveUser() {
+    const userId = document.getElementById('userId').value;
+    const name = document.getElementById('userName').value;
+    const email = document.getElementById('userEmail').value;
+    const phone = document.getElementById('userPhone').value;
+    const password = document.getElementById('userPassword').value;
+    const role = document.getElementById('userRole').value;
+    
+    // Validaciones básicas
+    if (!name || !email || !phone || (!userId && !password)) {
+        showMessage('Por favor complete todos los campos obligatorios', 'error');
+        return;
+    }
+    
+    // Si es edición y no se ingresó contraseña, remover el campo
+    const userData = { name, email, phone, role };
+    if (password) {
+        userData.password = password;
+    }
+    
+    try {
+        const token = getAuthToken();
+        let response;
+        
+        if (userId) {
+            // Actualizar usuario existente
+            response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(userData)
+            });
+        } else {
+            // Crear nuevo usuario
+            if (!password) {
+                showMessage('La contraseña es obligatoria para nuevos usuarios', 'error');
+                return;
+            }
+            
+            response = await fetch(`${API_BASE_URL}/api/users/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(userData)
+            });
+        }
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al guardar usuario');
+        }
+        
+        // Cerrar modal
+        document.getElementById('userModal').style.display = 'none';
+        
+        // Mostrar mensaje de éxito
+        showMessage(userId ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente', 'success');
+        
+        // Recargar lista de usuarios
+        loadUsers();
+    } catch (error) {
+        console.error('Error al guardar usuario:', error);
+        showMessage(error.message || 'Error al guardar usuario', 'error');
+    }
+}
+
 // Cargar usuarios
 async function loadUsers() {
     try {
-        // Simular carga de usuarios
-        setTimeout(() => {
-            const tbody = document.getElementById('usersTableBody');
-            tbody.innerHTML = `
-                <tr>
-                    <td>1</td>
-                    <td>Administrador</td>
-                    <td>admin@arreglosvictoria.com</td>
-                    <td>+56963603177</td>
-                    <td>admin</td>
-                    <td>
-                        <button class="btn-icon edit-user" data-id="1" aria-label="Editar usuario 1" title="Editar">
-                            <i class="fas fa-edit" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Juan Pérez</td>
-                    <td>juan.perez@example.com</td>
-                    <td>+56987654321</td>
-                    <td>user</td>
-                    <td>
-                        <button class="btn-icon edit-user" data-id="2" aria-label="Editar usuario 2" title="Editar">
-                            <i class="fas fa-edit" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-        }, 1000);
+        const token = getAuthToken();
+        const response = await fetch(`${API_BASE_URL}/api/users`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Error al cargar usuarios');
+        }
+        
+        const data = await response.json();
+        const users = data.users || [];
+        const tbody = document.getElementById('usersTableBody');
+        
+        if (tbody) {
+            if (users && users.length > 0) {
+                tbody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone || ''}</td>
+                        <td>${user.role || 'user'}</td>
+                        <td>
+                            <button class="btn-icon edit-user" data-id="${user.id}" aria-label="Editar ${user.name}" title="Editar">
+                                <i class="fas fa-edit" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                // Añadir eventos a los botones de editar
+                document.querySelectorAll('.edit-user').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const userId = this.getAttribute('data-id');
+                        editUser(userId);
+                    });
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="6">No hay usuarios disponibles</td></tr>';
+            }
+        }
     } catch (error) {
         console.error('Error al cargar usuarios:', error);
-        document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="6">Error al cargar usuarios</td></tr>';
+        const tbody = document.getElementById('usersTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="6">Error al cargar usuarios</td></tr>';
+        }
+    }
+}
+
+// Editar usuario
+async function editUser(userId) {
+    try {
+        const token = getAuthToken();
+        const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Error al obtener datos del usuario');
+        }
+        
+        const user = await response.json();
+        showUserModal(user);
+    } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        showMessage('Error al obtener datos del usuario', 'error');
     }
 }
 

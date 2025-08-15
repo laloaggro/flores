@@ -52,60 +52,39 @@ class ProductManager {
       if (search) {
         url += `&search=${encodeURIComponent(search)}`;
       }
-      
+
       const response = await fetch(url);
       
       if (!response.ok) {
         throw new Error(`Error al cargar productos: ${response.status}`);
       }
-      
+
       const data = await response.json();
       
-      // Cargar imágenes de flores si no hay imágenes en caché
-      if (this.flowerImages.length === 0) {
-        await this.loadFlowerImages();
-      }
-      
-      // Asignar imágenes de flores a los productos si no tienen imagen válida
-      const productsWithImages = data.products.map(product => {
-        // Si el producto no tiene una imagen válida, asignar una de la API de flores
-        if (!product.image_url || product.image_url.includes('placeholder') || product.image_url.includes('product_')) {
-          product.image_url = this.getNextFlowerImage();
-        }
-        return product;
-      });
-      
-      // Actualizar los datos con los productos modificados
-      const updatedData = {
-        ...data,
-        products: productsWithImages
-      };
-      
-      // Guardar en caché solo si es la primera página sin filtros
+      // Guardar en caché si es la primera página sin filtros
       if (!category && !search && page === 1) {
-        this.cachedProducts = updatedData.products;
+        this.cachedProducts = data.products || data;
       }
       
       this.isLoading = false;
-      console.log('Productos cargados exitosamente:', updatedData.products.length);
-      return updatedData;
+      return data;
     } catch (error) {
-      this.isLoading = false;
       console.error('Error al cargar productos:', error);
+      this.isLoading = false;
       throw error;
     }
   }
 
-  // Función para cargar imágenes de flores de una API externa
-  async loadFlowerImages() {
+  // Inicializar las imágenes de flores
+  async initFlowerImages() {
     // Comenzar con un conjunto de imágenes locales verificadas
     this.flowerImages = [
       'https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
-      'https://images.unsplash.com/photo-1593488953269-05061b49f8a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
       'https://images.unsplash.com/photo-1593488952230-c25d5c9dcd25?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
-      'https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
       'https://images.unsplash.com/photo-1593488953269-05061b49f8a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
-      'https://images.unsplash.com/photo-1593488952230-c25d5c9dcd25?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80'
+      'https://images.unsplash.com/photo-1496632237219-0439069605d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
+      'https://images.unsplash.com/photo-1593488952230-c25d5c9dcd25?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80',
+      'https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80'
     ];
     
     // Intentar cargar imágenes adicionales de la API de Unsplash
@@ -260,6 +239,48 @@ class ProductManager {
       console.error('Error al cargar categorías:', error);
       throw error;
     }
+  }
+
+  // Función para inicializar los event listeners para los botones de agregar al carrito
+  initCartEventListeners() {
+    // Usar event delegation para manejar los clics en botones de agregar al carrito
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
+        const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
+        
+        // Obtener datos del producto del botón
+        const product = {
+          id: button.dataset.id,
+          name: button.dataset.name,
+          price: parseFloat(button.dataset.price),
+          image: button.dataset.image
+        };
+        
+        // Agregar al carrito
+        CartUtils.addToCart(product);
+        
+        // Mostrar notificación visual en la tarjeta del producto
+        const notification = document.getElementById(`notification-${product.id}`);
+        if (notification) {
+          notification.style.display = 'block';
+          
+          // Ocultar la notificación después de 3 segundos
+          setTimeout(() => {
+            notification.style.display = 'none';
+          }, 3000);
+        }
+        
+        // Mostrar notificación global
+        showNotification(`${product.name} agregado al carrito`, 'success');
+        
+        // Actualizar contador del carrito en la UI
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+          const currentCount = parseInt(cartCount.textContent) || 0;
+          cartCount.textContent = currentCount + 1;
+        }
+      }
+    });
   }
 }
 

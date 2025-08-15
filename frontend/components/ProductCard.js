@@ -45,6 +45,9 @@ const ProductCard = (product) => {
                 tabindex="0">
           <i class="fas fa-shopping-cart" aria-hidden="true"></i> Agregar
         </button>
+        <div class="product-card-notification" id="notification-${product.id}" style="display: none; margin-top: 10px; padding: 5px; background-color: #48bb78; color: white; border-radius: 4px; font-size: 0.8rem;">
+          ¡Agregado al carrito!
+        </div>
       </div>
     </article>
   `;

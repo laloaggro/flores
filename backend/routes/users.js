@@ -56,7 +56,33 @@ db.serialize(() => {
   });
 });
 
-// Ruta para registrar un nuevo usuario
+// Middleware para verificar token
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Acceso denegado. No se proporcionó token.' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET || 'secreto_por_defecto', (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Token inválido' });
+    }
+    req.user = user;
+    next();
+  });
+};
+
+// Middleware para verificar si es administrador
+const isAdmin = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Acceso denegado. Se requiere rol de administrador.' });
+  }
+  next();
+};
+
+// Ruta para registrar un nuevo usuario (público)
 router.post('/register', async (req, res) => {
   const { name, email, phone, password } = req.body;
   
@@ -115,6 +141,68 @@ router.post('/register', async (req, res) => {
   } catch (error) {
     console.error('Error al registrar usuario:', error.message);
     res.status(500).json({ error: 'Error al registrar usuario' });
+  }
+});
+
+// Ruta para crear un nuevo usuario (solo administradores)
+router.post('/', authenticateToken, isAdmin, async (req, res) => {
+  const { name, email, phone, password, role = 'user' } = req.body;
+  
+  // Validaciones básicas
+  if (!name || !email || !phone || !password) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+  }
+  
+  // Validar formato de email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Formato de email inválido' });
+  }
+  
+  // Validar longitud mínima de contraseña
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+  }
+  
+  try {
+    // Verificar si el email ya está registrado
+    const existingUser = await new Promise((resolve, reject) => {
+      db.get(`SELECT id FROM users WHERE email = ?`, [email], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+    
+    if (existingUser) {
+      return res.status(400).json({ error: 'El email ya está registrado' });
+    }
+    
+    // Hashear la contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Insertar nuevo usuario
+    const result = await new Promise((resolve, reject) => {
+      const stmt = db.prepare(`INSERT INTO users (name, email, phone, password, role) VALUES (?, ?, ?, ?, ?)`);
+      stmt.run(name, email, phone, hashedPassword, role, function(err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this);
+        }
+      });
+      stmt.finalize();
+    });
+    
+    res.status(201).json({
+      message: 'Usuario creado exitosamente',
+      userId: result.lastID
+    });
+  } catch (error) {
+    console.error('Error al crear usuario:', error.message);
+    res.status(500).json({ error: 'Error al crear usuario' });
   }
 });
 
@@ -177,36 +265,19 @@ router.post('/login', async (req, res) => {
 });
 
 // Ruta para obtener el perfil del usuario (verificación de token)
-router.get('/profile', (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
+router.get('/profile', authenticateToken, (req, res) => {
+  const { id, email, name, role } = req.user;
   
-  if (!token) {
-    return res.status(401).json({ error: 'No se proporcionó token de autenticación' });
-  }
-  
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secreto_por_defecto');
-    const { id, email, name, role } = decoded;
-    
-    res.json({
-      id,
-      email,
-      name,
-      role
-    });
-  } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token expirado' });
-    }
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ error: 'Token inválido' });
-    }
-    return res.status(500).json({ error: 'Error al verificar el token' });
-  }
+  res.json({
+    id,
+    email,
+    name,
+    role
+  });
 });
 
-// Ruta para obtener todos los usuarios (solo para pruebas)
-router.get('/', (req, res) => {
+// Ruta para obtener todos los usuarios (solo administradores)
+router.get('/', authenticateToken, isAdmin, (req, res) => {
   db.all(`SELECT id, name, email, phone, role, created_at FROM users`, (err, rows) => {
     if (err) {
       console.error('Error al obtener usuarios:', err.message);
@@ -214,6 +285,138 @@ router.get('/', (req, res) => {
     }
     
     res.json({ users: rows });
+  });
+});
+
+// Ruta para obtener un usuario específico por ID (solo administradores)
+router.get('/:id', authenticateToken, isAdmin, (req, res) => {
+  const userId = req.params.id;
+  
+  db.get(`SELECT id, name, email, phone, role FROM users WHERE id = ?`, [userId], (err, row) => {
+    if (err) {
+      console.error('Error al obtener usuario:', err.message);
+      return res.status(500).json({ error: 'Error al obtener usuario' });
+    }
+    
+    if (!row) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    
+    res.json(row);
+  });
+});
+
+// Ruta para actualizar un usuario (solo administradores)
+router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
+  const userId = req.params.id;
+  const { name, email, phone, password, role } = req.body;
+  
+  // Validaciones básicas
+  if (!name || !email || !phone) {
+    return res.status(400).json({ error: 'Nombre, email y teléfono son obligatorios' });
+  }
+  
+  // Validar formato de email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Formato de email inválido' });
+  }
+  
+  try {
+    // Verificar si el usuario existe
+    const existingUser = await new Promise((resolve, reject) => {
+      db.get(`SELECT id, email FROM users WHERE id = ?`, [userId], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+    
+    if (!existingUser) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    
+    // Si se está cambiando el email, verificar que no esté en uso por otro usuario
+    if (email !== existingUser.email) {
+      const emailInUse = await new Promise((resolve, reject) => {
+        db.get(`SELECT id FROM users WHERE email = ? AND id != ?`, [email, userId], (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        });
+      });
+      
+      if (emailInUse) {
+        return res.status(400).json({ error: 'El email ya está registrado por otro usuario' });
+      }
+    }
+    
+    // Preparar consulta de actualización
+    let query = `UPDATE users SET name = ?, email = ?, phone = ?`;
+    const params = [name, email, phone];
+    
+    // Si se proporciona una nueva contraseña, hashearla y agregarla a la consulta
+    if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+      }
+      
+      const hashedPassword = await bcrypt.hash(password, 10);
+      query += `, password = ?`;
+      params.push(hashedPassword);
+    }
+    
+    // Si se proporciona un rol, agregarlo a la consulta
+    if (role) {
+      query += `, role = ?`;
+      params.push(role);
+    }
+    
+    query += ` WHERE id = ?`;
+    params.push(userId);
+    
+    // Actualizar usuario
+    await new Promise((resolve, reject) => {
+      db.run(query, params, function(err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+    
+    res.json({ message: 'Usuario actualizado exitosamente' });
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error.message);
+    res.status(500).json({ error: 'Error al actualizar usuario' });
+  }
+});
+
+// Ruta para eliminar un usuario (solo administradores)
+router.delete('/:id', authenticateToken, isAdmin, (req, res) => {
+  const userId = req.params.id;
+  
+  // Evitar que un administrador se elimine a sí mismo
+  if (userId == req.user.id) {
+    return res.status(400).json({ error: 'No puedes eliminarte a ti mismo' });
+  }
+  
+  db.run(`DELETE FROM users WHERE id = ?`, [userId], function(err) {
+    if (err) {
+      console.error('Error al eliminar usuario:', err.message);
+      return res.status(500).json({ error: 'Error al eliminar usuario' });
+    }
+    
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    
+    res.json({ message: 'Usuario eliminado exitosamente' });
   });
 });
 

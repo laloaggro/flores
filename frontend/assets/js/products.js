@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Adjuntar event listeners
   attachEventListeners();
   
+  // Inicializar event listeners del carrito
+  productManager.initCartEventListeners();
+  
   // Actualizar contador del carrito
   updateCartCount();
   

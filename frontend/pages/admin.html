@@ -195,8 +195,13 @@
                             
                             <!-- Users Section -->
                             <section id="users-section" class="admin-content-section">
-                                <h2>Gestión de Usuarios</h2>
-                                <div class="admin-table-container">
+                                <div class="section-header">
+                                    <h2>Usuarios</h2>
+                                    <button id="addUserBtn" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Agregar Usuario
+                                    </button>
+                                </div>
+                                <div class="table-container">
                                     <table class="admin-table">
                                         <thead>
                                             <tr>
@@ -280,6 +285,46 @@
                         <input type="url" id="productImage" class="form-input" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="userModalTitle">Agregar Usuario</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+                    <div class="form-group">
+                        <label for="userName">Nombre</label>
+                        <input type="text" id="userName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email</label>
+                        <input type="email" id="userEmail" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPhone">Teléfono</label>
+                        <input type="text" id="userPhone" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPassword">Contraseña</label>
+                        <input type="password" id="userPassword" class="form-input" minlength="6">
+                        <small id="passwordHelp" class="form-text">Dejar en blanco para no cambiar la contraseña</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole">Rol</label>
+                        <select id="userRole" class="form-input" required>
+                            <option value="user">Usuario</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar Usuario</button>
                 </form>
             </div>
         </div>

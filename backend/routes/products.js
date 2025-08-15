@@ -230,12 +230,20 @@ router.post('/', authenticateAdmin, (req, res) => {
     });
   }
   
+  // Validar que el precio sea un número válido
+  const parsedPrice = parseFloat(price);
+  if (isNaN(parsedPrice) || parsedPrice < 0) {
+    return res.status(400).json({ 
+      error: 'El precio debe ser un número válido mayor o igual a cero' 
+    });
+  }
+  
   // Insertar nuevo producto
   const stmt = db.prepare(`INSERT INTO products (name, description, price, category, image) VALUES (?, ?, ?, ?, ?)`);
-  stmt.run([name, description, price, category, image], function(err) {
+  stmt.run([name, description, parsedPrice, category, image], function(err) {
     if (err) {
       console.error('Error al crear producto:', err.message);
-      return res.status(500).json({ error: 'Error al crear producto' });
+      return res.status(500).json({ error: 'Error al crear producto: ' + err.message });
     }
     
     // Devolver el producto creado con su ID
@@ -243,7 +251,7 @@ router.post('/', authenticateAdmin, (req, res) => {
       id: this.lastID,
       name,
       description,
-      price,
+      price: parsedPrice,
       category,
       image
     });
@@ -263,11 +271,19 @@ router.put('/:id', authenticateAdmin, (req, res) => {
     });
   }
   
+  // Validar que el precio sea un número válido
+  const parsedPrice = parseFloat(price);
+  if (isNaN(parsedPrice) || parsedPrice < 0) {
+    return res.status(400).json({ 
+      error: 'El precio debe ser un número válido mayor o igual a cero' 
+    });
+  }
+  
   // Verificar si el producto existe
   db.get(`SELECT id FROM products WHERE id = ?`, [id], (err, row) => {
     if (err) {
       console.error('Error al verificar producto:', err.message);
-      return res.status(500).json({ error: 'Error al verificar producto' });
+      return res.status(500).json({ error: 'Error al verificar producto: ' + err.message });
     }
     
     if (!row) {
@@ -276,10 +292,10 @@ router.put('/:id', authenticateAdmin, (req, res) => {
     
     // Actualizar el producto
     const stmt = db.prepare(`UPDATE products SET name = ?, description = ?, price = ?, category = ?, image = ? WHERE id = ?`);
-    stmt.run([name, description, price, category, image, id], function(err) {
+    stmt.run([name, description, parsedPrice, category, image, id], function(err) {
       if (err) {
         console.error('Error al actualizar producto:', err.message);
-        return res.status(500).json({ error: 'Error al actualizar producto' });
+        return res.status(500).json({ error: 'Error al actualizar producto: ' + err.message });
       }
       
       if (this.changes === 0) {
@@ -291,7 +307,7 @@ router.put('/:id', authenticateAdmin, (req, res) => {
         id,
         name,
         description,
-        price,
+        price: parsedPrice,
         category,
         image
       });
