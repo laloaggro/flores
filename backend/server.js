@@ -1,5 +1,5 @@
 const express = require('express');
-const dotenv = require('dotenv');
+const { config } = require('dotenv');
 const path = require('path');
 const fs = require('fs');
 
@@ -15,14 +15,21 @@ function logMessage(message) {
 }
 
 // Cargar variables de entorno
-dotenv.config();
+config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware para parsear el body
+// Configurar middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads')); // Servir archivos subidos
+
+// Crear directorio de subidas si no existe
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Middleware para registrar solicitudes
 app.use((req, res, next) => {

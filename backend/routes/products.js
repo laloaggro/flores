@@ -2,7 +2,9 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
+const fs = require('fs');
 
 // Conectar a la base de datos
 const dbPath = path.join(__dirname, '..', 'products.db');
@@ -55,6 +57,50 @@ router.get('/categories', (req, res) => {
     const categories = rows.map(row => row.category);
     res.json({ categories });
   });
+});
+
+// Ruta para obtener estadísticas (solo para administradores)
+router.get('/stats', (req, res) => {
+  try {
+    // Obtener total de productos
+    db.get(`SELECT COUNT(*) as totalProducts FROM products`, (err, productsRow) => {
+      if (err) {
+        console.error('Error al obtener total de productos:', err.message);
+        return res.status(500).json({ error: 'Error al obtener estadísticas' });
+      }
+      
+      // Obtener total de usuarios
+      const dbPathUsers = path.join(__dirname, '..', 'users.db');
+      const dbUsers = new sqlite3.Database(dbPathUsers, (err) => {
+        if (err) {
+          console.error('Error al conectar con la base de datos de usuarios:', err.message);
+          return res.status(500).json({ error: 'Error al obtener estadísticas' });
+        }
+        
+        dbUsers.get(`SELECT COUNT(*) as totalUsers FROM users`, (err, usersRow) => {
+          if (err) {
+            console.error('Error al obtener total de usuarios:', err.message);
+            dbUsers.close();
+            return res.status(500).json({ error: 'Error al obtener estadísticas' });
+          }
+          
+          // Cerrar la conexión a la base de datos de usuarios
+          dbUsers.close();
+          
+          // Devolver estadísticas
+          res.json({
+            totalProducts: productsRow.totalProducts,
+            totalUsers: usersRow.totalUsers,
+            totalOrders: 0, // Implementar cuando se tenga el sistema de pedidos
+            totalRevenue: 0 // Implementar cuando se tenga el sistema de pedidos
+          });
+        });
+      });
+    });
+  } catch (error) {
+    console.error('Error al obtener estadísticas:', error.message);
+    res.status(500).json({ error: 'Error al obtener estadísticas' });
+  }
 });
 
 // Ruta para obtener todos los productos
@@ -217,6 +263,39 @@ router.get('/search/:query', (req, res) => {
       });
     });
   });
+});
+
+// Ruta para subir imágenes (solo para administradores)
+router.post('/upload', authenticateAdmin, (req, res) => {
+    if (!req.body.image) {
+        return res.status(400).json({ error: 'No se proporcionó imagen' });
+    }
+    
+    try {
+        // Decodificar la imagen base64
+        const imageData = req.body.image;
+        const base64Data = imageData.replace(/^data:image\/\w+;base64,/, '');
+        const buffer = Buffer.from(base64Data, 'base64');
+        
+        // Generar nombre único para el archivo
+        const fileName = `${uuidv4()}.png`;
+        const filePath = path.join(__dirname, '..', 'uploads', fileName);
+        
+        // Guardar la imagen
+        fs.writeFile(filePath, buffer, (err) => {
+            if (err) {
+                console.error('Error al guardar imagen:', err);
+                return res.status(500).json({ error: 'Error al guardar imagen' });
+            }
+            
+            // Devolver la URL de la imagen
+            const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${fileName}`;
+            res.json({ imageUrl });
+        });
+    } catch (error) {
+        console.error('Error al procesar imagen:', error);
+        res.status(500).json({ error: 'Error al procesar imagen' });
+    }
 });
 
 // Ruta para crear un nuevo producto (solo para administradores)

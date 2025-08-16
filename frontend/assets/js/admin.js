@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'users':
                 loadUsers();
+                setupUserEvents();
+                break;
+            case 'settings':
+                initSettings();
                 break;
         }
     }
@@ -84,6 +88,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar eventos de productos
     setupProductEvents();
+    
+    // Configurar eventos de usuarios
+    setupUserEvents();
+    
+    // Configurar vista previa de imágenes
+    setupImagePreview();
+    
+    // Inicializar configuración
+    initSettings();
 });
 
 // Función para cargar datos del dashboard
@@ -208,6 +221,10 @@ function showAddProductForm() {
                         <input type="text" id="productImage" class="form-input">
                     </div>
                     <div class="form-group">
+                        <label for="productImageFile">Subir Imagen:</label>
+                        <input type="file" id="productImageFile" class="form-input">
+                    </div>
+                    <div class="form-group">
                         <label for="productDescription">Descripción:</label>
                         <textarea id="productDescription" class="form-input" rows="3"></textarea>
                     </div>
@@ -266,11 +283,19 @@ async function addProduct() {
     
     try {
         const formData = new FormData(form);
+        const imageFile = document.getElementById('productImageFile').files[0];
+        let imageUrl = formData.get('productImage');
+        
+        // Si se seleccionó un archivo, subirlo
+        if (imageFile) {
+            imageUrl = await uploadImage(imageFile);
+        }
+        
         const productData = {
             name: formData.get('productName'),
             price: parseFloat(formData.get('productPrice')),
             category: formData.get('productCategory'),
-            image: formData.get('productImage'),
+            image: imageUrl,
             description: formData.get('productDescription')
         };
         
@@ -430,6 +455,10 @@ function showEditProductForm(product) {
                         <input type="text" id="editProductImage" class="form-input" value="${product.image || ''}">
                     </div>
                     <div class="form-group">
+                        <label for="editProductImageFile">Subir Imagen:</label>
+                        <input type="file" id="editProductImageFile" class="form-input">
+                    </div>
+                    <div class="form-group">
                         <label for="editProductDescription">Descripción:</label>
                         <textarea id="editProductDescription" class="form-input" rows="3">${product.description || ''}</textarea>
                     </div>
@@ -488,11 +517,19 @@ async function updateProduct(productId) {
     
     try {
         const formData = new FormData(form);
+        const imageFile = document.getElementById('editProductImageFile').files[0];
+        let imageUrl = formData.get('editProductImage');
+        
+        // Si se seleccionó un archivo, subirlo
+        if (imageFile) {
+            imageUrl = await uploadImage(imageFile);
+        }
+        
         const productData = {
             name: formData.get('editProductName'),
             price: parseFloat(formData.get('editProductPrice')),
             category: formData.get('editProductCategory'),
-            image: formData.get('editProductImage'),
+            image: imageUrl,
             description: formData.get('editProductDescription')
         };
         
@@ -574,40 +611,95 @@ async function removeProduct(productId) {
 // Cargar pedidos
 async function loadOrders() {
     try {
-        // Simular carga de pedidos
+        // Mostrar mensaje de carga
+        const tbody = document.getElementById('ordersTableBody');
+        tbody.innerHTML = '<tr><td colspan="6">Cargando pedidos...</td></tr>';
+        
+        // Simular una llamada a una API de pedidos
         setTimeout(() => {
-            const tbody = document.getElementById('ordersTableBody');
-            tbody.innerHTML = `
-                <tr>
-                    <td>1</td>
-                    <td>Juan Pérez</td>
-                    <td>2025-08-10</td>
-                    <td>$45.990</td>
-                    <td><span class="status pending">Pendiente</span></td>
-                    <td>
-                        <button class="btn-icon edit-order" data-id="1" aria-label="Editar pedido 1" title="Editar">
-                            <i class="fas fa-edit" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>María González</td>
-                    <td>2025-08-09</td>
-                    <td>$32.500</td>
-                    <td><span class="status completed">Completado</span></td>
-                    <td>
-                        <button class="btn-icon edit-order" data-id="2" aria-label="Editar pedido 2" title="Editar">
-                            <i class="fas fa-edit" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
+            // Datos de ejemplo de pedidos
+            const orders = [
+                {
+                    id: 1,
+                    customer: 'Juan Pérez',
+                    date: '2025-08-10',
+                    total: 45990,
+                    status: 'Pendiente'
+                },
+                {
+                    id: 2,
+                    customer: 'María González',
+                    date: '2025-08-09',
+                    total: 32500,
+                    status: 'Completado'
+                },
+                {
+                    id: 3,
+                    customer: 'Carlos López',
+                    date: '2025-08-08',
+                    total: 28750,
+                    status: 'Enviado'
+                },
+                {
+                    id: 4,
+                    customer: 'Ana Rodríguez',
+                    date: '2025-08-07',
+                    total: 52300,
+                    status: 'Completado'
+                }
+            ];
+            
+            if (orders.length > 0) {
+                tbody.innerHTML = orders.map(order => `
+                    <tr>
+                        <td>${order.id}</td>
+                        <td>${order.customer}</td>
+                        <td>${order.date}</td>
+                        <td>$${order.total.toLocaleString('es-CL')}</td>
+                        <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
+                        <td>
+                            <button class="btn-icon view-order" data-id="${order.id}" aria-label="Ver pedido ${order.id}" title="Ver">
+                                <i class="fas fa-eye" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn-icon edit-order" data-id="${order.id}" aria-label="Editar pedido ${order.id}" title="Editar">
+                                <i class="fas fa-edit" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                // Añadir eventos a los botones
+                document.querySelectorAll('.view-order').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const orderId = this.getAttribute('data-id');
+                        viewOrder(orderId);
+                    });
+                });
+                
+                document.querySelectorAll('.edit-order').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const orderId = this.getAttribute('data-id');
+                        editOrder(orderId);
+                    });
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="6">No hay pedidos disponibles</td></tr>';
+            }
         }, 1000);
     } catch (error) {
         console.error('Error al cargar pedidos:', error);
         document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="6">Error al cargar pedidos</td></tr>';
     }
+}
+
+// Ver detalles de un pedido
+function viewOrder(orderId) {
+    showMessage(`Función para ver detalles del pedido ${orderId}. En una implementación completa, aquí se mostrarían los detalles del pedido.`, 'info');
+}
+
+// Editar un pedido
+function editOrder(orderId) {
+    showMessage(`Función para editar el pedido ${orderId}. En una implementación completa, aquí se podría cambiar el estado del pedido.`, 'info');
 }
 
 // Configurar eventos de usuarios
@@ -729,7 +821,7 @@ async function saveUser() {
                 return;
             }
             
-            response = await fetch(`${API_BASE_URL}/api/users/register`, {
+            response = await fetch(`${API_BASE_URL}/api/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -739,9 +831,10 @@ async function saveUser() {
             });
         }
         
+        const result = await response.json();
+        
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Error al guardar usuario');
+            throw new Error(result.error || 'Error al guardar usuario');
         }
         
         // Cerrar modal
@@ -813,6 +906,112 @@ async function loadUsers() {
     }
 }
 
+// Inicializar configuración
+function initSettings() {
+    // Cargar configuración guardada
+    loadSettings();
+    
+    // Configurar formularios
+    const storeInfoForm = document.getElementById('storeInfoForm');
+    const customizationForm = document.getElementById('customizationForm');
+    const shippingForm = document.getElementById('shippingForm');
+    
+    if (storeInfoForm) {
+        storeInfoForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveStoreInfo();
+        });
+    }
+    
+    if (customizationForm) {
+        customizationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveCustomization();
+        });
+    }
+    
+    if (shippingForm) {
+        shippingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveShippingSettings();
+        });
+    }
+}
+
+// Cargar configuración guardada
+function loadSettings() {
+    // Cargar información de la tienda
+    const storeInfo = JSON.parse(localStorage.getItem('storeInfo')) || {};
+    document.getElementById('storeName').value = storeInfo.name || '';
+    document.getElementById('storeEmail').value = storeInfo.email || '';
+    document.getElementById('storePhone').value = storeInfo.phone || '';
+    document.getElementById('storeAddress').value = storeInfo.address || '';
+    document.getElementById('storeHours').value = storeInfo.hours || '';
+    
+    // Cargar personalización
+    const customization = JSON.parse(localStorage.getItem('customization')) || {};
+    document.getElementById('primaryColor').value = customization.primaryColor || '#4a7c59';
+    document.getElementById('secondaryColor').value = customization.secondaryColor || '#3a6c49';
+    
+    // Cargar configuración de envíos
+    const shipping = JSON.parse(localStorage.getItem('shippingSettings')) || {};
+    document.getElementById('shippingCost').value = shipping.cost || '';
+    document.getElementById('freeShippingThreshold').value = shipping.freeThreshold || '';
+    document.getElementById('deliveryTime').value = shipping.deliveryTime || '';
+}
+
+// Guardar información de la tienda
+function saveStoreInfo() {
+    const storeInfo = {
+        name: document.getElementById('storeName').value,
+        email: document.getElementById('storeEmail').value,
+        phone: document.getElementById('storePhone').value,
+        address: document.getElementById('storeAddress').value,
+        hours: document.getElementById('storeHours').value
+    };
+    
+    localStorage.setItem('storeInfo', JSON.stringify(storeInfo));
+    showMessage('Información de la tienda guardada correctamente', 'success');
+}
+
+// Guardar personalización
+function saveCustomization() {
+    const customization = {
+        primaryColor: document.getElementById('primaryColor').value,
+        secondaryColor: document.getElementById('secondaryColor').value
+    };
+    
+    localStorage.setItem('customization', JSON.stringify(customization));
+    showMessage('Personalización guardada correctamente', 'success');
+    
+    // Aplicar colores inmediatamente
+    applyCustomColors(customization.primaryColor, customization.secondaryColor);
+}
+
+// Guardar configuración de envíos
+function saveShippingSettings() {
+    const shipping = {
+        cost: document.getElementById('shippingCost').value,
+        freeThreshold: document.getElementById('freeShippingThreshold').value,
+        deliveryTime: document.getElementById('deliveryTime').value
+    };
+    
+    localStorage.setItem('shippingSettings', JSON.stringify(shipping));
+    showMessage('Configuración de envíos guardada correctamente', 'success');
+}
+
+// Aplicar colores personalizados
+function applyCustomColors(primaryColor, secondaryColor) {
+    const style = document.createElement('style');
+    style.textContent = `
+        :root {
+            --primary: ${primaryColor};
+            --secondary: ${secondaryColor};
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 // Editar usuario
 async function editUser(userId) {
     try {
@@ -876,25 +1075,149 @@ function initMenuNavigation() {
     });
 }
 
-// Función para mostrar mensajes al usuario
+// Mostrar mensaje al usuario
 function showMessage(message, type = 'info') {
-    // Crear elemento de mensaje
-    const messageElement = document.createElement('div');
-    messageElement.className = `alert alert-${type}`;
-    messageElement.textContent = message;
-    messageElement.setAttribute('role', 'alert');
-    messageElement.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
+    // Crear contenedor de mensajes si no existe
+    let messageContainer = document.getElementById('admin-message-container');
+    if (!messageContainer) {
+        messageContainer = document.createElement('div');
+        messageContainer.id = 'admin-message-container';
+        messageContainer.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            width: 300px;
+        `;
+        document.body.appendChild(messageContainer);
+    }
     
-    // Agregar al inicio del contenedor principal
-    const container = document.querySelector('.admin-container');
-    if (container) {
-        container.insertBefore(messageElement, container.firstChild);
-        
-        // Eliminar el mensaje después de 5 segundos
-        setTimeout(() => {
-            if (messageElement.parentNode) {
-                messageElement.remove();
+    // Crear mensaje
+    const messageElement = document.createElement('div');
+    messageElement.style.cssText = `
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+    `;
+    
+    // Establecer estilo según el tipo de mensaje
+    switch(type) {
+        case 'success':
+            messageElement.style.backgroundColor = '#28a745';
+            break;
+        case 'error':
+            messageElement.style.backgroundColor = '#dc3545';
+            break;
+        case 'warning':
+            messageElement.style.backgroundColor = '#ffc107';
+            messageElement.style.color = '#212529';
+            break;
+        default:
+            messageElement.style.backgroundColor = '#17a2b8';
+    }
+    
+    messageElement.textContent = message;
+    
+    // Añadir mensaje al contenedor
+    messageContainer.appendChild(messageElement);
+    
+    // Eliminar mensaje después de 3 segundos
+    setTimeout(() => {
+        if (messageElement.parentNode) {
+            messageElement.parentNode.removeChild(messageElement);
+        }
+    }, 3000);
+}
+
+// Función para subir imágenes
+async function uploadImage(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            try {
+                // Convertir a base64
+                const base64Image = e.target.result;
+                
+                // Enviar al servidor
+                const token = getAuthToken();
+                const response = await fetch(`${API_BASE_URL}/api/products/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ image: base64Image })
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Error al subir imagen');
+                }
+                
+                resolve(result.imageUrl);
+            } catch (error) {
+                reject(error);
             }
-        }, 5000);
+        };
+        reader.onerror = function() {
+            reject(new Error('Error al leer el archivo'));
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// Función para mostrar vista previa de imagen
+function setupImagePreview() {
+    // Vista previa para agregar producto
+    const imageFileInput = document.getElementById('productImageFile');
+    const imagePreview = document.getElementById('imagePreview');
+    
+    if (imageFileInput && imagePreview) {
+        imageFileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Crear o actualizar imagen de vista previa
+                    let previewImg = imagePreview.querySelector('img');
+                    if (!previewImg) {
+                        previewImg = document.createElement('img');
+                        imagePreview.appendChild(previewImg);
+                    }
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Vista previa para editar producto
+    const editImageFileInput = document.getElementById('editProductImageFile');
+    const editImagePreview = document.getElementById('editImagePreview');
+    
+    if (editImageFileInput && editImagePreview) {
+        editImageFileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Crear o actualizar imagen de vista previa
+                    let previewImg = editImagePreview.querySelector('img');
+                    if (!previewImg) {
+                        previewImg = document.createElement('img');
+                        editImagePreview.appendChild(previewImg);
+                    }
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     }
 }

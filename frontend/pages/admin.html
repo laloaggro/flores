@@ -223,21 +223,85 @@
                             <!-- Settings Section -->
                             <section id="settings-section" class="admin-content-section">
                                 <h2>Configuración</h2>
-                                <form class="settings-form">
-                                    <div class="form-group">
-                                        <label for="siteName">Nombre del Sitio</label>
-                                        <input type="text" id="siteName" class="form-input" value="Arreglos Florales Victoria">
+                                
+                                <div class="settings-container">
+                                    <div class="settings-card">
+                                        <h3><i class="fas fa-store"></i> Información de la Tienda</h3>
+                                        <form id="storeInfoForm">
+                                            <div class="form-group">
+                                                <label for="storeName">Nombre de la Tienda</label>
+                                                <input type="text" id="storeName" name="storeName" class="form-control" placeholder="Arreglos Florales Victoria">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="storeEmail">Email de Contacto</label>
+                                                <input type="email" id="storeEmail" name="storeEmail" class="form-control" placeholder="info@arreglosvictoria.cl">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="storePhone">Teléfono</label>
+                                                <input type="text" id="storePhone" name="storePhone" class="form-control" placeholder="+56 9 1234 5678">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="storeAddress">Dirección</label>
+                                                <textarea id="storeAddress" name="storeAddress" class="form-control" placeholder="Av. Valdivieso 593, Recoleta, Región Metropolitana"></textarea>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="storeHours">Horario de Atención</label>
+                                                <textarea id="storeHours" name="storeHours" class="form-control" placeholder="Lunes a Sábado: 9:00 - 19:00&#10;Domingo: 10:00 - 18:00"></textarea>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save"></i> Guardar Cambios
+                                            </button>
+                                        </form>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="siteEmail">Email de Contacto</label>
-                                        <input type="email" id="siteEmail" class="form-input" value="info@arreglosvictoria.com">
+                                    
+                                    <div class="settings-card">
+                                        <h3><i class="fas fa-palette"></i> Personalización</h3>
+                                        <form id="customizationForm">
+                                            <div class="form-group">
+                                                <label for="primaryColor">Color Primario</label>
+                                                <input type="color" id="primaryColor" name="primaryColor" class="form-control" value="#4a7c59">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="secondaryColor">Color Secundario</label>
+                                                <input type="color" id="secondaryColor" name="secondaryColor" class="form-control" value="#3a6c49">
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save"></i> Guardar Colores
+                                            </button>
+                                        </form>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="sitePhone">Teléfono de Contacto</label>
-                                        <input type="text" id="sitePhone" class="form-input" value="+56 9 1234 5678">
+                                    
+                                    <div class="settings-card">
+                                        <h3><i class="fas fa-shipping-fast"></i> Configuración de Envíos</h3>
+                                        <form id="shippingForm">
+                                            <div class="form-group">
+                                                <label for="shippingCost">Costo de Envío</label>
+                                                <input type="number" id="shippingCost" name="shippingCost" class="form-control" placeholder="0" min="0" step="100">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="freeShippingThreshold">Monto Mínimo para Envío Gratis</label>
+                                                <input type="number" id="freeShippingThreshold" name="freeShippingThreshold" class="form-control" placeholder="50000" min="0" step="1000">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="deliveryTime">Tiempo Estimado de Entrega (horas)</label>
+                                                <input type="number" id="deliveryTime" name="deliveryTime" class="form-control" placeholder="24" min="1" max="168">
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save"></i> Guardar Configuración
+                                            </button>
+                                        </form>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                </form>
+                                </div>
                             </section>
                         </main>
                     </div>
@@ -281,8 +345,16 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="productImage">URL de la Imagen</label>
-                        <input type="url" id="productImage" class="form-input" required>
+                        <label for="productImage">Imagen del Producto</label>
+                        <input type="file" id="productImageFile" class="form-input" accept="image/*">
+                        <input type="url" id="productImage" class="form-input" placeholder="O ingrese URL de la imagen">
+                        <div class="image-preview" id="imagePreview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductImageFile">Editar Imagen del Producto</label>
+                        <input type="file" id="editProductImageFile" class="form-input" accept="image/*">
+                        <input type="url" id="editProductImage" class="form-input" placeholder="O ingrese URL de la imagen">
+                        <div class="image-preview" id="editImagePreview"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar Producto</button>
                 </form>

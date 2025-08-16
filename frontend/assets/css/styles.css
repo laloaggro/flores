@@ -791,25 +791,14 @@ header {
   animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    transform: translateX(100%);
-  }
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
 }
 
 .notification-content {
@@ -1911,12 +1900,13 @@ footer {
     border: 1px solid #bee5eb;
 }
 
-/* Status badges */
+/* Estilos para estados de pedidos */
 .status {
     padding: 5px 10px;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 500;
+    text-transform: uppercase;
 }
 
 .status.pending {
@@ -1927,6 +1917,11 @@ footer {
 .status.completed {
     background-color: #d4edda;
     color: #155724;
+}
+
+.status.sent, .status.shipped {
+    background-color: #cce5ff;
+    color: #004085;
 }
 
 .status.cancelled {
@@ -2153,6 +2148,20 @@ footer {
     border-radius: 4px;
     font-family: 'Poppins', sans-serif;
 }
+
+/* Estilos para la vista previa de imágenes */
+.image-preview {
+  margin-top: 10px;
+  max-width: 200px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  display: none;
+}
+
 
 .admin-stats {
     display: grid;
@@ -2467,6 +2476,25 @@ footer {
 
 .user-dropdown {
   position: absolute;
+}
+
+.login-link {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  text-decoration: none;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.login-link:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
   top: 100%;
   right: 0;
   background-color: white;
@@ -2623,6 +2651,65 @@ footer {
     flex: 1;
 }
 
+.settings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.settings-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+}
+
+.settings-card h3 {
+    margin-bottom: 20px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings-card h3 i {
+    font-size: 1.2rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background-color: var(--light);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+}
+
+.form-control[type="color"] {
+    height: 50px;
+    padding: 5px;
+}
+
 /* Media Queries */
 @media (max-width: 768px) {
     .auth-page {
@@ -2664,6 +2751,8 @@ footer {
     align-items: center;
     margin: 20px 0;
     padding: 15px;
+}
+
     background: var(--white);
     border-radius: 5px;
     box-shadow: var(--shadow);
