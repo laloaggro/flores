@@ -82,87 +82,57 @@ function initUserMenu() {
       
       freshUserMenuButton.addEventListener('click', function(e) {
         e.stopPropagation();
-        userDropdown.classList.toggle('show');
-        const isExpanded = userDropdown.classList.contains('show');
-        freshUserMenuButton.setAttribute('aria-expanded', isExpanded);
-        
-        // Si el menú se abre, enfocar el primer elemento
-        if (isExpanded) {
-          const firstLink = userDropdown.querySelector('a');
-          if (firstLink) {
-            firstLink.focus();
-          }
-        }
+        toggleUserDropdown();
       });
       
-      // Manejar la navegación con teclado
+      // Manejar tecla Enter o Espacio para abrir/cerrar el menú
       freshUserMenuButton.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          freshUserMenuButton.click();
+          e.stopPropagation();
+          toggleUserDropdown();
         }
       });
       
-      // Cerrar el menú si se hace clic fuera de él
-      document.addEventListener('click', function(e) {
-        if (userDropdown.classList.contains('show') && 
-            !userDropdown.contains(e.target) && 
-            e.target !== freshUserMenuButton) {
-          userDropdown.classList.remove('show');
-          freshUserMenuButton.setAttribute('aria-expanded', 'false');
-        }
-      });
+      // Añadir atributos de accesibilidad
+      freshUserMenuButton.setAttribute('role', 'button');
+      freshUserMenuButton.setAttribute('tabindex', '0');
+      freshUserMenuButton.setAttribute('aria-expanded', 'false');
+      freshUserMenuButton.setAttribute('aria-haspopup', 'true');
       
-      // Manejar navegación por teclado en el menú de usuario
-      userDropdown.addEventListener('keydown', function(e) {
-        const links = userDropdown.querySelectorAll('a');
-        const currentIndex = Array.from(links).indexOf(document.activeElement);
-        
-        switch (e.key) {
-          case 'ArrowDown':
-            e.preventDefault();
-            const nextIndex = (currentIndex + 1) % links.length;
-            links[nextIndex].focus();
-            break;
-          case 'ArrowUp':
-            e.preventDefault();
-            const prevIndex = (currentIndex - 1 + links.length) % links.length;
-            links[prevIndex].focus();
-            break;
-          case 'Escape':
-            e.preventDefault();
-            userDropdown.classList.remove('show');
-            freshUserMenuButton.setAttribute('aria-expanded', 'false');
-            freshUserMenuButton.focus();
-            break;
-        }
-      });
+      // Cerrar el dropdown cuando se hace clic fuera de él
+      document.removeEventListener('click', closeUserDropdown);
+      document.addEventListener('click', closeUserDropdown);
       
-      // Añadir roles y atributos de accesibilidad al dropdown
-      userDropdown.setAttribute('role', 'menu');
+      // Cerrar el dropdown cuando se presiona Escape
+      document.removeEventListener('keydown', handleEscapeKey);
+      document.addEventListener('keydown', handleEscapeKey);
     }
-  } else {
-    // Usuario no autenticado - mostrar enlace de inicio de sesión
+  } else if (userMenu && loginLink) {
+    // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
     userMenu.style.display = 'none';
     loginLink.style.display = 'block';
     
-    // Ocultar el ícono del menú desplegable
-    if (caretIcon) {
-      caretIcon.style.display = 'none';
-    }
-    
     // Asegurarse de que el dropdown esté oculto
-    if (userDropdown && userDropdown.classList.contains('show')) {
+    if (userDropdown) {
       userDropdown.classList.remove('show');
     }
-    
-    // Limpiar cualquier contenido del nombre de usuario
-    if (userNameElement) {
-      userNameElement.textContent = '';
+  }
+}
+
+// Función para manejar el cierre de sesión
+function handleLogout() {
+  logout();
+  window.location.href = '/index.html';
+}
+
+// Función para verificar la autenticación del usuario
+function checkAuth() {
+  if (!isAuthenticated()) {
+    // Redirigir al login si no está autenticado en páginas que lo requieren
+    if (window.location.pathname.includes('profile.html')) {
+      window.location.href = '/login.html';
     }
-    
-    // Limpiar datos residuales de usuario en localStorage
-    localStorage.removeItem('user');
   }
 }
 
@@ -183,29 +153,85 @@ function addAdminLinkToMenu() {
   }
 }
 
-// Función para manejar el cierre de sesión
-function handleLogout() {
-  logout();
-  window.location.href = '/index.html';
-}
-
-// Función para verificar la autenticación del usuario
-function checkAuth() {
-  if (!isAuthenticated()) {
-    // Redirigir al login si no está autenticado en páginas que lo requieren
-    if (window.location.pathname.includes('profile.html')) {
-      window.location.href = '/login.html';
+// Función para alternar el menú desplegable del usuario
+function toggleUserDropdown() {
+  const userDropdown = document.querySelector('.user-dropdown');
+  const userMenuButton = document.querySelector('.user-info');
+  
+  if (userDropdown && userMenuButton) {
+    const isExpanded = userDropdown.classList.contains('show');
+    
+    // Cerrar todos los dropdowns
+    closeAllDropdowns();
+    
+    if (!isExpanded) {
+      // Abrir este dropdown
+      userDropdown.classList.add('show');
+      userMenuButton.setAttribute('aria-expanded', 'true');
+      
+      // Enfocar el primer elemento del menú
+      const firstLink = userDropdown.querySelector('a');
+      if (firstLink) {
+        firstLink.setAttribute('tabindex', '0');
+        // Esperar un momento para asegurar el enfoque
+        setTimeout(() => firstLink.focus(), 10);
+      }
+    } else {
+      // Cerrar este dropdown
+      userDropdown.classList.remove('show');
+      userMenuButton.setAttribute('aria-expanded', 'false');
     }
   }
 }
 
+// Función para cerrar el menú desplegable del usuario
+function closeUserDropdown(e) {
+  const userMenu = document.getElementById('userMenu');
+  const userDropdown = document.querySelector('.user-dropdown');
+  
+  if (userMenu && userDropdown && !userMenu.contains(e.target)) {
+    userDropdown.classList.remove('show');
+    const userMenuButton = document.querySelector('.user-info');
+    if (userMenuButton) {
+      userMenuButton.setAttribute('aria-expanded', 'false');
+    }
+    
+    // Quitar el foco de los elementos del menú
+    const menuItems = userDropdown.querySelectorAll('a');
+    menuItems.forEach(item => {
+      item.setAttribute('tabindex', '-1');
+    });
+  }
+}
+
+// Función para manejar la tecla Escape
+function handleEscapeKey(e) {
+  if (e.key === 'Escape') {
+    closeAllDropdowns();
+  }
+}
+
+// Función para cerrar todos los dropdowns
+function closeAllDropdowns() {
+  const openDropdowns = document.querySelectorAll('.user-dropdown.show');
+  openDropdowns.forEach(dropdown => {
+    dropdown.classList.remove('show');
+  });
+  
+  const userMenuButtons = document.querySelectorAll('.user-info');
+  userMenuButtons.forEach(button => {
+    button.setAttribute('aria-expanded', 'false');
+  });
+  
+  // Quitar el foco de los elementos del menú
+  const menuItems = document.querySelectorAll('.user-dropdown a');
+  menuItems.forEach(item => {
+    item.setAttribute('tabindex', '-1');
+  });
+}
+
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
-  // Forzar limpieza de datos residuales
-  if (!isAuthenticated()) {
-    localStorage.removeItem('user');
-  }
-  
   initUserMenu();
   checkAuth();
   updateCartCount();
@@ -220,4 +246,4 @@ if (document.readyState === 'loading') {
 }
 
 // Exportar funciones
-export { initUserMenu, handleLogout, checkAuth, API_BASE_URL };
+export { initUserMenu, handleLogout, checkAuth };
