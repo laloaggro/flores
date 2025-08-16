@@ -300,9 +300,14 @@ async function addProduct() {
         };
         
         // Validar campos requeridos
-        if (!productData.name || !productData.price || !productData.category) {
+        if (!productData.name || !productData.price || !productData.category || productData.price <= 0) {
             showMessage('Por favor complete todos los campos obligatorios', 'error');
             return;
+        }
+        
+        // Si no hay imagen, usar una por defecto
+        if (!productData.image) {
+            productData.image = '/assets/images/default-avatar.svg';
         }
         
         const token = getAuthToken();
@@ -534,9 +539,14 @@ async function updateProduct(productId) {
         };
         
         // Validar campos requeridos
-        if (!productData.name || !productData.price || !productData.category) {
+        if (!productData.name || !productData.price || !productData.category || productData.price <= 0) {
             showMessage('Por favor complete todos los campos obligatorios', 'error');
             return;
+        }
+        
+        // Si no hay imagen, usar una por defecto
+        if (!productData.image) {
+            productData.image = '/assets/images/default-avatar.svg';
         }
         
         const token = getAuthToken();

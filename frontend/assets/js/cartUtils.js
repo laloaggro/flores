@@ -208,7 +208,7 @@ const CartUtils = {
                 }
             });
         }
-    }
+    },
 
 
     // Guardar un producto para más tarde

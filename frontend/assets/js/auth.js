@@ -166,67 +166,32 @@ function initUserMenu() {
   }
 }
 
-// Función para agregar enlace al panel de administración en el menú
+// Función para añadir enlace al panel de administración en el menú
 function addAdminLinkToMenu() {
   const userDropdown = document.querySelector('.user-dropdown');
-  if (userDropdown) {
-    // Verificar si el enlace ya existe
-    const existingAdminLink = document.querySelector('.admin-link');
-    if (!existingAdminLink) {
-      // Crear enlace al panel de administración
-      const adminLink = document.createElement('a');
-      adminLink.href = 'pages/admin.html';
-      adminLink.className = 'admin-link';
-      adminLink.innerHTML = '<i class="fas fa-cog"></i> Panel de Administración';
-      adminLink.setAttribute('role', 'menuitem');
-      adminLink.setAttribute('tabindex', '-1');
-      
-      // Insertar el enlace antes del enlace de cierre de sesión
-      const logoutLink = document.getElementById('logoutLink');
-      if (logoutLink && logoutLink.parentNode) {
-        userDropdown.insertBefore(adminLink, logoutLink);
-      } else {
-        userDropdown.appendChild(adminLink);
-      }
-    }
+  if (userDropdown && !document.getElementById('adminLink')) {
+    const adminLink = document.createElement('a');
+    adminLink.id = 'adminLink';
+    adminLink.href = '/pages/admin.html';
+    adminLink.innerHTML = '<i class="fas fa-cog"></i> Panel de Administración';
+    adminLink.setAttribute('role', 'menuitem');
+    adminLink.setAttribute('tabindex', '-1');
+    
+    // Insertar el enlace de administración antes del enlace de cierre de sesión
+    const logoutLink = document.getElementById('logoutLink');
+    userDropdown.insertBefore(adminLink, logoutLink);
   }
 }
 
 // Función para manejar el cierre de sesión
 function handleLogout() {
-  // Enviar solicitud al servidor para cerrar sesión
-  fetch(`${API_BASE_URL}/api/users/logout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Limpiar datos de sesión local
-    logout();
-    // Forzar limpieza completa
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    window.location.href = '/index.html';
-  })
-  .catch(error => {
-    console.error('Error al cerrar sesión:', error);
-    // Aún si hay error, limpiar datos locales
-    logout();
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    window.location.href = '/index.html';
-  });
+  logout();
+  window.location.href = '/index.html';
 }
 
 // Función para verificar la autenticación del usuario
 function checkAuth() {
   if (!isAuthenticated()) {
-    // Limpiar datos residuales
-    localStorage.removeItem('user');
-    
     // Redirigir al login si no está autenticado en páginas que lo requieren
     if (window.location.pathname.includes('profile.html')) {
       window.location.href = '/login.html';
