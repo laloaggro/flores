@@ -11,10 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    // Verificar si el usuario es administrador
-    // Ya no redirigimos automáticamente al panel de administración
-    // Los administradores pueden acceder a su perfil personal
-    
     // Mostrar información del usuario
     displayUserInfo(user);
     
@@ -23,22 +19,31 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Cargar datos adicionales del usuario
     loadUserStats();
+    
+    // Configurar navegación del perfil
+    setupProfileNavigation();
 });
 
 // Mostrar información del usuario
 function displayUserInfo(user) {
     // Actualizar elementos del DOM con la información del usuario
     const userNameElement = document.getElementById('userName');
-    const userEmailElement = document.getElementById('userEmail');
     const profileNameElement = document.getElementById('profileName');
-    const profileEmailElement = document.getElementById('profileEmail');
-    const profilePhoneElement = document.getElementById('profilePhone');
+    const userEmailElement = document.getElementById('userEmail');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const addressInput = document.getElementById('address');
     
     if (userNameElement) userNameElement.textContent = user.name || 'Usuario';
-    if (userEmailElement) userEmailElement.textContent = user.email || '';
     if (profileNameElement) profileNameElement.textContent = user.name || 'Usuario';
-    if (profileEmailElement) profileEmailElement.textContent = user.email || '';
-    if (profilePhoneElement) profilePhoneElement.textContent = user.phone || '';
+    if (userEmailElement) userEmailElement.textContent = user.email || '';
+    
+    // Rellenar el formulario con los datos del usuario
+    if (nameInput) nameInput.value = user.name || '';
+    if (emailInput) emailInput.value = user.email || '';
+    if (phoneInput) phoneInput.value = user.phone || '';
+    if (addressInput) addressInput.value = user.address || '';
 }
 
 // Configurar event listeners
@@ -46,28 +51,9 @@ function setupEventListeners() {
     // Botón de cerrar sesión
     const logoutButton = document.getElementById('logoutButton');
     if (logoutButton) {
-        logoutButton.addEventListener('click', function() {
-            // Eliminar datos de sesión
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            
-            // Redirigir a la página principal
-            window.location.href = 'index.html';
-        });
-    }
-    
-    // Enlace de cerrar sesión en el menú
-    const logoutLink = document.getElementById('logoutLink');
-    if (logoutLink) {
-        logoutLink.addEventListener('click', function(e) {
+        logoutButton.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            // Eliminar datos de sesión
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            
-            // Redirigir a la página principal
-            window.location.href = 'index.html';
+            handleLogout();
         });
     }
     
@@ -80,51 +66,46 @@ function setupEventListeners() {
         });
     }
     
+    // Botón de cambiar contraseña
+    const changePasswordBtn = document.getElementById('changePasswordBtn');
+    if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', function() {
+            showChangePasswordModal();
+        });
+    }
+    
     // Botón de cambiar avatar
     const changeAvatarButton = document.getElementById('changeAvatarButton');
     if (changeAvatarButton) {
         changeAvatarButton.addEventListener('click', function() {
-            changeAvatar();
+            showChangeAvatarModal();
         });
     }
-    
-    // Menú de perfil
-    const profileMenuItems = document.querySelectorAll('.profile-menu a');
-    profileMenuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remover clase active de todos los items
-            document.querySelectorAll('.profile-menu li').forEach(li => {
-                li.classList.remove('active');
-            });
-            
-            // Agregar clase active al item seleccionado
-            this.parentElement.classList.add('active');
-            
-            // Aquí se cargaría el contenido correspondiente
-            const section = this.getAttribute('href').substring(1);
-            loadProfileSection(section);
-        });
-    });
 }
 
 // Actualizar perfil
 function updateProfile() {
-    const profileForm = document.getElementById('profileForm');
-    if (!profileForm) return;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
     
-    const formData = new FormData(profileForm);
-    const userData = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        address: formData.get('address')
-    };
+    // Validación básica
+    if (!name || !email) {
+        alert('Por favor complete los campos obligatorios (Nombre y Email)');
+        return;
+    }
     
-    // Actualizar datos en localStorage
+    // Obtener usuario actual
     const user = JSON.parse(localStorage.getItem('user')) || {};
-    Object.assign(user, userData);
+    
+    // Actualizar datos del usuario
+    user.name = name;
+    user.email = email;
+    user.phone = phone;
+    user.address = address;
+    
+    // Guardar en localStorage
     localStorage.setItem('user', JSON.stringify(user));
     
     // Actualizar UI
@@ -134,18 +115,42 @@ function updateProfile() {
     alert('Perfil actualizado correctamente');
 }
 
-// Cargar sección del perfil
-function loadProfileSection(sectionId) {
+// Configurar navegación del perfil
+function setupProfileNavigation() {
+    const menuLinks = document.querySelectorAll('.profile-menu a');
+    
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const sectionId = this.getAttribute('data-section');
+            showProfileSection(sectionId);
+        });
+    });
+}
+
+// Mostrar sección del perfil
+function showProfileSection(sectionId) {
     // Ocultar todas las secciones
-    document.querySelectorAll('.profile-content-section').forEach(section => {
+    const sections = document.querySelectorAll('.profile-content-section');
+    sections.forEach(section => {
         section.style.display = 'none';
     });
     
     // Mostrar la sección seleccionada
-    const section = document.getElementById(sectionId);
-    if (section) {
-        section.style.display = 'block';
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
     }
+    
+    // Actualizar enlaces activos
+    const menuItems = document.querySelectorAll('.profile-menu li');
+    menuItems.forEach(item => {
+        item.classList.remove('active');
+        const link = item.querySelector('a');
+        if (link && link.getAttribute('data-section') === sectionId) {
+            item.classList.add('active');
+        }
+    });
 }
 
 // Cargar estadísticas del usuario
@@ -166,5 +171,27 @@ function changeAvatar() {
     alert('Funcionalidad de cambio de avatar no implementada aún');
 }
 
-// Exportar funciones para uso global
-window.loadProfileSection = loadProfileSection;
+// Manejar cierre de sesión
+function handleLogout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = 'index.html';
+}
+
+// Mostrar modal para cambiar contraseña
+function showChangePasswordModal() {
+    alert('Funcionalidad de cambio de contraseña no implementada en esta demo');
+}
+
+// Mostrar modal para cambiar avatar
+function showChangeAvatarModal() {
+    alert('Funcionalidad de cambio de avatar no implementada en esta demo');
+}
+
+// Cargar estadísticas del usuario
+function loadUserStats() {
+    // Simular carga de estadísticas
+    document.getElementById('orderCount').textContent = '5';
+    document.getElementById('productCount').textContent = '12';
+    document.getElementById('totalSpent').textContent = '$125.990';
+}
