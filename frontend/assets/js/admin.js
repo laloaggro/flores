@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadUsers();
                 setupUserEvents();
                 break;
+            case 'analytics':
+                loadAnalytics();
+                break;
             case 'settings':
                 initSettings();
                 break;
@@ -97,6 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar configuración
     initSettings();
+    
+    // Configurar filtro de pedidos
+    setupOrderFilter();
 });
 
 // Función para cargar datos del dashboard
@@ -702,6 +708,23 @@ async function loadOrders() {
     }
 }
 
+// Configurar filtro de pedidos
+function setupOrderFilter() {
+    const filterSelect = document.getElementById('orderStatusFilter');
+    if (filterSelect) {
+        filterSelect.addEventListener('change', function() {
+            const status = this.value;
+            filterOrders(status);
+        });
+    }
+}
+
+// Filtrar pedidos por estado
+function filterOrders(status) {
+    // En una implementación real, esto haría una llamada a la API con el filtro
+    showMessage(`Filtrando pedidos por estado: ${status === 'all' ? 'Todos' : status}`, 'info');
+}
+
 // Ver detalles de un pedido
 function viewOrder(orderId) {
     showMessage(`Función para ver detalles del pedido ${orderId}. En una implementación completa, aquí se mostrarían los detalles del pedido.`, 'info');
@@ -888,6 +911,7 @@ async function loadUsers() {
                         <td>${user.email}</td>
                         <td>${user.phone || ''}</td>
                         <td>${user.role || 'user'}</td>
+                        <td>${user.lastLogin || 'Nunca'}</td>
                         <td>
                             <button class="btn-icon edit-user" data-id="${user.id}" aria-label="Editar ${user.name}" title="Editar">
                                 <i class="fas fa-edit" aria-hidden="true"></i>
@@ -904,16 +928,120 @@ async function loadUsers() {
                     });
                 });
             } else {
-                tbody.innerHTML = '<tr><td colspan="6">No hay usuarios disponibles</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7">No hay usuarios disponibles</td></tr>';
             }
         }
     } catch (error) {
         console.error('Error al cargar usuarios:', error);
         const tbody = document.getElementById('usersTableBody');
         if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="6">Error al cargar usuarios</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7">Error al cargar usuarios</td></tr>';
         }
     }
+}
+
+// Cargar analíticas
+function loadAnalytics() {
+    // En una implementación real, esto haría llamadas a la API para obtener datos
+    initCharts();
+    loadSummaryStats();
+}
+
+// Inicializar gráficos
+function initCharts() {
+    // Gráfico de ventas por mes
+    const salesCtx = document.getElementById('salesChart');
+    if (salesCtx) {
+        new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago'],
+                datasets: [{
+                    label: 'Ventas',
+                    data: [12000, 19000, 15000, 18000, 22000, 19500, 23000, 25000],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+    
+    // Gráfico de productos más vendidos
+    const topProductsCtx = document.getElementById('topProductsChart');
+    if (topProductsCtx) {
+        new Chart(topProductsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Ramo Rosas', 'Arreglo Especial', 'Planta Interior', 'Caja Sorpresa', 'Centro de Mesa'],
+                datasets: [{
+                    label: 'Unidades vendidas',
+                    data: [45, 32, 28, 25, 22],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+    
+    // Gráfico de categorías populares
+    const categoriesCtx = document.getElementById('categoriesChart');
+    if (categoriesCtx) {
+        new Chart(categoriesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ramos', 'Arreglos', 'Especiales', 'Plantas'],
+                datasets: [{
+                    data: [35, 30, 20, 15],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 205, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Cargar estadísticas resumidas
+function loadSummaryStats() {
+    // En una implementación real, esto haría llamadas a la API
+    document.getElementById('todaySales').textContent = '$12,500';
+    document.getElementById('weekSales').textContent = '$85,300';
+    document.getElementById('monthSales').textContent = '$325,600';
 }
 
 // Inicializar configuración

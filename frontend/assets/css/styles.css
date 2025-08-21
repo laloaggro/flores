@@ -3621,6 +3621,111 @@ input:checked + .slider:before {
 /* Estilos para el modal de usuarios */
 #userModal .modal-content {
   max-width: 500px;
+}
+
+/* Estilos principales para Arreglos Victoria Florería */
+
+:root {
+    --primary: #5a8f69;
+    --secondary: #4a7a5a;
+    --light: #f5f9f6;
+    --dark: #333;
+    --white: #fff;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+    --success: #27ae60;
+    --gray: #ecf0f1;
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--dark);
+    background-color: #f9f9f9;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Fondo optimizado para mejor rendimiento */
+body::before {
+    content: "";
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background-image: 
+        radial-gradient(circle at 30% 30%, rgba(90, 143, 105, 0.05) 3px, transparent 10px),
+        radial-gradient(circle at 70% 70%, rgba(90, 143, 105, 0.07) 5px, transparent 12px),
+        radial-gradient(circle at 50% 50%, rgba(90, 143, 105, 0.03) 8px, transparent 15px);
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: -1;
+    opacity: 0.15;
+}
+
+/* Mejorar el contraste para accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    body::before {
+        opacity: 0.05;
+    }
+}
+
+/* Focus visible para mejor accesibilidad */
+*:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Skip link para navegación por teclado */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    transition: top 0.3s;
+    z-index: 1000;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ARIA live regions para mensajes dinámicos */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Botones y enlaces accesibles */
+button, a, .btn {
+    /* Asegurar tamaño mínimo para interacción táctil */
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Ajustar contraste para elementos interactivos */
+.btn-primary {
+    background: var(--primary);
+}
+
   width: 90%;
 }
 

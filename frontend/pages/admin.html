@@ -68,6 +68,7 @@
                                 <li><a href="#" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
                                 <li><a href="#" data-section="orders"><i class="fas fa-shopping-cart"></i> Pedidos</a></li>
                                 <li><a href="#" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
+                                <li><a href="#" data-section="analytics"><i class="fas fa-chart-line"></i> Analíticas</a></li>
                                 <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
                             </ul>
                         </aside>
@@ -75,7 +76,7 @@
                         <main class="admin-main">
                             <!-- Dashboard Section -->
                             <section id="dashboard-section" class="admin-content-section active">
-                                <h2>Dashboard</h2>
+                                <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
                                 
                                 <div class="admin-stats">
                                     <div class="stat-card">
@@ -125,28 +126,31 @@
                                     </button>
                                 </div>
                                 
-                                <div class="admin-table-container">
-                                    <table class="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Nombre</th>
-                                                <th>Precio</th>
-                                                <th>Categoría</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="productsTableBody">
-                                            <!-- Los productos se cargarán aquí dinámicamente -->
-                                        </tbody>
-                                    </table>
+                                <div class="recent-products">
+                                    <h3>Productos recientes</h3>
+                                    <div class="admin-table-container">
+                                        <table class="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Nombre</th>
+                                                    <th>Precio</th>
+                                                    <th>Categoría</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="productsTableBody">
+                                                <!-- Los productos se cargarán aquí dinámicamente -->
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </section>
                             
                             <!-- Products Section -->
                             <section id="products-section" class="admin-content-section">
-                                <h2>Gestión de Productos</h2>
-                                <div class="admin-actions">
+                                <div class="section-header">
+                                    <h2><i class="fas fa-box"></i> Gestión de Productos</h2>
                                     <button id="addProductModalBtn" class="btn btn-primary">
                                         <i class="fas fa-plus"></i> Agregar Producto
                                     </button>
@@ -173,7 +177,17 @@
                             
                             <!-- Orders Section -->
                             <section id="orders-section" class="admin-content-section">
-                                <h2>Gestión de Pedidos</h2>
+                                <div class="section-header">
+                                    <h2><i class="fas fa-shopping-cart"></i> Gestión de Pedidos</h2>
+                                    <div class="filter-controls">
+                                        <select id="orderStatusFilter">
+                                            <option value="all">Todos los estados</option>
+                                            <option value="Pendiente">Pendiente</option>
+                                            <option value="Completado">Completado</option>
+                                            <option value="Enviado">Enviado</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="admin-table-container">
                                     <table class="admin-table">
                                         <thead>
@@ -196,12 +210,12 @@
                             <!-- Users Section -->
                             <section id="users-section" class="admin-content-section">
                                 <div class="section-header">
-                                    <h2>Usuarios</h2>
+                                    <h2><i class="fas fa-users"></i> Usuarios</h2>
                                     <button id="addUserBtn" class="btn btn-primary">
                                         <i class="fas fa-plus"></i> Agregar Usuario
                                     </button>
                                 </div>
-                                <div class="table-container">
+                                <div class="admin-table-container">
                                     <table class="admin-table">
                                         <thead>
                                             <tr>
@@ -210,6 +224,7 @@
                                                 <th>Email</th>
                                                 <th>Teléfono</th>
                                                 <th>Rol</th>
+                                                <th>Último acceso</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
@@ -220,9 +235,55 @@
                                 </div>
                             </section>
                             
+                            <!-- Analytics Section -->
+                            <section id="analytics-section" class="admin-content-section">
+                                <h2><i class="fas fa-chart-line"></i> Analíticas</h2>
+                                
+                                <div class="analytics-grid">
+                                    <div class="analytics-card">
+                                        <h3>Ventas por mes</h3>
+                                        <div class="chart-placeholder">
+                                            <canvas id="salesChart"></canvas>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="analytics-card">
+                                        <h3>Productos más vendidos</h3>
+                                        <div class="chart-placeholder">
+                                            <canvas id="topProductsChart"></canvas>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="analytics-card">
+                                        <h3>Categorías populares</h3>
+                                        <div class="chart-placeholder">
+                                            <canvas id="categoriesChart"></canvas>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="analytics-card">
+                                        <h3>Resumen de ventas</h3>
+                                        <div class="summary-stats">
+                                            <div class="summary-item">
+                                                <span class="summary-label">Ventas hoy</span>
+                                                <span class="summary-value" id="todaySales">$0</span>
+                                            </div>
+                                            <div class="summary-item">
+                                                <span class="summary-label">Ventas esta semana</span>
+                                                <span class="summary-value" id="weekSales">$0</span>
+                                            </div>
+                                            <div class="summary-item">
+                                                <span class="summary-label">Ventas este mes</span>
+                                                <span class="summary-value" id="monthSales">$0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            
                             <!-- Settings Section -->
                             <section id="settings-section" class="admin-content-section">
-                                <h2>Configuración</h2>
+                                <h2><i class="fas fa-cog"></i> Configuración</h2>
                                 
                                 <div class="settings-container">
                                     <div class="settings-card">
@@ -337,7 +398,7 @@
                             <label for="productCategory">Categoría</label>
                             <select id="productCategory" class="form-input" required>
                                 <option value="">Seleccionar categoría</option>
-                                <option value=" Ramos">Ramos</option>
+                                <option value="Ramos">Ramos</option>
                                 <option value="Arreglos">Arreglos</option>
                                 <option value="Especiales">Especiales</option>
                                 <option value="Plantas">Plantas</option>
@@ -402,6 +463,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../assets/js/utils.js" type="module"></script>
     <script src="../assets/js/auth.js" type="module"></script>
     <script src="../assets/js/admin.js" type="module"></script>
