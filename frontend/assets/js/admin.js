@@ -2,6 +2,9 @@
 import { API_BASE_URL, isAuthenticated, isAdmin, getAuthToken } from './utils.js';
 import { initUserMenu } from './auth.js';
 
+// Importar Chart.js para los gráficos
+import Chart from 'https://cdn.jsdelivr.net/npm/chart.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar autenticación
     if (!isAuthenticated()) {
@@ -117,6 +120,13 @@ async function loadDashboardData() {
         document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
         document.getElementById('totalRevenue').textContent = `$${(stats.totalRevenue || 0).toFixed(2)}`;
         
+        // Calcular valores adicionales
+        const avgOrderValue = stats.totalOrders ? stats.totalRevenue / stats.totalOrders : 0;
+        document.getElementById('avgOrderValue').textContent = `$${avgOrderValue.toFixed(2)}`;
+        
+        // Tasa de conversión (ejemplo: 5%)
+        document.getElementById('conversionRate').textContent = '5%';
+        
         // Cargar productos recientes
         const productsResponse = await fetch(`${API_BASE_URL}/api/products?limit=5`);
         const productsData = await productsResponse.json();
@@ -159,8 +169,160 @@ async function loadDashboardData() {
             
             productsTableBody.appendChild(row);
         });
+        
+        // Cargar datos para los gráficos
+        loadChartData();
+        
+        // Cargar actividades recientes
+        loadRecentActivities();
     } catch (error) {
         console.error('Error al cargar datos del dashboard:', error);
+    }
+}
+
+// Función para cargar datos de los gráficos
+async function loadChartData() {
+    try {
+        // Datos de ejemplo para los gráficos
+        const salesData = {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Ventas',
+                data: [12000, 19000, 15000, 18000, 22000, 25000],
+                backgroundColor: 'rgba(90, 143, 105, 0.6)',
+                borderColor: 'rgba(90, 143, 105, 1)',
+                borderWidth: 1
+            }]
+        };
+        
+        const topProductsData = {
+            labels: ['Ramo Rosas', 'Arreglo Cumpleaños', 'Centro de Mesa', 'Caja Sorpresa', 'Bouquet Especial'],
+            datasets: [{
+                label: 'Unidades vendidas',
+                data: [45, 38, 32, 28, 22],
+                backgroundColor: [
+                    'rgba(90, 143, 105, 0.6)',
+                    'rgba(74, 122, 90, 0.6)',
+                    'rgba(120, 180, 130, 0.6)',
+                    'rgba(60, 100, 75, 0.6)',
+                    'rgba(100, 160, 115, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(90, 143, 105, 1)',
+                    'rgba(74, 122, 90, 1)',
+                    'rgba(120, 180, 130, 1)',
+                    'rgba(60, 100, 75, 1)',
+                    'rgba(100, 160, 115, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        
+        const categoriesData = {
+            labels: ['Ramos', 'Arreglos', 'Centros de Mesa', 'Cajas', 'Especiales'],
+            datasets: [{
+                label: '% de ventas',
+                data: [30, 25, 20, 15, 10],
+                backgroundColor: [
+                    'rgba(90, 143, 105, 0.6)',
+                    'rgba(74, 122, 90, 0.6)',
+                    'rgba(120, 180, 130, 0.6)',
+                    'rgba(60, 100, 75, 0.6)',
+                    'rgba(100, 160, 115, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(90, 143, 105, 1)',
+                    'rgba(74, 122, 90, 1)',
+                    'rgba(120, 180, 130, 1)',
+                    'rgba(60, 100, 75, 1)',
+                    'rgba(100, 160, 115, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        
+        // Crear gráficos
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        new Chart(salesCtx, {
+            type: 'line',
+            data: salesData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        const topProductsCtx = document.getElementById('topProductsChart').getContext('2d');
+        new Chart(topProductsCtx, {
+            type: 'bar',
+            data: topProductsData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        const categoriesCtx = document.getElementById('categoriesChart').getContext('2d');
+        new Chart(categoriesCtx, {
+            type: 'doughnut',
+            data: categoriesData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error al cargar datos de gráficos:', error);
+    }
+}
+
+// Función para cargar actividades recientes
+function loadRecentActivities() {
+    try {
+        // Datos de ejemplo para actividades recientes
+        const activities = [
+            { text: 'Nuevo pedido #1234 realizado', time: 'Hace 10 min' },
+            { text: 'Producto "Ramo de Rosas" actualizado', time: 'Hace 25 min' },
+            { text: 'Nuevo usuario registrado: María López', time: 'Hace 1 hora' },
+            { text: 'Pedido #1230 marcado como completado', time: 'Hace 2 horas' },
+            { text: 'Nuevo producto "Arreglo Especial" agregado', time: 'Hace 1 día' }
+        ];
+        
+        const activityList = document.getElementById('activityList');
+        activityList.innerHTML = '';
+        
+        activities.forEach(activity => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <i class="fas fa-bell"></i>
+                <span>${activity.text}</span>
+                <span class="activity-time">${activity.time}</span>
+            `;
+            activityList.appendChild(li);
+        });
+    } catch (error) {
+        console.error('Error al cargar actividades recientes:', error);
+        document.getElementById('activityList').innerHTML = '<li>Error al cargar actividades</li>';
     }
 }
 
