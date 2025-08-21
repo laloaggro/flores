@@ -64,7 +64,7 @@ body::before {
     position: absolute;
     top: -40px;
     left: 0;
-    background: var(--primary);
+    background: var(--success);
     color: white;
     padding: 8px;
     text-decoration: none;
@@ -99,6 +99,14 @@ button, a, .btn {
 /* Ajustar contraste para elementos interactivos */
 .btn-primary {
     background: var(--primary);
+}
+
+/* Contenedor principal */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 /* Navbar */
