@@ -16,11 +16,6 @@ function initUserMenu() {
   const userMenuButton = document.querySelector('.user-info');
   const caretIcon = userMenuButton ? userMenuButton.querySelector('.fas.fa-caret-down') : null;
   
-  // Si no existen los elementos necesarios, salir de la función
-  if (!userMenu && !loginLink) {
-    return;
-  }
-  
   // Limpiar cualquier contenido previo
   if (userNameElement) {
     userNameElement.textContent = '';
@@ -113,14 +108,75 @@ function initUserMenu() {
       document.addEventListener('keydown', handleEscapeKey);
     }
   } else {
-    // Usuario no autenticado - mostrar enlace de login
+    // Usuario no autenticado - mostrar enlace de login y ocultar menú de usuario
     if (loginLink) {
-      // Ocultar login si estamos en la página de login
-      loginLink.style.display = window.location.pathname.includes('login.html') ? 'none' : 'block';
+      loginLink.style.display = 'block';
     }
     if (userMenu) {
       userMenu.style.display = 'none';
     }
+  }
+}
+
+// Función para cerrar el dropdown del usuario
+function closeUserDropdown(e) {
+  const userDropdown = document.querySelector('.user-dropdown');
+  const userMenuButton = document.querySelector('.user-info');
+  
+  if (userDropdown && userMenuButton && 
+      !userDropdown.contains(e.target) && 
+      !userMenuButton.contains(e.target)) {
+    userDropdown.style.display = 'none';
+    userMenuButton.setAttribute('aria-expanded', 'false');
+  }
+}
+
+// Función para manejar la tecla Escape
+function handleEscapeKey(e) {
+  if (e.key === 'Escape') {
+    const userDropdown = document.querySelector('.user-dropdown');
+    const userMenuButton = document.querySelector('.user-info');
+    
+    if (userDropdown && userMenuButton) {
+      userDropdown.style.display = 'none';
+      userMenuButton.setAttribute('aria-expanded', 'false');
+    }
+  }
+}
+
+// Función para alternar el dropdown del usuario
+function toggleUserDropdown() {
+  const userDropdown = document.querySelector('.user-dropdown');
+  const userMenuButton = document.querySelector('.user-info');
+  
+  if (userDropdown && userMenuButton) {
+    const isExpanded = userMenuButton.getAttribute('aria-expanded') === 'true';
+    
+    if (isExpanded) {
+      userDropdown.style.display = 'none';
+      userMenuButton.setAttribute('aria-expanded', 'false');
+    } else {
+      userDropdown.style.display = 'block';
+      userMenuButton.setAttribute('aria-expanded', 'true');
+    }
+  }
+}
+
+// Función para añadir enlace al panel de administración en el menú
+function addAdminLinkToMenu() {
+  const userDropdown = document.querySelector('.user-dropdown');
+  const adminLink = document.querySelector('[href="pages/admin.html"]');
+  
+  // Si ya existe el enlace, no hacer nada
+  if (adminLink) return;
+  
+  // Crear enlace al panel de administración
+  if (userDropdown) {
+    const adminListItem = document.createElement('li');
+    adminListItem.innerHTML = '<a href="pages/admin.html" role="menuitem"><i class="fas fa-cog" aria-hidden="true"></i> Panel de Administración</a>';
+    // Insertar antes del enlace de cierre de sesión
+    const logoutItem = userDropdown.querySelector('[id="logoutLink"]').parentNode;
+    userDropdown.insertBefore(adminListItem, logoutItem);
   }
 }
 
@@ -138,100 +194,6 @@ function checkAuth() {
       window.location.href = '/login.html';
     }
   }
-}
-
-// Función para añadir enlace al panel de administración en el menú
-function addAdminLinkToMenu() {
-  const userDropdown = document.querySelector('.user-dropdown');
-  if (userDropdown && !document.getElementById('adminLink')) {
-    const adminLink = document.createElement('a');
-    adminLink.id = 'adminLink';
-    adminLink.href = '/pages/admin.html';
-    adminLink.innerHTML = '<i class="fas fa-cog"></i> Panel de Administración';
-    adminLink.setAttribute('role', 'menuitem');
-    adminLink.setAttribute('tabindex', '-1');
-    
-    // Insertar el enlace de administración antes del enlace de cierre de sesión
-    const logoutLink = document.getElementById('logoutLink');
-    userDropdown.insertBefore(adminLink, logoutLink);
-  }
-}
-
-// Función para alternar el menú desplegable del usuario
-function toggleUserDropdown() {
-  const userDropdown = document.querySelector('.user-dropdown');
-  const userMenuButton = document.querySelector('.user-info');
-  
-  if (userDropdown && userMenuButton) {
-    const isExpanded = userDropdown.classList.contains('show');
-    
-    // Cerrar todos los dropdowns
-    closeAllDropdowns();
-    
-    if (!isExpanded) {
-      // Abrir este dropdown
-      userDropdown.classList.add('show');
-      userMenuButton.setAttribute('aria-expanded', 'true');
-      
-      // Enfocar el primer elemento del menú
-      const firstLink = userDropdown.querySelector('a');
-      if (firstLink) {
-        firstLink.setAttribute('tabindex', '0');
-        // Esperar un momento para asegurar el enfoque
-        setTimeout(() => firstLink.focus(), 10);
-      }
-    } else {
-      // Cerrar este dropdown
-      userDropdown.classList.remove('show');
-      userMenuButton.setAttribute('aria-expanded', 'false');
-    }
-  }
-}
-
-// Función para cerrar el menú desplegable del usuario
-function closeUserDropdown(e) {
-  const userMenu = document.getElementById('userMenu');
-  const userDropdown = document.querySelector('.user-dropdown');
-  
-  if (userMenu && userDropdown && !userMenu.contains(e.target)) {
-    userDropdown.classList.remove('show');
-    const userMenuButton = document.querySelector('.user-info');
-    if (userMenuButton) {
-      userMenuButton.setAttribute('aria-expanded', 'false');
-    }
-    
-    // Quitar el foco de los elementos del menú
-    const menuItems = userDropdown.querySelectorAll('a');
-    menuItems.forEach(item => {
-      item.setAttribute('tabindex', '-1');
-    });
-  }
-}
-
-// Función para manejar la tecla Escape
-function handleEscapeKey(e) {
-  if (e.key === 'Escape') {
-    closeAllDropdowns();
-  }
-}
-
-// Función para cerrar todos los dropdowns
-function closeAllDropdowns() {
-  const openDropdowns = document.querySelectorAll('.user-dropdown.show');
-  openDropdowns.forEach(dropdown => {
-    dropdown.classList.remove('show');
-  });
-  
-  const userMenuButtons = document.querySelectorAll('.user-info');
-  userMenuButtons.forEach(button => {
-    button.setAttribute('aria-expanded', 'false');
-  });
-  
-  // Quitar el foco de los elementos del menú
-  const menuItems = document.querySelectorAll('.user-dropdown a');
-  menuItems.forEach(item => {
-    item.setAttribute('tabindex', '-1');
-  });
 }
 
 // Inicializar cuando el DOM esté cargado

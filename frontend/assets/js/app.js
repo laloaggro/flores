@@ -31,8 +31,12 @@ function saveCartToLocalStorage() {
 // Función para actualizar el contador del carrito
 function updateCartCount() {
     const cartCountElement = document.querySelector('.cart-count');
+    const cartCountElementById = document.getElementById('cartCount');
     if (cartCountElement) {
         cartCountElement.textContent = cartCount;
+        console.log('Contador del carrito actualizado:', cartCount);
+    } else if (cartCountElementById) {
+        cartCountElementById.textContent = cartCount;
         console.log('Contador del carrito actualizado:', cartCount);
     }
 }

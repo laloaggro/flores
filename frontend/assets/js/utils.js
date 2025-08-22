@@ -50,12 +50,17 @@ function showNotification(message, type = 'info') {
         margin-bottom: 10px;
         border-radius: 4px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        opacity: 0;
-        transform: translateX(100%);
-        transition: all 0.3s ease;
+        position: relative;
         cursor: pointer;
+        transition: opacity 0.3s, transform 0.3s;
+        opacity: 1;
+        transform: translateX(0);
     `;
-    notification.textContent = message;
+    
+    notification.innerHTML = `
+        ${message}
+        <span style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-weight: bold;">&times;</span>
+    `;
     
     // Añadir evento para cerrar la notificación al hacer clic
     notification.addEventListener('click', function() {
@@ -68,25 +73,21 @@ function showNotification(message, type = 'info') {
         }, 300);
     });
     
-    // Añadir al contenedor
+    // Añadir la notificación al contenedor
     notificationContainer.appendChild(notification);
     
-    // Mostrar con animación
+    // Eliminar automáticamente la notificación después de 5 segundos
     setTimeout(() => {
-        notification.style.opacity = '1';
-        notification.style.transform = 'translateX(0)';
-    }, 10);
-    
-    // Eliminar después de 3 segundos
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
+        if (notification.parentNode) {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+    }, 5000);
 }
 
 // Formatear precio
