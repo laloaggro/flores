@@ -90,6 +90,34 @@ body::before {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Botón de inicio de sesión */
+.btn-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-login:hover,
+.btn-login:focus {
+    background-color: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    color: white;
+}
+
+.btn-login i {
+    font-size: 1.1em;
+}
+
 /* ARIA live regions para mensajes dinámicos */
 .sr-only {
     position: absolute;
@@ -199,32 +227,6 @@ button, a, .btn {
     display: flex;
     align-items: center;
     gap: 15px; /* Reducir el espacio entre elementos */
-}
-
-/* Botón de inicio de sesión */
-.btn-login {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: var(--primary);
-    color: var(--white);
-    padding: 8px 16px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: var(--transition);
-    border: none;
-    cursor: pointer;
-}
-
-.btn-login:hover {
-    background-color: var(--secondary);
-    transform: translateY(-2px);
-    color: var(--white);
-}
-
-.btn-login i {
-    font-size: 1rem;
 }
 
 .user-menu {
