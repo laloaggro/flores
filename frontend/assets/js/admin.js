@@ -163,8 +163,20 @@ async function loadDashboardData() {
         updateCharts(stats);
     } catch (error) {
         console.error('Error al cargar datos del dashboard:', error);
-        showNotification('Error al cargar datos del dashboard', 'error');
+        // Verificar que showNotification esté disponible antes de usarlo
+        if (typeof showNotification === 'function') {
+            showNotification('Error al cargar datos del dashboard', 'error');
+        } else {
+            console.error('Función showNotification no disponible');
+        }
     }
+}
+
+// Función para actualizar los gráficos con nuevos datos
+function updateCharts(stats) {
+    // En una implementación real, aquí se actualizarían los gráficos con los datos reales
+    console.log('Actualizando gráficos con estadísticas:', stats);
+    // Por ahora, solo dejamos los datos de ejemplo
 }
 
 // Función para cargar datos de los gráficos
@@ -922,10 +934,17 @@ function setupUserEvents() {
     }
 }
 
-// Mostrar modal para crear/editar usuario
+// Mostrar modal de usuario (crear o editar)
 function showUserModal(user = null) {
     const modal = document.getElementById('userModal');
     const title = document.getElementById('userModalTitle');
+    
+    // Verificar que los elementos existen antes de usarlos
+    if (!modal || !title) {
+        console.error('No se encontraron los elementos necesarios para mostrar el modal de usuario');
+        return;
+    }
+    
     const userId = document.getElementById('userId');
     const userName = document.getElementById('userName');
     const userEmail = document.getElementById('userEmail');
@@ -937,25 +956,25 @@ function showUserModal(user = null) {
     if (user) {
         // Editar usuario existente
         title.textContent = 'Editar Usuario';
-        userId.value = user.id;
-        userName.value = user.name;
-        userEmail.value = user.email;
-        userPhone.value = user.phone || '';
-        userRole.value = user.role || 'user';
-        userPassword.value = '';
-        passwordHelp.style.display = 'block';
-        userPassword.removeAttribute('required');
+        if (userId) userId.value = user.id;
+        if (userName) userName.value = user.name;
+        if (userEmail) userEmail.value = user.email;
+        if (userPhone) userPhone.value = user.phone || '';
+        if (userRole) userRole.value = user.role || 'user';
+        if (userPassword) userPassword.value = '';
+        if (passwordHelp) passwordHelp.style.display = 'block';
+        if (userPassword) userPassword.removeAttribute('required');
     } else {
         // Crear nuevo usuario
         title.textContent = 'Agregar Usuario';
-        userId.value = '';
-        userName.value = '';
-        userEmail.value = '';
-        userPhone.value = '';
-        userRole.value = 'user';
-        userPassword.value = '';
-        passwordHelp.style.display = 'block';
-        userPassword.setAttribute('required', 'required');
+        if (userId) userId.value = '';
+        if (userName) userName.value = '';
+        if (userEmail) userEmail.value = '';
+        if (userPhone) userPhone.value = '';
+        if (userRole) userRole.value = 'user';
+        if (userPassword) userPassword.value = '';
+        if (passwordHelp) passwordHelp.style.display = 'block';
+        if (userPassword) userPassword.setAttribute('required', 'required');
     }
     
     modal.style.display = 'block';
