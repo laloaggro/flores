@@ -18,7 +18,7 @@ function debounce(func, wait) {
 // Función para cargar todos los productos
 async function loadAllProducts() {
     try {
-        const response = await fetch(`${API_BASE_URL}/products`);
+        const response = await fetch(`${API_BASE_URL}/api/products`);
         if (!response.ok) {
             throw new Error('Error al cargar los productos');
         }

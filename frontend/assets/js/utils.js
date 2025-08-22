@@ -8,7 +8,13 @@ const getApiBaseUrl = () => {
     return 'https://arreglos-victoria-backend.onrender.com';
   }
   
-  // En desarrollo, usar localhost con puerto 5000
+  // Detectar si se está usando Live Server (puerto 5500)
+  if (typeof window !== 'undefined' && window.location.port === '5500') {
+    // Cuando se usa Live Server, el backend está en localhost:5000
+    return 'http://localhost:5000';
+  }
+  
+  // En desarrollo normal, usar localhost con puerto 5000
   return 'http://localhost:5000';
 };
 
