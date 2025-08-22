@@ -19,8 +19,8 @@ const checkBackendConnectivity = async () => {
   try {
     // Probar primero con un endpoint que probablemente exista
     const endpointsToTry = [
+      '/api/users/login',  // Endpoint de login
       '/api/products',  // Endpoint que debería existir
-      '/api/auth/login', // Endpoint de login
       '/',  // Página principal como último recurso
     ];
     

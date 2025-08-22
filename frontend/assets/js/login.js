@@ -89,11 +89,11 @@ async function handleLogin() {
     
     // Realizar solicitud de inicio de sesión
     console.log('Realizando solicitud de inicio de sesión...');
-    console.log('URL de la solicitud:', `${API_BASE_URL}/api/auth/login`);
+    console.log('URL de la solicitud:', `${API_BASE_URL}/api/users/login`);
     
     let response;
     try {
-      response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      response = await fetch(`${API_BASE_URL}/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
