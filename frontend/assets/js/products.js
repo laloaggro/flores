@@ -157,17 +157,6 @@ function sortProducts(products, sortBy) {
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('DOM cargado en products.js');
     
-    // Inicializar menú de usuario
-    try {
-        initUserMenu();
-        console.log('Menú de usuario inicializado en products.js');
-    } catch (error) {
-        console.error('Error al inicializar el menú de usuario en products.js:', error);
-    }
-    
-    // Cargar todos los productos
-    const allProducts = await loadAllProducts();
-    
     // Configurar filtro de categorías
     const categoryLinks = document.querySelectorAll('.category-filter a');
     categoryLinks.forEach(link => {
@@ -204,4 +193,18 @@ document.addEventListener('DOMContentLoaded', async function() {
             displayProducts(sortedProducts);
         });
     }
+});
+
+// Inicializar menú de usuario cuando el DOM esté cargado
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar el menú de usuario
+    try {
+        initUserMenu();
+        console.log('Menú de usuario inicializado en products.js');
+    } catch (error) {
+        console.error('Error al inicializar el menú de usuario en products.js:', error);
+    }
+    
+    // Cargar productos
+    loadAllProducts();
 });
