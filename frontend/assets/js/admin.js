@@ -121,75 +121,49 @@ document.addEventListener('DOMContentLoaded', function() {
     setupOrderFilter();
 });
 
-// Función para cargar datos del dashboard
+// Cargar datos del dashboard
 async function loadDashboardData() {
+    console.log('Cargando datos del dashboard...');
     try {
-        // Cargar estadísticas
-        const statsResponse = await fetch(`${API_BASE_URL}/api/products/stats`);
-        const stats = await statsResponse.json();
-        
-        document.getElementById('totalProducts').textContent = stats.totalProducts || 0;
-        document.getElementById('totalOrders').textContent = stats.totalOrders || 0;
-        document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
-        document.getElementById('totalRevenue').textContent = `$${(stats.totalRevenue || 0).toFixed(2)}`;
-        
-        // Calcular valores adicionales
-        const avgOrderValue = stats.totalOrders ? stats.totalRevenue / stats.totalOrders : 0;
-        document.getElementById('avgOrderValue').textContent = `$${avgOrderValue.toFixed(2)}`;
-        
-        // Tasa de conversión (ejemplo: 5%)
-        document.getElementById('conversionRate').textContent = '5%';
-        
-        // Cargar productos recientes
-        const productsResponse = await fetch(`${API_BASE_URL}/api/products?limit=5`);
-        const productsData = await productsResponse.json();
-        const products = productsData.products || productsData;
-        
-        const productsTableBody = document.getElementById('productsTableBody');
-        productsTableBody.innerHTML = '';
-        
-        products.forEach(product => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${product.id}</td>
-                <td>${product.name}</td>
-                <td>$${product.price.toFixed(2)}</td>
-                <td>${product.category}</td>
-                <td>
-                    <button class="btn-icon view-btn" title="Ver" aria-label="Ver detalles de ${product.name}">
-                        <i class="fas fa-eye" aria-hidden="true"></i>
-                    </button>
-                    <button class="btn-icon edit-btn" title="Editar" data-id="${product.id}" aria-label="Editar ${product.name}">
-                        <i class="fas fa-edit" aria-hidden="true"></i>
-                    </button>
-                    <button class="btn-icon delete-btn" title="Eliminar" data-id="${product.id}" aria-label="Eliminar ${product.name}">
-                        <i class="fas fa-trash" aria-hidden="true"></i>
-                    </button>
-                </td>
-            `;
-            
-            // Agregar eventos a los botones
-            const editBtn = row.querySelector('.edit-btn');
-            const deleteBtn = row.querySelector('.delete-btn');
-            
-            editBtn.addEventListener('click', () => {
-                editProduct(product.id);
-            });
-            
-            deleteBtn.addEventListener('click', () => {
-                deleteProduct(product.id);
-            });
-            
-            productsTableBody.appendChild(row);
+        // Obtener estadísticas del backend
+        const response = await fetch(`${API_BASE_URL}/api/products/stats`, {
+            headers: {
+                'Authorization': `Bearer ${getAuthToken()}`
+            }
         });
         
-        // Cargar datos para los gráficos
-        loadChartData();
+        if (!response.ok) {
+            throw new Error('Error al cargar estadísticas');
+        }
         
-        // Cargar actividades recientes
-        loadRecentActivities();
+        const stats = await response.json();
+        console.log('Estadísticas cargadas:', stats);
+        
+        // Actualizar elementos del dashboard si existen
+        const totalProducts = document.getElementById('totalProducts');
+        const totalOrders = document.getElementById('totalOrders');
+        const totalUsers = document.getElementById('totalUsers');
+        const totalRevenue = document.getElementById('totalRevenue');
+        const avgOrderValue = document.getElementById('avgOrderValue');
+        const conversionRate = document.getElementById('conversionRate');
+        
+        if (totalProducts) totalProducts.textContent = stats.totalProducts || 0;
+        if (totalOrders) totalOrders.textContent = stats.totalOrders || 0;
+        if (totalUsers) totalUsers.textContent = stats.totalUsers || 0;
+        if (totalRevenue) totalRevenue.textContent = `$${(stats.totalRevenue || 0).toFixed(2)}`;
+        
+        // Calcular valores adicionales
+        const avgValue = stats.totalOrders ? stats.totalRevenue / stats.totalOrders : 0;
+        if (avgOrderValue) avgOrderValue.textContent = `$${avgValue.toFixed(2)}`;
+        
+        // Tasa de conversión (ejemplo: 5%)
+        if (conversionRate) conversionRate.textContent = '5%';
+        
+        // Actualizar gráficos
+        updateCharts(stats);
     } catch (error) {
         console.error('Error al cargar datos del dashboard:', error);
+        showNotification('Error al cargar datos del dashboard', 'error');
     }
 }
 
@@ -1251,26 +1225,35 @@ function initSettings() {
     }
 }
 
-// Cargar configuración guardada
+// Cargar configuración
 function loadSettings() {
+    console.log('Cargando configuración...');
+    
     // Cargar información de la tienda
     const storeInfo = JSON.parse(localStorage.getItem('storeInfo')) || {};
-    document.getElementById('storeName').value = storeInfo.name || '';
-    document.getElementById('storeEmail').value = storeInfo.email || '';
-    document.getElementById('storePhone').value = storeInfo.phone || '';
-    document.getElementById('storeAddress').value = storeInfo.address || '';
-    document.getElementById('storeHours').value = storeInfo.hours || '';
+    const storeName = document.getElementById('storeName');
+    const storeEmail = document.getElementById('storeEmail');
+    const storePhone = document.getElementById('storePhone');
+    const storeAddress = document.getElementById('storeAddress');
+    
+    if (storeName) storeName.value = storeInfo.name || '';
+    if (storeEmail) storeEmail.value = storeInfo.email || '';
+    if (storePhone) storePhone.value = storeInfo.phone || '';
+    if (storeAddress) storeAddress.value = storeInfo.address || '';
     
     // Cargar personalización
     const customization = JSON.parse(localStorage.getItem('customization')) || {};
-    document.getElementById('primaryColor').value = customization.primaryColor || '#4a7c59';
-    document.getElementById('secondaryColor').value = customization.secondaryColor || '#3a6c49';
+    const primaryColor = document.getElementById('primaryColor');
+    const secondaryColor = document.getElementById('secondaryColor');
+    
+    if (primaryColor) primaryColor.value = customization.primaryColor || '#4a7c59';
+    if (secondaryColor) secondaryColor.value = customization.secondaryColor || '#3a6c49';
     
     // Cargar configuración de envíos
     const shipping = JSON.parse(localStorage.getItem('shippingSettings')) || {};
-    document.getElementById('shippingCost').value = shipping.cost || '';
-    document.getElementById('freeShippingThreshold').value = shipping.freeThreshold || '';
-    document.getElementById('deliveryTime').value = shipping.deliveryTime || '';
+    const shippingCost = document.getElementById('shippingCost');
+    
+    if (shippingCost) shippingCost.value = shipping.cost || '';
 }
 
 // Guardar información de la tienda
