@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa del Sitio - Arreglos Victoria Florería</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+    <link rel="preload" href="assets/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="assets/css/styles.css">
+    </noscript>
+    <meta name="description" content="Mapa del sitio web de Arreglos Florales Victoria. Navega fácilmente por todas las secciones y páginas de nuestro sitio web.">
+    <meta name="keywords" content="mapa del sitio, sitemap, navegación, florería, arreglos florales, Recoleta">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="noindex, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/sitemap.html">
+    <meta property="og:title" content="Mapa del Sitio - Arreglos Victoria Florería">
+    <meta property="og:description" content="Mapa del sitio web de Arreglos Florales Victoria. Navega fácilmente por todas las secciones y páginas de nuestro sitio web.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/sitemap.html">
+    <meta property="twitter:title" content="Mapa del Sitio - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Mapa del sitio web de Arreglos Florales Victoria. Navega fácilmente por todas las secciones y páginas de nuestro sitio web.">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    <header>
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="Menú principal">
+                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="products.html">Productos</a></li>
+                    <li><a href="index.html#about">Nosotros</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                    <li><a href="sitemap.html" class="active" aria-current="page">Mapa del Sitio</a></li>
+                </ul>
+                <div class="user-actions">
+                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                        <span>Iniciar sesión</span>
+                    </a>
+                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario">
+                        <div class="user-info">
+                            <span id="userNameDisplay"></span>
+                            <button id="userMenuToggle" class="user-menu-toggle" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                                <span class="sr-only">Menú de usuario</span>
+                            </button>
+                        </div>
+                        <ul class="user-dropdown" role="menu">
+                            <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
+                            <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
+                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="sitemap-section">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Mapa del Sitio</h1>
+                    <p>Navega fácilmente por todas las secciones de nuestro sitio web</p>
+                </div>
+                
+                <div class="sitemap-intro">
+                    <p>En esta página encontrarás un listado completo de todas las secciones y páginas disponibles en nuestro sitio web. Haz clic en cualquier enlace para acceder directamente a la página que desees visitar.</p>
+                </div>
+                
+                <div class="sitemap-grid">
+                    <div class="sitemap-category">
+                        <h3><i class="fas fa-home"></i> Páginas Principales</h3>
+                        <ul>
+                            <li>
+                                <a href="index.html">Inicio</a>
+                                <p>Página principal con información general</p>
+                            </li>
+                            <li>
+                                <a href="products.html">Productos</a>
+                                <p>Catálogo completo de nuestros arreglos florales</p>
+                            </li>
+                            <li>
+                                <a href="index.html#about">Nosotros</a>
+                                <p>Información sobre nuestra florería</p>
+                            </li>
+                            <li>
+                                <a href="index.html#services">Servicios</a>
+                                <p>Servicios que ofrecemos</p>
+                            </li>
+                            <li>
+                                <a href="index.html#testimonials">Testimonios</a>
+                                <p>Opiniones de nuestros clientes</p>
+                            </li>
+                            <li>
+                                <a href="index.html#contacto">Contacto</a>
+                                <p>Formulario y datos de contacto</p>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sitemap-category">
+                        <h3><i class="fas fa-user"></i> Cuenta de Usuario</h3>
+                        <ul>
+                            <li>
+                                <a href="login.html">Iniciar Sesión</a>
+                                <p>Accede a tu cuenta</p>
+                            </li>
+                            <li>
+                                <a href="register.html">Registrarse</a>
+                                <p>Crea una nueva cuenta</p>
+                            </li>
+                            <li>
+                                <a href="profile.html">Perfil</a>
+                                <p>Gestiona tu información personal</p>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sitemap-category">
+                        <h3><i class="fas fa-shopping-cart"></i> Compras</h3>
+                        <ul>
+                            <li>
+                                <a href="checkout.html">Proceso de Compra</a>
+                                <p>Finaliza tu pedido</p>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sitemap-category">
+                        <h3><i class="fas fa-info-circle"></i> Información Adicional</h3>
+                        <ul>
+                            <li>
+                                <a href="sitemap.html">Mapa del Sitio</a>
+                                <p>Esta página</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="sitemap-footer">
+                    <h3><i class="fas fa-sitemap"></i> Estructura del Sitio</h3>
+                    <p>Nuestro sitio web está organizado en varias secciones principales para facilitar la navegación:</p>
+                    <ul>
+                        <li><strong>Página de Inicio:</strong> Presenta nuestra florería, servicios y productos destacados</li>
+                        <li><strong>Catálogo de Productos:</strong> Muestra todos nuestros arreglos florales organizados por categorías</li>
+                        <li><strong>Área de Usuario:</strong> Permite a los clientes gestionar sus cuentas, pedidos y preferencias</li>
+                        <li><strong>Proceso de Compra:</strong> Guía a los clientes a través del proceso de pago y envío</li>
+                        <li><strong>Información Institucional:</strong> Proporciona detalles sobre nuestra empresa y contacto</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Arreglos Florales Victoria</h3>
+                    <p>Flores frescas y arreglos florales únicos para las ocasiones más especiales.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="products.html">Productos</a></li>
+                        <li><a href="index.html#about">Nosotros</a></li>
+                        <li><a href="index.html#contacto">Contacto</a></li>
+                        <li><a href="sitemap.html">Mapa del Sitio</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Información de Contacto</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</li>
+                        <li><i class="fas fa-phone" aria-hidden="true"></i> +569 6360 3177</li>
+                        <li><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/mobile-menu.js" type="module"></script>
+    <script src="assets/js/utils.js" type="module"></script>
+    <script src="assets/js/auth.js" type="module"></script>
+    <script>
+        // Fallback para cargar estilos en caso de que el preload falle
+        window.addEventListener('load', function() {
+            var stylesLink = document.querySelector('link[href="assets/css/styles.css"]');
+            if (stylesLink && (!stylesLink.rel || stylesLink.rel !== 'stylesheet')) {
+                stylesLink.rel = 'stylesheet';
+            }
+        });
+    </script>
+</body>
+</html>

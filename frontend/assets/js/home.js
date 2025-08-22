@@ -1,4 +1,4 @@
-import { updateCartCount, showNotification } from './utils.js';
+import { updateCartCount, showNotification, API_BASE_URL } from './utils.js';
 import productManager from './productManager.js';
 import CartUtils from './cartUtils.js';
 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Load featured products for the home page
 async function loadFeaturedProducts() {
   try {
-    const response = await fetch('/api/products?limit=4');
+    const response = await fetch(`${API_BASE_URL}/api/products?limit=4`);
     if (!response.ok) {
       throw new Error('Failed to load products');
     }
@@ -50,7 +50,7 @@ async function loadFeaturedProducts() {
                       data-name="${product.name}" 
                       data-price="${product.price}"
                       data-image="${product.image_url || '/assets/images/default-avatar.svg'}">
-                <i class="fas fa-shopping-cart"></i> Agregar
+                <i class="fas fa-shopping-cart"></i> Agregar al carrito
               </button>
               <div class="product-card-notification" id="notification-${product.id}" style="display: none;">
                 ¡Agregado al carrito!
@@ -64,5 +64,9 @@ async function loadFeaturedProducts() {
     }
   } catch (error) {
     console.error('Error loading featured products:', error);
+    const featuredProductsContainer = document.getElementById('featuredProducts');
+    if (featuredProductsContainer) {
+      featuredProductsContainer.innerHTML = '<p class="error-message">Error al cargar productos destacados. Por favor, inténtelo más tarde.</p>';
+    }
   }
 }

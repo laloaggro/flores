@@ -1,16 +1,25 @@
-<!DOCTYPE html>
+ga<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arreglos Victoria Florería - Inicio</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+    <link rel="preload" href="assets/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <meta name="description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana. Más de 10 años de experiencia en el mercado.">
     <meta name="keywords" content="arreglos florales, flores, florería, Recoleta, Región Metropolitana, entrega a domicilio">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="index, follow">
+    
+    <!-- Preload critical images -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -45,8 +54,13 @@
                     <li><a href="products.html">Productos</a></li>
                     <li><a href="#about">Nosotros</a></li>
                     <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="sitemap.html">Mapa del Sitio</a></li>
                 </ul>
                 <div class="user-actions">
+                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                        <span>Iniciar sesión</span>
+                    </a>
                     <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario">
                         <div class="user-info">
                             <span id="userNameDisplay"></span>
@@ -57,7 +71,6 @@
                         </div>
                         <ul class="user-dropdown" role="menu">
                             <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
-                            <li><a href="login.html" id="loginLink" role="menuitem"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Iniciar sesión</a></li>
                             <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
                         </ul>
                     </div>
@@ -70,7 +83,7 @@
         </div>
     </header>
 
-    <main id="main-content">
+    <main>
         <section id="home" class="hero" aria-labelledby="hero-heading">
             <div class="container">
                 <div class="hero-content">
@@ -99,31 +112,24 @@
                     <div class="about-text">
                         <h2 class="section-title">Sobre Nosotros</h2>
                         <p>En Arreglos Florales Victoria llevamos más de 10 años creando hermosos arreglos florales para las ocasiones más especiales. Nuestra pasión por las flores y la atención al detalle nos distingue en el mercado.</p>
-                        <p>Utilizamos solo flores frescas de la más alta calidad, cortadas diariamente y combinadas con creatividad y estilo para crear composiciones únicas que encantarán a tus seres queridos.</p>
+                        <p>Utilizamos solo las flores más frescas y de la mejor calidad, trabajando directamente con productores locales para ofrecer una experiencia única a nuestros clientes.</p>
                         <div class="about-stats">
                             <div class="stat">
                                 <h3>10+</h3>
                                 <p>Años de Experiencia</p>
                             </div>
                             <div class="stat">
-                                <h3>500+</h3>
+                                <h3>1000+</h3>
                                 <p>Clientes Satisfechos</p>
                             </div>
                             <div class="stat">
-                                <h3>100%</h3>
-                                <p>Flores Frescas</p>
+                                <h3>24/7</h3>
+                                <p>Entrega a Domicilio</p>
                             </div>
                         </div>
                     </div>
                     <div class="about-image">
-                        <picture>
-                            <source srcset="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80.webp" type="image/webp">
-                            <img src="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                                 alt="Florista trabajando en arreglos florales" 
-                                 width="800" 
-                                 height="600"
-                                 loading="lazy">
-                        </picture>
+                        <img width="800" height="533" src="assets/images/backgrounds/plant-shadow.png" alt="Arreglos florales hermosos y frescos" loading="lazy" fetchpriority="low">
                     </div>
                 </div>
             </div>
@@ -135,52 +141,41 @@
                 <div class="contact-content">
                     <div class="contact-info">
                         <h3>Información de Contacto</h3>
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <div>
-                                <h4>Dirección</h4>
-                                <p>Av. Valdivieso 593, Recoleta, Región Metropolitana</p>
-                            </div>
+                        <p><i class="fas fa-map-marker-alt"></i> Av. Valdivieso 593, Recoleta, Región Metropolitana</p>
+                        <p><i class="fas fa-phone"></i> +569 6360 3177</p>
+                        <p><i class="fas fa-clock"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</p>
+                        <p><i class="fas fa-envelope"></i> contacto@arreglosvictoria.cl</p>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                            <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                            <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
                         </div>
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <div>
-                                <h4>Teléfono</h4>
-                                <p>+569 6360 3177</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <h4>Horario</h4>
-                                <p>Lunes a Sábado: 9:00 AM - 7:00 PM</p>
-                            </div>
-                        </div>
-                        <div class="map">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.715667637789!2d-70.64444432440353!3d-33.43781947332158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5560a18778f%3A0x2dc9ab0c703d89a7!2sAv.%20Valdivieso%20593%2C%20Recoleta%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1658780324853!5m2!1ses!2scl" 
-                                width="100%" 
-                                height="250" 
-                                style="border:0;" 
-                                allowfullscreen="" 
-                                loading="lazy" 
-                                referrerpolicy="no-referrer-when-downgrade"
-                                title="Ubicación de Arreglos Florales Victoria"></iframe>
-                        </div>
+                    </div>
+                    <div class="contact-map">
+                        <iframe 
+                            width="100%" 
+                            height="250" 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.701477894064!2d-70.64401568475035!3d-33.43894998077974!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a7a9d4d1d1%3A0x1f3a9f6b3c4a1a7f!2sAv.%20Valdivieso%20593%2C%20Recoleta%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1649782043882!5m2!1ses!2scl" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Ubicación de Arreglos Florales Victoria"></iframe>
                     </div>
                     <div class="contact-form">
                         <h3>Envíanos un Mensaje</h3>
                         <form id="contactForm">
                             <div class="form-group">
                                 <label for="name">Nombre</label>
-                                <input type="text" id="name" name="name" required>
+                                <input type="text" id="name" name="name" required class="form-input">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" id="email" name="email" required>
+                                <input type="email" id="email" name="email" required class="form-input">
                             </div>
                             <div class="form-group">
                                 <label for="message">Mensaje</label>
-                                <textarea id="message" name="message" rows="5" required></textarea>
+                                <textarea id="message" name="message" rows="5" required class="form-input"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                         </form>
@@ -210,6 +205,7 @@
                         <li><a href="products.html">Productos</a></li>
                         <li><a href="index.html#about">Nosotros</a></li>
                         <li><a href="index.html#contacto">Contacto</a></li>
+                        <li><a href="sitemap.html">Mapa del Sitio</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -227,7 +223,32 @@
         </div>
     </footer>
 
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="loading-indicator" aria-hidden="true">
+        <div class="spinner" role="status" aria-label="Cargando contenido">
+            <div></div><div></div><div></div>
+        </div>
+    </div>
+
     <!-- Scripts -->
+    <script>
+        // Script para manejar el indicador de carga
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            
+            // Mostrar el indicador de carga al inicio
+            loadingIndicator.setAttribute('aria-hidden', 'false');
+            loadingIndicator.style.display = 'flex';
+            
+            // Ocultar el indicador de carga después de que todos los recursos se hayan cargado
+            window.addEventListener('load', function() {
+                setTimeout(() => {
+                    loadingIndicator.setAttribute('aria-hidden', 'true');
+                    loadingIndicator.style.display = 'none';
+                }, 500); // Pequeño retraso para efecto visual
+            });
+        });
+    </script>
     <script src="assets/js/mobile-menu.js" type="module"></script>
     <script src="assets/js/utils.js" type="module"></script>
     <script src="assets/js/auth.js" type="module"></script>

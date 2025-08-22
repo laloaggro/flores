@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Inicializar elementos del DOM
 function initializeDOMElements() {
-  productGrid = document.getElementById('productGrid');
+  productGrid = document.getElementById('productsContainer');
   categoryFilter = document.getElementById('categoryFilter');
-  searchFilter = document.getElementById('searchFilter');
+  priceFilter = document.getElementById('priceFilter');
   clearFiltersBtn = document.getElementById('clearFilters');
   prevPage = document.querySelector('.prev-page');
   nextPage = document.querySelector('.next-page');

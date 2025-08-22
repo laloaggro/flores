@@ -4,7 +4,7 @@
 const getApiBaseUrl = () => {
   // En producción, usar la URL del backend en Render
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-    // Cambia esta URL por la URL real de tu backend en Render
+    // URL real del backend en Render
     return 'https://arreglos-victoria-backend.onrender.com';
   }
   
