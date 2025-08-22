@@ -79,6 +79,9 @@ function initUserMenu() {
       userMenuButton.parentNode.replaceChild(newUserMenuButton, userMenuButton);
       const freshUserMenuButton = document.querySelector('.user-info');
       
+      // Asegurarse de que el dropdown esté oculto inicialmente
+      userDropdown.style.display = 'none';
+      
       freshUserMenuButton.addEventListener('click', function(e) {
         e.stopPropagation();
         toggleUserDropdown();

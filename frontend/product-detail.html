@@ -36,9 +36,52 @@
     <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-    
     <header>
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="Menú principal">
+                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
+                
+                <button class="hamburger" aria-label="Menú" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="products.html">Productos</a></li>
+                    <li><a href="index.html#about">Nosotros</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+                
+                <div class="user-actions">
+                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                        <span>Iniciar sesión</span>
+                    </a>
+                    <div class="user-menu" id="userMenu" role="menu" aria-label="Menú de usuario" style="display: none;">
+                        <button class="user-info" aria-haspopup="true" aria-expanded="false" aria-label="Menú de usuario">
+                            <span id="userNameDisplay"></span>
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <i class="fas fa-caret-down" aria-hidden="true"></i>
+                        </button>
+                        <ul class="user-dropdown" role="menu" aria-orientation="vertical">
+                            <li><a href="profile.html" role="menuitem" tabindex="-1"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
+                            <li><a href="#" id="logoutLink" role="menuitem" tabindex="-1"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false" aria-haspopup="true">
+                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Saltar al contenido principal</a>
+    
+    <main id="main-content">
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="Menú principal">
                 <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
