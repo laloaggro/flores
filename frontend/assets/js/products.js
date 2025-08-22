@@ -1,5 +1,4 @@
-import { API_BASE_URL } from './utils.js';
-import { showNotification } from './errorHandler.js';
+import { API_BASE_URL, showNotification } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 // Función para implementar debounce
