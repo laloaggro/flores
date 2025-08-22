@@ -11,141 +11,91 @@ const Cart = (cartItems = [], savedForLater = []) => {
     savedForLater = [];
   }
 
-  // Función para actualizar la cantidad de un producto en el carrito
-  const updateQuantity = (id, change) => {
-    const updatedCart = cartItems.map(item => 
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + change) } : item
-    );
-    saveCartToLocalStorage(updatedCart);
-    // Actualizar el DOM (esto sería más fácil con un framework como React)
-    document.querySelector('.cart-modal').outerHTML = Cart(updatedCart, savedForLater);
-  };
+  // Calcular el precio total
+  const totalPrice = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
-  // Función para eliminar un producto del carrito
-  const removeFromCart = (id) => {
-    const updatedCart = cartItems.filter(item => item.id !== id);
-    saveCartToLocalStorage(updatedCart);
-    // Actualizar el DOM
-    document.querySelector('.cart-modal').outerHTML = Cart(updatedCart, savedForLater);
-  };
-
-  // Función para guardar un producto para más tarde
-  const saveForLater = (id) => {
-    const itemToSave = cartItems.find(item => item.id === id);
-    const updatedCart = cartItems.filter(item => item.id !== id);
-    const updatedSavedForLater = [...savedForLater, itemToSave];
-    
-    saveCartToLocalStorage(updatedCart);
-    // Actualizar el DOM
-    document.querySelector('.cart-modal').outerHTML = Cart(updatedCart, updatedSavedForLater);
-  };
-
-  // Función para mover un producto guardado de vuelta al carrito
-  const moveToCart = (id) => {
-    const itemToMove = savedForLater.find(item => item.id === id);
-    const updatedSavedForLater = savedForLater.filter(item => item.id !== id);
-    const updatedCart = [...cartItems, itemToMove];
-    
-    saveCartToLocalStorage(updatedCart);
-    // Actualizar el DOM
-    document.querySelector('.cart-modal').outerHTML = Cart(updatedCart, updatedSavedForLater);
-  };
-
-  // Calcular el precio total con validación
-  const totalPrice = cartItems.reduce((sum, item) => {
-    // Validar que el item tenga las propiedades necesarias
-    if (!item || typeof item.price !== 'number' || typeof item.quantity !== 'number') {
-      console.warn('Cart component: Invalid item in cart', item);
-      return sum;
-    }
-    return sum + (item.price * item.quantity);
-  }, 0);
-  
   // Generar HTML para los items del carrito
-  const cartItemsHTML = cartItems.length ? cartItems.map(item => {
-    // Validar que el item tenga las propiedades necesarias
-    if (!item || !item.id || !item.name || !item.image || 
-        typeof item.price !== 'number' || typeof item.quantity !== 'number') {
-      console.warn('Cart component: Invalid item structure', item);
-      return ''; // Omitir items inválidos
-    }
-    
-    return `
-      <div class="cart-item" data-id="${item.id}">
-        <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.src='/assets/images/products/product_1.jpg'" loading="lazy">
-        <div class="cart-item-details">
-          <h4 class="cart-item-name">${item.name}</h4>
-          <p class="cart-item-price">$${item.price.toLocaleString('es-CL')}</p>
-          <div class="cart-item-quantity">
-            <button class="quantity-btn decrease-btn" aria-label="Disminuir cantidad" onclick="Cart(cartItems, savedForLater).updateQuantity(${item.id}, -1)">-</button>
-            <span class="quantity">${item.quantity}</span>
-            <button class="quantity-btn increase-btn" aria-label="Aumentar cantidad" onclick="Cart(cartItems, savedForLater).updateQuantity(${item.id}, 1)">+</button>
-          </div>
-        </div>
-        <div class="cart-item-actions">
-          <button class="save-for-later-btn" aria-label="Guardar para más tarde" title="Guardar para más tarde" onclick="Cart(cartItems, savedForLater).saveForLater(${item.id})">
-            <i class="fas fa-save"></i>
-          </button>
-          <button class="remove-btn" aria-label="Eliminar producto" title="Eliminar" onclick="Cart(cartItems, savedForLater).removeFromCart(${item.id})">×</button>
+  const cartItemsHTML = cartItems.map(item => `
+    <div class="cart-item" data-id="${item.id}">
+      <img src="${item.image || 'https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}" alt="${item.name}" class="cart-item-image">
+      <div class="cart-item-details">
+        <h4 class="cart-item-name">${item.name}</h4>
+        <p class="cart-item-price">${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(item.price)}</p>
+        <div class="cart-item-quantity">
+          <button class="quantity-btn decrease-btn" data-id="${item.id}">-</button>
+          <span class="quantity">${item.quantity}</span>
+          <button class="quantity-btn increase-btn" data-id="${item.id}">+</button>
         </div>
       </div>
-    `;
-  }).join('') : '<p class="empty-cart-message">Tu carrito está vacío</p>';
-  
-  // Generar HTML para items guardados para más tarde
-  const savedItemsHTML = savedForLater.length ? savedForLater.map(item => {
-    // Validar que el item tenga las propiedades necesarias
-    if (!item || !item.id || !item.name || !item.image || 
-        typeof item.price !== 'number' || typeof item.quantity !== 'number') {
-      console.warn('Cart component: Invalid saved item structure', item);
-      return ''; // Omitir items inválidos
-    }
-    
-    return `
-      <div class="saved-item" data-id="${item.id}">
-        <img src="${item.image}" alt="${item.name}" class="saved-item-image" onerror="this.src='/assets/images/products/product_1.jpg'" loading="lazy">
-        <div class="saved-item-details">
-          <h4 class="saved-item-name">${item.name}</h4>
-          <p class="saved-item-price">$${item.price.toLocaleString('es-CL')}</p>
-        </div>
-        <div class="saved-item-actions">
-          <button class="move-to-cart-btn" aria-label="Mover al carrito" title="Mover al carrito" onclick="Cart(cartItems, savedForLater).moveToCart(${item.id})">
-            <i class="fas fa-cart-plus"></i>
-          </button>
-          <button class="remove-saved-btn" aria-label="Eliminar" title="Eliminar" onclick="Cart(cartItems, [...savedForLater.filter(item => item.id !== ${item.id})])">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
+      <div class="cart-item-actions">
+        <button class="save-for-later" data-id="${item.id}">
+          <i class="fas fa-save"></i> Guardar
+        </button>
+        <button class="remove-from-cart" data-id="${item.id}">
+          <i class="fas fa-trash"></i> Eliminar
+        </button>
       </div>
-    `;
-  }).join('') : '';
+    </div>
+  `).join('');
+
+  // Generar HTML para los items guardados para más tarde
+  const savedItemsHTML = savedForLater.map(item => `
+    <div class="saved-item" data-id="${item.id}">
+      <img src="${item.image || 'https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}" alt="${item.name}" class="saved-item-image">
+      <div class="saved-item-details">
+        <h4 class="saved-item-name">${item.name}</h4>
+        <p class="saved-item-price">${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(item.price)}</p>
+      </div>
+      <div class="saved-item-actions">
+        <button class="move-to-cart" data-id="${item.id}">
+          <i class="fas fa-cart-plus"></i> Mover al carrito
+        </button>
+        <button class="remove-from-saved" data-id="${item.id}">
+          <i class="fas fa-trash"></i> Eliminar
+        </button>
+      </div>
+    </div>
+  `).join('');
 
   return `
     <div id="cartModal" class="cart-modal" role="dialog" aria-labelledby="cartTitle" aria-modal="true">
       <div class="cart-content">
         <div class="cart-header">
-          <h2 id="cartTitle">Tu Carrito</h2>
+          <h2 id="cartTitle">Tu Carrito (${cartItems.length})</h2>
           <span class="cart-close" role="button" tabindex="0" aria-label="Cerrar carrito">&times;</span>
         </div>
         <div class="cart-body">
-          <div class="cart-items">
-            ${cartItemsHTML}
-          </div>
-          ${savedForLater.length ? `
+          ${cartItems.length > 0 ? `
+            <div class="cart-items">
+              ${cartItemsHTML}
+            </div>
+          ` : `
+            <div class="empty-cart-message">
+              <i class="fas fa-shopping-cart fa-3x"></i>
+              <h3>Tu carrito está vacío</h3>
+              <p>Agrega productos para comenzar</p>
+              <button class="btn btn-primary continue-shopping">Continuar comprando</button>
+            </div>
+          `}
+          
+          ${savedForLater.length > 0 ? `
             <div class="saved-for-later">
-              <h3>Guardado para más tarde</h3>
+              <h3>Guardado para más tarde (${savedForLater.length})</h3>
               <div class="saved-items">
                 ${savedItemsHTML}
               </div>
             </div>
           ` : ''}
-          <div class="cart-summary">
-            <div class="cart-total">
-              <span>Total:</span>
-              <span class="total-amount">$${totalPrice.toLocaleString('es-CL')}</span>
+          
+          ${cartItems.length > 0 ? `
+            <div class="cart-summary">
+              <div class="cart-total">
+                <span>Total:</span>
+                <span class="total-amount">${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(totalPrice)}</span>
+              </div>
+              <button class="btn btn-primary checkout-button">Proceder al Pedido</button>
             </div>
-            <button class="btn btn-primary checkout-button" ${cartItems.length ? '' : 'disabled'} aria-disabled="${cartItems.length ? 'false' : 'true'}">Proceder al Pedido</button>
-          </div>
+          ` : ''}
         </div>
       </div>
     </div>

@@ -2259,22 +2259,34 @@ footer {
     text-align: center;
     padding: 40px 20px;
     color: var(--dark);
-    font-size: 1.1rem;
 }
 
-.saved-for-later {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px dashed var(--gray);
+.empty-cart-message i {
+    color: var(--gray);
+    margin-bottom: 20px;
 }
 
-.saved-for-later h3 {
+.empty-cart-message h3 {
+    margin: 20px 0 10px 0;
     color: var(--dark);
-    margin-bottom: 15px;
-    font-size: 1.1rem;
 }
 
-.saved-items {
-    max-height: 200px;
-    overflow-y: auto;
+.empty-cart-message p {
+    margin: 10px 0 20px 0;
+    color: var(--dark);
+}
+
+.continue-shopping {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.continue-shopping:hover {
+    background: var(--secondary);
 }
