@@ -71,23 +71,29 @@ body::before {
 /* Skip link para navegación por teclado */
 .skip-link {
     position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--success);
+    top: -50px;
+    left: 10px;
+    background: var(--primary);
     color: white;
-    min-width: 120px;
-    padding: 10px 15px;
+    min-width: 180px;
+    padding: 12px 20px;
     text-align: center;
     text-decoration: none;
-    transition: top 0.3s, box-shadow 0.3s;
+    transition: all 0.3s ease;
     z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 2px solid var(--secondary);
 }
 
 .skip-link:focus {
-    top: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    top: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+    outline: 3px solid var(--white);
+    outline-offset: 2px;
 }
 
 /* Botón de inicio de sesión */
