@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function() {
     handleNavigation();
     
     // Cargar productos en la sección de productos si estamos en la página principal
-    if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+    if (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname.endsWith('/index.html')) {
         // Cargar productos inmediatamente
         loadProductsSection();
     }
@@ -760,22 +760,15 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         clearInterval(formCheckInterval);
     }, 5000);
-    
-    // Smooth scrolling para enlaces de navegación
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
 });
+
+// Función para inicializar event listeners
+function initializeEventListeners() {
+    // Adjuntar event listener al formulario de contacto si existe
+    checkAndAttachFormListener();
+    
+    console.log('Inicialización completada');
+}
 
 // Verificar también después de que la ventana se haya cargado completamente
 window.addEventListener('load', function() {

@@ -39,9 +39,7 @@ function initUserMenu() {
     if (userMenu) {
       userMenu.style.display = 'block';
     }
-    if (loginLink && !window.location.pathname.includes('login.html')) {
-      loginLink.style.display = 'block';
-    } else if (loginLink) {
+    if (loginLink) {
       loginLink.style.display = 'none';
     }
     
@@ -121,18 +119,15 @@ function initUserMenu() {
       document.removeEventListener('keydown', handleEscapeKey);
       document.addEventListener('keydown', handleEscapeKey);
     }
-  } else if (userMenu && loginLink) {
-    // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
-    userMenu.style.display = 'none';
-    if (!window.location.pathname.includes('login.html')) {
+  } else {
+    // Usuario no autenticado - mostrar enlace de login
+    if (loginLink && !window.location.pathname.includes('login.html')) {
       loginLink.style.display = 'block';
-    } else {
+    } else if (loginLink) {
       loginLink.style.display = 'none';
     }
-    
-    // Asegurarse de que el dropdown esté oculto
-    if (userDropdown) {
-      userDropdown.classList.remove('show');
+    if (userMenu) {
+      userMenu.style.display = 'none';
     }
   }
 }
