@@ -36,7 +36,7 @@ const Products = {
    */
   mount: async () => {
     // Cargar productos cuando el componente esté montado
-    this.loadProducts();
+    Products.loadProducts();
   },
 
   /**
@@ -47,11 +47,11 @@ const Products = {
       const data = await productManager.loadProducts(1, 8);
       
       if (data && data.products.length > 0) {
-        this.displayProducts(data.products);
-        this.loadTestimonials(); // Cargar testimonios después de obtener productos
+        Products.displayProducts(data.products);
+        Products.loadTestimonials(); // Cargar testimonios después de obtener productos
       }
     } catch (error) {
-      this.showError('productsGrid', 'Error al cargar productos. Por favor, inténtelo más tarde.');
+      Products.showError('productsGrid', 'Error al cargar productos. Por favor, inténtelo más tarde.');
       console.error('Error al cargar productos:', error);
     }
   },
@@ -97,7 +97,7 @@ const Products = {
       }
     ];
     
-    this.displayTestimonials(testimonials);
+    Products.displayTestimonials(testimonials);
   },
 
   /**
@@ -112,10 +112,10 @@ const Products = {
       <div class="testimonial-card" role="article" aria-labelledby="testimonial-${testimonial.id}">
         <div class="testimonial-header">
           <div class="testimonial-rating">
-            ${this.renderStars(testimonial.rating)}
+            ${Products.renderStars(testimonial.rating)}
           </div>
           <h4 id="testimonial-${testimonial.id}" class="testimonial-name">${testimonial.name}</h4>
-          <time class="testimonial-date" datetime="${testimonial.date}">${this.formatDate(testimonial.date)}</time>
+          <time class="testimonial-date" datetime="${testimonial.date}">${Products.formatDate(testimonial.date)}</time>
         </div>
         <p class="testimonial-comment">${testimonial.comment}</p>
       </div>

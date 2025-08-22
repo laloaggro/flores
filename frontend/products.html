@@ -94,19 +94,16 @@
                 <div class="section-header">
                     <h2 class="section-title">Catálogo de Arreglos</h2>
                     <div class="filter-controls">
+                        <input type="text" id="searchFilter" placeholder="Buscar productos..." class="search-input">
                         <select id="categoryFilter">
                             <option value="">Todas las categorías</option>
-                            <option value="ramo">Ramos</option>
-                            <option value="arreglo">Arreglos</option>
-                            <option value="corona">Coronas</option>
-                            <option value="rosas">Rosas</option>
                         </select>
-                        <select id="priceFilter">
-                            <option value="">Todos los precios</option>
-                            <option value="low">Menor precio</option>
-                            <option value="high">Mayor precio</option>
-                        </select>
+                        <button id="clearFilters" class="btn btn-secondary">Limpiar filtros</button>
                     </div>
+                </div>
+                
+                <div class="results-info">
+                    <span id="resultsCount">Mostrando 0 productos</span>
                 </div>
                 
                 <div class="product-grid" id="productsContainer">
@@ -120,6 +117,12 @@
                 
                 <div id="errorContainer" class="error-message" style="display: none;">
                     <p><i class="fas fa-exclamation-triangle"></i> Error al cargar los productos. Por favor, inténtalo más tarde.</p>
+                </div>
+                
+                <div class="pagination">
+                    <button class="btn prev-page">Anterior</button>
+                    <span class="page-info top">Página 1 de 1</span>
+                    <button class="btn next-page">Siguiente</button>
                 </div>
             </div>
         </section>
@@ -165,6 +168,7 @@
     <script src="assets/js/mobile-menu.js" type="module"></script>
     <script src="assets/js/utils.js" type="module"></script>
     <script src="assets/js/auth.js" type="module"></script>
+    <script src="assets/js/errorHandler.js" type="module"></script>
     <script src="assets/js/products.js" type="module"></script>
     
 </body>

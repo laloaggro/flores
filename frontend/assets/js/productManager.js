@@ -2,6 +2,7 @@
 
 import { showNotification, formatPrice, API_BASE_URL } from './utils.js';
 import CartUtils from './cartUtils.js';
+import ErrorHandler from './errorHandler.js';
 
 class ProductManager {
   constructor() {
@@ -56,14 +57,14 @@ class ProductManager {
       const response = await fetch(url);
       
       if (!response.ok) {
-        throw new Error(`Error al cargar productos: ${response.status}`);
+        throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
       
       // Guardar en caché si es la primera página sin filtros
-      if (!category && !search && page === 1) {
-        this.cachedProducts = data.products || data;
+      if (!category && !search && page === 1 && data.products) {
+        this.cachedProducts = data.products;
       }
       
       this.isLoading = false;
@@ -71,6 +72,9 @@ class ProductManager {
     } catch (error) {
       console.error('Error al cargar productos:', error);
       this.isLoading = false;
+      
+      // Handle error with our new error handler
+      ErrorHandler.handleApiError(error, 'loadProducts');
       throw error;
     }
   }
@@ -97,6 +101,7 @@ class ProductManager {
       }
     } catch (error) {
       console.warn('No se pudieron cargar imágenes adicionales de la API de Unsplash:', error);
+      ErrorHandler.logError(error, 'initFlowerImages');
       // Usar las imágenes locales como respaldo
     }
   }
@@ -118,7 +123,7 @@ class ProductManager {
       const response = await fetch(`${API_BASE_URL}/api/products/${id}`);
       
       if (!response.ok) {
-        throw new Error(`Error al cargar el producto: ${response.status}`);
+        throw new Error(`Error al cargar el producto: ${response.status} ${response.statusText}`);
       }
       
       const product = await response.json();
@@ -131,6 +136,7 @@ class ProductManager {
       return product;
     } catch (error) {
       console.error('Error al cargar producto por ID:', error);
+      ErrorHandler.handleApiError(error, 'loadProductById');
       throw error;
     }
   }
@@ -162,6 +168,7 @@ class ProductManager {
       return newProduct;
     } catch (error) {
       console.error('Error al crear producto:', error);
+      ErrorHandler.handleApiError(error, 'createProduct');
       throw error;
     }
   }
@@ -193,6 +200,7 @@ class ProductManager {
       return updatedProduct;
     } catch (error) {
       console.error('Error al actualizar producto:', error);
+      ErrorHandler.handleApiError(error, 'updateProduct');
       throw error;
     }
   }
@@ -220,6 +228,7 @@ class ProductManager {
       return true;
     } catch (error) {
       console.error('Error al eliminar producto:', error);
+      ErrorHandler.handleApiError(error, 'deleteProduct');
       throw error;
     }
   }
@@ -230,13 +239,14 @@ class ProductManager {
       const response = await fetch(`${API_BASE_URL}/api/products/categories`);
       
       if (!response.ok) {
-        throw new Error(`Error al cargar categorías: ${response.status}`);
+        throw new Error(`Error al cargar categorías: ${response.status} ${response.statusText}`);
       }
       
       const categories = await response.json();
       return categories;
     } catch (error) {
       console.error('Error al cargar categorías:', error);
+      ErrorHandler.handleApiError(error, 'loadCategories');
       throw error;
     }
   }

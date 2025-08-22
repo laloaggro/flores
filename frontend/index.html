@@ -27,6 +27,8 @@
     <meta property="og:title" content="Arreglos Victoria Florería - Inicio">
     <meta property="og:description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
+    <meta property="og:locale" content="es_CL">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -34,6 +36,41 @@
     <meta property="twitter:title" content="Arreglos Victoria Florería - Inicio">
     <meta property="twitter:description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana.">
     <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    
+    <!-- Schema.org markup for Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Florist",
+      "name": "Arreglos Florales Victoria",
+      "image": "https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80",
+      "telephone": "+569 6360 3177",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Valdivieso 593",
+        "addressLocality": "Recoleta",
+        "addressRegion": "Región Metropolitana",
+        "postalCode": "8450000",
+        "addressCountry": "CL"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "09:00",
+          "closes": "19:00"
+        }
+      ],
+      "url": "https://arreglos-victoria-backend.onrender.com/"
+    }
+    </script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -57,16 +94,18 @@
                     <li><a href="sitemap.html">Mapa del Sitio</a></li>
                 </ul>
                 <div class="user-actions">
-                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
+                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión">
                         <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
                         <span>Iniciar sesión</span>
                     </a>
-                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
-                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
+                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario">
+                        <div class="user-info">
                             <span id="userNameDisplay"></span>
-                            <i class="fas fa-user" aria-hidden="true"></i>
-                            <i class="fas fa-caret-down" aria-hidden="true"></i>
-                        </button>
+                            <button id="userMenuToggle" class="user-menu-toggle" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                                <span class="sr-only">Menú de usuario</span>
+                            </button>
+                        </div>
                         <ul class="user-dropdown" role="menu">
                             <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
                             <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
@@ -360,6 +399,7 @@
     <script src="assets/js/mobile-menu.js" type="module"></script>
     <script src="assets/js/utils.js" type="module"></script>
     <script src="assets/js/auth.js" type="module"></script>
+    <script src="assets/js/errorHandler.js" type="module"></script>
     <script src="assets/js/home.js" type="module"></script>
 </body>
 </html>
