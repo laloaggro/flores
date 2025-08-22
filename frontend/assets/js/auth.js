@@ -16,13 +16,6 @@ function initUserMenu() {
   const userMenuButton = document.querySelector('.user-info');
   const caretIcon = userMenuButton ? userMenuButton.querySelector('.fas.fa-caret-down') : null;
   
-  // Ocultar el enlace de login en la página de login
-  if (window.location.pathname.includes('login.html')) {
-    if (loginLink) {
-      loginLink.style.display = 'none';
-    }
-  }
-  
   // Si no existen los elementos necesarios, salir de la función
   if (!userMenu && !loginLink) {
     return;
@@ -35,7 +28,7 @@ function initUserMenu() {
   
   // Verificar autenticación y mostrar elementos apropiados
   if (isAuthenticated() && user) {
-    // Usuario autenticado - mostrar menú de usuario
+    // Usuario autenticado - mostrar menú de usuario y ocultar login
     if (userMenu) {
       userMenu.style.display = 'block';
     }
@@ -121,10 +114,9 @@ function initUserMenu() {
     }
   } else {
     // Usuario no autenticado - mostrar enlace de login
-    if (loginLink && !window.location.pathname.includes('login.html')) {
-      loginLink.style.display = 'block';
-    } else if (loginLink) {
-      loginLink.style.display = 'none';
+    if (loginLink) {
+      // Ocultar login si estamos en la página de login
+      loginLink.style.display = window.location.pathname.includes('login.html') ? 'none' : 'block';
     }
     if (userMenu) {
       userMenu.style.display = 'none';

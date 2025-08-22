@@ -739,6 +739,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar navegación
     handleNavigation();
     
+    // Inicializar el menú de usuario
+    if (typeof initUserMenu === 'function') {
+        initUserMenu();
+    }
+    
     // Cargar productos en la sección de productos si estamos en la página principal
     if (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname.endsWith('/index.html')) {
         // Cargar productos inmediatamente
