@@ -218,6 +218,15 @@
     <script src="assets/js/utils.js" type="module"></script>
     <script src="assets/js/auth.js" type="module"></script>
     <script>
+        // Inicializar menú de usuario
+        document.addEventListener('DOMContentLoaded', function() {
+            import('./assets/js/auth.js').then(module => {
+                module.initUserMenu();
+            }).catch(err => {
+                console.error('Error al cargar auth.js:', err);
+            });
+        });
+        
         // Fallback para cargar estilos en caso de que el preload falle
         window.addEventListener('load', function() {
             var stylesLink = document.querySelector('link[href="assets/css/styles.css"]');

@@ -1,6 +1,10 @@
 // profile.js - Manejo de la página de perfil de usuario
+import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar menú de usuario
+    initUserMenu();
+    
     // Verificar si el usuario está logueado
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
@@ -19,9 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Cargar datos adicionales del usuario
     loadUserStats();
-    
-    // Configurar navegación del perfil
-    setupProfileNavigation();
 });
 
 // Mostrar información del usuario
@@ -123,6 +124,8 @@ function updateProfile() {
 function setupProfileNavigation() {
     // La navegación se maneja ahora con el script en línea en profile.html
 }
+
+// ... existing code ...
 
 // Cargar estadísticas del usuario
 function loadUserStats() {

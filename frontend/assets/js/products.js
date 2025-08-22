@@ -1,5 +1,6 @@
 import { API_BASE_URL } from './utils.js';
 import { showNotification } from './errorHandler.js';
+import { initUserMenu } from './auth.js';
 
 // Función para implementar debounce
 function debounce(func, wait) {
@@ -154,6 +155,9 @@ function sortProducts(products, sortBy) {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', async function() {
+    // Inicializar menú de usuario
+    initUserMenu();
+    
     // Cargar todos los productos
     const allProducts = await loadAllProducts();
     

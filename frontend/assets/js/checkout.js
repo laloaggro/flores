@@ -1,6 +1,10 @@
 import { showNotification, updateCartCount, formatPrice, getUser, isAuthenticated } from './utils.js';
+import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar menú de usuario
+  initUserMenu();
+  
   // Elementos del DOM
   const orderItems = document.querySelector('.order-items');
   const totalAmount = document.querySelector('.total-amount');
