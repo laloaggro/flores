@@ -2,6 +2,8 @@ import { updateCartCount, getUser, isAuthenticated, logout, isAdmin, API_BASE_UR
 
 // Función para inicializar el menú de usuario
 function initUserMenu() {
+  console.log('Iniciando menú de usuario');
+  
   // Forzar limpieza adicional
   if (!isAuthenticated()) {
     localStorage.removeItem('user');
@@ -15,6 +17,8 @@ function initUserMenu() {
   const userDropdown = document.querySelector('.user-dropdown');
   const userMenuButton = document.querySelector('.user-info');
   const caretIcon = userMenuButton ? userMenuButton.querySelector('.fas.fa-caret-down') : null;
+  
+  console.log('Elementos encontrados:', { userMenu, loginLink, userNameElement, logoutLink, userDropdown, userMenuButton });
   
   // Limpiar cualquier contenido previo
   if (userNameElement) {

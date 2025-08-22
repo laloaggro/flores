@@ -5,11 +5,18 @@ import { initUserMenu } from './auth.js';
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
+  console.log('DOM cargado en home.js');
+  
   // Initialize cart utilities
   CartUtils.init();
   
   // Initialize user menu
-  initUserMenu();
+  try {
+    initUserMenu();
+    console.log('Menú de usuario inicializado en home.js');
+  } catch (error) {
+    console.error('Error al inicializar el menú de usuario en home.js:', error);
+  }
   
   // Initialize event listeners for adding products to cart
   productManager.initCartEventListeners();

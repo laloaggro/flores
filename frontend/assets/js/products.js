@@ -155,8 +155,15 @@ function sortProducts(products, sortBy) {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', async function() {
+    console.log('DOM cargado en products.js');
+    
     // Inicializar menú de usuario
-    initUserMenu();
+    try {
+        initUserMenu();
+        console.log('Menú de usuario inicializado en products.js');
+    } catch (error) {
+        console.error('Error al inicializar el menú de usuario en products.js:', error);
+    }
     
     // Cargar todos los productos
     const allProducts = await loadAllProducts();
