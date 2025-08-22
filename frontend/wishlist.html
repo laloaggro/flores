@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos - Arreglos Victoria Florería</title>
+    <title>Lista de Deseos - Arreglos Victoria Florería</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -16,23 +16,23 @@
     <noscript>
         <link rel="stylesheet" href="assets/css/styles.css">
     </noscript>
-    <meta name="description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
-    <meta name="keywords" content="productos, arreglos florales, flores, ramos, coronas, Recoleta, Región Metropolitana">
+    <meta name="description" content="Tu lista de deseos en Arreglos Florales Victoria. Guarda tus productos favoritos para comprarlos más tarde.">
+    <meta name="keywords" content="lista de deseos, wishlist, productos favoritos, florería, arreglos florales">
     <meta name="author" content="Arreglos Victoria Florería">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="noindex, follow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/products.html">
-    <meta property="og:title" content="Productos - Arreglos Victoria Florería">
-    <meta property="og:description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
+    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/wishlist.html">
+    <meta property="og:title" content="Lista de Deseos - Arreglos Victoria Florería">
+    <meta property="og:description" content="Tu lista de deseos en Arreglos Florales Victoria. Guarda tus productos favoritos para comprarlos más tarde.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/products.html">
-    <meta property="twitter:title" content="Productos - Arreglos Victoria Florería">
-    <meta property="twitter:description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
+    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/wishlist.html">
+    <meta property="twitter:title" content="Lista de Deseos - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Tu lista de deseos en Arreglos Florales Victoria. Guarda tus productos favoritos para comprarlos más tarde.">
     <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
 </head>
 <body>
@@ -51,7 +51,7 @@
                 
                 <ul class="nav-links">
                     <li><a href="index.html">Inicio</a></li>
-                    <li><a href="products.html" class="active" aria-current="page">Productos</a></li>
+                    <li><a href="products.html">Productos</a></li>
                     <li><a href="index.html#about">Nosotros</a></li>
                     <li><a href="index.html#contacto">Contacto</a></li>
                 </ul>
@@ -83,42 +83,13 @@
 
     <main id="main-content">
         <section class="products-header">
-            <h1>Nuestros Productos</h1>
-            <p>Descubre nuestra amplia variedad de arreglos florales, ramos, plantas y accesorios. Todos nuestros productos son elaborados con flores frescas y de la más alta calidad.</p>
+            <h1>Tu Lista de Deseos</h1>
+            <p>Guarda tus productos favoritos para comprarlos más tarde.</p>
         </section>
 
         <div class="container">
-            <div class="product-filters">
-                <div class="category-filter">
-                    <a href="#" data-category="all" class="active">Todos</a>
-                    <a href="#" data-category="arreglos">Arreglos Florales</a>
-                    <a href="#" data-category="ramos">Ramos</a>
-                    <a href="#" data-category="plantas">Plantas</a>
-                    <a href="#" data-category="accesorios">Accesorios</a>
-                </div>
-                
-                <div class="search-sort-container">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Buscar productos...">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    
-                    <div class="sort-box">
-                        <select id="sortSelect">
-                            <option value="default">Ordenar por</option>
-                            <option value="name-asc">Nombre (A-Z)</option>
-                            <option value="name-desc">Nombre (Z-A)</option>
-                            <option value="price-asc">Precio (Menor a Mayor)</option>
-                            <option value="price-desc">Precio (Mayor a Menor)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="product-count" id="productCount">Cargando productos...</div>
-            
-            <div class="product-grid" id="productGrid">
-                <!-- Los productos se cargarán aquí -->
+            <div class="wishlist-container" id="wishlistContainer">
+                <p>Cargando lista de deseos...</p>
             </div>
         </div>
     </main>
@@ -139,7 +110,7 @@
                     <h4>Enlaces Rápidos</h4>
                     <ul>
                         <li><a href="index.html">Inicio</a></li>
-                        <li><a href="products.html" class="active" aria-current="page">Productos</a></li>
+                        <li><a href="products.html">Productos</a></li>
                         <li><a href="index.html#about">Nosotros</a></li>
                         <li><a href="index.html#contacto">Contacto</a></li>
                         <li><a href="sitemap.html">Mapa del Sitio</a></li>
@@ -163,8 +134,12 @@
     <script src="assets/js/mobile-menu.js" type="module"></script>
     <script src="assets/js/utils.js" type="module"></script>
     <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/errorHandler.js" type="module"></script>
-    <script src="assets/js/products.js" type="module"></script>
-    
+    <script src="assets/js/wishlist.js" type="module"></script>
+    <script>
+        // Inicializar la lista de deseos cuando la página cargue
+        document.addEventListener('DOMContentLoaded', function() {
+            displayWishlist();
+        });
+    </script>
 </body>
 </html>

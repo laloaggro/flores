@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos - Arreglos Victoria Florería</title>
+    <title>Detalle del Producto - Arreglos Victoria Florería</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -16,23 +16,23 @@
     <noscript>
         <link rel="stylesheet" href="assets/css/styles.css">
     </noscript>
-    <meta name="description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
-    <meta name="keywords" content="productos, arreglos florales, flores, ramos, coronas, Recoleta, Región Metropolitana">
+    <meta name="description" content="Detalle del producto - Arreglos Florales Victoria. Información completa, reseñas y especificaciones del producto seleccionado.">
+    <meta name="keywords" content="detalle de producto, reseñas, información de producto, florería, arreglos florales">
     <meta name="author" content="Arreglos Victoria Florería">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="noindex, follow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/products.html">
-    <meta property="og:title" content="Productos - Arreglos Victoria Florería">
-    <meta property="og:description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
+    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/product-detail.html">
+    <meta property="og:title" content="Detalle del Producto - Arreglos Victoria Florería">
+    <meta property="og:description" content="Detalle del producto - Arreglos Florales Victoria. Información completa, reseñas y especificaciones del producto seleccionado.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/products.html">
-    <meta property="twitter:title" content="Productos - Arreglos Victoria Florería">
-    <meta property="twitter:description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
+    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/product-detail.html">
+    <meta property="twitter:title" content="Detalle del Producto - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Detalle del producto - Arreglos Florales Victoria. Información completa, reseñas y especificaciones del producto seleccionado.">
     <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
 </head>
 <body>
@@ -51,7 +51,7 @@
                 
                 <ul class="nav-links">
                     <li><a href="index.html">Inicio</a></li>
-                    <li><a href="products.html" class="active" aria-current="page">Productos</a></li>
+                    <li><a href="products.html">Productos</a></li>
                     <li><a href="index.html#about">Nosotros</a></li>
                     <li><a href="index.html#contacto">Contacto</a></li>
                 </ul>
@@ -82,43 +82,62 @@
     </header>
 
     <main id="main-content">
-        <section class="products-header">
-            <h1>Nuestros Productos</h1>
-            <p>Descubre nuestra amplia variedad de arreglos florales, ramos, plantas y accesorios. Todos nuestros productos son elaborados con flores frescas y de la más alta calidad.</p>
-        </section>
-
         <div class="container">
-            <div class="product-filters">
-                <div class="category-filter">
-                    <a href="#" data-category="all" class="active">Todos</a>
-                    <a href="#" data-category="arreglos">Arreglos Florales</a>
-                    <a href="#" data-category="ramos">Ramos</a>
-                    <a href="#" data-category="plantas">Plantas</a>
-                    <a href="#" data-category="accesorios">Accesorios</a>
+            <div class="product-detail-container">
+                <div class="product-detail-image">
+                    <img id="productImage" src="" alt="">
                 </div>
                 
-                <div class="search-sort-container">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Buscar productos...">
-                        <i class="fas fa-search"></i>
+                <div class="product-detail-info">
+                    <h1 id="productName"></h1>
+                    <div class="product-rating" id="productRating">
+                        <!-- Las estrellas se cargarán aquí -->
                     </div>
+                    <p class="product-price" id="productPrice"></p>
+                    <p class="product-description" id="productDescription"></p>
+                    <p class="product-category" id="productCategory"></p>
                     
-                    <div class="sort-box">
-                        <select id="sortSelect">
-                            <option value="default">Ordenar por</option>
-                            <option value="name-asc">Nombre (A-Z)</option>
-                            <option value="name-desc">Nombre (Z-A)</option>
-                            <option value="price-asc">Precio (Menor a Mayor)</option>
-                            <option value="price-desc">Precio (Mayor a Menor)</option>
-                        </select>
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <div class="product-count" id="productCount">Cargando productos...</div>
-            
-            <div class="product-grid" id="productGrid">
-                <!-- Los productos se cargarán aquí -->
+            <div class="product-reviews-section">
+                <h2>Reseñas del producto</h2>
+                <div id="productReviews">
+                    <p>Cargando reseñas...</p>
+                </div>
+                
+                <div class="add-review-section">
+                    <h3>Agregar tu reseña</h3>
+                    <form id="reviewForm">
+                        <div class="form-group">
+                            <label for="reviewRating">Calificación:</label>
+                            <div class="rating-input">
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1"><i class="fas fa-star"></i></label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reviewComment">Comentario:</label>
+                            <textarea id="reviewComment" name="comment" rows="4" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Enviar reseña</button>
+                    </form>
+                </div>
             </div>
         </div>
     </main>
@@ -139,7 +158,7 @@
                     <h4>Enlaces Rápidos</h4>
                     <ul>
                         <li><a href="index.html">Inicio</a></li>
-                        <li><a href="products.html" class="active" aria-current="page">Productos</a></li>
+                        <li><a href="products.html">Productos</a></li>
                         <li><a href="index.html#about">Nosotros</a></li>
                         <li><a href="index.html#contacto">Contacto</a></li>
                         <li><a href="sitemap.html">Mapa del Sitio</a></li>
@@ -163,8 +182,45 @@
     <script src="assets/js/mobile-menu.js" type="module"></script>
     <script src="assets/js/utils.js" type="module"></script>
     <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/errorHandler.js" type="module"></script>
-    <script src="assets/js/products.js" type="module"></script>
-    
+    <script src="assets/js/productManager.js" type="module"></script>
+    <script>
+        // Código para cargar y mostrar el producto
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener el ID del producto de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (productId) {
+                // Cargar información del producto
+                loadProductDetails(productId);
+            } else {
+                // Redirigir a la página de productos si no hay ID
+                window.location.href = 'products.html';
+            }
+        });
+        
+        function loadProductDetails(productId) {
+            // Esta función se implementará completamente cuando se conecte con la API
+            // Por ahora, simulamos con datos de ejemplo
+            document.getElementById('productName').textContent = 'Arreglo Floral Especial';
+            document.getElementById('productPrice').textContent = '$15.990';
+            document.getElementById('productDescription').textContent = 'Hermoso arreglo floral con rosas, claveles y follaje fresco, ideal para ocasiones especiales.';
+            document.getElementById('productCategory').textContent = 'Arreglos Florales';
+            document.getElementById('productImage').src = 'https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80';
+            document.getElementById('productImage').alt = 'Arreglo Floral Especial';
+            
+            // Simular calificación promedio
+            document.getElementById('productRating').innerHTML = `
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>(4.5 de 5)</span>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>

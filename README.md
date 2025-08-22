@@ -1,180 +1,131 @@
-# Arreglos Florales Victoria - Website
+# Arreglos Florales Victoria 🌹
 
-Bienvenido al repositorio del sitio web de Arreglos Florales Victoria. Esta es una tienda en línea para la venta de arreglos florales.
+¡Bienvenido a Arreglos Florales Victoria! Somos una florería familiar con más de 10 años de experiencia en Recoleta, Región Metropolitana, especializados en crear hermosos arreglos florales para todas las ocasiones.
+
+## Características del Sitio Web
+
+### ✅ Funcionalidades Principales
+
+- **Visualización de productos**: Catálogo completo de arreglos florales, ramos, plantas y accesorios
+- **Sistema de autenticación**: Registro e inicio de sesión de usuarios
+- **Carrito de compras**: Agregar productos y proceder al checkout
+- **Panel de administración**: Gestión de productos, pedidos, usuarios y reseñas
+- **Sistema de reseñas**: Los usuarios pueden dejar reseñas y calificaciones de productos
+- **Lista de deseos**: Guardar productos favoritos para comprarlos más tarde
+- **Búsqueda y filtrado**: Buscar productos por nombre, categoría o precio
+- **Responsive design**: Diseño adaptable a dispositivos móviles y de escritorio
+
+### ✅ Mejoras de UX/UI
+
+- **Interfaz intuitiva**: Navegación clara y sencilla
+- **Carga optimizada**: Implementación de lazy loading y preloading de recursos
+- **Feedback visual**: Notificaciones para acciones del usuario
+- **Accesibilidad**: Soporte para lectores de pantalla y navegación por teclado
+
+### ✅ Optimizaciones Técnicas
+
+- **Rendimiento**: Optimización de carga de imágenes y recursos
+- **SEO**: Meta etiquetas y estructura semántica para mejor posicionamiento
+- **Responsive**: Diseño adaptable a diferentes tamaños de pantalla
+- **Manejo de errores**: Sistema centralizado de manejo de errores
 
 ## Estructura del Proyecto
 
 ```
-.
-├── backend/
-│   ├── routes/
-│   ├── products.db
-│   └── server.js
-├── frontend/
-│   ├── assets/
-│   ├── components/
-│   └── pages/
-└── README.md
+frontend/
+├── assets/
+│   ├── css/
+│   │   └── styles.css
+│   ├── images/
+│   └── js/
+│       ├── admin.js
+│       ├── auth.js
+│       ├── checkout.js
+│       ├── errorHandler.js
+│       ├── home.js
+│       ├── mobile-menu.js
+│       ├── productManager.js
+│       ├── products.js
+│       ├── profile.js
+│       ├── utils.js
+│       └── wishlist.js
+├── components/
+├── pages/
+│   └── admin.html
+├── index.html
+├── products.html
+├── product-detail.html
+├── wishlist.html
+├── profile.html
+├── checkout.html
+├── login.html
+├── register.html
+└── sitemap.html
+
+backend/
+├── middleware/
+├── routes/
+├── server.js
+└── init-db.js
 ```
 
-## Problemas Identificados y Soluciones Implementadas
+## Tecnologías Utilizadas
 
-### 1. Problemas con la Carga de Productos
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Backend**: Node.js con Express
+- **Base de datos**: SQLite
+- **Autenticación**: JWT (JSON Web Tokens)
+- **Despliegue**: Render
+- **Herramientas**: Git, GitHub
 
-**Problema**: Los productos no se cargaban correctamente en la página principal debido a un problema con el contexto (`this`) en el componente [Products.js](file:///home/laloaggro/Proyectos/flores-1/frontend/components/Products.js).
+## Instalación y Configuración
 
-**Solución**: Se corrigió el uso del contexto `this` cambiando las funciones flecha a funciones regulares y referenciando directamente al objeto `Products`.
+1. Clonar el repositorio:
+```bash
+git clone https://github.com/tu-usuario/arreglos-victoria.git
+```
 
-### 2. Manejo de Imágenes
+2. Navegar al directorio del proyecto:
+```bash
+cd arreglos-victoria
+```
 
-**Problema**: Las imágenes rotas no se manejaban adecuadamente, causando una mala experiencia de usuario.
+3. Instalar dependencias del backend:
+```bash
+cd backend
+npm install
+```
 
-**Solución**: Se implementó un mejor manejo de errores de imágenes con imágenes por defecto SVG y validaciones adicionales.
+4. Iniciar el servidor de desarrollo:
+```bash
+npm start
+```
 
-### 3. Manejo de Errores
-
-**Problema**: Los errores de carga de productos no se comunicaban claramente al usuario.
-
-**Solución**: Se mejoró el manejo de errores en el [productManager.js](file:///home/laloaggro/Proyectos/flores-1/frontend/assets/js/productManager.js) para mostrar notificaciones al usuario cuando ocurren problemas.
-
-## Mejoras Implementadas
-
-### 1. Funcionalidad de Búsqueda Mejorada
-
-Se ha implementado una funcionalidad de búsqueda con "debouncing" para mejorar la experiencia del usuario al buscar productos.
-
-### 2. Mejoras de SEO
-
-- Se han añadido etiquetas meta adicionales para mejorar el posicionamiento en buscadores
-- Se ha implementado Schema.org markup para ayudar a los motores de búsqueda a entender mejor el contenido
-- Se han mejorado las etiquetas Open Graph para redes sociales
-
-### 3. Manejo Centralizado de Errores
-
-Se ha creado un sistema centralizado de manejo de errores para proporcionar una mejor experiencia de usuario cuando ocurren problemas.
-
-### 4. Mejoras en la Paginación
-
-Se han implementado mejoras en la paginación y el conteo de resultados para que los usuarios tengan una mejor comprensión de cuántos productos hay disponibles.
-
-## Recomendaciones para Mejorar el Sitio Web
-
-### 1. Optimización del Rendimiento
-
-1. **Implementar carga diferida (lazy loading)**: Ya se está usando `loading="lazy"` en las imágenes, pero se puede mejorar aún más con Intersection Observer para cargar productos a medida que el usuario se desplaza.
-
-2. **Optimización de imágenes**: 
-   - Convertir imágenes a formatos modernos (WebP, AVIF)
-   - Implementar compresión de imágenes
-   - Usar CDN para servir imágenes
-
-3. **Caching de API**: 
-   - Implementar estrategias de caching más robustas
-   - Considerar Service Workers para offline functionality
-
-### 2. Mejoras de UX/UI
-
-1. **Filtros y búsqueda avanzada**:
-   - Agregar filtros por precio, popularidad, fecha
-   - Implementar búsqueda en tiempo real con sugerencias
-
-2. **Mejor paginación**:
-   - Agregar navegación por números de página
-   - Implementar "cargar más" en lugar de o además de la paginación tradicional
-
-3. **Carrito de compras mejorado**:
-   - Permitir edición de cantidades directamente en el carrito
-   - Agregar persistencia del carrito entre sesiones
-
-### 3. Funcionalidades Adicionales
-
-1. **Sistema de reseñas de productos**:
-   - Permitir a los clientes dejar reseñas y calificaciones
-   - Mostrar promedio de calificaciones en las tarjetas de productos
-
-2. **Wishlist/Favoritos**:
-   - Permitir a los usuarios guardar productos para más tarde
-
-3. **Notificaciones por email**:
-   - Confirmación de pedidos
-   - Recordatorios de carrito abandonado
-
-### 4. SEO y Accesibilidad
-
-1. **Mejorar la estructura de URLs**:
-   - URLs descriptivas para productos y categorías
-
-2. **Metadatos mejorados**:
-   - Open Graph tags para redes sociales
-   - Schema.org markup para productos
-
-3. **Accesibilidad mejorada**:
-   - ARIA labels más descriptivos
-   - Navegación por teclado mejorada
-   - Contraste de colores para usuarios con discapacidad visual
-
-### 5. Seguridad
-
-1. **Validación y sanitización de datos**:
-   - Asegurar que todos los datos del formulario se validen tanto en el frontend como en el backend
-
-2. **Protección CSRF**:
-   - Implementar tokens CSRF para formularios
-
-3. **Rate limiting**:
-   - Limitar solicitudes a la API para prevenir abusos
-
-### 6. Monitoreo y Análisis
-
-1. **Analytics**:
-   - Implementar Google Analytics o alternativa de privacidad
-   - Seguimiento de conversiones y funnels
-
-2. **Monitoreo de errores**:
-   - Implementar herramientas como Sentry para seguimiento de errores en producción
-
-3. **Performance monitoring**:
-   - Medir y optimizar tiempos de carga
-   - Core Web Vitals tracking
+5. Abrir el navegador en `http://localhost:5000`
 
 ## Despliegue
 
-El sitio está configurado para desplegarse en Render con el backend en `https://arreglos-victoria-backend.onrender.com`.
+El sitio web está configurado para desplegarse automáticamente en Render. Para desplegar manualmente:
 
-### Para desplegar localmente:
-
-1. Instalar dependencias:
-   ```
-   cd backend
-   npm install
-   ```
-
-2. Iniciar el servidor:
-   ```
-   npm start
-   ```
-
-3. El sitio estará disponible en `http://localhost:5000`
-
-### Para desplegar en producción:
-
-1. Ejecutar el script de despliegue:
-   ```
-   ./deploy.sh
-   ```
-
-2. En Render, configurar la rama `main` para despliegue automático.
+```bash
+./deploy.sh
+```
 
 ## Contribuciones
 
-Para contribuir al proyecto:
-
-1. Hacer fork del repositorio
-2. Crear una rama para la nueva funcionalidad (`git checkout -b feature/nueva-funcionalidad`)
-3. Hacer commit de los cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Hacer push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crear un nuevo Pull Request
+Las contribuciones son bienvenidas. Para cambios importantes, por favor abre un issue primero para discutir lo que te gustaría cambiar.
 
 ## Licencia
 
-Este proyecto es de código cerrado y propiedad de Arreglos Florales Victoria.
+Derechos reservados © 2025 Arreglos Florales Victoria
+
+## Contacto
+
+- 📞 Teléfono: +569 6360 3177
+- 📍 Dirección: Av. Valdivieso 593, Recoleta, Región Metropolitana
+- 🌐 Sitio web: https://arreglos-victoria-backend.onrender.com
+- 📧 Email: contacto@arreglosvictoria.cl
+
+---
+
+Desarrollado con ❤️ para Arreglos Florales Victoria
