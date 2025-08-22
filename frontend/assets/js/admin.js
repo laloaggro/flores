@@ -1,9 +1,9 @@
 // admin.js - Funcionalidad del panel de administración
-import { API_BASE_URL, isAuthenticated, isAdmin, getAuthToken } from './utils.js';
+import { API_BASE_URL, isAuthenticated, isAdmin, getAuthToken, logout } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 // Importar Chart.js para los gráficos
-import Chart from 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/+esm';
+import Chart from 'https://cdn.jsdelivr.net/npm/chart.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar autenticación
@@ -20,6 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar el menú de usuario
     initUserMenu();
+    
+    // Configurar el evento de logout
+    const logoutLink = document.getElementById('logoutLink');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+            window.location.href = '../index.html';
+        });
+    }
     
     // Resto del código de admin.js
     const menuLinks = document.querySelectorAll('.admin-menu a');
