@@ -79,6 +79,12 @@ async function handleLogin() {
       body: JSON.stringify({ email, password })
     });
     
+    // Verificar si la respuesta es JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Error de conexión con el servidor. Por favor, verifica que el servidor esté funcionando.');
+    }
+    
     const data = await response.json();
     
     if (!response.ok) {
@@ -96,7 +102,12 @@ async function handleLogin() {
       window.location.href = 'index.html';
     }, 1000);
   } catch (error) {
-    showNotification(error.message, 'error');
+    // Manejar errores de red o de parseo de JSON
+    if (error instanceof SyntaxError) {
+      showNotification('Error al procesar la respuesta del servidor. Por favor, inténtalo nuevamente.', 'error');
+    } else {
+      showNotification(error.message, 'error');
+    }
   }
 }
 
@@ -150,6 +161,12 @@ async function handleRegister() {
       },
       body: JSON.stringify({ firstName, lastName, email, phone, password })
     });
+    
+    // Verificar si la respuesta es JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Error de conexión con el servidor. Por favor, verifica que el servidor esté funcionando.');
+    }
     
     const data = await response.json();
     
