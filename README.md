@@ -37,6 +37,26 @@ Bienvenido al repositorio del sitio web de Arreglos Florales Victoria. Esta es u
 
 **Solución**: Se mejoró el manejo de errores en el [productManager.js](file:///home/laloaggro/Proyectos/flores-1/frontend/assets/js/productManager.js) para mostrar notificaciones al usuario cuando ocurren problemas.
 
+## Mejoras Implementadas
+
+### 1. Funcionalidad de Búsqueda Mejorada
+
+Se ha implementado una funcionalidad de búsqueda con "debouncing" para mejorar la experiencia del usuario al buscar productos.
+
+### 2. Mejoras de SEO
+
+- Se han añadido etiquetas meta adicionales para mejorar el posicionamiento en buscadores
+- Se ha implementado Schema.org markup para ayudar a los motores de búsqueda a entender mejor el contenido
+- Se han mejorado las etiquetas Open Graph para redes sociales
+
+### 3. Manejo Centralizado de Errores
+
+Se ha creado un sistema centralizado de manejo de errores para proporcionar una mejor experiencia de usuario cuando ocurren problemas.
+
+### 4. Mejoras en la Paginación
+
+Se han implementado mejoras en la paginación y el conteo de resultados para que los usuarios tengan una mejor comprensión de cuántos productos hay disponibles.
+
 ## Recomendaciones para Mejorar el Sitio Web
 
 ### 1. Optimización del Rendimiento
@@ -121,7 +141,7 @@ Bienvenido al repositorio del sitio web de Arreglos Florales Victoria. Esta es u
 
 El sitio está configurado para desplegarse en Render con el backend en `https://arreglos-victoria-backend.onrender.com`.
 
-Para desplegar localmente:
+### Para desplegar localmente:
 
 1. Instalar dependencias:
    ```
@@ -135,6 +155,15 @@ Para desplegar localmente:
    ```
 
 3. El sitio estará disponible en `http://localhost:5000`
+
+### Para desplegar en producción:
+
+1. Ejecutar el script de despliegue:
+   ```
+   ./deploy.sh
+   ```
+
+2. En Render, configurar la rama `main` para despliegue automático.
 
 ## Contribuciones
 

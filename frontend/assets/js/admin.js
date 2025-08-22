@@ -3,7 +3,7 @@ import { API_BASE_URL, isAuthenticated, isAdmin, getAuthToken } from './utils.js
 import { initUserMenu } from './auth.js';
 
 // Importar Chart.js para los gráficos
-import Chart from 'https://cdn.jsdelivr.net/npm/chart.js';
+import Chart from 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/+esm';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar autenticación
