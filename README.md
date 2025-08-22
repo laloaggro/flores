@@ -32,41 +32,53 @@
 ## Estructura del Proyecto
 
 ```
-frontend/
-├── assets/
-│   ├── css/
-│   │   └── styles.css
-│   ├── images/
-│   └── js/
-│       ├── admin.js
-│       ├── auth.js
-│       ├── checkout.js
-│       ├── errorHandler.js
-│       ├── home.js
-│       ├── mobile-menu.js
-│       ├── productManager.js
-│       ├── products.js
-│       ├── profile.js
-│       ├── utils.js
-│       └── wishlist.js
-├── components/
-├── pages/
-│   └── admin.html
-├── index.html
-├── products.html
-├── product-detail.html
-├── wishlist.html
-├── profile.html
-├── checkout.html
-├── login.html
-├── register.html
-└── sitemap.html
+.
+├── backend/
+│   ├── middleware/              # Middleware de autenticación y otros
+│   ├── routes/                  # Rutas de la API (contacto, productos, usuarios)
+│   ├── uploads/                 # Directorio para archivos subidos
+│   ├── server.js                # Punto de entrada del servidor
+│   ├── init-db.js               # Script de inicialización de base de datos
+│   ├── users.db                 # Base de datos de usuarios
+│   ├── products.db              # Base de datos de productos
+│   └── arreglos_victoria.db     # Base de datos principal
+│
+├── frontend/
+│   ├── assets/
+│   │   ├── css/
+│   │   │   └── styles.css       # Hoja de estilos principal
+│   │   ├── images/              # Imágenes del sitio
+│   │   └── js/                  # Scripts JavaScript
+│   │       ├── admin.js         # Funcionalidades del panel de administración
+│   │       ├── auth.js          # Funciones de autenticación y menú de usuario
+│   │       ├── checkout.js      # Funcionalidades del proceso de compra
+│   │       ├── errorHandler.js  # Manejo centralizado de errores
+│   │       ├── home.js          # Funcionalidades de la página principal
+│   │       ├── mobile-menu.js   # Menú responsive para dispositivos móviles
+│   │       ├── productManager.js# Gestión de productos y carrito
+│   │       ├── products.js      # Funcionalidades de la página de productos
+│   │       ├── profile.js       # Funcionalidades del perfil de usuario
+│   │       ├── utils.js         # Funciones de utilidad compartidas
+│   │       └── wishlist.js      # Funcionalidades de la lista de deseos
+│   │
+│   ├── components/              # Componentes reutilizables
+│   ├── pages/                   # Páginas adicionales
+│   │   └── admin.html           # Panel de administración
+│   │
+│   ├── index.html               # Página principal
+│   ├── products.html            # Catálogo de productos
+│   ├── product-detail.html      # Detalle de producto
+│   ├── wishlist.html            # Lista de deseos
+│   ├── profile.html             # Perfil de usuario
+│   ├── checkout.html            # Proceso de compra
+│   ├── login.html               # Inicio de sesión
+│   ├── register.html            # Registro de usuarios
+│   └── sitemap.html             # Mapa del sitio
+│
+├── js/                          # Scripts auxiliares
+├── temp_images/                 # Imágenes temporales
+└── deploy.sh                    # Script de despliegue
 
-backend/
-├── middleware/
-├── routes/
-├── server.js
-└── init-db.js
 ```
 
 ## Tecnologías Utilizadas
@@ -77,6 +89,53 @@ backend/
 - **Autenticación**: JWT (JSON Web Tokens)
 - **Despliegue**: Render
 - **Herramientas**: Git, GitHub
+
+## Uso del Sitio Web
+
+### Para Usuarios
+
+1. **Navegación de productos**: 
+   - Visita la página principal para ver productos destacados
+   - Navega a "Productos" para ver el catálogo completo
+   - Usa los filtros por categoría, búsqueda y ordenamiento para encontrar productos específicos
+
+2. **Autenticación**:
+   - Regístrate en la página de registro con tus datos
+   - Inicia sesión con tu email y contraseña
+   - Una vez autenticado, podrás acceder a tu perfil, lista de deseos y carrito de compras
+
+3. **Carrito de compras**:
+   - Agrega productos al carrito desde la página de productos o detalle de producto
+   - Accede al carrito para ver los productos agregados
+   - Procede al checkout para finalizar tu compra
+
+4. **Lista de deseos**:
+   - Guarda productos en tu lista de deseos para recordarlos
+   - Accede a tu lista de deseos desde el menú de usuario
+
+5. **Perfil de usuario**:
+   - Edita tu información personal
+   - Revisa tu historial de compras (simulado)
+
+### Para Administradores
+
+1. **Acceso al panel de administración**:
+   - Inicia sesión con credenciales de administrador
+   - Accede al panel de administración desde el menú de usuario
+
+2. **Gestión de productos**:
+   - Agrega nuevos productos con nombre, descripción, precio, categoría e imagen
+   - Edita productos existentes
+   - Elimina productos del catálogo
+
+3. **Gestión de usuarios**:
+   - Visualiza la lista de usuarios registrados
+   - Edita información de usuarios
+   - Elimina usuarios (excepto administradores)
+
+4. **Gestión de reseñas**:
+   - Visualiza todas las reseñas de productos
+   - Elimina reseñas inapropiadas
 
 ## Instalación y Configuración
 
