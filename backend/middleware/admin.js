@@ -30,7 +30,13 @@ const isAdmin = async (req, res, next) => {
     const token = tokenParts[1];
 
     // Verificar el token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'floreria_secret_key');
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error('JWT_SECRET no está definida en las variables de entorno');
+      return res.status(500).json({ error: 'Error de configuración del servidor' });
+    }
+    
+    const decoded = jwt.verify(token, jwtSecret);
     
     // Buscar al usuario en la base de datos
     db.get(`SELECT id, name, email, role FROM users WHERE id = ?`, [decoded.userId], (err, user) => {

@@ -16,6 +16,15 @@ const API_BASE_URL = getApiBaseUrl();
 
 // Función para mostrar notificaciones
 function showNotification(message, type = 'info') {
+    // Registrar el error en la consola si es de tipo error
+    if (type === 'error') {
+        console.error('Error notification:', message);
+    } else if (type === 'warning') {
+        console.warn('Warning notification:', message);
+    } else {
+        console.log('Info notification:', message);
+    }
+    
     // Crear el contenedor de notificaciones si no existe
     let notificationContainer = document.getElementById('notificationContainer');
     if (!notificationContainer) {
@@ -35,7 +44,7 @@ function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.style.cssText = `
-        background: ${type === 'error' ? '#f44336' : type === 'success' ? '#4caf50' : '#2196f3'};
+        background: ${type === 'error' ? '#f44336' : type === 'success' ? '#4caf50' : type === 'warning' ? '#ff9800' : '#2196f3'};
         color: white;
         padding: 16px;
         margin-bottom: 10px;
@@ -44,8 +53,20 @@ function showNotification(message, type = 'info') {
         opacity: 0;
         transform: translateX(100%);
         transition: all 0.3s ease;
+        cursor: pointer;
     `;
     notification.textContent = message;
+    
+    // Añadir evento para cerrar la notificación al hacer clic
+    notification.addEventListener('click', function() {
+        this.style.opacity = '0';
+        this.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (this.parentNode) {
+                this.parentNode.removeChild(this);
+            }
+        }, 300);
+    });
     
     // Añadir al contenedor
     notificationContainer.appendChild(notification);

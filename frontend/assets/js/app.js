@@ -557,48 +557,43 @@ function checkAndAttachFormListener() {
     }
 }
 
-// Función para cargar y mostrar productos dinámicamente en la página de inicio
-async function loadProductsSection() {
-    const productsSection = document.getElementById('products');
-    if (!productsSection) return;
+// Función para cargar y mostrar productos dinámicamente
+async function loadProducts() {
+    const productGrid = document.querySelector('.product-grid');
+    if (!productGrid) return;
     
-    console.log('Cargando sección de productos...');
+    console.log('Cargando productos...');
     
     // Mostrar mensaje de carga
-    const productGrid = productsSection.querySelector('.product-grid');
-    if (productGrid) {
-        productGrid.innerHTML = '<div class="loading-message">Cargando productos...</div>';
-    }
+    productGrid.innerHTML = '<div class="loading-message">Cargando productos...</div>';
     
     try {
         // Solicitar productos al backend
-        const response = await fetch('/api/products?page=1&limit=8');
+        const response = await fetch('/api/products');
         
         if (!response.ok) {
-            throw new Error(`Error al cargar productos: ${response.status}`);
+            throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
         }
         
         const data = await response.json();
-        const products = data.products;
+        const products = data.products || data;
         
         console.log('Productos cargados exitosamente:', products.length);
         
-        // Generar HTML de los productos usando el componente ProductCard
-        if (productGrid && products.length > 0) {
-            // Importar dinámicamente el componente ProductCard
-            const { default: ProductCard } = await import('../components/ProductCard.js');
-            
+        // Generar HTML de los productos
+        if (products.length > 0) {
             const productsHTML = products.map(product => ProductCard(product)).join('');
             
             productGrid.innerHTML = productsHTML;
             
             // Volver a adjuntar los event listeners para los botones de agregar al carrito
             attachCartEventListeners();
-        } else if (productGrid) {
+        } else {
             productGrid.innerHTML = '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
         }
     } catch (error) {
         console.error('Error al cargar productos:', error);
+        showNotification(`Error al cargar productos: ${error.message}`, 'error');
         if (productGrid) {
             productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>';
         }

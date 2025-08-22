@@ -239,6 +239,12 @@ router.post('/login', async (req, res) => {
     }
     
     // Generar token JWT
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error('JWT_SECRET no está definida en las variables de entorno');
+      return res.status(500).json({ error: 'Error de configuración del servidor' });
+    }
+    
     const token = jwt.sign(
       { 
         id: user.id, 
@@ -246,7 +252,7 @@ router.post('/login', async (req, res) => {
         name: user.name,
         role: user.role
       }, 
-      process.env.JWT_SECRET || 'secreto_por_defecto',
+      jwtSecret,
       { expiresIn: '24h' }
     );
     
