@@ -186,30 +186,5 @@ function handleLogout() {
   window.location.href = '/index.html';
 }
 
-// Función para verificar la autenticación del usuario
-function checkAuth() {
-  if (!isAuthenticated()) {
-    // Redirigir al login si no está autenticado en páginas que lo requieren
-    if (window.location.pathname.includes('profile.html')) {
-      window.location.href = '/login.html';
-    }
-  }
-}
-
-// Inicializar cuando el DOM esté cargado
-document.addEventListener('DOMContentLoaded', function() {
-  initUserMenu();
-  checkAuth();
-  updateCartCount();
-});
-
-// También ejecutar initUserMenu inmediatamente si el DOM ya está cargado
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initUserMenu);
-} else {
-  // DOM ya está cargado
-  initUserMenu();
-}
-
-// Exportar funciones
-export { initUserMenu, handleLogout, checkAuth };
+// Exportar funciones necesarias
+export { initUserMenu };

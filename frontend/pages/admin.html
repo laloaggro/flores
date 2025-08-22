@@ -3,500 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración - Arreglos Florales Victoria</title>
+    <title>Panel de Administración - Arreglos Victoria</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    </noscript>
-    <link rel="preload" href="../../assets/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="../../assets/css/styles.css">
-    </noscript>
-    <meta name="description" content="Panel de Administración - Arreglos Florales Victoria">
-    <meta name="keywords" content="administración, panel, florería, arreglos florales, Recoleta, Región Metropolitana">
-    <meta name="author" content="Arreglos Victoria Florería">
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/pages/admin.html">
-    <meta property="og:title" content="Panel de Administración - Arreglos Victoria Florería">
-    <meta property="og:description" content="Panel de Administración - Arreglos Florales Victoria">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/pages/admin.html">
-    <meta property="twitter:title" content="Panel de Administración - Arreglos Victoria Florería">
-    <meta property="twitter:description" content="Panel de Administración - Arreglos Florales Victoria">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    
-    <style>
-        /* Estilos específicos para el panel de administración */
-        .admin-section {
-            padding: 30px 0;
-            background-color: #f8f9fa;
-            min-height: calc(100vh - 160px);
-        }
-        
-        .admin-container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        
-        .admin-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .admin-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .admin-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        .admin-content {
-            display: flex;
-            min-height: 500px;
-        }
-        
-        .admin-sidebar {
-            flex: 0 0 250px;
-            background: #343a40;
-            color: white;
-        }
-        
-        .admin-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .admin-menu li {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .admin-menu a {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .admin-menu a:hover,
-        .admin-menu a.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-        
-        .admin-menu a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .admin-main {
-            flex: 1;
-            padding: 30px;
-        }
-        
-        .admin-content-section {
-            display: none;
-        }
-        
-        .admin-content-section.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--gray);
-        }
-        
-        .section-header h2 {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin: 0;
-        }
-        
-        .section-header h2 i {
-            margin-right: 10px;
-        }
-        
-        /* Estilos para las estadísticas del dashboard */
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            transition: transform 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            margin-right: 15px;
-        }
-        
-        .stat-info {
-            flex: 1;
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark);
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-        
-        .dashboard-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-        
-        .card-header {
-            background: var(--primary);
-            color: white;
-            padding: 15px 20px;
-        }
-        
-        .card-header h3 {
-            margin: 0;
-            font-size: 1.2rem;
-        }
-        
-        .card-header h3 i {
-            margin-right: 10px;
-        }
-        
-        .card-content {
-            padding: 20px;
-        }
-        
-        .chart-placeholder {
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f8f9fa;
-            border-radius: 4px;
-        }
-        
-        .activity-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .activity-list li {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .activity-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .activity-list li i {
-            font-size: 1.2rem;
-            margin-right: 15px;
-            color: var(--primary);
-        }
-        
-        .activity-list li div {
-            flex: 1;
-        }
-        
-        .activity-list li strong {
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .activity-time {
-            font-size: 0.8rem;
-            color: #6c757d;
-        }
-        
-        /* Estilos para tablas */
-        .admin-table-container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-        
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .admin-table th,
-        .admin-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .admin-table th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        .admin-table tbody tr:hover {
-            background: #f8f9fa;
-        }
-        
-        /* Estilos para formularios */
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #333;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(90, 143, 105, 0.1);
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
-        
-        /* Estilos para modales */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .modal-header h3 {
-            margin: 0;
-            color: var(--primary);
-        }
-        
-        .close {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #6c757d;
-        }
-        
-        .close:hover {
-            color: var(--dark);
-        }
-        
-        .modal-body {
-            padding: 20px;
-        }
-        
-        .image-preview {
-            margin-top: 15px;
-            text-align: center;
-        }
-        
-        .image-preview img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .image-preview img[src] {
-            display: block;
-        }
-        
-        /* Estilos para configuración */
-        .settings-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .settings-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            padding: 25px;
-        }
-        
-        .settings-card h3 {
-            margin-top: 0;
-            color: var(--primary);
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--gray);
-        }
-        
-        .settings-card h3 i {
-            margin-right: 10px;
-        }
-        
-        /* Animaciones */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Responsive */
-        @media (max-width: 992px) {
-            .admin-content {
-                flex-direction: column;
-            }
-            
-            .admin-sidebar {
-                flex: 0 0 auto;
-            }
-            
-            .admin-menu {
-                display: flex;
-                flex-wrap: wrap;
-                padding: 10px;
-            }
-            
-            .admin-menu li {
-                border-bottom: none;
-                margin: 5px;
-            }
-            
-            .admin-menu a {
-                padding: 10px 15px;
-                border-radius: 5px;
-            }
-            
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .settings-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            
-            .admin-header {
-                padding: 20px 15px;
-            }
-            
-            .admin-header h1 {
-                font-size: 2rem;
-            }
-            
-            .admin-main {
-                padding: 20px 15px;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -506,7 +19,6 @@
             <nav class="navbar" role="navigation" aria-label="Menú principal">
                 <a href="../index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
                 
-                <!-- Botón de menú hamburguesa -->
                 <button class="hamburger" aria-label="Menú" aria-expanded="false">
                     <span></span>
                     <span></span>
@@ -516,27 +28,29 @@
                 <ul class="nav-links">
                     <li><a href="../index.html">Inicio</a></li>
                     <li><a href="../products.html">Productos</a></li>
-                    <li><a href="../index.html#about">Nosotros</a></li>
-                    <li><a href="../index.html#contacto">Contacto</a></li>
-                    <li><a href="../sitemap.html">Mapa del Sitio</a></li>
+                    <li><a href="#about">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
                 </ul>
+                
                 <div class="user-actions">
                     <a href="../login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
                         <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
                         <span>Iniciar sesión</span>
                     </a>
                     <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
-                        <div class="user-info" id="userMenuButton">
-                            <span id="userNameDisplay">Admin</span>
-                            <button id="userMenuToggle" class="user-menu-toggle" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-user" aria-hidden="true"></i>
-                                <span class="sr-only">Menú de usuario</span>
-                            </button>
-                        </div>
+                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
+                            <span id="userNameDisplay"></span>
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <i class="fas fa-caret-down" aria-hidden="true"></i>
+                        </button>
                         <ul class="user-dropdown" role="menu">
                             <li><a href="../profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
                             <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
                         </ul>
+                    </div>
+                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
+                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="cart-count" id="cartCount">0</span>
                     </div>
                 </div>
             </nav>
@@ -544,436 +58,308 @@
     </header>
 
     <main id="main-content">
-        <section class="admin-section">
-            <div class="container">
-                <div class="admin-container">
-                    <div class="admin-header">
-                        <h1>Panel de Administración</h1>
-                        <p>Gestiona productos, pedidos y usuarios</p>
+        <div class="admin-container">
+            <aside class="admin-menu">
+                <h2>Administración</h2>
+                <nav role="navigation" aria-label="Menú de administración">
+                    <ul>
+                        <li><a href="#" data-section="dashboard" class="active" aria-current="page"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="#" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
+                        <li><a href="#" data-section="orders"><i class="fas fa-shopping-cart"></i> Pedidos</a></li>
+                        <li><a href="#" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
+                        <li><a href="#" data-section="reviews"><i class="fas fa-star"></i> Reseñas</a></li>
+                        <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <div class="admin-content">
+                <!-- Sección Dashboard -->
+                <section id="dashboard-section" class="admin-content-section active">
+                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <h3>Total Ventas</h3>
+                            <p class="stat-value" id="totalSales">-</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Pedidos</h3>
+                            <p class="stat-value" id="totalOrders">-</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Productos</h3>
+                            <p class="stat-value" id="totalProducts">-</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Usuarios</h3>
+                            <p class="stat-value" id="totalUsers">-</p>
+                        </div>
                     </div>
-                    
-                    <div class="admin-content">
-                        <div class="admin-sidebar">
-                            <ul class="admin-menu">
-                                <li><a href="#dashboard-section" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                                <li><a href="#products-section" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
-                                <li><a href="#orders-section" data-section="orders"><i class="fas fa-shopping-cart"></i> Pedidos</a></li>
-                                <li><a href="#users-section" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
-                                <li><a href="#reviews-section" data-section="reviews"><i class="fas fa-comments"></i> Reseñas</a></li>
-                                <li><a href="#settings-section" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
-                            </ul>
+                    <div class="dashboard-charts">
+                        <div class="chart-container">
+                            <h3>Ventas por Mes</h3>
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Categorías de Productos</h3>
+                            <canvas id="categoriesChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección Productos -->
+                <section id="products-section" class="admin-content-section">
+                    <h2><i class="fas fa-box"></i> Gestión de Productos</h2>
+                    <div class="admin-actions">
+                        <button id="addProductBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Producto</button>
+                        <div class="search-box">
+                            <input type="text" id="productSearch" placeholder="Buscar productos...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Categoría</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <!-- Los productos se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Sección Pedidos -->
+                <section id="orders-section" class="admin-content-section">
+                    <h2><i class="fas fa-shopping-cart"></i> Gestión de Pedidos</h2>
+                    <div class="admin-actions">
+                        <select id="orderStatusFilter">
+                            <option value="">Todos los estados</option>
+                            <option value="pending">Pendiente</option>
+                            <option value="processing">Procesando</option>
+                            <option value="shipped">Enviado</option>
+                            <option value="delivered">Entregado</option>
+                            <option value="cancelled">Cancelado</option>
+                        </select>
+                        <div class="search-box">
+                            <input type="text" id="orderSearch" placeholder="Buscar pedidos...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Usuario</th>
+                                    <th>Fecha</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                                <!-- Los pedidos se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Sección Usuarios -->
+                <section id="users-section" class="admin-content-section">
+                    <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
+                    <div class="admin-actions">
+                        <button id="addUserBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Usuario</button>
+                        <div class="search-box">
+                            <input type="text" id="userSearch" placeholder="Buscar usuarios...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Fecha de Registro</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Los usuarios se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Sección Reseñas -->
+                <section id="reviews-section" class="admin-content-section">
+                    <h2><i class="fas fa-star"></i> Gestión de Reseñas</h2>
+                    <div class="admin-actions">
+                        <select id="reviewStatusFilter">
+                            <option value="">Todos los estados</option>
+                            <option value="pending">Pendiente</option>
+                            <option value="approved">Aprobado</option>
+                            <option value="rejected">Rechazado</option>
+                        </select>
+                        <div class="search-box">
+                            <input type="text" id="reviewSearch" placeholder="Buscar reseñas...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Usuario</th>
+                                    <th>Calificación</th>
+                                    <th>Comentario</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reviewsTableBody">
+                                <!-- Las reseñas se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Sección Configuración -->
+                <section id="settings-section" class="admin-content-section">
+                    <h2><i class="fas fa-cog"></i> Configuración</h2>
+                    <div class="settings-container">
+                        <div class="setting-group">
+                            <h3>Información de la Tienda</h3>
+                            <form id="storeInfoForm">
+                                <div class="form-group">
+                                    <label for="storeName">Nombre de la Tienda</label>
+                                    <input type="text" id="storeName" name="storeName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="storeEmail">Email de Contacto</label>
+                                    <input type="email" id="storeEmail" name="storeEmail">
+                                </div>
+                                <div class="form-group">
+                                    <label for="storePhone">Teléfono</label>
+                                    <input type="tel" id="storePhone" name="storePhone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="storeAddress">Dirección</label>
+                                    <textarea id="storeAddress" name="storeAddress" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </form>
                         </div>
                         
-                        <div class="admin-main">
-                            <!-- Dashboard Section -->
-                            <div id="dashboard-section" class="admin-content-section active">
-                                <div class="section-header">
-                                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-                                </div>
-                                <div class="admin-stats">
-                                    <div class="stat-card">
-                                        <div class="stat-icon">
-                                            <i class="fas fa-box"></i>
-                                        </div>
-                                        <div class="stat-info">
-                                            <span class="stat-number" id="totalProducts">0</span>
-                                            <span class="stat-label">Productos</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="stat-card">
-                                        <div class="stat-icon">
-                                            <i class="fas fa-shopping-cart"></i>
-                                        </div>
-                                        <div class="stat-info">
-                                            <span class="stat-number" id="totalOrders">0</span>
-                                            <span class="stat-label">Pedidos</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="stat-card">
-                                        <div class="stat-icon">
-                                            <i class="fas fa-users"></i>
-                                        </div>
-                                        <div class="stat-info">
-                                            <span class="stat-number" id="totalUsers">0</span>
-                                            <span class="stat-label">Usuarios</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="stat-card">
-                                        <div class="stat-icon">
-                                            <i class="fas fa-dollar-sign"></i>
-                                        </div>
-                                        <div class="stat-info">
-                                            <span class="stat-number" id="totalRevenue">$0.00</span>
-                                            <span class="stat-label">Ingresos Totales</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="dashboard-grid">
-                                    <div class="chart-container">
-                                        <h3><i class="fas fa-chart-line"></i> Ventas Recientes</h3>
-                                        <canvas id="salesChart"></canvas>
-                                    </div>
-                                    
-                                    <div class="recent-products">
-                                        <h3><i class="fas fa-box-open"></i> Productos Recientes</h3>
-                                        <div class="table-responsive">
-                                            <table class="data-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Nombre</th>
-                                                        <th>Precio</th>
-                                                        <th>Categoría</th>
-                                                        <th>Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="productsTableBody">
-                                                    <tr>
-                                                        <td colspan="5">Cargando productos...</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Products Section -->
-                            <div id="products-section" class="admin-content-section">
-                                <div class="section-header">
-                                    <h2><i class="fas fa-box"></i> Gestión de Productos</h2>
-                                    <button id="addProductBtn" class="btn btn-primary">
-                                        <i class="fas fa-plus-circle"></i> Agregar Producto
-                                    </button>
-                                </div>
-                                
-                                <div class="filters">
-                                    <input type="text" id="productSearch" placeholder="Buscar productos..." class="form-input">
-                                    <select id="productCategoryFilter" class="form-input">
-                                        <option value="">Todas las categorías</option>
-                                        <option value="Arreglos">Arreglos</option>
-                                        <option value="Ramos">Ramos</option>
-                                        <option value="Coronas">Coronas</option>
-                                        <option value="Jardinería">Jardinería</option>
-                                        <option value="Condolencias">Condolencias</option>
+                        <div class="setting-group">
+                            <h3>Configuración de Pagos</h3>
+                            <form id="paymentSettingsForm">
+                                <div class="form-group">
+                                    <label for="paymentMethod">Método de Pago Predeterminado</label>
+                                    <select id="paymentMethod" name="paymentMethod">
+                                        <option value="cash">Efectivo</option>
+                                        <option value="card">Tarjeta</option>
+                                        <option value="transfer">Transferencia</option>
                                     </select>
                                 </div>
-                                
-                                <div class="table-responsive">
-                                    <table class="data-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Nombre</th>
-                                                <th>Descripción</th>
-                                                <th>Precio</th>
-                                                <th>Categoría</th>
-                                                <th>Imagen</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="productsTable">
-                                            <tr>
-                                                <td colspan="7">Cargando productos...</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                                <div class="pagination" id="productsPagination">
-                                    <!-- La paginación se generará dinámicamente -->
-                                </div>
-                            </div>
-                            
-                            <!-- Orders Section -->
-                            <div id="orders-section" class="admin-content-section">
-                                <div class="section-header">
-                                    <h2><i class="fas fa-shopping-cart"></i> Gestión de Pedidos</h2>
-                                </div>
-                                
-                                <div class="filters">
-                                    <input type="text" id="orderSearch" placeholder="Buscar pedidos..." class="form-input">
-                                    <select id="orderStatusFilter" class="form-input">
-                                        <option value="">Todos los estados</option>
-                                        <option value="pending">Pendiente</option>
-                                        <option value="processing">Procesando</option>
-                                        <option value="shipped">Enviado</option>
-                                        <option value="delivered">Entregado</option>
-                                        <option value="cancelled">Cancelado</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="table-responsive">
-                                    <table class="data-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Usuario</th>
-                                                <th>Fecha</th>
-                                                <th>Total</th>
-                                                <th>Estado</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="ordersTable">
-                                            <tr>
-                                                <td colspan="6">Cargando pedidos...</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                                <div class="pagination" id="ordersPagination">
-                                    <!-- La paginación se generará dinámicamente -->
-                                </div>
-                            </div>
-                            
-                            <!-- Users Section -->
-                            <div id="users-section" class="admin-content-section">
-                                <div class="section-header">
-                                    <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
-                                    <button id="addUserBtn" class="btn btn-primary">
-                                        <i class="fas fa-plus-circle"></i> Agregar Usuario
-                                    </button>
-                                </div>
-                                
-                                <div class="filters">
-                                    <input type="text" id="userSearch" placeholder="Buscar usuarios..." class="form-input">
-                                    <select id="userRoleFilter" class="form-input">
-                                        <option value="">Todos los roles</option>
-                                        <option value="user">Usuario</option>
-                                        <option value="admin">Administrador</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="table-responsive">
-                                    <table class="data-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Nombre</th>
-                                                <th>Email</th>
-                                                <th>Teléfono</th>
-                                                <th>Rol</th>
-                                                <th>Registrado</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="usersTable">
-                                            <tr>
-                                                <td colspan="7">Cargando usuarios...</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                                <div class="pagination" id="usersPagination">
-                                    <!-- La paginación se generará dinámicamente -->
-                                </div>
-                            </div>
-                            
-                            <!-- Reviews Section -->
-                            <div id="reviews-section" class="admin-content-section">
-                                <div class="section-header">
-                                    <h2><i class="fas fa-comments"></i> Gestión de Reseñas</h2>
-                                </div>
-                                
-                                <div class="filters">
-                                    <input type="text" id="reviewSearch" placeholder="Buscar reseñas..." class="form-input">
-                                    <select id="reviewStatusFilter" class="form-input">
-                                        <option value="">Todos los estados</option>
-                                        <option value="pending">Pendiente</option>
-                                        <option value="approved">Aprobado</option>
-                                        <option value="rejected">Rechazado</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="table-responsive">
-                                    <table class="data-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Producto</th>
-                                                <th>Usuario</th>
-                                                <th>Calificación</th>
-                                                <th>Comentario</th>
-                                                <th>Fecha</th>
-                                                <th>Estado</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="reviewsTable">
-                                            <tr>
-                                                <td colspan="8">Cargando reseñas...</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                                <div class="pagination" id="reviewsPagination">
-                                    <!-- La paginación se generará dinámicamente -->
-                                </div>
-                            </div>
-                            
-                            <!-- Settings Section -->
-                            <div id="settings-section" class="admin-content-section">
-                                <div class="section-header">
-                                    <h2><i class="fas fa-cog"></i> Configuración del Sistema</h2>
-                                </div>
-                                
-                                <div class="settings-grid">
-                                    <div class="settings-card">
-                                        <h3><i class="fas fa-store"></i> Información de la Tienda</h3>
-                                        <form id="storeInfoForm">
-                                            <div class="form-group">
-                                                <label for="storeName">Nombre de la Tienda</label>
-                                                <input type="text" id="storeName" class="form-input" value="Arreglos Florales Victoria">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="storeEmail">Email de Contacto</label>
-                                                <input type="email" id="storeEmail" class="form-input" value="contacto@arreglosvictoria.cl">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="storePhone">Teléfono</label>
-                                                <input type="text" id="storePhone" class="form-input" value="+569 6360 3177">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="storeAddress">Dirección</label>
-                                                <textarea id="storeAddress" class="form-input">Av. Valdivieso 593, Recoleta, Región Metropolitana</textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Guardar Información</button>
-                                        </form>
-                                    </div>
-                                    
-                                    <div class="settings-card">
-                                        <h3><i class="fas fa-sliders-h"></i> Configuración General</h3>
-                                        <form id="generalSettingsForm">
-                                            <div class="form-group">
-                                                <label for="currency">
-                                                    <input type="checkbox" id="currency" checked> 
-                                                    Mostrar precios en CLP
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="notifications">
-                                                    <input type="checkbox" id="notifications" checked> 
-                                                    Activar notificaciones por email
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="maintenance">
-                                                    <input type="checkbox" id="maintenance"> 
-                                                    Modo mantenimiento
-                                                </label>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Guardar Configuración</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </form>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
-        </section>
+        </div>
     </main>
 
-    <!-- Modal para añadir/editar productos -->
+    <!-- Modal para agregar/editar productos -->
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Añadir Producto</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <form id="productForm">
-                    <input type="hidden" id="productId">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Agregar Producto</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label for="productName">Nombre</label>
+                    <input type="text" id="productName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Descripción</label>
+                    <textarea id="productDescription" name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="productName">Nombre del Producto</label>
-                        <input type="text" id="productName" name="productName" class="form-input" required>
+                        <label for="productPrice">Precio</label>
+                        <input type="number" id="productPrice" name="price" min="0" step="100" required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="productDescription">Descripción</label>
-                        <textarea id="productDescription" name="productDescription" class="form-input" rows="3" required></textarea>
+                        <label for="productCategory">Categoría</label>
+                        <select id="productCategory" name="category" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="arreglos">Arreglos Florales</option>
+                            <option value="ramos">Ramos</option>
+                            <option value="plantas">Plantas</option>
+                            <option value="accesorios">Accesorios</option>
+                        </select>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="productPrice">Precio ($)</label>
-                            <input type="number" id="productPrice" name="productPrice" class="form-input" step="0.01" min="0" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="productCategory">Categoría</label>
-                            <select id="productCategory" name="productCategory" class="form-input" required>
-                                <option value="">Seleccionar categoría</option>
-                                <option value="ramo">Ramo</option>
-                                <option value="arreglo">Arreglo</option>
-                                <option value="corona">Corona</option>
-                                <option value="rosas">Rosas</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="productImage">URL de la Imagen</label>
-                        <input type="url" id="productImage" name="productImage" class="form-input" required>
-                        <div class="image-preview">
-                            <img id="imagePreview" src="" alt="Vista previa de la imagen">
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
-                </form>
-            </div>
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Imagen URL</label>
+                    <input type="url" id="productImage" name="image">
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Producto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para agregar/editar usuarios -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="userModalTitle">Agregar Usuario</h2>
+            <form id="userForm">
+                <input type="hidden" id="userId">
+                <div class="form-group">
+                    <label for="userName">Nombre</label>
+                    <input type="text" id="userName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email</label>
+                    <input type="email" id="userEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword">Contraseña</label>
+                    <input type="password" id="userPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Rol</label>
+                    <select id="userRole" name="role" required>
+                        <option value="user">Usuario</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+            </form>
         </div>
     </div>
 
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Arreglos Florales Victoria</h3>
-                    <p>Flores frescas y arreglos florales únicos para las ocasiones más especiales.</p>
-                    <div class="social-links">
-                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Enlaces Rápidos</h4>
-                    <ul>
-                        <li><a href="../index.html">Inicio</a></li>
-                        <li><a href="../products.html">Productos</a></li>
-                        <li><a href="../index.html#about">Nosotros</a></li>
-                        <li><a href="../index.html#contacto">Contacto</a></li>
-                        <li><a href="../sitemap.html">Mapa del Sitio</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Información de Contacto</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i> +569 6360 3177</li>
-                        <li><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
-            </div>
+            <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <script src="../../assets/js/mobile-menu.js" type="module"></script>
-    <script src="../../assets/js/utils.js" type="module"></script>
-    <script src="../../assets/js/auth.js" type="module"></script>
-    <script src="../../assets/js/admin.js" type="module"></script>
+    <script type="module" src="../assets/js/admin.js"></script>
 </body>
 </html>

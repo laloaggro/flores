@@ -55,6 +55,7 @@ function showNotification(message, type = 'info') {
         transition: opacity 0.3s, transform 0.3s;
         opacity: 1;
         transform: translateX(0);
+        font-family: 'Poppins', sans-serif;
     `;
     
     notification.innerHTML = `
@@ -88,6 +89,8 @@ function showNotification(message, type = 'info') {
             }, 300);
         }
     }, 5000);
+    
+    return notification;
 }
 
 // Formatear precio
