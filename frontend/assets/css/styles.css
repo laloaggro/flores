@@ -75,10 +75,14 @@ body::before {
     left: 0;
     background: var(--success);
     color: white;
-    padding: 8px;
+    min-width: 120px;
+    padding: 10px 15px;
+    text-align: center;
     text-decoration: none;
-    transition: top 0.3s;
+    transition: top 0.3s, box-shadow 0.3s;
     z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
 }
 
 .skip-link:focus {

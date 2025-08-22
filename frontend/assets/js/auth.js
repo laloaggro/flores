@@ -186,7 +186,7 @@ function addAdminLinkToMenu() {
 // Función para manejar el cierre de sesión
 function handleLogout() {
   logout();
-  window.location.href = '/index.html';
+  window.location.href = 'index.html';
 }
 
 // Exportar funciones necesarias
