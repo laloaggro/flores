@@ -54,15 +54,25 @@ document.addEventListener('DOMContentLoaded', function() {
 // Función para manejar el inicio de sesión
 async function handleLogin() {
   try {
+    console.log('Iniciando proceso de login');
+    console.log('API_BASE_URL:', API_BASE_URL);
+    
     // Verificar conectividad con el backend antes de intentar iniciar sesión
+    console.log('Verificando conectividad con el backend...');
     const isBackendAvailable = await checkBackendConnectivity();
+    console.log('Backend disponible:', isBackendAvailable);
+    
     if (!isBackendAvailable) {
-      showNotification('No se puede conectar con el servidor. Por favor, verifica que el servidor backend esté funcionando en ' + API_BASE_URL, 'error');
+      const errorMsg = 'No se puede conectar con el servidor. Por favor, verifica que el servidor backend esté funcionando en ' + API_BASE_URL;
+      console.error(errorMsg);
+      showNotification(errorMsg, 'error');
       return;
     }
     
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
+    
+    console.log('Datos de login:', { email, password: '****' });
     
     // Validar campos
     if (!email || !password) {
@@ -78,6 +88,7 @@ async function handleLogin() {
     }
     
     // Realizar solicitud de inicio de sesión
+    console.log('Realizando solicitud de inicio de sesión...');
     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
@@ -86,16 +97,27 @@ async function handleLogin() {
       body: JSON.stringify({ email, password })
     });
     
+    console.log('Respuesta del servidor:', response);
+    console.log('Estado de la respuesta:', response.status);
+    
     // Verificar si la respuesta es JSON
     const contentType = response.headers.get('content-type');
+    console.log('Tipo de contenido:', contentType);
+    
     if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Error de conexión con el servidor. Por favor, verifica que el servidor esté funcionando.');
+      const errorMsg = 'Error de conexión con el servidor. Por favor, verifica que el servidor esté funcionando.';
+      console.error(errorMsg);
+      console.log('Contenido de la respuesta:', await response.text());
+      throw new Error(errorMsg);
     }
     
     const data = await response.json();
+    console.log('Datos recibidos:', data);
     
     if (!response.ok) {
-      throw new Error(data.message || 'Error al iniciar sesión');
+      const errorMsg = data.message || 'Error al iniciar sesión';
+      console.error(errorMsg);
+      throw new Error(errorMsg);
     }
     
     // Guardar token y datos del usuario en localStorage
@@ -109,6 +131,7 @@ async function handleLogin() {
       window.location.href = 'index.html';
     }, 1000);
   } catch (error) {
+    console.error('Error en handleLogin:', error);
     // Manejar errores de red o de parseo de JSON
     if (error instanceof SyntaxError) {
       showNotification('Error al procesar la respuesta del servidor. Por favor, inténtalo nuevamente.', 'error');

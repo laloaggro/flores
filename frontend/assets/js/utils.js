@@ -8,8 +8,7 @@ const getApiBaseUrl = () => {
     return 'https://arreglos-victoria-backend.onrender.com';
   }
   
-  // En desarrollo, usar localhost con puerto 5000 o 3000 dependiendo de la configuración
-  // Verificar si el backend está disponible en el puerto 5000
+  // En desarrollo, usar localhost con puerto 5000
   return 'http://localhost:5000';
 };
 
@@ -20,25 +19,33 @@ const checkBackendConnectivity = async () => {
   try {
     // Probar primero con un endpoint que probablemente exista
     const endpointsToTry = [
-      '/api/health',
-      '/api/status',
-      '/api/products',
-      '/'  // Página principal como último recurso
+      '/api/products',  // Endpoint que debería existir
+      '/api/auth/login', // Endpoint de login
+      '/',  // Página principal como último recurso
     ];
     
     for (const endpoint of endpointsToTry) {
       try {
+        console.log(`Intentando conectar a: ${API_BASE_URL}${endpoint}`);
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos de timeout
         
         const response = await fetch(`${API_BASE_URL}${endpoint}`, { 
-          method: 'GET', 
-          signal: controller.signal 
+          method: 'GET',
+          signal: controller.signal,
+          headers: {
+            'Accept': 'application/json'
+          }
+        }).catch(error => {
+          // Capturar errores de red o abort
+          clearTimeout(timeoutId);
+          throw error;
         });
         
         clearTimeout(timeoutId);
         
         // Si obtenemos una respuesta (incluso 404), el servidor está activo
+        console.log(`Respuesta del servidor: ${response.status}`);
         if (response.status < 500) {
           console.log(`Backend conectado correctamente a ${API_BASE_URL}${endpoint} con estado ${response.status}`);
           return true;
@@ -46,12 +53,17 @@ const checkBackendConnectivity = async () => {
       } catch (endpointError) {
         // Continuar con el siguiente endpoint
         console.warn(`No se pudo conectar a ${API_BASE_URL}${endpoint}:`, endpointError.message);
+        if (endpointError.name === 'AbortError') {
+          console.warn(`Timeout al conectar a ${API_BASE_URL}${endpoint}`);
+        }
       }
     }
     
+    // Si llegamos aquí, ninguno de los endpoints respondió correctamente
+    console.warn('No se pudo establecer conexión con ningún endpoint del backend');
     return false;
   } catch (error) {
-    console.warn('Backend connectivity check failed:', error);
+    console.warn('Error general en la verificación de conectividad:', error);
     return false;
   }
 };
