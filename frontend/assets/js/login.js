@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar Google Sign-In si el botón existe
   const googleButton = document.getElementById('googleSignInButton');
   if (googleButton) {
-    // Reemplaza con tu Client ID de Google
-    const googleClientId = 'TU_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+    // Usar el Client ID de Google real
+    const googleClientId = '888681528450-havivkoibjv0ht3vu4q46hc8k0i3f8iu.apps.googleusercontent.com';
     initGoogleSignIn(googleClientId, handleGoogleLoginResponse);
   }
   
