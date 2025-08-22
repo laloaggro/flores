@@ -57,6 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Cargar datos específicos de la sección
         switch(sectionId) {
+            case 'dashboard':
+                loadDashboardData();
+                break;
             case 'products':
                 loadAllProducts();
                 break;
@@ -67,8 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadUsers();
                 setupUserEvents();
                 break;
-            case 'analytics':
-                loadAnalytics();
+            case 'reviews':
+                loadReviews();
                 break;
             case 'settings':
                 initSettings();

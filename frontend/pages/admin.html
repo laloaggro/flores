@@ -521,7 +521,11 @@
                     <li><a href="../sitemap.html">Mapa del Sitio</a></li>
                 </ul>
                 <div class="user-actions">
-                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario">
+                    <a href="../login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                        <span>Iniciar sesión</span>
+                    </a>
+                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
                         <div class="user-info" id="userMenuButton">
                             <span id="userNameDisplay">Admin</span>
                             <button id="userMenuToggle" class="user-menu-toggle" aria-haspopup="true" aria-expanded="false">
@@ -531,7 +535,6 @@
                         </div>
                         <ul class="user-dropdown" role="menu">
                             <li><a href="../profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
-                            <li><a href="../login.html" id="loginLink" role="menuitem"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Iniciar sesión</a></li>
                             <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
                         </ul>
                     </div>
@@ -552,19 +555,21 @@
                     <div class="admin-content">
                         <div class="admin-sidebar">
                             <ul class="admin-menu">
-                                <li><a href="#dashboard" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                                <li><a href="#products" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
-                                <li><a href="#orders" data-section="orders"><i class="fas fa-shopping-cart"></i> Pedidos</a></li>
-                                <li><a href="#users" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
-                                <li><a href="#reviews" data-section="reviews"><i class="fas fa-comments"></i> Reseñas</a></li>
-                                <li><a href="#settings" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
+                                <li><a href="#dashboard-section" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                                <li><a href="#products-section" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
+                                <li><a href="#orders-section" data-section="orders"><i class="fas fa-shopping-cart"></i> Pedidos</a></li>
+                                <li><a href="#users-section" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
+                                <li><a href="#reviews-section" data-section="reviews"><i class="fas fa-comments"></i> Reseñas</a></li>
+                                <li><a href="#settings-section" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
                             </ul>
                         </div>
                         
                         <div class="admin-main">
                             <!-- Dashboard Section -->
-                            <div id="dashboard" class="admin-content-section active">
-                                <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                            <div id="dashboard-section" class="admin-content-section active">
+                                <div class="section-header">
+                                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                                </div>
                                 <div class="admin-stats">
                                     <div class="stat-card">
                                         <div class="stat-icon">
@@ -601,138 +606,194 @@
                                             <i class="fas fa-dollar-sign"></i>
                                         </div>
                                         <div class="stat-info">
-                                            <span class="stat-number" id="totalRevenue">$0</span>
-                                            <span class="stat-label">Ingresos</span>
+                                            <span class="stat-number" id="totalRevenue">$0.00</span>
+                                            <span class="stat-label">Ingresos Totales</span>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="dashboard-grid">
-                                    <div class="dashboard-card">
-                                        <div class="card-header">
-                                            <h3><i class="fas fa-chart-line"></i> Ventas Recientes</h3>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="chart-placeholder">
-                                                <p>Gráfico de ventas</p>
-                                            </div>
-                                        </div>
+                                    <div class="chart-container">
+                                        <h3><i class="fas fa-chart-line"></i> Ventas Recientes</h3>
+                                        <canvas id="salesChart"></canvas>
                                     </div>
                                     
-                                    <div class="dashboard-card">
-                                        <div class="card-header">
-                                            <h3><i class="fas fa-history"></i> Actividad Reciente</h3>
-                                        </div>
-                                        <div class="card-content">
-                                            <ul class="activity-list" id="activityList">
-                                                <li>
-                                                    <i class="fas fa-plus-circle"></i>
-                                                    <div>
-                                                        <strong>Nuevo producto añadido</strong>
-                                                        <p>Ramo de Rosas Rojas</p>
-                                                    </div>
-                                                    <span class="activity-time">Hace 2 horas</span>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-shopping-cart"></i>
-                                                    <div>
-                                                        <strong>Nuevo pedido</strong>
-                                                        <p>Pedido #12345</p>
-                                                    </div>
-                                                    <span class="activity-time">Hace 5 horas</span>
-                                                </li>
-                                            </ul>
+                                    <div class="recent-products">
+                                        <h3><i class="fas fa-box-open"></i> Productos Recientes</h3>
+                                        <div class="table-responsive">
+                                            <table class="data-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Nombre</th>
+                                                        <th>Precio</th>
+                                                        <th>Categoría</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="productsTableBody">
+                                                    <tr>
+                                                        <td colspan="5">Cargando productos...</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- Products Section -->
-                            <div id="products" class="admin-content-section">
+                            <div id="products-section" class="admin-content-section">
                                 <div class="section-header">
                                     <h2><i class="fas fa-box"></i> Gestión de Productos</h2>
                                     <button id="addProductBtn" class="btn btn-primary">
-                                        <i class="fas fa-plus"></i> Añadir Producto
+                                        <i class="fas fa-plus-circle"></i> Agregar Producto
                                     </button>
                                 </div>
                                 
-                                <div class="admin-table-container">
-                                    <table class="admin-table">
+                                <div class="filters">
+                                    <input type="text" id="productSearch" placeholder="Buscar productos..." class="form-input">
+                                    <select id="productCategoryFilter" class="form-input">
+                                        <option value="">Todas las categorías</option>
+                                        <option value="Arreglos">Arreglos</option>
+                                        <option value="Ramos">Ramos</option>
+                                        <option value="Coronas">Coronas</option>
+                                        <option value="Jardinería">Jardinería</option>
+                                        <option value="Condolencias">Condolencias</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table class="data-table">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Nombre</th>
+                                                <th>Descripción</th>
                                                 <th>Precio</th>
                                                 <th>Categoría</th>
-                                                <th>Stock</th>
+                                                <th>Imagen</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="productsTableBody">
-                                            <!-- Los productos se cargarán aquí dinámicamente -->
+                                        <tbody id="productsTable">
+                                            <tr>
+                                                <td colspan="7">Cargando productos...</td>
+                                            </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                                
+                                <div class="pagination" id="productsPagination">
+                                    <!-- La paginación se generará dinámicamente -->
                                 </div>
                             </div>
                             
                             <!-- Orders Section -->
-                            <div id="orders" class="admin-content-section">
+                            <div id="orders-section" class="admin-content-section">
                                 <div class="section-header">
                                     <h2><i class="fas fa-shopping-cart"></i> Gestión de Pedidos</h2>
                                 </div>
                                 
-                                <div class="admin-table-container">
-                                    <table class="admin-table">
+                                <div class="filters">
+                                    <input type="text" id="orderSearch" placeholder="Buscar pedidos..." class="form-input">
+                                    <select id="orderStatusFilter" class="form-input">
+                                        <option value="">Todos los estados</option>
+                                        <option value="pending">Pendiente</option>
+                                        <option value="processing">Procesando</option>
+                                        <option value="shipped">Enviado</option>
+                                        <option value="delivered">Entregado</option>
+                                        <option value="cancelled">Cancelado</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table class="data-table">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Cliente</th>
+                                                <th>Usuario</th>
                                                 <th>Fecha</th>
                                                 <th>Total</th>
                                                 <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="ordersTableBody">
-                                            <!-- Los pedidos se cargarán aquí dinámicamente -->
+                                        <tbody id="ordersTable">
+                                            <tr>
+                                                <td colspan="6">Cargando pedidos...</td>
+                                            </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                                
+                                <div class="pagination" id="ordersPagination">
+                                    <!-- La paginación se generará dinámicamente -->
                                 </div>
                             </div>
                             
                             <!-- Users Section -->
-                            <div id="users" class="admin-content-section">
+                            <div id="users-section" class="admin-content-section">
                                 <div class="section-header">
                                     <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
+                                    <button id="addUserBtn" class="btn btn-primary">
+                                        <i class="fas fa-plus-circle"></i> Agregar Usuario
+                                    </button>
                                 </div>
                                 
-                                <div class="admin-table-container">
-                                    <table class="admin-table">
+                                <div class="filters">
+                                    <input type="text" id="userSearch" placeholder="Buscar usuarios..." class="form-input">
+                                    <select id="userRoleFilter" class="form-input">
+                                        <option value="">Todos los roles</option>
+                                        <option value="user">Usuario</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table class="data-table">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Nombre</th>
                                                 <th>Email</th>
+                                                <th>Teléfono</th>
                                                 <th>Rol</th>
-                                                <th>Fecha Registro</th>
+                                                <th>Registrado</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="usersTableBody">
-                                            <!-- Los usuarios se cargarán aquí dinámicamente -->
+                                        <tbody id="usersTable">
+                                            <tr>
+                                                <td colspan="7">Cargando usuarios...</td>
+                                            </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                                
+                                <div class="pagination" id="usersPagination">
+                                    <!-- La paginación se generará dinámicamente -->
                                 </div>
                             </div>
                             
                             <!-- Reviews Section -->
-                            <div id="reviews" class="admin-content-section">
+                            <div id="reviews-section" class="admin-content-section">
                                 <div class="section-header">
                                     <h2><i class="fas fa-comments"></i> Gestión de Reseñas</h2>
                                 </div>
                                 
-                                <div class="admin-table-container">
-                                    <table class="admin-table">
+                                <div class="filters">
+                                    <input type="text" id="reviewSearch" placeholder="Buscar reseñas..." class="form-input">
+                                    <select id="reviewStatusFilter" class="form-input">
+                                        <option value="">Todos los estados</option>
+                                        <option value="pending">Pendiente</option>
+                                        <option value="approved">Aprobado</option>
+                                        <option value="rejected">Rechazado</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table class="data-table">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -741,57 +802,75 @@
                                                 <th>Calificación</th>
                                                 <th>Comentario</th>
                                                 <th>Fecha</th>
+                                                <th>Estado</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="reviewsTableBody">
-                                            <!-- Las reseñas se cargarán aquí dinámicamente -->
+                                        <tbody id="reviewsTable">
+                                            <tr>
+                                                <td colspan="8">Cargando reseñas...</td>
+                                            </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                                
+                                <div class="pagination" id="reviewsPagination">
+                                    <!-- La paginación se generará dinámicamente -->
                                 </div>
                             </div>
                             
                             <!-- Settings Section -->
-                            <div id="settings" class="admin-content-section">
-                                <h2><i class="fas fa-cog"></i> Configuración</h2>
+                            <div id="settings-section" class="admin-content-section">
+                                <div class="section-header">
+                                    <h2><i class="fas fa-cog"></i> Configuración del Sistema</h2>
+                                </div>
                                 
-                                <div class="settings-container">
+                                <div class="settings-grid">
                                     <div class="settings-card">
                                         <h3><i class="fas fa-store"></i> Información de la Tienda</h3>
-                                        <form id="shopSettingsForm">
+                                        <form id="storeInfoForm">
                                             <div class="form-group">
-                                                <label for="shopName">Nombre de la Tienda</label>
-                                                <input type="text" id="shopName" name="shopName" class="form-input" value="Arreglos Florales Victoria">
+                                                <label for="storeName">Nombre de la Tienda</label>
+                                                <input type="text" id="storeName" class="form-input" value="Arreglos Florales Victoria">
                                             </div>
-                                            
                                             <div class="form-group">
-                                                <label for="shopEmail">Email de Contacto</label>
-                                                <input type="email" id="shopEmail" name="shopEmail" class="form-input" value="contacto@arreglosvictoria.cl">
+                                                <label for="storeEmail">Email de Contacto</label>
+                                                <input type="email" id="storeEmail" class="form-input" value="contacto@arreglosvictoria.cl">
                                             </div>
-                                            
                                             <div class="form-group">
-                                                <label for="shopPhone">Teléfono</label>
-                                                <input type="text" id="shopPhone" name="shopPhone" class="form-input" value="+569 6360 3177">
+                                                <label for="storePhone">Teléfono</label>
+                                                <input type="text" id="storePhone" class="form-input" value="+569 6360 3177">
                                             </div>
-                                            
-                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                            <div class="form-group">
+                                                <label for="storeAddress">Dirección</label>
+                                                <textarea id="storeAddress" class="form-input">Av. Valdivieso 593, Recoleta, Región Metropolitana</textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Guardar Información</button>
                                         </form>
                                     </div>
                                     
                                     <div class="settings-card">
-                                        <h3><i class="fas fa-map-marker-alt"></i> Información de Ubicación</h3>
-                                        <form id="locationSettingsForm">
+                                        <h3><i class="fas fa-sliders-h"></i> Configuración General</h3>
+                                        <form id="generalSettingsForm">
                                             <div class="form-group">
-                                                <label for="shopAddress">Dirección</label>
-                                                <input type="text" id="shopAddress" name="shopAddress" class="form-input" value="Av. Valdivieso 593, Recoleta">
+                                                <label for="currency">
+                                                    <input type="checkbox" id="currency" checked> 
+                                                    Mostrar precios en CLP
+                                                </label>
                                             </div>
-                                            
                                             <div class="form-group">
-                                                <label for="shopHours">Horario de Atención</label>
-                                                <input type="text" id="shopHours" name="shopHours" class="form-input" value="Lunes a Sábado: 9:00 AM - 7:00 PM">
+                                                <label for="notifications">
+                                                    <input type="checkbox" id="notifications" checked> 
+                                                    Activar notificaciones por email
+                                                </label>
                                             </div>
-                                            
-                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                            <div class="form-group">
+                                                <label for="maintenance">
+                                                    <input type="checkbox" id="maintenance"> 
+                                                    Modo mantenimiento
+                                                </label>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Guardar Configuración</button>
                                         </form>
                                     </div>
                                 </div>
