@@ -51,5 +51,127 @@ document.addEventListener('DOMContentLoaded', function() {
   updateCartCount();
 });
 
+// Función para manejar el inicio de sesión
+async function handleLogin() {
+  try {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    // Validar campos
+    if (!email || !password) {
+      showNotification('Por favor, completa todos los campos', 'error');
+      return;
+    }
+    
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showNotification('Por favor, ingresa un email válido', 'error');
+      return;
+    }
+    
+    // Realizar solicitud de inicio de sesión
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Error al iniciar sesión');
+    }
+    
+    // Guardar token y datos del usuario en localStorage
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    
+    showNotification('Inicio de sesión exitoso', 'success');
+    
+    // Redirigir a la página principal después de 1 segundo
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 1000);
+  } catch (error) {
+    showNotification(error.message, 'error');
+  }
+}
+
+// Función para manejar el registro
+async function handleRegister() {
+  try {
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('registerEmail').value;
+    const phone = document.getElementById('phone').value;
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    // Validar campos
+    if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
+      showNotification('Por favor, completa todos los campos', 'error');
+      return;
+    }
+    
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showNotification('Por favor, ingresa un email válido', 'error');
+      return;
+    }
+    
+    // Validar teléfono
+    const phoneRegex = /^(\+56)?[\s\-]?[9\d][\s\-]?\d{4}[\s\-]?\d{4}$/;
+    if (!phoneRegex.test(phone.replace(/\s+/g, ' ').trim())) {
+      showNotification('Por favor, ingresa un teléfono válido (ej: +56912345678)', 'error');
+      return;
+    }
+    
+    // Validar contraseña
+    if (password.length < 6) {
+      showNotification('La contraseña debe tener al menos 6 caracteres', 'error');
+      return;
+    }
+    
+    // Verificar que las contraseñas coincidan
+    if (password !== confirmPassword) {
+      showNotification('Las contraseñas no coinciden', 'error');
+      return;
+    }
+    
+    // Registrar usuario
+    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ firstName, lastName, email, phone, password })
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Error al registrar usuario');
+    }
+    
+    showNotification('Usuario registrado exitosamente. Ahora puedes iniciar sesión.', 'success');
+    
+    // Redirigir a la página de login después de 2 segundos
+    setTimeout(() => {
+      // Cambiar a la pestaña de inicio de sesión
+      const loginContainer = document.querySelector('.login-form-container');
+      const registerContainer = document.querySelector('.register-form-container');
+      
+      if (registerContainer) registerContainer.classList.add('hidden');
+      if (loginContainer) loginContainer.classList.remove('hidden');
+    }, 2000);
+  } catch (error) {
+    showNotification(error.message, 'error');
+  }
+}
+
 // Inicializar contador del carrito
 updateCartCount();
