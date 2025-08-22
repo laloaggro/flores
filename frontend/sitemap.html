@@ -42,26 +42,29 @@
             <nav class="navbar" role="navigation" aria-label="Menú principal">
                 <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
                 
+                <button class="hamburger" aria-label="Menú" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
                 <ul class="nav-links">
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="products.html">Productos</a></li>
                     <li><a href="index.html#about">Nosotros</a></li>
                     <li><a href="index.html#contacto">Contacto</a></li>
-                    <li><a href="sitemap.html" class="active" aria-current="page">Mapa del Sitio</a></li>
                 </ul>
                 <div class="user-actions">
-                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión">
+                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
                         <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
                         <span>Iniciar sesión</span>
                     </a>
-                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario">
-                        <div class="user-info">
+                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
+                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
                             <span id="userNameDisplay"></span>
-                            <button id="userMenuToggle" class="user-menu-toggle" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-user" aria-hidden="true"></i>
-                                <span class="sr-only">Menú de usuario</span>
-                            </button>
-                        </div>
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <i class="fas fa-caret-down" aria-hidden="true"></i>
+                        </button>
                         <ul class="user-dropdown" role="menu">
                             <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
                             <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>

@@ -94,20 +94,15 @@
                     <li><a href="sitemap.html">Mapa del Sitio</a></li>
                 </ul>
                 <div class="user-actions">
-                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión">
-                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                        <span>Iniciar sesión</span>
-                    </a>
                     <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario">
-                        <div class="user-info">
-                            <span id="userNameDisplay"></span>
-                            <button id="userMenuToggle" class="user-menu-toggle" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-user" aria-hidden="true"></i>
-                                <span class="sr-only">Menú de usuario</span>
-                            </button>
-                        </div>
+                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <span id="userNameDisplay">Usuario</span>
+                            <i class="fas fa-caret-down" aria-hidden="true"></i>
+                        </button>
                         <ul class="user-dropdown" role="menu">
                             <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
+                            <li><a href="login.html" id="loginLink" role="menuitem"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Iniciar sesión</a></li>
                             <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
                         </ul>
                     </div>
