@@ -17,13 +17,14 @@ function debounce(func, wait) {
 // Función para cargar todos los productos
 async function loadAllProducts() {
     try {
+        console.log('Cargando productos desde:', `${API_BASE_URL}/api/products`);
         const response = await fetch(`${API_BASE_URL}/api/products`);
         if (!response.ok) {
             throw new Error('Error al cargar los productos');
         }
         const products = await response.json();
-        displayProducts(products);
-        updateProductCount(products.length);
+        displayProducts(products.products || products); // Asegurarse de acceder a los productos correctamente
+        updateProductCount((products.products || products).length);
         return products;
     } catch (error) {
         console.error('Error al cargar productos:', error);
@@ -37,15 +38,18 @@ function displayProducts(products) {
     const container = document.getElementById('productGrid');
     if (!container) return;
 
-    if (products.length === 0) {
+    // Asegurarse de acceder a los productos correctamente
+    const productList = products.products || products;
+    
+    if (productList.length === 0) {
         container.innerHTML = '<p class="no-products">No se encontraron productos.</p>';
         return;
     }
 
-    container.innerHTML = products.map(product => `
+    container.innerHTML = productList.map(product => `
         <div class="product-card" data-category="${product.category}">
             <div class="product-image">
-                <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOHB4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjM1ZW0iIGZpbGw9IiM5OTkiPkltYWdlbiBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg=='; this.onerror=null;">
+                <img src="${product.image_url || product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOHB4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjM1ZW0iIGZpbGw9IiM5OTkiPkltYWdlbiBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg=='; this.onerror=null;">
                 <button class="add-to-cart" data-product-id="${product.id}">
                     <i class="fas fa-shopping-cart"></i> Agregar al carrito
                 </button>
