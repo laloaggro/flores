@@ -716,8 +716,8 @@ function handleNavigation() {
                 console.log('Navegando a sección:', targetId);
                 
                 // Si es la sección de productos, cargar productos dinámicamente
-                if (targetId === '#products') {
-                    loadProductsSection();
+                if (targetId === '#featured-products') {
+                    loadProducts();
                 }
             }
         });
@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar productos en la sección de productos si estamos en la página principal
     if (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname.endsWith('/index.html')) {
         // Cargar productos inmediatamente
-        loadProductsSection();
+        loadProducts();
     }
     
     // Inicializar event listeners con una pequeña demora
