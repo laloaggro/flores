@@ -1,11 +1,15 @@
 import { updateCartCount, showNotification, API_BASE_URL } from './utils.js';
 import productManager from './productManager.js';
 import CartUtils from './cartUtils.js';
+import { initUserMenu } from './auth.js';
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
   // Initialize cart utilities
   CartUtils.init();
+  
+  // Initialize user menu
+  initUserMenu();
   
   // Initialize event listeners for adding products to cart
   productManager.initCartEventListeners();
@@ -29,44 +33,28 @@ async function loadFeaturedProducts() {
     const products = data.products || data;
     
     const featuredProductsContainer = document.getElementById('featuredProducts');
-    if (featuredProductsContainer) {
-      // Generate HTML for featured products
-      let productsHTML = '';
-      products.forEach(product => {
-        productsHTML += `
-          <div class="product-card">
-            <div class="product-image">
-              <img src="${product.image_url || '/assets/images/default-avatar.svg'}" 
-                   alt="${product.name}" 
-                   loading="lazy"
-                   onerror="this.src='/assets/images/default-avatar.svg'">
-            </div>
-            <div class="product-info">
-              <h3>${product.name}</h3>
-              <p>${product.description}</p>
-              <span class="price">$${parseInt(product.price).toLocaleString('es-CL')}</span>
-              <button class="btn btn-secondary add-to-cart" 
-                      data-id="${product.id}" 
-                      data-name="${product.name}" 
-                      data-price="${product.price}"
-                      data-image="${product.image_url || '/assets/images/default-avatar.svg'}">
-                <i class="fas fa-shopping-cart"></i> Agregar al carrito
-              </button>
-              <div class="product-card-notification" id="notification-${product.id}" style="display: none;">
-                ¡Agregado al carrito!
-              </div>
-            </div>
+    
+    if (products && products.length > 0) {
+      featuredProductsContainer.innerHTML = products.map(product => 
+        `<div class="product-card">
+          <div class="product-image">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://placehold.co/300x300?text=Imagen+no+disponible'">
+            <button class="add-to-cart" data-product-id="${product.id}">
+              <i class="fas fa-shopping-cart"></i> Agregar al carrito
+            </button>
           </div>
-        `;
-      });
-      
-      featuredProductsContainer.innerHTML = productsHTML;
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p class="product-description">${product.description}</p>
+            <div class="product-price">$${product.price.toLocaleString()}</div>
+          </div>
+        </div>`
+      ).join('');
+    } else {
+      featuredProductsContainer.innerHTML = '<p class="no-products">No hay productos destacados disponibles.</p>';
     }
   } catch (error) {
     console.error('Error loading featured products:', error);
-    const featuredProductsContainer = document.getElementById('featuredProducts');
-    if (featuredProductsContainer) {
-      featuredProductsContainer.innerHTML = '<p class="error-message">Error al cargar productos destacados. Por favor, inténtelo más tarde.</p>';
-    }
+    showNotification('Error al cargar productos destacados', 'error');
   }
 }
