@@ -31,9 +31,11 @@ function initUserMenu() {
     // Usuario autenticado - mostrar menú de usuario y ocultar login
     if (userMenu) {
       userMenu.style.display = 'block';
+      console.log('Mostrando menú de usuario');
     }
     if (loginLink) {
       loginLink.style.display = 'none';
+      console.log('Ocultando botón de inicio de sesión');
     }
     
     // Añadir atributos de accesibilidad al menú de usuario
@@ -120,9 +122,11 @@ function initUserMenu() {
     // Usuario no autenticado - mostrar enlace de login y ocultar menú de usuario
     if (loginLink) {
       loginLink.style.display = 'block';
+      console.log('Mostrando botón de inicio de sesión');
     }
     if (userMenu) {
       userMenu.style.display = 'none';
+      console.log('Ocultando menú de usuario');
     }
   }
 }
