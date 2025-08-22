@@ -10,14 +10,21 @@ function initUserMenu() {
   const user = getUser();
   const userMenu = document.getElementById('userMenu');
   const loginLink = document.getElementById('loginLink');
-  const userNameElement = document.getElementById('userName');
+  const userNameElement = document.getElementById('userNameDisplay');
   const logoutLink = document.getElementById('logoutLink');
   const userDropdown = document.querySelector('.user-dropdown');
   const userMenuButton = document.querySelector('.user-info');
   const caretIcon = userMenuButton ? userMenuButton.querySelector('.fas.fa-caret-down') : null;
   
+  // Ocultar el enlace de login en la página de login
+  if (window.location.pathname.includes('login.html')) {
+    if (loginLink) {
+      loginLink.style.display = 'none';
+    }
+  }
+  
   // Si no existen los elementos necesarios, salir de la función
-  if (!userMenu || !loginLink) {
+  if (!userMenu && !loginLink) {
     return;
   }
   
@@ -29,8 +36,14 @@ function initUserMenu() {
   // Verificar autenticación y mostrar elementos apropiados
   if (isAuthenticated() && user) {
     // Usuario autenticado - mostrar menú de usuario
-    userMenu.style.display = 'block';
-    loginLink.style.display = 'none';
+    if (userMenu) {
+      userMenu.style.display = 'block';
+    }
+    if (loginLink && !window.location.pathname.includes('login.html')) {
+      loginLink.style.display = 'block';
+    } else if (loginLink) {
+      loginLink.style.display = 'none';
+    }
     
     // Añadir atributos de accesibilidad al menú de usuario
     if (userMenuButton) {
@@ -111,7 +124,11 @@ function initUserMenu() {
   } else if (userMenu && loginLink) {
     // Ocultar el menú de usuario y mostrar el enlace de inicio de sesión
     userMenu.style.display = 'none';
-    loginLink.style.display = 'block';
+    if (!window.location.pathname.includes('login.html')) {
+      loginLink.style.display = 'block';
+    } else {
+      loginLink.style.display = 'none';
+    }
     
     // Asegurarse de que el dropdown esté oculto
     if (userDropdown) {

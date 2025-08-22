@@ -3,7 +3,7 @@
 // Determinar la URL base del API según el entorno
 const getApiBaseUrl = () => {
   // En producción, usar la URL del backend en Render
-  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
     // URL real del backend en Render
     return 'https://arreglos-victoria-backend.onrender.com';
   }

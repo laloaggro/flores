@@ -1,12 +1,14 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const bcrypt = require('bcrypt');
 
-// Crear/conectar a la base de datos
-const db = new sqlite3.Database(path.join(__dirname, 'products.db'), (err) => {
+// Conectar a la base de datos de usuarios
+const dbPath = path.join(__dirname, 'users.db');
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
-    console.error('Error al conectar con la base de datos:', err.message);
+    console.error('Error al conectar con la base de datos de usuarios:', err.message);
   } else {
-    console.log('Conectado a la base de datos SQLite');
+    console.log('Conectado a la base de datos de usuarios');
   }
 });
 
@@ -87,11 +89,50 @@ db.serialize(() => {
   stmt.finalize();
 });
 
-// Cerrar la conexión
-db.close((err) => {
+// Conectar a la base de datos de productos
+const productsDbPath = path.join(__dirname, 'products.db');
+const productsDb = new sqlite3.Database(productsDbPath, (err) => {
   if (err) {
-    console.error('Error al cerrar la conexión:', err.message);
+    console.error('Error al conectar con la base de datos de productos:', err.message);
   } else {
-    console.log('Conexión a la base de datos cerrada');
+    console.log('Conectado a la base de datos de productos');
   }
 });
+
+// Crear la tabla de productos si no existe
+productsDb.serialize(() => {
+  productsDb.run(`CREATE TABLE IF NOT EXISTS products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    description TEXT,
+    price REAL NOT NULL,
+    image_url TEXT,
+    category TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`, (err) => {
+    if (err) {
+      console.error('Error al crear la tabla de productos:', err.message);
+    } else {
+      console.log('Tabla de productos verificada o creada');
+    }
+  });
+});
+
+// Cerrar las conexiones a las bases de datos después de un tiempo
+setTimeout(() => {
+  db.close((err) => {
+    if (err) {
+      console.error('Error al cerrar la base de datos de usuarios:', err.message);
+    } else {
+      console.log('Conexión a la base de datos de usuarios cerrada');
+    }
+  });
+  
+  productsDb.close((err) => {
+    if (err) {
+      console.error('Error al cerrar la base de datos de productos:', err.message);
+    } else {
+      console.log('Conexión a la base de datos de productos cerrada');
+    }
+  });
+}, 2000);
