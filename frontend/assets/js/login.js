@@ -1,4 +1,4 @@
-import { showNotification, updateCartCount, API_BASE_URL } from './utils.js';
+import { showNotification, updateCartCount, API_BASE_URL, checkBackendConnectivity } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -54,6 +54,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // Función para manejar el inicio de sesión
 async function handleLogin() {
   try {
+    // Verificar conectividad con el backend antes de intentar iniciar sesión
+    const isBackendAvailable = await checkBackendConnectivity();
+    if (!isBackendAvailable) {
+      showNotification('No se puede conectar con el servidor. Por favor, verifica que el servidor backend esté funcionando en ' + API_BASE_URL, 'error');
+      return;
+    }
+    
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
@@ -114,6 +121,13 @@ async function handleLogin() {
 // Función para manejar el registro
 async function handleRegister() {
   try {
+    // Verificar conectividad con el backend antes de intentar registrar
+    const isBackendAvailable = await checkBackendConnectivity();
+    if (!isBackendAvailable) {
+      showNotification('No se puede conectar con el servidor. Por favor, verifica que el servidor backend esté funcionando en ' + API_BASE_URL, 'error');
+      return;
+    }
+    
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;
     const email = document.getElementById('registerEmail').value;
@@ -186,7 +200,12 @@ async function handleRegister() {
       if (loginContainer) loginContainer.classList.remove('hidden');
     }, 2000);
   } catch (error) {
-    showNotification(error.message, 'error');
+    // Manejar errores de red o de parseo de JSON
+    if (error instanceof SyntaxError) {
+      showNotification('Error al procesar la respuesta del servidor. Por favor, inténtalo nuevamente.', 'error');
+    } else {
+      showNotification(error.message, 'error');
+    }
   }
 }
 

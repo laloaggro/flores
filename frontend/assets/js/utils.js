@@ -8,11 +8,53 @@ const getApiBaseUrl = () => {
     return 'https://arreglos-victoria-backend.onrender.com';
   }
   
-  // En desarrollo, usar localhost
+  // En desarrollo, usar localhost con puerto 5000 o 3000 dependiendo de la configuración
+  // Verificar si el backend está disponible en el puerto 5000
   return 'http://localhost:5000';
 };
 
 const API_BASE_URL = getApiBaseUrl();
+
+// Función para verificar la conectividad con el backend
+const checkBackendConnectivity = async () => {
+  try {
+    // Probar primero con un endpoint que probablemente exista
+    const endpointsToTry = [
+      '/api/health',
+      '/api/status',
+      '/api/products',
+      '/'  // Página principal como último recurso
+    ];
+    
+    for (const endpoint of endpointsToTry) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos de timeout
+        
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, { 
+          method: 'GET', 
+          signal: controller.signal 
+        });
+        
+        clearTimeout(timeoutId);
+        
+        // Si obtenemos una respuesta (incluso 404), el servidor está activo
+        if (response.status < 500) {
+          console.log(`Backend conectado correctamente a ${API_BASE_URL}${endpoint} con estado ${response.status}`);
+          return true;
+        }
+      } catch (endpointError) {
+        // Continuar con el siguiente endpoint
+        console.warn(`No se pudo conectar a ${API_BASE_URL}${endpoint}:`, endpointError.message);
+      }
+    }
+    
+    return false;
+  } catch (error) {
+    console.warn('Backend connectivity check failed:', error);
+    return false;
+  }
+};
 
 // Función para mostrar notificaciones
 function showNotification(message, type = 'info') {
@@ -49,44 +91,50 @@ function showNotification(message, type = 'info') {
         padding: 16px;
         margin-bottom: 10px;
         border-radius: 4px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         position: relative;
-        cursor: pointer;
-        transition: opacity 0.3s, transform 0.3s;
-        opacity: 1;
-        transform: translateX(0);
+        animation: notificationSlideIn 0.3s ease-out;
         font-family: 'Poppins', sans-serif;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     `;
     
-    notification.innerHTML = `
-        ${message}
-        <span style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-weight: bold;">&times;</span>
-    `;
+    // Crear el contenido de la notificación
+    const messageDiv = document.createElement('div');
+    messageDiv.textContent = message;
+    notification.appendChild(messageDiv);
     
-    // Añadir evento para cerrar la notificación al hacer clic
-    notification.addEventListener('click', function() {
-        this.style.opacity = '0';
-        this.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (this.parentNode) {
-                this.parentNode.removeChild(this);
-            }
-        }, 300);
-    });
+    // Añadir botón de cierre
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.style.cssText = `
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        line-height: 18px;
+        text-align: center;
+    `;
+    closeBtn.onclick = () => {
+        notification.remove();
+    };
+    notification.appendChild(closeBtn);
     
     // Añadir la notificación al contenedor
     notificationContainer.appendChild(notification);
     
-    // Eliminar automáticamente la notificación después de 5 segundos
+    // Eliminar automáticamente después de 5 segundos
     setTimeout(() => {
         if (notification.parentNode) {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
+            notification.remove();
         }
     }, 5000);
     
@@ -283,5 +331,6 @@ export {
   handleNetworkError, 
   apiRequest,
   logout,
-  API_BASE_URL
+  API_BASE_URL,
+  checkBackendConnectivity
 };
