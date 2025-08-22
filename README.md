@@ -32,114 +32,42 @@
 ## Estructura del Proyecto
 
 ```
-.
-├── backend/
-│   ├── middleware/
-│   ├── routes/
-│   │   ├── contact.js
-│   │   ├── orders.js
-│   │   ├── products.js
-│   │   └── users.js
-│   ├── uploads/
-│   ├── server.js
-│   ├── init-db.js
-│   ├── users.db
-│   └── products.db
-├── frontend/
-│   ├── assets/
-│   │   ├── css/
-│   │   │   └── styles.css
-│   │   ├── images/
-│   │   └── js/
-│   │       ├── admin.js
-│   │       ├── auth.js
-│   │       ├── checkout.js
-│   │       ├── errorHandler.js
-│   │       ├── home.js
-│   │       ├── initUserMenu.js
-│   │       ├── login.js
-│   │       ├── mobile-menu.js
-│   │       ├── productManager.js
-│   │       ├── products.js
-│   │       ├── profile.js
-│   │       ├── register.js
-│   │       ├── utils.js
-│   │       └── wishlist.js
-│   ├── components/
-│   ├── pages/
-│   │   └── admin.html
-│   ├── index.html
-│   ├── products.html
-│   ├── product-detail.html
-│   ├── wishlist.html
-│   ├── profile.html
-│   ├── checkout.html
-│   ├── login.html
-│   ├── register.html
-│   └── sitemap.html
-├── js/
-├── temp_images/
-└── uploads/
+frontend/
+├── assets/
+│   ├── css/
+│   │   └── styles.css
+│   ├── images/
+│   └── js/
+│       ├── admin.js
+│       ├── auth.js
+│       ├── checkout.js
+│       ├── errorHandler.js
+│       ├── home.js
+│       ├── mobile-menu.js
+│       ├── productManager.js
+│       ├── products.js
+│       ├── profile.js
+│       ├── utils.js
+│       └── wishlist.js
+├── components/
+├── pages/
+│   └── admin.html
+├── index.html
+├── products.html
+├── product-detail.html
+├── wishlist.html
+├── profile.html
+├── checkout.html
+├── login.html
+├── register.html
+└── sitemap.html
+
+backend/
+├── middleware/
+├── routes/
+├── server.js
+└── init-db.js
 ```
-
-## Descripción de Páginas y Funcionalidades
-
-### Página Principal (index.html)
-- Página de inicio con presentación de la florería
-- Sección de productos destacados
-- Información sobre la empresa
-- Formulario de contacto
-- Enlaces a redes sociales
-
-### Página de Productos (products.html)
-- Catálogo completo de productos
-- Filtrado por categorías (arreglos, ramos, plantas, accesorios)
-- Búsqueda por nombre
-- Ordenamiento por precio o nombre
-- Vista de detalles de cada producto
-
-### Página de Detalle de Producto (product-detail.html)
-- Información detallada de un producto específico
-- Imágenes del producto
-- Descripción y precio
-- Opciones para agregar al carrito
-- Sistema de reseñas y calificaciones
-
-### Página de Autenticación
-#### Inicio de Sesión (login.html)
-- Formulario para ingresar credenciales
-- Enlace para registro de nuevos usuarios
-
-#### Registro (register.html)
-- Formulario para crear una nueva cuenta
-- Validación de datos de usuario
-
-### Página de Perfil (profile.html)
-- Información del usuario logueado
-- Historial de pedidos
-- Posibilidad de editar datos personales
-
-### Lista de Deseos (wishlist.html)
-- Productos marcados como favoritos por el usuario
-- Posibilidad de agregar al carrito o eliminar de la lista
-
-### Carrito y Checkout (checkout.html)
-- Resumen de productos seleccionados
-- Cálculo de totales
-- Formulario para datos de envío
-- Confirmación de pedido
-
-### Mapa del Sitio (sitemap.html)
-- Enlaces a todas las páginas del sitio
-- Información de contacto
-- Enlaces a redes sociales
-
-### Panel de Administración (pages/admin.html)
-- Gestión de productos (crear, editar, eliminar)
-- Gestión de pedidos
-- Gestión de usuarios
-- Gestión de reseñas
-- Estadísticas de ventas
 
 ## Tecnologías Utilizadas
 
