@@ -104,6 +104,7 @@ body::before {
     transition: var(--transition);
     border: none;
     cursor: pointer;
+    box-shadow: var(--shadow);
 }
 
 .btn-login:hover,

@@ -23,6 +23,7 @@ function initUserMenu() {
   
   // Verificar autenticación y mostrar elementos apropiados
   if (isAuthenticated() && user) {
+    console.log('Usuario autenticado:', user);
     // Usuario autenticado - mostrar menú de usuario y ocultar login
     if (userMenu) {
       userMenu.style.display = 'block';
@@ -111,6 +112,7 @@ function initUserMenu() {
       document.addEventListener('keydown', handleEscapeKey);
     }
   } else {
+    console.log('Usuario no autenticado');
     // Usuario no autenticado - mostrar enlace de login y ocultar menú de usuario
     if (loginLink) {
       loginLink.style.display = 'block';
