@@ -163,7 +163,9 @@ function showNotification(message, type = 'info') {
 const formatPrice = (price) => {
   return new Intl.NumberFormat('es-CL', {
     style: 'currency',
-    currency: 'CLP'
+    currency: 'CLP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
   }).format(price);
 };
 
