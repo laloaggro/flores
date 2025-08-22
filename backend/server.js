@@ -39,6 +39,9 @@ app.use((req, res, next) => {
   }
 });
 
+// Configurar Google OAuth
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+
 // Crear directorio de subidas si no existe
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {

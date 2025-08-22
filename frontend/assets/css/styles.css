@@ -735,21 +735,20 @@ button, a, .btn {
     color: var(--dark);
     font-size: 1rem;
 }
-
 /* Authentication Section */
 .auth-section {
-    padding: 120px 0 60px;
-    background-color: var(--light);
-    min-height: calc(100vh - 70px - 200px); /* Ajustar altura mínima considerando navbar y footer */
+    padding: 60px 0;
+    background: linear-gradient(135deg, #f9f9f9 0%, #e6f4ea 100%);
+    min-height: calc(100vh - 70px);
 }
 
 .auth-container {
-    max-width: 500px;
+    max-width: 450px;
     margin: 0 auto;
     background: var(--white);
-    padding: 40px;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: var(--shadow);
+    overflow: hidden;
 }
 
 .auth-header {
@@ -769,7 +768,7 @@ button, a, .btn {
 }
 
 .auth-form {
-    margin-bottom: 20px;
+    padding: 30px;
 }
 
 .auth-footer {

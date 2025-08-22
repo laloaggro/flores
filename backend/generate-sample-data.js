@@ -30,14 +30,33 @@ db.run(`CREATE TABLE IF NOT EXISTS products (
   } else {
     console.log('Tabla de productos verificada o creada');
     
-    // Limpiar datos existentes
-    db.run('DELETE FROM products', (err) => {
+    // Crear la tabla de usuarios si no existe
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      phone TEXT,
+      password TEXT,
+      google_id TEXT,
+      role TEXT DEFAULT 'user',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`, (err) => {
       if (err) {
-        console.error('Error al limpiar la tabla de productos:', err.message);
+        console.error('Error al crear la tabla de usuarios:', err.message);
         process.exit(1);
       } else {
-        console.log('Datos anteriores eliminados');
-        generateSampleData();
+        console.log('Tabla de usuarios verificada o creada');
+        
+        // Limpiar datos existentes
+        db.run('DELETE FROM products', (err) => {
+          if (err) {
+            console.error('Error al limpiar la tabla de productos:', err.message);
+            process.exit(1);
+          } else {
+            console.log('Datos anteriores eliminados');
+            generateSampleData();
+          }
+        });
       }
     });
   }

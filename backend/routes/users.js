@@ -270,6 +270,103 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Ruta para iniciar sesión con Google
+router.post('/google-login', async (req, res) => {
+  try {
+    const { googleId, email, name, imageUrl } = req.body;
+    
+    // Validaciones básicas
+    if (!googleId || !email || !name) {
+      return res.status(400).json({ 
+        error: 'Se requieren googleId, email y name para iniciar sesión con Google' 
+      });
+    }
+    
+    // Buscar usuario por email o googleId
+    let user = await new Promise((resolve, reject) => {
+      db.get(
+        `SELECT id, name, email, phone, role FROM users WHERE email = ? OR google_id = ?`, 
+        [email, googleId], 
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        }
+      );
+    });
+    
+    // Si no existe el usuario, crear uno nuevo
+    if (!user) {
+      const newUser = await new Promise((resolve, reject) => {
+        const stmt = db.prepare(
+          `INSERT INTO users (name, email, google_id, role) VALUES (?, ?, ?, ?)`
+        );
+        
+        stmt.run([name, email, googleId, 'user'], function(err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve({
+              id: this.lastID,
+              name,
+              email,
+              role: 'user'
+            });
+          }
+        });
+        
+        stmt.finalize();
+      });
+      
+      user = newUser;
+    } else if (!user.google_id) {
+      // Si el usuario existe pero no tiene google_id, actualizarlo
+      await new Promise((resolve, reject) => {
+        db.run(
+          `UPDATE users SET google_id = ? WHERE id = ?`,
+          [googleId, user.id],
+          (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          }
+        );
+      });
+    }
+    
+    // Generar token JWT
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error('JWT_SECRET no está definida en las variables de entorno');
+      return res.status(500).json({ error: 'Error de configuración del servidor' });
+    }
+    
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name,
+        role: user.role
+      }, 
+      jwtSecret,
+      { expiresIn: '24h' }
+    );
+    
+    res.json({
+      message: 'Inicio de sesión con Google exitoso',
+      user,
+      token
+    });
+  } catch (error) {
+    console.error('Error al iniciar sesión con Google:', error.message);
+    res.status(500).json({ error: 'Error al iniciar sesión con Google' });
+  }
+});
+
 // Ruta para obtener el perfil del usuario (verificación de token)
 router.get('/profile', authenticateToken, (req, res) => {
   const { id, email, name, role } = req.user;

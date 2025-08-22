@@ -1,5 +1,6 @@
 import { showNotification, updateCartCount, API_BASE_URL, checkBackendConnectivity } from './utils.js';
 import { initUserMenu } from './auth.js';
+import { initGoogleSignIn } from './googleAuth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar menú de usuario
@@ -12,6 +13,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const showLoginLink = document.getElementById('showLogin');
   const loginContainer = document.querySelector('.login-form-container');
   const registerContainer = document.querySelector('.register-form-container');
+  
+  // Inicializar Google Sign-In si el botón existe
+  const googleButton = document.getElementById('googleSignInButton');
+  if (googleButton) {
+    // Reemplaza con tu Client ID de Google
+    const googleClientId = 'TU_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+    initGoogleSignIn(googleClientId, handleGoogleLoginResponse);
+  }
   
   // Mostrar formulario de registro
   if (showRegisterLink) {
@@ -249,6 +258,32 @@ async function handleRegister() {
     } else {
       showNotification(error.message, 'error');
     }
+  }
+}
+
+// Función para manejar la respuesta de inicio de sesión con Google
+function handleGoogleLoginResponse(error, result) {
+  if (error) {
+    console.error('Error en inicio de sesión con Google:', error);
+    showNotification('Error al iniciar sesión con Google: ' + error.message, 'error');
+    return;
+  }
+  
+  if (result.success) {
+    showNotification('Inicio de sesión exitoso. Bienvenido ' + result.user.name, 'success');
+    
+    // Redirigir al usuario después de un breve retraso
+    setTimeout(() => {
+      // Si el usuario es administrador, redirigir al panel de administración
+      if (result.user.role === 'admin') {
+        window.location.href = 'pages/admin.html';
+      } else {
+        // Para usuarios normales, redirigir a la página principal
+        window.location.href = 'index.html';
+      }
+    }, 1500);
+  } else {
+    showNotification(result.message || 'Error al iniciar sesión con Google', 'error');
   }
 }
 
