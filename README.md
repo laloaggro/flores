@@ -21,6 +21,8 @@
 - **Carga optimizada**: Implementación de lazy loading y preloading de recursos
 - **Feedback visual**: Notificaciones para acciones del usuario
 - **Accesibilidad**: Soporte para lectores de pantalla y navegación por teclado
+- **Optimización de imágenes**: Conversión automática a formatos modernos (WebP)
+- **Navegación por teclado**: Mejoras en accesibilidad para usuarios con discapacidad motriz
 
 ### ✅ Optimizaciones Técnicas
 
@@ -28,6 +30,8 @@
 - **SEO**: Meta etiquetas y estructura semántica para mejor posicionamiento
 - **Responsive**: Diseño adaptable a diferentes tamaños de pantalla
 - **Manejo de errores**: Sistema centralizado de manejo de errores
+- **Componentes reutilizables**: Arquitectura modular para facilitar el mantenimiento
+- **Carga diferida**: Implementación mejorada de lazy loading para imágenes
 
 ## Estructura del Proyecto
 
@@ -46,22 +50,34 @@
 ├── frontend/
 │   ├── assets/
 │   │   ├── css/
-│   │   │   └── styles.css       # Hoja de estilos principal
+│   │   │   ├── styles.css       # Hoja de estilos principal
+│   │   │   └── accessibility.css# Estilos específicos para accesibilidad
 │   │   ├── images/              # Imágenes del sitio
 │   │   └── js/                  # Scripts JavaScript
+│   │       ├── accessibility.js # Mejoras de accesibilidad
 │   │       ├── admin.js         # Funcionalidades del panel de administración
 │   │       ├── auth.js          # Funciones de autenticación y menú de usuario
+│   │       ├── cart.js          # Funcionalidades del carrito de compras
+│   │       ├── cartUtils.js     # Utilidades para el carrito de compras
 │   │       ├── checkout.js      # Funcionalidades del proceso de compra
 │   │       ├── errorHandler.js  # Manejo centralizado de errores
 │   │       ├── home.js          # Funcionalidades de la página principal
+│   │       ├── homeProducts.js  # Gestión de productos en la página de inicio
+│   │       ├── imageOptimizer.js# Optimización de imágenes
+│   │       ├── lazyLoad.js      # Carga diferida de imágenes
 │   │       ├── mobile-menu.js   # Menú responsive para dispositivos móviles
 │   │       ├── productManager.js# Gestión de productos y carrito
 │   │       ├── products.js      # Funcionalidades de la página de productos
 │   │       ├── profile.js       # Funcionalidades del perfil de usuario
+│   │       ├── register-sw.js   # Registro del Service Worker
 │   │       ├── utils.js         # Funciones de utilidad compartidas
 │   │       └── wishlist.js      # Funcionalidades de la lista de deseos
 │   │
 │   ├── components/              # Componentes reutilizables
+│   │   ├── Cart.js              # Componente del carrito
+│   │   ├── ProductCard.js       # Componente de tarjeta de producto
+│   │   └── Products.js          # Componente de lista de productos
+│   │
 │   ├── pages/                   # Páginas adicionales
 │   │   └── admin.html           # Panel de administración
 │   │
@@ -90,54 +106,7 @@
 - **Despliegue**: Render
 - **Herramientas**: Git, GitHub
 
-## Uso del Sitio Web
-
-### Para Usuarios
-
-1. **Navegación de productos**: 
-   - Visita la página principal para ver productos destacados
-   - Navega a "Productos" para ver el catálogo completo
-   - Usa los filtros por categoría, búsqueda y ordenamiento para encontrar productos específicos
-
-2. **Autenticación**:
-   - Regístrate en la página de registro con tus datos
-   - Inicia sesión con tu email y contraseña
-   - Una vez autenticado, podrás acceder a tu perfil, lista de deseos y carrito de compras
-
-3. **Carrito de compras**:
-   - Agrega productos al carrito desde la página de productos o detalle de producto
-   - Accede al carrito para ver los productos agregados
-   - Procede al checkout para finalizar tu compra
-
-4. **Lista de deseos**:
-   - Guarda productos en tu lista de deseos para recordarlos
-   - Accede a tu lista de deseos desde el menú de usuario
-
-5. **Perfil de usuario**:
-   - Edita tu información personal
-   - Revisa tu historial de compras (simulado)
-
-### Para Administradores
-
-1. **Acceso al panel de administración**:
-   - Inicia sesión con credenciales de administrador
-   - Accede al panel de administración desde el menú de usuario
-
-2. **Gestión de productos**:
-   - Agrega nuevos productos con nombre, descripción, precio, categoría e imagen
-   - Edita productos existentes
-   - Elimina productos del catálogo
-
-3. **Gestión de usuarios**:
-   - Visualiza la lista de usuarios registrados
-   - Edita información de usuarios
-   - Elimina usuarios (excepto administradores)
-
-4. **Gestión de reseñas**:
-   - Visualiza todas las reseñas de productos
-   - Elimina reseñas inapropiadas
-
-## Instalación y Configuración
+## Instalación y Uso Local
 
 1. Clonar el repositorio:
 ```bash
@@ -149,16 +118,13 @@ git clone https://github.com/tu-usuario/arreglos-victoria.git
 cd arreglos-victoria
 ```
 
-3. Instalar dependencias del backend:
+3. Iniciar el servidor backend:
 ```bash
 cd backend
-npm install
+node server.js
 ```
 
-4. Iniciar el servidor de desarrollo:
-```bash
-npm start
-```
+4. Servir los archivos frontend (puedes usar Live Server en VSCode o cualquier servidor estático)
 
 5. Abrir el navegador en `http://localhost:5000`
 
