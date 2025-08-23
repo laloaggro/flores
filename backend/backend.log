@@ -122,3 +122,4 @@ Token generado exitosamente
 [2025-08-23T02:45:41.147Z] GET /api/products?limit=4 - IP: ::1
 [2025-08-23T02:49:46.480Z] GET /api/products?limit=4 - IP: ::1
 [2025-08-23T02:49:50.512Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:54:03.685Z] GET /api/products?limit=4 - IP: ::1
