@@ -143,6 +143,15 @@ async function generateSampleData() {
     'https://images.unsplash.com/photo-1510951300960-009537c6cf20?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80'
   ];
   
+  // Array de imágenes de ejemplo (ahora apuntan a rutas locales)
+  const sampleImages = [
+    '/assets/images/placeholder.svg',
+    '/assets/images/placeholder.svg',
+    '/assets/images/placeholder.svg',
+    '/assets/images/placeholder.svg',
+    '/assets/images/placeholder.svg'
+  ];
+  
   // Generar 20 productos de ejemplo (5 imágenes x 4 productos por imagen)
   const stmt = db.prepare('INSERT INTO products (name, description, price, image_url, category) VALUES (?, ?, ?, ?, ?)');
   

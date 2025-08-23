@@ -12,11 +12,14 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
-    <link rel="preload" href="assets/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="assets/css/styles.css">
-    </noscript>
-    <meta name="description" content="Gestiona tu información personal, pedidos y configuración de cuenta en Arreglos Florales Victoria.">
+    
+    <!-- Cargar estilos CSS en el orden correcto -->
+    <link rel="stylesheet" href="assets/css/preflight.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <meta name="description" content="Tu perfil en Arreglos Victoria Florería. Gestiona tu información personal, pedidos y preferencias.">
     <meta name="keywords" content="perfil, usuario, cuenta, información personal, pedidos, florería, arreglos florales">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="noindex, follow">
@@ -26,15 +29,15 @@
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/profile.html">
     <meta property="og:title" content="Perfil de Usuario - Arreglos Victoria Florería">
     <meta property="og:description" content="Gestiona tu información personal, pedidos y configuración de cuenta en Arreglos Florales Victoria.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    
+    <meta property="og:image" content="./assets/images/hero-image.jpg">
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/profile.html">
     <meta property="twitter:title" content="Perfil de Usuario - Arreglos Victoria Florería">
     <meta property="twitter:description" content="Gestiona tu información personal, pedidos y configuración de cuenta en Arreglos Florales Victoria.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    
+    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
+
     <style>
         .profile-section {
             padding: 40px 0;
@@ -378,35 +381,32 @@
                         <div id="profile-info" class="profile-tab active">
                             <h2>Información Personal</h2>
                             <form id="profileForm">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="profileFirstName">Nombre</label>
-                                        <input type="text" id="profileFirstName" name="firstName" class="form-input">
+                                <div class="profile-info">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="profileFirstName">Nombre</label>
+                                            <input type="text" id="profileFirstName" name="firstName" class="form-input" autocomplete="given-name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="profileLastName">Apellido</label>
+                                            <input type="text" id="profileLastName" name="lastName" class="form-input" autocomplete="family-name">
+                                        </div>
                                     </div>
-                                    
                                     <div class="form-group">
-                                        <label for="profileLastName">Apellido</label>
-                                        <input type="text" id="profileLastName" name="lastName" class="form-input">
+                                        <label for="profileEmail">Email</label>
+                                        <input type="email" id="profileEmail" name="email" class="form-input" readonly>
                                     </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="profileEmail">Email</label>
-                                    <input type="email" id="profileEmail" name="email" class="form-input" readonly>
-                                </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="profilePhone">Teléfono</label>
-                                        <input type="tel" id="profilePhone" name="phone" class="form-input">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="profileAddress">Dirección</label>
-                                        <textarea id="profileAddress" name="address" class="form-input"></textarea>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="profilePhone">Teléfono</label>
+                                            <input type="tel" id="profilePhone" name="phone" class="form-input" autocomplete="tel">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="profileAddress">Dirección</label>
+                                            <textarea id="profileAddress" name="address" class="form-input" autocomplete="street-address"></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                                
                                 <button type="submit" class="btn btn-primary">Actualizar Información</button>
                             </form>
                         </div>
@@ -447,17 +447,15 @@
                             <form id="changePasswordForm">
                                 <div class="form-group">
                                     <label for="currentPassword">Contraseña Actual</label>
-                                    <input type="password" id="currentPassword" name="currentPassword" class="form-input" required>
+                                    <input type="password" id="currentPassword" name="currentPassword" class="form-input" required autocomplete="current-password">
                                 </div>
-                                
                                 <div class="form-group">
                                     <label for="newPassword">Nueva Contraseña</label>
-                                    <input type="password" id="newPassword" name="newPassword" class="form-input" required minlength="6">
+                                    <input type="password" id="newPassword" name="newPassword" class="form-input" required minlength="6" autocomplete="new-password">
                                 </div>
-                                
                                 <div class="form-group">
                                     <label for="confirmNewPassword">Confirmar Nueva Contraseña</label>
-                                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="form-input" required>
+                                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="form-input" required autocomplete="new-password">
                                 </div>
                                 
                                 <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
@@ -506,10 +504,15 @@
         </div>
     </footer>
 
-    <script src="assets/js/mobile-menu.js" type="module"></script>
-    <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/profile.js" type="module"></script>
+    <!-- Scripts -->
+    <script type="module" src="./assets/js/utils.js"></script>
+    <script type="module" src="./assets/js/auth.js"></script>
+    <script type="module" src="./assets/js/profile.js"></script>
+    <script type="module" src="./assets/js/cart.js"></script>
+    <script type="module" src="./assets/js/accessibility.js"></script>
+    <script type="module" src="./assets/js/lazyLoad.js"></script>
+    <script type="module" src="./assets/js/imageOptimizer.js"></script>
+    <script type="module" src="./assets/js/register-sw.js"></script>
     
     <script>
         // Funcionalidad para cambiar entre pestañas del perfil

@@ -12,315 +12,263 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
-    <link rel="preload" href="assets/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- Cargar estilos CSS -->
+    <link rel="stylesheet" href="assets/css/preflight.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
     <meta name="description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana. Más de 10 años de experiencia en el mercado.">
     <meta name="keywords" content="arreglos florales, flores, florería, Recoleta, Región Metropolitana, entrega a domicilio">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="index, follow">
-    
-    <!-- Preload critical images -->
-    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/">
     <meta property="og:title" content="Arreglos Victoria Florería - Inicio">
     <meta property="og:description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="og:image" content="./assets/images/hero-image.jpg">
     <meta property="og:site_name" content="Arreglos Victoria Florería">
-    <meta property="og:locale" content="es_CL">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/">
     <meta property="twitter:title" content="Arreglos Victoria Florería - Inicio">
     <meta property="twitter:description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    
-    <!-- Schema.org markup for Google -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Florist",
-      "name": "Arreglos Florales Victoria",
-      "image": "https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80",
-      "telephone": "+569 6360 3177",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Av. Valdivieso 593",
-        "addressLocality": "Recoleta",
-        "addressRegion": "Región Metropolitana",
-        "postalCode": "8450000",
-        "addressCountry": "CL"
-      },
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-          ],
-          "opens": "09:00",
-          "closes": "19:00"
-        }
-      ],
-      "url": "https://arreglos-victoria-backend.onrender.com/"
-    }
-    </script>
+    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
 </head>
 <body>
+    <!-- Skip link para navegación por teclado -->
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <!-- Header -->
     <header>
-        <div class="container">
-            <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
-                
-                <!-- Botón de menú hamburguesa -->
-                <button class="hamburger" aria-label="Menú" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                
-                <ul class="nav-links">
-                    <li><a href="index.html" class="active" aria-current="page">Inicio</a></li>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <img src="./assets/images/logo.png" alt="Logo Arreglos Victoria" class="logo-img">
+                <span class="logo-text">Arreglos Victoria</span>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Inicio</a></li>
                     <li><a href="products.html">Productos</a></li>
-                    <li><a href="#about">Nosotros</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
-                    <li><a href="sitemap.html">Mapa del Sitio</a></li>
+                    <li><a href="contact.html">Contacto</a></li>
                 </ul>
-                <div class="user-actions">
-                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
-                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                        <span>Iniciar sesión</span>
-                    </a>
-                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
-                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
-                            <span id="userNameDisplay"></span>
-                            <i class="fas fa-user" aria-hidden="true"></i>
-                            <i class="fas fa-caret-down" aria-hidden="true"></i>
-                        </button>
-                        <ul class="user-dropdown" role="menu">
-                            <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
-                            <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
-                        </ul>
+            </nav>
+            
+            <div class="user-menu">
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+                <div class="user-icon" id="userIcon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-dropdown" id="userDropdown">
+                    <div id="guest-menu">
+                        <a href="login.html">Iniciar Sesión</a>
+                        <a href="register.html">Registrarse</a>
                     </div>
-                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
-                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                        <span class="cart-count" id="cartCount">0</span>
+                    <div id="user-menu" style="display: none;">
+                        <a href="profile.html">Mi Perfil</a>
+                        <a href="wishlist.html">Lista de Deseos</a>
+                        <a href="#" id="logoutLink">Cerrar Sesión</a>
+                        <a href="admin.html" id="admin-menu-item" style="display: none;">Panel de Administración</a>
                     </div>
                 </div>
-            </nav>
+            </div>
         </div>
     </header>
 
     <main id="main-content">
-        <section id="home" class="hero" aria-labelledby="hero-heading">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Arreglos Victoria</h1>
+                <p>Flores frescas y hermosos arreglos florales para alegrar tus momentos especiales. Entrega a domicilio en Recoleta y alrededores.</p>
+                <a href="products.html" class="btn btn-primary">Ver Productos</a>
+            </div>
+        </section>
+
+        <!-- Categorías -->
+        <section class="categories">
             <div class="container">
-                <div class="hero-content">
-                    <h1 id="hero-heading">Arreglos Florales Victoria</h1>
-                    <p>Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana</p>
-                    <div class="hero-buttons">
-                        <a href="products.html" class="btn btn-primary">Ver Productos</a>
-                        <a href="#contacto" class="btn btn-secondary">Contactar</a>
+                <div class="section-title">
+                    <h2>Categorías</h2>
+                    <p>Explora nuestras categorías de arreglos florales</p>
+                </div>
+                <div class="category-grid">
+                    <div class="category-card">
+                        <div class="category-image">
+                            <img src="./assets/images/categories/arrangements.jpg" alt="Arreglos Florales" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                        </div>
+                        <div class="category-info">
+                            <h3>Arreglos Florales</h3>
+                            <p>Hermosos arreglos para todas las ocasiones</p>
+                            <a href="products.html?category=arreglos" class="btn btn-primary">Ver Más</a>
+                        </div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-image">
+                            <img src="./assets/images/categories/bouquets.jpg" alt="Ramos" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                        </div>
+                        <div class="category-info">
+                            <h3>Ramos</h3>
+                            <p>Ramos elegantes y frescos</p>
+                            <a href="products.html?category=ramos" class="btn btn-primary">Ver Más</a>
+                        </div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-image">
+                            <img src="./assets/images/categories/plants.jpg" alt="Plantas" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                        </div>
+                        <div class="category-info">
+                            <h3>Plantas</h3>
+                            <p>Plantas de interior y exterior</p>
+                            <a href="products.html?category=plantas" class="btn btn-primary">Ver Más</a>
+                        </div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-image">
+                            <img src="./assets/images/categories/accessories.jpg" alt="Accesorios" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                        </div>
+                        <div class="category-info">
+                            <h3>Accesorios</h3>
+                            <p>Accesorios para complementar tus arreglos</p>
+                            <a href="products.html?category=accesorios" class="btn btn-primary">Ver Más</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="featured-products" class="featured-products">
+        <!-- Productos Destacados -->
+        <section class="featured-products">
             <div class="container">
-                <h2>Productos Destacados</h2>
-                <div id="featuredProductsContainer" class="products-grid">
-                    <!-- Los productos se cargarán aquí dinámicamente -->
-                    <div class="loading-placeholder">
-                        <p>Cargando productos...</p>
-                    </div>
+                <div class="section-title">
+                    <h2>Productos Destacados</h2>
+                    <p>Descubre nuestros arreglos florales más populares</p>
                 </div>
-                <div class="view-all-products">
-                    <a href="products.html" class="btn btn-secondary">Ver todos los productos</a>
+                <div class="product-grid" id="featuredProducts">
+                    <!-- Productos cargados dinámicamente -->
                 </div>
             </div>
         </section>
 
-        <section id="about" class="about">
+        <!-- Acerca de Nosotros -->
+        <section class="about">
+            <div class="about-image">
+                <img src="./assets/images/about-florist.jpg" alt="Nuestra Florería" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+            </div>
+            <div class="about-content">
+                <h2>Acerca de Arreglos Victoria</h2>
+                <p>Con más de 10 años de experiencia en el mercado, Arreglos Victoria se ha convertido en la florería de confianza para miles de clientes en Recoleta y alrededores.</p>
+                <p>Nos especializamos en crear hermosos arreglos florales frescos para todas las ocasiones, desde cumpleaños y aniversarios hasta eventos corporativos y bodas.</p>
+                <p>Cada arreglo es cuidadosamente diseñado por nuestros expertos floristas utilizando las mejores flores y materiales disponibles.</p>
+                <a href="about.html" class="btn btn-primary">Leer Más</a>
+            </div>
+        </section>
+
+        <!-- Testimonios -->
+        <section class="testimonials">
             <div class="container">
-                <div class="about-content">
-                    <div class="about-text">
-                        <h2 class="section-title">Sobre Nosotros</h2>
-                        <p>En Arreglos Florales Victoria llevamos más de 10 años creando hermosos arreglos florales para las ocasiones más especiales. Nuestra pasión por las flores y la atención al detalle nos distingue en el mercado.</p>
-                        <p>Utilizamos solo las flores más frescas y de la mejor calidad, trabajando directamente con productores locales para ofrecer una experiencia única a nuestros clientes.</p>
-                        <div class="about-stats">
-                            <div class="stat">
-                                <h3>10+</h3>
-                                <p>Años de Experiencia</p>
-                            </div>
-                            <div class="stat">
-                                <h3>1000+</h3>
-                                <p>Clientes Satisfechos</p>
-                            </div>
-                            <div class="stat">
-                                <h3>24/7</h3>
-                                <p>Entrega a Domicilio</p>
-                            </div>
-                        </div>
+                <div class="section-title">
+                    <h2>Lo que dicen nuestros clientes</h2>
+                    <p>Testimonios de clientes satisfechos</p>
+                </div>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Los arreglos florales de Arreglos Victoria son simplemente hermosos. Siempre cumplen con la entrega puntual y la calidad es excelente."</p>
+                        <p class="testimonial-author">- María González</p>
                     </div>
-                    <div class="about-image">
-                        <img width="800" height="533" src="assets/images/backgrounds/plant-shadow.png" alt="Arreglos florales hermosos y frescos" loading="lazy" fetchpriority="low">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Contraté sus servicios para mi boda y superaron mis expectativas. Los arreglos fueron el toque perfecto para la celebración."</p>
+                        <p class="testimonial-author">- Carlos Rodríguez</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Como empresa, hemos utilizado sus servicios para eventos corporativos y siempre recibimos elogios de nuestros clientes."</p>
+                        <p class="testimonial-author">- Ana Martínez</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="testimonials-section" aria-labelledby="testimonials-heading">
+        <!-- Contacto -->
+        <section class="contact">
             <div class="container">
-                <h2 id="testimonials-heading">Testimonios de Nuestros Clientes</h2>
-                <p class="section-description">Lo que dicen nuestros clientes sobre nuestros productos</p>
-                
-                <div class="testimonials-grid">
-                    <article class="testimonial-card" itemscope itemtype="http://schema.org/Review">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">
-                                <i class="fas fa-user-circle" aria-hidden="true"></i>
-                            </div>
-                            <div class="testimonial-user">
-                                <h3 itemprop="author">María González</h3>
-                                <div class="testimonial-rating" aria-label="Calificación de 5 estrellas">
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-content">
-                            <p itemprop="reviewBody">
-                                "El ramo de rosas rojas que pedí para el aniversario de mi esposo fue simplemente hermoso. 
-                                La frescura de las flores y el arreglo tan cuidado hicieron que el momento fuera aún más especial. 
-                                ¡Definitivamente volveré a comprar!"
-                            </p>
-                            <div class="testimonial-product">
-                                <span><i class="fas fa-box" aria-hidden="true"></i> Ramo de Rosas Rojas</span>
-                            </div>
-                            <time datetime="2025-08-15" itemprop="datePublished">15 de agosto de 2025</time>
-                        </div>
-                    </article>
-                    
-                    <article class="testimonial-card" itemscope itemtype="http://schema.org/Review">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">
-                                <i class="fas fa-user-circle" aria-hidden="true"></i>
-                            </div>
-                            <div class="testimonial-user">
-                                <h3 itemprop="author">Carlos Rodríguez</h3>
-                                <div class="testimonial-rating" aria-label="Calificación de 4 estrellas">
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star-half-alt" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-content">
-                            <p itemprop="reviewBody">
-                                "Sorprendí a mi madre con el arreglo de flores para su cumpleaños y quedó encantada. 
-                                La entrega fue puntual y el producto llegó en perfectas condiciones. 
-                                Muy recomendable para ocasiones especiales."
-                            </p>
-                            <div class="testimonial-product">
-                                <span><i class="fas fa-box" aria-hidden="true"></i> Arreglo Especial Cumpleaños</span>
-                            </div>
-                            <time datetime="2025-07-22" itemprop="datePublished">22 de julio de 2025</time>
-                        </div>
-                    </article>
-                    
-                    <article class="testimonial-card" itemscope itemtype="http://schema.org/Review">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">
-                                <i class="fas fa-user-circle" aria-hidden="true"></i>
-                            </div>
-                            <div class="testimonial-user">
-                                <h3 itemprop="author">Ana Martínez</h3>
-                                <div class="testimonial-rating" aria-label="Calificación de 5 estrellas">
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                    <i class="fas fa-star" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-content">
-                            <p itemprop="reviewBody">
-                                "Como dueña de un restaurante, siempre busco los mejores productos para decorar mis espacios. 
-                                Los arreglos florales de Arreglos Victoria son de excelente calidad y duran mucho tiempo. 
-                                Además, el servicio al cliente es excepcional."
-                            </p>
-                            <div class="testimonial-product">
-                                <span><i class="fas fa-box" aria-hidden="true"></i> Arreglo Decorativo Premium</span>
-                            </div>
-                            <time datetime="2025-08-05" itemprop="datePublished">5 de agosto de 2025</time>
-                        </div>
-                    </article>
+                <div class="section-title">
+                    <h2>Contacto</h2>
+                    <p>¿Tienes alguna pregunta? Contáctanos</p>
                 </div>
-                
-                <div class="testimonials-cta">
-                    <h3>¿Tienes una experiencia que compartir?</h3>
-                    <p>¡Nos encantaría escuchar tu testimonio sobre nuestros productos!</p>
-                    <button id="addTestimonialBtn" class="btn btn-primary">
-                        <i class="fas fa-plus-circle" aria-hidden="true"></i> Agregar Testimonio
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <section id="contacto" class="contact">
-            <div class="container">
-                <h2 class="section-title">Contáctanos</h2>
                 <div class="contact-content">
                     <div class="contact-info">
                         <h3>Información de Contacto</h3>
-                        <p><i class="fas fa-map-marker-alt"></i> Av. Valdivieso 593, Recoleta, Región Metropolitana</p>
-                        <p><i class="fas fa-phone"></i> +569 6360 3177</p>
-                        <p><i class="fas fa-clock"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</p>
-                        <p><i class="fas fa-envelope"></i> contacto@arreglosvictoria.cl</p>
-                        <div class="social-links">
-                            <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                            <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                            <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Dirección</h4>
+                                <p>Av. Recoleta 1234, Recoleta, Región Metropolitana</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Teléfono</h4>
+                                <p>+56 2 1234 5678</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <p>info@arreglosvictoria.cl</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Horario</h4>
+                                <p>Lunes a Sábado: 9:00 AM - 8:00 PM<br>Domingo: 10:00 AM - 6:00 PM</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="contact-map">
-                        <iframe 
-                            width="100%" 
-                            height="250" 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.701477894064!2d-70.64401568475035!3d-33.43894998077974!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a7a9d4d1d1%3A0x1f3a9f6b3c4a1a7f!2sAv.%20Valdivieso%20593%2C%20Recoleta%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1649782043882!5m2!1ses!2scl" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade"
-                            title="Ubicación de Arreglos Florales Victoria"></iframe>
-                    </div>
                     <div class="contact-form">
-                        <h3>Envíanos un Mensaje</h3>
+                        <h3>Envíanos un mensaje</h3>
                         <form id="contactForm">
-                            <div class="form-group">
-                                <label for="name">Nombre</label>
-                                <input type="text" id="name" name="name" required class="form-input">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Nombre</label>
+                                    <input type="text" id="name" name="name" required class="form-input" autocomplete="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" required class="form-input" autocomplete="email">
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" required class="form-input">
+                                <label for="subject">Asunto</label>
+                                <input type="text" id="subject" name="subject" required class="form-input" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label for="message">Mensaje</label>
-                                <textarea id="message" name="message" rows="5" required class="form-input"></textarea>
+                                <textarea id="message" name="message" rows="5" required class="form-input" autocomplete="off"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                         </form>
@@ -339,30 +287,17 @@
     </div>
 
     <!-- Scripts -->
-    <script>
-        // Script para manejar el indicador de carga
-        document.addEventListener('DOMContentLoaded', function() {
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            
-            // Mostrar el indicador de carga al inicio
-            loadingIndicator.setAttribute('aria-hidden', 'false');
-            loadingIndicator.style.display = 'flex';
-            
-            // Ocultar el indicador de carga después de que todos los recursos se hayan cargado
-            window.addEventListener('load', function() {
-                setTimeout(() => {
-                    loadingIndicator.setAttribute('aria-hidden', 'true');
-                    loadingIndicator.style.display = 'none';
-                }, 500); // Pequeño retraso para efecto visual
-            });
-        });
-    </script>
-    <script src="assets/js/mobile-menu.js" type="module"></script>
-    <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/errorHandler.js" type="module"></script>
-    <script src="assets/js/home.js" type="module"></script>
-    <script src="assets/js/initUserMenu.js" type="module"></script>
-    <script src="assets/js/cart.js" type="module"></script>
+    <script type="module" src="./assets/js/utils.js"></script>
+    <script type="module" src="./assets/js/auth.js"></script>
+    <script type="module" src="./assets/js/cartUtils.js"></script>
+    <script type="module" src="./assets/js/productManager.js"></script>
+    <script type="module" src="./assets/js/homeProducts.js"></script>
+    <script type="module" src="./assets/js/cart.js"></script>
+    <script type="module" src="./assets/js/home.js"></script>
+    <script type="module" src="./assets/js/accessibility.js"></script>
+    <script type="module" src="./assets/js/lazyLoad.js"></script>
+    <script type="module" src="./assets/js/imageOptimizer.js"></script>
+    <script type="module" src="./assets/js/register-sw.js"></script>
+
 </body>
 </html>

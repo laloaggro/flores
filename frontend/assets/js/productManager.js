@@ -1,129 +1,163 @@
-// productManager.js - Gestión de productos y reseñas
+// productManager.js - Gestión de productos
+import { API_BASE_URL, showNotification } from './utils.js';
+import CartUtils from './cartUtils.js';
 
-// Función para obtener productos
-async function getProducts() {
-    try {
-        const response = await fetch('/api/products');
-        if (!response.ok) {
-            throw new Error('Error al obtener productos');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error al obtener productos:', error);
-        throw error;
-    }
-}
-
-// Función para obtener reseñas de un producto
-async function getProductReviews(productId) {
-    try {
-        const response = await fetch(`/api/products/${productId}/reviews`);
-        if (!response.ok) {
-            throw new Error('Error al obtener reseñas');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error al obtener reseñas:', error);
-        return [];
-    }
-}
-
-// Función para agregar una reseña
-async function addProductReview(productId, reviewData) {
-    try {
-        const response = await fetch(`/api/products/${productId}/reviews`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reviewData)
-        });
-        
-        if (!response.ok) {
-            throw new Error('Error al agregar reseña');
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error al agregar reseña:', error);
-        throw error;
-    }
-}
-
-// Función para calcular el promedio de calificaciones
-function calculateAverageRating(reviews) {
-    if (!reviews || reviews.length === 0) return 0;
+const productManager = {
+    currentPage: 1,
+    productsPerPage: 9,
+    currentProducts: [],
     
-    const total = reviews.reduce((sum, review) => sum + review.rating, 0);
-    return Math.round((total / reviews.length) * 10) / 10;
-}
-
-// Función para mostrar reseñas en la página de producto
-function displayProductReviews(productId) {
-    getProductReviews(productId)
-        .then(reviews => {
-            const reviewsContainer = document.getElementById('productReviews');
-            if (!reviewsContainer) return;
+    // Inicializar el gestor de productos
+    async init() {
+        console.log('Inicializando productManager');
+        await this.loadProducts();
+        this.initCartEventListeners();
+    },
+    
+    // Cargar productos
+    async loadProducts(category = null, search = null) {
+        try {
+            let url = `${API_BASE_URL}/api/products?page=${this.currentPage}&limit=${this.productsPerPage}`;
             
-            if (reviews.length === 0) {
-                reviewsContainer.innerHTML = '<p>No hay reseñas para este producto aún.</p>';
-                return;
+            if (category) {
+                url += `&category=${encodeURIComponent(category)}`;
             }
             
-            const averageRating = calculateAverageRating(reviews);
+            if (search) {
+                url += `&search=${encodeURIComponent(search)}`;
+            }
             
-            reviewsContainer.innerHTML = `
-                <div class="reviews-header">
-                    <h3>Reseñas del producto</h3>
-                    <div class="average-rating">
-                        <span class="rating-value">${averageRating}</span>
-                        <div class="stars">${renderStars(averageRating)}</div>
-                        <span class="review-count">(${reviews.length} reseñas)</span>
-                    </div>
-                </div>
-                <div class="reviews-list">
-                    ${reviews.map(review => `
-                        <div class="review-item">
-                            <div class="review-header">
-                                <strong>${review.userName}</strong>
-                                <div class="stars">${renderStars(review.rating)}</div>
-                                <span class="review-date">${formatDate(review.date)}</span>
-                            </div>
-                            <p class="review-comment">${review.comment}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        })
-        .catch(error => {
-            console.error('Error al mostrar reseñas:', error);
-        });
-}
-
-// Función para renderizar estrellas de calificación
-function renderStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            console.log('Cargando productos desde:', url);
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`Error al cargar productos: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('Productos cargados:', data);
+            
+            this.currentProducts = data.products || data;
+            this.renderProducts(this.currentProducts);
+            
+            // Renderizar paginación si es necesario
+            if (data.totalPages > 1) {
+                this.renderPagination(data.currentPage, data.totalPages);
+            }
+        } catch (error) {
+            console.error('Error al cargar productos:', error);
+            showNotification('Error al cargar productos', 'error');
+        }
+    },
     
-    return `
-        ${'<i class="fas fa-star"></i>'.repeat(fullStars)}
-        ${hasHalfStar ? '<i class="fas fa-star-half-alt"></i>' : ''}
-        ${'<i class="far fa-star"></i>'.repeat(emptyStars)}
-    `;
-}
-
-// Función para formatear fecha
-function formatDate(dateString) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('es-ES', options);
-}
-
-// Exportar funciones
-export { 
-    getProducts, 
-    getProductReviews, 
-    addProductReview, 
-    displayProductReviews,
-    calculateAverageRating
+    // Renderizar productos
+    renderProducts(products) {
+        const productGrid = document.getElementById('productGrid');
+        if (!productGrid) return;
+        
+        if (!products || products.length === 0) {
+            productGrid.innerHTML = '<p class="no-products">No se encontraron productos.</p>';
+            return;
+        }
+        
+        productGrid.innerHTML = products.map(product => `
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="${product.image || './assets/images/placeholder.svg'}" 
+                         alt="${product.name || 'Producto sin nombre'}"
+                         loading="lazy"
+                         onerror="this.src='./assets/images/placeholder.svg'">
+                    <button class="add-to-cart" data-product-id="${product.id}">
+                        <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="product-info">
+                    <h3>${product.name || 'Producto sin nombre'}</h3>
+                    <p class="product-description">${product.description || 'Sin descripción disponible'}</p>
+                    <div class="product-price">$${(product.price || 0).toLocaleString()}</div>
+                </div>
+            </div>
+        `).join('');
+        
+        // Añadir event listeners a los botones de agregar al carrito
+        this.initCartEventListeners();
+    },
+    
+    // Renderizar paginación
+    renderPagination(currentPage, totalPages) {
+        const paginationContainer = document.getElementById('pagination');
+        if (!paginationContainer) return;
+        
+        let paginationHTML = '';
+        
+        // Botón anterior
+        if (currentPage > 1) {
+            paginationHTML += `<button class="pagination-btn" data-page="${currentPage - 1}">&laquo; Anterior</button>`;
+        }
+        
+        // Páginas
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === currentPage) {
+                paginationHTML += `<button class="pagination-btn active" data-page="${i}">${i}</button>`;
+            } else {
+                paginationHTML += `<button class="pagination-btn" data-page="${i}">${i}</button>`;
+            }
+        }
+        
+        // Botón siguiente
+        if (currentPage < totalPages) {
+            paginationHTML += `<button class="pagination-btn" data-page="${currentPage + 1}">Siguiente &raquo;</button>`;
+        }
+        
+        paginationContainer.innerHTML = paginationHTML;
+        
+        // Añadir event listeners a los botones de paginación
+        document.querySelectorAll('.pagination-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const page = parseInt(e.target.dataset.page);
+                if (page && page !== this.currentPage) {
+                    this.currentPage = page;
+                    this.loadProducts();
+                }
+            });
+        });
+    },
+    
+    // Inicializar event listeners para agregar al carrito
+    initCartEventListeners() {
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const productId = e.target.closest('.add-to-cart').dataset.productId;
+                console.log('Agregando producto al carrito:', productId);
+                
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/products/${productId}`);
+                    if (!response.ok) {
+                        throw new Error('Error al obtener detalles del producto');
+                    }
+                    
+                    const product = await response.json();
+                    CartUtils.addToCart(product);
+                } catch (error) {
+                    console.error('Error al agregar producto al carrito:', error);
+                    showNotification('Error al agregar producto al carrito', 'error');
+                }
+            });
+        });
+    },
+    
+    // Filtrar productos por categoría
+    async filterByCategory(category) {
+        this.currentPage = 1;
+        await this.loadProducts(category);
+    },
+    
+    // Buscar productos
+    async searchProducts(query) {
+        this.currentPage = 1;
+        await this.loadProducts(null, query);
+    }
 };
+
+// Exportar productManager
+export default productManager;

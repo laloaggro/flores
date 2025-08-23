@@ -12,11 +12,14 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
-    <link rel="preload" href="assets/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="assets/css/styles.css">
-    </noscript>
-    <meta name="description" content="Inicia sesión en tu cuenta de Arreglos Florales Victoria para acceder a tu perfil y realizar compras.">
+    
+    <!-- Cargar estilos CSS en el orden correcto -->
+    <link rel="stylesheet" href="assets/css/preflight.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <meta name="description" content="Inicia sesión en Arreglos Victoria Florería. Accede a tu cuenta para gestionar pedidos, lista de deseos y preferencias.">
     <meta name="keywords" content="iniciar sesión, login, cuenta, florería, arreglos florales, Recoleta, Región Metropolitana">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="noindex, follow">
@@ -26,14 +29,15 @@
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/login.html">
     <meta property="og:title" content="Iniciar Sesión - Arreglos Victoria Florería">
     <meta property="og:description" content="Inicia sesión en tu cuenta de Arreglos Florales Victoria para acceder a tu perfil y realizar compras.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="og:image" content="./assets/images/hero-image.jpg">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/login.html">
     <meta property="twitter:title" content="Iniciar Sesión - Arreglos Victoria Florería">
     <meta property="twitter:description" content="Inicia sesión en tu cuenta de Arreglos Florales Victoria para acceder a tu perfil y realizar compras.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
+
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -115,32 +119,26 @@
                         <p>Accede a tu cuenta para continuar</p>
                     </div>
                     
-                    <form id="loginForm" class="auth-form">
-                        <div class="form-group">
-                            <label for="loginEmail">Email</label>
-                            <input type="email" id="loginEmail" name="email" required class="form-input">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="loginPassword">Contraseña</label>
-                            <input type="password" id="loginPassword" name="password" required class="form-input">
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-                        
-                        <div class="divider">
-                            <span>o</span>
-                        </div>
-                        
-                        <div id="googleSignInButton" class="google-signin-button" style="display: none; justify-content: center; margin: 20px 0;">
-                            <!-- El botón de Google se renderizará aquí -->
-                        </div>
-                        
-                        <div class="auth-footer">
-                            <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
-                            <p><a href="index.html">Volver al inicio</a></p>
-                        </div>
-                    </form>
+                    <div class="auth-form">
+                        <h2>Iniciar Sesión</h2>
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="loginEmail">Email</label>
+                                <input type="email" id="loginEmail" name="email" required class="form-input" autocomplete="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Contraseña</label>
+                                <input type="password" id="loginPassword" name="password" required class="form-input" autocomplete="current-password">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                        </form>
+                        <p class="text-center">
+                            ¿No tienes cuenta? <a href="register.html">Regístrate aquí</a>
+                        </p>
+                        <p class="text-center">
+                            <a href="forgot-password.html">¿Olvidaste tu contraseña?</a>
+                        </p>
+                    </div>
                     
                     <div id="loginMessage" class="form-message"></div>
                 </div>
@@ -185,9 +183,15 @@
         </div>
     </footer>
 
-    <script src="assets/js/mobile-menu.js" type="module"></script>
-    <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/login.js" type="module"></script>
+    <!-- Scripts -->
+    <script type="module" src="./assets/js/utils.js"></script>
+    <script type="module" src="./assets/js/auth.js"></script>
+    <script type="module" src="./assets/js/login.js"></script>
+    <script type="module" src="./assets/js/googleAuth.js"></script>
+    <script type="module" src="./assets/js/accessibility.js"></script>
+    <script type="module" src="./assets/js/lazyLoad.js"></script>
+    <script type="module" src="./assets/js/imageOptimizer.js"></script>
+    <script type="module" src="./assets/js/register-sw.js"></script>
+
 </body>
 </html>

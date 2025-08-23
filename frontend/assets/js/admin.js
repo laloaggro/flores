@@ -790,82 +790,61 @@ async function loadOrders() {
     try {
         // Mostrar mensaje de carga
         const tbody = document.getElementById('ordersTableBody');
+        if (!tbody) return;
+        
         tbody.innerHTML = '<tr><td colspan="6">Cargando pedidos...</td></tr>';
         
-        // Simular una llamada a una API de pedidos
-        setTimeout(() => {
-            // Datos de ejemplo de pedidos
-            const orders = [
-                {
-                    id: 1,
-                    customer: 'Juan Pérez',
-                    date: '2025-08-10',
-                    total: 45990,
-                    status: 'Pendiente'
-                },
-                {
-                    id: 2,
-                    customer: 'María González',
-                    date: '2025-08-09',
-                    total: 32500,
-                    status: 'Completado'
-                },
-                {
-                    id: 3,
-                    customer: 'Carlos López',
-                    date: '2025-08-08',
-                    total: 28750,
-                    status: 'Enviado'
-                },
-                {
-                    id: 4,
-                    customer: 'Ana Rodríguez',
-                    date: '2025-08-07',
-                    total: 52300,
-                    status: 'Completado'
-                }
-            ];
+        // Obtener pedidos del backend
+        const response = await fetch('http://localhost:5000/api/orders');
+        
+        if (!response.ok) {
+            throw new Error('Error al cargar los pedidos');
+        }
+        
+        const orders = await response.json();
+        
+        if (orders.length > 0) {
+            tbody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.customerName}</td>
+                    <td>${new Date(order.date).toLocaleDateString('es-CL')}</td>
+                    <td>$${order.total.toLocaleString('es-CL')}</td>
+                    <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
+                    <td>
+                        <button class="btn-icon view-order" data-id="${order.id}" aria-label="Ver pedido ${order.id}" title="Ver">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn-icon edit-order" data-id="${order.id}" aria-label="Editar pedido ${order.id}" title="Editar">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
             
-            if (orders.length > 0) {
-                tbody.innerHTML = orders.map(order => `
-                    <tr>
-                        <td>${order.id}</td>
-                        <td>${order.customer}</td>
-                        <td>${order.date}</td>
-                        <td>$${order.total.toLocaleString('es-CL')}</td>
-                        <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
-                        <td>
-                            <button class="btn-icon view-order" data-id="${order.id}" aria-label="Ver pedido ${order.id}" title="Ver">
-                                <i class="fas fa-eye" aria-hidden="true"></i>
-                            </button>
-                            <button class="btn-icon edit-order" data-id="${order.id}" aria-label="Editar pedido ${order.id}" title="Editar">
-                                <i class="fas fa-edit" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                
-                // Añadir eventos a los botones
-                document.querySelectorAll('.view-order').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const orderId = this.getAttribute('data-id');
-                        viewOrder(orderId);
-                    });
+            // Añadir eventos a los botones
+            document.querySelectorAll('.view-order').forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderId = this.getAttribute('data-id');
+                    viewOrder(orderId);
                 });
-                
-                document.querySelectorAll('.edit-order').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const orderId = this.getAttribute('data-id');
-                        editOrder(orderId);
-                    });
+            });
+            
+            document.querySelectorAll('.edit-order').forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderId = this.getAttribute('data-id');
+                    editOrder(orderId);
                 });
-            } else {
-                tbody.innerHTML = '<tr><td colspan="6">No hay pedidos disponibles</td></tr>';
-            }
-        }, 1000);
+            });
+        } else {
+            tbody.innerHTML = '<tr><td colspan="6">No hay pedidos disponibles</td></tr>';
+        }
     } catch (error) {
         console.error('Error al cargar pedidos:', error);
-        document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="6">Error al cargar pedidos</td></tr>';
+        const tbody = document.getElementById('ordersTableBody');
+        if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="6">Error al cargar pedidos</td></tr>';
+        }
     }
 }
 
@@ -883,7 +862,7 @@ function setupOrderFilter() {
 // Filtrar pedidos por estado
 function filterOrders(status) {
     // En una implementación real, esto haría una llamada a la API con el filtro
-    showMessage(`Filtrando pedidos por estado: ${status === 'all' ? 'Todos' : status}`, 'info');
+    showMessage(`Filtrando pedidos por estado: ${status === '' ? 'Todos' : status}`, 'info');
 }
 
 // Ver detalles de un pedido

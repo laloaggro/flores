@@ -1,5 +1,6 @@
 // profile.js - Manejo de la página de perfil de usuario
 import { initUserMenu } from './auth.js';
+import { formatPrice, getUser } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar menú de usuario
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Verificar si el usuario está logueado
     const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = getUser();
     
     if (!token || !user) {
         // Si no hay token o usuario, redirigir al login
@@ -23,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Cargar datos adicionales del usuario
     loadUserStats();
+    
+    // Cargar pedidos del usuario
+    loadUserOrders(user.id);
 });
 
 // Mostrar información del usuario
@@ -103,7 +107,7 @@ function updateProfile() {
     }
     
     // Obtener usuario actual
-    const user = JSON.parse(localStorage.getItem('user')) || {};
+    const user = getUser() || {};
     
     // Actualizar datos del usuario
     user.name = `${profileFirstName} ${profileLastName}`;
@@ -125,7 +129,71 @@ function setupProfileNavigation() {
     // La navegación se maneja ahora con el script en línea en profile.html
 }
 
-// ... existing code ...
+// Cargar pedidos del usuario
+async function loadUserOrders(userId) {
+    try {
+        const ordersList = document.getElementById('ordersList');
+        if (!ordersList) return;
+        
+        ordersList.innerHTML = '<p>Cargando pedidos...</p>';
+        
+        // En un entorno real, esto sería una llamada a la API
+        const response = await fetch(`http://localhost:5000/api/orders/user/${userId}`);
+        
+        if (!response.ok) {
+            throw new Error('Error al cargar los pedidos');
+        }
+        
+        const orders = await response.json();
+        
+        if (orders.length === 0) {
+            ordersList.innerHTML = '<p>No tienes pedidos aún.</p>';
+            return;
+        }
+        
+        // Mostrar pedidos
+        ordersList.innerHTML = `
+            <div class="orders-container">
+                ${orders.map(order => `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <h3>Pedido #${order.id}</h3>
+                                <p class="order-date">${new Date(order.date).toLocaleDateString('es-CL')}</p>
+                            </div>
+                            <span class="order-status ${order.status.toLowerCase()}">${order.status}</span>
+                        </div>
+                        
+                        <div class="order-items">
+                            ${order.items.map(item => `
+                                <div class="order-item">
+                                    <span>${item.productName}</span>
+                                    <span>${item.quantity} x ${formatPrice(item.price)}</span>
+                                    <span>${formatPrice(item.quantity * item.price)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="order-total">
+                            <strong>Total: ${formatPrice(order.total)}</strong>
+                        </div>
+                        
+                        <div class="order-details">
+                            <p><strong>Dirección de envío:</strong> ${order.shippingAddress}</p>
+                            <p><strong>Método de pago:</strong> ${order.paymentMethod}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } catch (error) {
+        console.error('Error al cargar pedidos:', error);
+        const ordersList = document.getElementById('ordersList');
+        if (ordersList) {
+            ordersList.innerHTML = '<p>Error al cargar los pedidos. Por favor, inténtalo nuevamente.</p>';
+        }
+    }
+}
 
 // Cargar estadísticas del usuario
 function loadUserStats() {

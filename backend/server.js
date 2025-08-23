@@ -63,6 +63,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 const contactRoutes = require('./routes/contact');
 const productsRouter = require('./routes/products');
 const usersRouter = require('./routes/users');
+const ordersRouter = require('./routes/orders');
 
 app.use('/api/contact', (req, res, next) => {
     logMessage(`Ruta /api/contact accedida con método ${req.method}`);
@@ -71,6 +72,12 @@ app.use('/api/contact', (req, res, next) => {
 
 app.use('/api/products', productsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/orders', ordersRouter);
+
+// Ruta de prueba para verificar que las rutas de usuarios estén montadas
+app.get('/api/users/test', (req, res) => {
+    res.status(200).json({ message: 'Rutas de usuarios montadas correctamente' });
+});
 
 // Ruta para servir el index.html
 app.get('/', (req, res) => {

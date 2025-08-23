@@ -75,89 +75,67 @@ const checkBackendConnectivity = async () => {
 };
 
 // Función para mostrar notificaciones
-function showNotification(message, type = 'info') {
-    // Registrar el error en la consola si es de tipo error
-    if (type === 'error') {
-        console.error('Error notification:', message);
-    } else if (type === 'warning') {
-        console.warn('Warning notification:', message);
-    } else {
-        console.log('Info notification:', message);
-    }
-    
-    // Crear el contenedor de notificaciones si no existe
-    let notificationContainer = document.getElementById('notificationContainer');
-    if (!notificationContainer) {
-        notificationContainer = document.createElement('div');
-        notificationContainer.id = 'notificationContainer';
-        notificationContainer.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            width: 300px;
-        `;
-        document.body.appendChild(notificationContainer);
-    }
-    
-    // Crear la notificación
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.style.cssText = `
-        background: ${type === 'error' ? '#f44336' : type === 'success' ? '#4caf50' : type === 'warning' ? '#ff9800' : '#2196f3'};
-        color: white;
-        padding: 16px;
-        margin-bottom: 10px;
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        position: relative;
-        animation: notificationSlideIn 0.3s ease-out;
-        font-family: 'Poppins', sans-serif;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+const showNotification = (message, type = 'info') => {
+  // Crear contenedor de notificaciones si no existe
+  let notificationContainer = document.getElementById('notification-container');
+  if (!notificationContainer) {
+    notificationContainer = document.createElement('div');
+    notificationContainer.id = 'notification-container';
+    notificationContainer.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     `;
-    
-    // Crear el contenido de la notificación
-    const messageDiv = document.createElement('div');
-    messageDiv.textContent = message;
-    notification.appendChild(messageDiv);
-    
-    // Añadir botón de cierre
-    const closeBtn = document.createElement('button');
-    closeBtn.innerHTML = '&times;';
-    closeBtn.style.cssText = `
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        background: none;
-        border: none;
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 0;
-        width: 20px;
-        height: 20px;
-        line-height: 18px;
-        text-align: center;
-    `;
-    closeBtn.onclick = () => {
-        notification.remove();
-    };
-    notification.appendChild(closeBtn);
-    
-    // Añadir la notificación al contenedor
-    notificationContainer.appendChild(notification);
-    
-    // Eliminar automáticamente después de 5 segundos
+    document.body.appendChild(notificationContainer);
+  }
+  
+  // Crear notificación
+  const notification = document.createElement('div');
+  notification.className = `notification notification-${type}`;
+  notification.style.cssText = `
+    background: ${type === 'error' ? '#e53e3e' : type === 'success' ? '#38a169' : type === 'warning' ? '#dd6b20' : '#3182ce'};
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease-in-out;
+  `;
+  
+  notification.innerHTML = `
+    <div style="display: flex; align-items: flex-start; gap: 10px;">
+      <span style="font-size: 1.2em;">
+        ${type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️'}
+      </span>
+      <span>${message}</span>
+    </div>
+  `;
+  
+  notificationContainer.appendChild(notification);
+  
+  // Animar entrada
+  setTimeout(() => {
+    notification.style.opacity = '1';
+    notification.style.transform = 'translateY(0)';
+  }, 10);
+  
+  // Eliminar notificación después de 5 segundos
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    notification.style.transform = 'translateY(-20px)';
     setTimeout(() => {
-        if (notification.parentNode) {
-            notification.remove();
-        }
-    }, 5000);
-    
-    return notification;
-}
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 5000);
+};
 
 // Formatear precio
 const formatPrice = (price) => {
@@ -179,17 +157,27 @@ function updateCartCount() {
   });
 }
 
-// Validar email
+// Función para validar email
 const validateEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
 };
 
-// Validar teléfono
+// Función para validar teléfono
 const validatePhone = (phone) => {
-  // Aceptar formatos chilenos: +56 9 1234 5678, +56912345678, 9 1234 5678, etc.
-  const re = /^(\+56)?[\s\-]?[9\d][\s\-]?\d{4}[\s\-]?\d{4}$/;
-  return re.test(phone.replace(/\s+/g, ' ').trim());
+  const re = /^[+]?[0-9\s\-()]{9,15}$/;
+  return re.test(phone);
+};
+
+// Función para validar contraseña
+const validatePassword = (password) => {
+  // Al menos 6 caracteres
+  return password.length >= 6;
+};
+
+// Función para validar campo requerido
+const validateRequired = (value) => {
+  return value && value.trim().length > 0;
 };
 
 // Verificar si el usuario está autenticado
@@ -228,18 +216,24 @@ const isAdmin = () => {
   return user.role === 'admin';
 };
 
-// Función para obtener el usuario actual
-const getUser = () => {
-  if (!isAuthenticated()) return null;
-  const userStr = localStorage.getItem('user');
-  if (!userStr) return null;
-  
-  try {
-    return JSON.parse(userStr);
-  } catch (e) {
-    return null;
-  }
-};
+// Función para obtener información del usuario actual
+function getUser() {
+    const token = getAuthToken();
+    if (!token) return null;
+    
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return {
+            id: payload.userId,
+            email: payload.email,
+            name: payload.name,
+            role: payload.role
+        };
+    } catch (error) {
+        console.error('Error al decodificar el token:', error);
+        return null;
+    }
+}
 
 // Requerir autenticación
 const requireAuth = () => {
@@ -335,22 +329,15 @@ const logout = () => {
   localStorage.removeItem('user');
 };
 
-// Exportar funciones y constantes
-export { 
-  showNotification, 
-  formatPrice, 
-  updateCartCount, 
+// Exportar funciones
+export {
+  API_BASE_URL,
+  checkBackendConnectivity,
+  updateCartCount,
+  showNotification,
+  formatPrice,
   validateEmail,
   validatePhone,
-  isAuthenticated, 
-  isAdmin, 
-  getUser, 
-  requireAuth, 
-  requireAdmin, 
-  getAuthToken, 
-  handleNetworkError, 
-  apiRequest,
-  logout,
-  API_BASE_URL,
-  checkBackendConnectivity
+  validatePassword,
+  validateRequired
 };

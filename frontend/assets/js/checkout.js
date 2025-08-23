@@ -83,28 +83,120 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Procesar pago (simulado)
-  function processPayment(paymentData) {
+  async function processPayment(paymentData) {
     // Mostrar mensaje de procesamiento
     showNotification('Procesando pago...', 'info');
     
-    // Simular proceso de pago (en un entorno real, aquí se haría la llamada al API de pago)
-    setTimeout(() => {
-      // Simular éxito en el pago
-      showNotification('¡Pago procesado exitosamente!', 'success');
+    try {
+      // Obtener datos del carrito y usuario
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const user = getUser();
       
-      // Limpiar carrito
-      localStorage.removeItem('cart');
-      updateCartCount();
+      if (cart.length === 0) {
+        throw new Error('El carrito está vacío');
+      }
       
-      // Mostrar información de depuración
-      console.log('Pago procesado para el usuario:', getUser());
-      console.log('Datos de pago:', paymentData);
+      // Calcular total
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       
-      // Redirigir a página de confirmación o inicio después de 2 segundos
+      // Obtener datos de envío del formulario (si existe)
+      const shippingFirstName = document.getElementById('shippingFirstName')?.value || '';
+      const shippingLastName = document.getElementById('shippingLastName')?.value || '';
+      const shippingAddress = document.getElementById('shippingAddress')?.value || paymentData.billingAddress;
+      const shippingPhone = document.getElementById('shippingPhone')?.value || '';
+      const shippingEmail = document.getElementById('shippingEmail')?.value || user.email;
+      
+      // Crear pedido
+      const orderData = {
+        userId: user.id,
+        customerName: user.name,
+        customerEmail: shippingEmail,
+        items: cart.map(item => ({
+          productId: item.id,
+          productName: item.name,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        total: total,
+        shippingAddress: shippingAddress,
+        paymentMethod: 'Tarjeta de crédito'
+      };
+      
+      // Enviar pedido al backend
+      const response = await fetch('http://localhost:5000/api/orders/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderData)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al crear el pedido');
+      }
+      
+      const order = await response.json();
+      
+      // Simular proceso de pago (en un entorno real, aquí se haría la llamada al API de pago)
       setTimeout(() => {
-        window.location.href = 'index.html';
+        // Simular éxito en el pago
+        showNotification('¡Pago procesado exitosamente!', 'success');
+        
+        // Limpiar carrito
+        localStorage.removeItem('cart');
+        updateCartCount();
+        
+        // Mostrar información de depuración
+        console.log('Pago procesado para el usuario:', user);
+        console.log('Datos de pago:', paymentData);
+        console.log('Pedido creado:', order);
+        
+        // Mostrar número de pedido en la página de confirmación
+        const orderNumberElement = document.getElementById('orderNumber');
+        if (orderNumberElement) {
+          orderNumberElement.innerHTML = `Número de pedido: <strong>#${order.id}</strong>`;
+        }
+        
+        // Mostrar resumen del pedido en la página de confirmación
+        const orderItemsElement = document.getElementById('orderItems');
+        if (orderItemsElement) {
+          orderItemsElement.innerHTML = order.items.map(item => `
+            <div class="order-item">
+              <div class="order-item-details">
+                <h4>${item.productName}</h4>
+                <p>${item.quantity} x ${formatPrice(item.price)}</p>
+              </div>
+              <div class="order-item-total">
+                ${formatPrice(item.quantity * item.price)}
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        // Mostrar total pagado
+        const paidAmountElement = document.getElementById('paidAmount');
+        if (paidAmountElement) {
+          paidAmountElement.textContent = formatPrice(order.total);
+        }
+        
+        // Cambiar a la pantalla de confirmación
+        document.querySelectorAll('.checkout-step').forEach(step => {
+          step.classList.remove('active');
+        });
+        document.getElementById('confirmation-step').classList.add('active');
+        
+        // Actualizar indicador de pasos
+        document.querySelectorAll('.step').forEach(step => {
+          step.classList.remove('active', 'completed');
+        });
+        document.querySelector('.step[data-step="confirmation"]').classList.add('active', 'completed');
+        document.querySelector('.step[data-step="payment"]').classList.add('completed');
       }, 2000);
-    }, 2000);
+    } catch (error) {
+      console.error('Error al procesar el pago:', error);
+      showNotification(`Error al procesar el pago: ${error.message}`, 'error');
+    }
   }
   
   // Inicializar contador del carrito

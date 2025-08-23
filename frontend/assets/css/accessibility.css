@@ -1,0 +1,151 @@
+/* accessibility.css - Estilos para mejorar la accesibilidad */
+
+/* Enfoque mejorado para usuarios de teclado */
+:focus {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+}
+
+.focus-visible {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Saltar enlaces */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #005fcc;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Texto solo para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Contraste mejorado */
+.high-contrast {
+  contrast: 1.2;
+}
+
+/* Reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dark-bg: #1a1a1a;
+    --dark-text: #ffffff;
+    --dark-border: #444444;
+    --dark-link: #4da6ff;
+  }
+  
+  body {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+  }
+  
+  a {
+    color: var(--dark-link);
+  }
+  
+  header {
+    background-color: #2d2d2d;
+  }
+  
+  nav ul li a {
+    color: var(--dark-text);
+  }
+  
+  .product-card {
+    background-color: #2a2a2a;
+    border-color: var(--dark-border);
+  }
+  
+  .btn-primary {
+    background-color: #0056b3;
+  }
+  
+  footer {
+    background-color: #2d2d2d;
+    color: var(--dark-text);
+  }
+}
+
+/* Tamaños de fuente aumentados */
+@media (prefers-font-size: large) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (prefers-font-size: extra-large) {
+  html {
+    font-size: 20px;
+  }
+}
+
+/* Espaciado aumentado */
+@media (prefers-spacing: large) {
+  * {
+    line-height: 1.6;
+  }
+  
+  p {
+    margin-bottom: 1.5em;
+  }
+}
+
+/* Botones más grandes para usuarios con discapacidad motriz */
+@media (prefers-button-size: large) {
+  .btn {
+    padding: 15px 25px;
+    font-size: 1.1em;
+  }
+}
+
+/* Invertir colores */
+@media (prefers-contrast: high) {
+  img {
+    filter: contrast(1.2) saturate(1.1);
+  }
+  
+  body {
+    background-color: #000;
+    color: #fff;
+  }
+}

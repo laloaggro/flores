@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://arreglos-victoria.onrender.com/sitemap.xml

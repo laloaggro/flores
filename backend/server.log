@@ -2251,3 +2251,148 @@ Error: listen EADDRINUSE: address already in use :::5000
 [2025-08-22T22:40:42.667Z] [2025-08-22T22:40:42.667Z] GET /api/products/stats - IP: ::1
 [2025-08-22T22:40:44.418Z] [2025-08-22T22:40:44.418Z] GET /api/products - IP: ::1
 [2025-08-22T22:40:53.680Z] [2025-08-22T22:40:53.680Z] GET /api/users - IP: ::1
+[2025-08-23T00:01:58.835Z] ❌ Error no capturado: listen EADDRINUSE: address already in use :::5000
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/home/laloaggro/Proyectos/flores-1/backend/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/home/laloaggro/Proyectos/flores-1/backend/server.js:81:5)
+    at Module._compile (node:internal/modules/cjs/loader:1688:14)
+    at Object..js (node:internal/modules/cjs/loader:1820:10)
+    at Module.load (node:internal/modules/cjs/loader:1423:32)
+    at Function._load (node:internal/modules/cjs/loader:1246:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+[2025-08-23T00:02:00.549Z] Servidor de correo configurado correctamente
+[2025-08-23T00:03:37.101Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:03:38.850Z] Servidor de correo configurado correctamente
+[2025-08-23T00:04:14.102Z] [2025-08-23T00:04:14.102Z] HEAD /api/users/test - IP: ::1
+[2025-08-23T00:05:16.670Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:05:17.767Z] Servidor de correo configurado correctamente
+[2025-08-23T00:05:35.982Z] [2025-08-23T00:05:35.982Z] GET /api/users/google-login-test - IP: ::1
+[2025-08-23T00:05:48.219Z] [2025-08-23T00:05:48.219Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:07:47.669Z] [2025-08-23T00:07:47.669Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:08:14.973Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:08:16.763Z] Servidor de correo configurado correctamente
+[2025-08-23T00:08:35.786Z] [2025-08-23T00:08:35.786Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:08:38.724Z] [2025-08-23T00:08:38.724Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:09:28.464Z] ❌ Error no capturado: listen EADDRINUSE: address already in use :::5000
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/home/laloaggro/Proyectos/flores-1/backend/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/home/laloaggro/Proyectos/flores-1/backend/server.js:86:5)
+    at Module._compile (node:internal/modules/cjs/loader:1688:14)
+    at Object..js (node:internal/modules/cjs/loader:1820:10)
+    at Module.load (node:internal/modules/cjs/loader:1423:32)
+    at Function._load (node:internal/modules/cjs/loader:1246:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+[2025-08-23T00:09:29.672Z] Servidor de correo configurado correctamente
+[2025-08-23T00:09:59.434Z] [2025-08-23T00:09:59.434Z] HEAD / - IP: ::1
+[2025-08-23T00:10:12.368Z] [2025-08-23T00:10:12.368Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:11:33.643Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:11:34.704Z] Servidor de correo configurado correctamente
+[2025-08-23T00:12:08.616Z] [2025-08-23T00:12:08.614Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:12:12.570Z] [2025-08-23T00:12:12.570Z] POST /api/users/google-login-test-simple - IP: ::1
+[2025-08-23T00:12:20.325Z] [2025-08-23T00:12:20.325Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:13:21.284Z] [2025-08-23T00:13:21.284Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:14:22.437Z] [2025-08-23T00:14:22.437Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:14:32.359Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:14:33.393Z] Servidor de correo configurado correctamente
+[2025-08-23T00:15:36.981Z] [2025-08-23T00:15:36.981Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:18:31.316Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:18:32.409Z] Servidor de correo configurado correctamente
+[2025-08-23T00:19:04.001Z] [2025-08-23T00:19:04.001Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:31:51.655Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:31:53.155Z] Servidor de correo configurado correctamente
+[2025-08-23T00:32:21.911Z] [2025-08-23T00:32:21.911Z] HEAD /api/products - IP: ::1
+[2025-08-23T00:32:27.182Z] [2025-08-23T00:32:27.182Z] GET /api/products - IP: ::1
+[2025-08-23T00:32:33.565Z] [2025-08-23T00:32:33.565Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T00:32:59.856Z] [2025-08-23T00:32:59.856Z] GET /api/products - IP: ::1
+[2025-08-23T00:39:43.840Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:39:45.078Z] Servidor de correo configurado correctamente
+[2025-08-23T00:40:02.876Z] [2025-08-23T00:40:02.876Z] GET /api/products - IP: ::1
+[2025-08-23T00:40:13.288Z] [2025-08-23T00:40:13.288Z] HEAD /api/orders - IP: ::1
+[2025-08-23T00:40:17.692Z] [2025-08-23T00:40:17.692Z] GET /api/orders/ - IP: ::1
+[2025-08-23T00:40:48.929Z] [2025-08-23T00:40:48.929Z] GET /api/orders/ - IP: ::1
+[2025-08-23T00:40:53.649Z] [2025-08-23T00:40:53.648Z] GET /api/orders - IP: ::1
+[2025-08-23T00:41:12.756Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-23T00:41:13.860Z] Servidor de correo configurado correctamente
+[2025-08-23T00:41:41.733Z] [2025-08-23T00:41:41.732Z] GET /api/orders - IP: ::1
+[2025-08-23T00:42:07.208Z] [2025-08-23T00:42:07.208Z] GET /api/orders - IP: ::1
+[2025-08-23T00:43:25.452Z] [2025-08-23T00:43:25.452Z] POST /api/orders/create - IP: ::1
+[2025-08-23T00:43:30.309Z] [2025-08-23T00:43:30.309Z] GET /api/orders - IP: ::1
+[2025-08-23T00:43:55.451Z] [2025-08-23T00:43:55.451Z] GET /api/orders - IP: ::1
+[2025-08-23T00:44:27.618Z] [2025-08-23T00:44:27.618Z] GET /api/orders - IP: ::1
+[2025-08-23T00:44:33.055Z] [2025-08-23T00:44:33.055Z] GET /api/orders/user/4 - IP: ::1
+[2025-08-23T00:44:38.748Z] [2025-08-23T00:44:38.748Z] PUT /api/orders/3/status - IP: ::1
+[2025-08-23T00:44:43.900Z] [2025-08-23T00:44:43.900Z] GET /api/orders/3 - IP: ::1
+[2025-08-23T00:45:09.431Z] [2025-08-23T00:45:09.431Z] GET /api/orders/3 - IP: ::1
+[2025-08-23T00:45:35.502Z] [2025-08-23T00:45:35.502Z] GET /api/orders/3 - IP: ::1
+[2025-08-23T00:46:11.597Z] [2025-08-23T00:46:11.597Z] GET /api/orders/3 - IP: ::1
+[2025-08-23T00:48:14.330Z] [2025-08-23T00:48:14.329Z] GET /api/products - IP: ::1
+[2025-08-23T00:48:16.670Z] [2025-08-23T00:48:16.670Z] GET /api/products - IP: ::1
+[2025-08-23T00:48:33.071Z] [2025-08-23T00:48:33.071Z] GET /api/products - IP: ::1
+[2025-08-23T00:54:56.945Z] [2025-08-23T00:54:56.945Z] GET /api/orders/user/4 - IP: ::1
+[2025-08-23T01:14:46.008Z] [2025-08-23T01:14:46.008Z] GET /api/cart/count - IP: ::1
+[2025-08-23T01:14:47.706Z] [2025-08-23T01:14:47.706Z] GET /api/cart/count - IP: ::1
+[2025-08-23T01:14:55.868Z] [2025-08-23T01:14:55.868Z] GET /api/products - IP: ::1
+[2025-08-23T01:19:11.648Z] [2025-08-23T01:19:11.648Z] GET /api/cart/count - IP: ::1
+[2025-08-23T01:19:12.913Z] [2025-08-23T01:19:12.913Z] GET /api/cart/count - IP: ::1
+[2025-08-23T01:19:13.710Z] [2025-08-23T01:19:13.710Z] GET /api/products - IP: ::1
+[2025-08-23T01:19:21.947Z] [2025-08-23T01:19:21.947Z] GET /api/cart/count - IP: ::1
+[2025-08-23T01:19:22.959Z] [2025-08-23T01:19:22.958Z] GET /api/cart/count - IP: ::1
+[2025-08-23T01:21:08.128Z] [2025-08-23T01:21:08.128Z] POST /api/users/google-login - IP: ::1
+[2025-08-23T02:09:58.892Z] [2025-08-23T02:09:58.892Z] GET /api/products - IP: ::1
+[2025-08-23T02:15:24.588Z] [2025-08-23T02:15:24.588Z] GET / - IP: ::1
+[2025-08-23T02:15:24.670Z] [2025-08-23T02:15:24.670Z] GET /assets/css/preflight.css - IP: ::1
+[2025-08-23T02:15:24.671Z] [2025-08-23T02:15:24.671Z] GET /assets/css/theme.css - IP: ::1
+[2025-08-23T02:15:24.672Z] [2025-08-23T02:15:24.672Z] GET /assets/css/index.css - IP: ::1
+[2025-08-23T02:15:24.673Z] [2025-08-23T02:15:24.673Z] GET /assets/css/styles.css - IP: ::1
+[2025-08-23T02:15:24.674Z] [2025-08-23T02:15:24.674Z] GET /assets/js/utils.js - IP: ::1
+[2025-08-23T02:15:24.675Z] [2025-08-23T02:15:24.675Z] GET /assets/js/auth.js - IP: ::1
+[2025-08-23T02:15:24.695Z] [2025-08-23T02:15:24.695Z] GET /assets/js/cartUtils.js - IP: ::1
+[2025-08-23T02:15:24.696Z] [2025-08-23T02:15:24.696Z] GET /assets/js/productManager.js - IP: ::1
+[2025-08-23T02:15:24.699Z] [2025-08-23T02:15:24.699Z] GET /assets/js/homeProducts.js - IP: ::1
+[2025-08-23T02:15:24.699Z] [2025-08-23T02:15:24.699Z] GET /assets/js/cart.js - IP: ::1
+[2025-08-23T02:15:24.701Z] [2025-08-23T02:15:24.701Z] GET /assets/js/home.js - IP: ::1
+[2025-08-23T02:15:24.702Z] [2025-08-23T02:15:24.702Z] GET /assets/js/accessibility.js - IP: ::1
+[2025-08-23T02:15:24.723Z] [2025-08-23T02:15:24.723Z] GET /assets/js/lazyLoad.js - IP: ::1
+[2025-08-23T02:15:24.724Z] [2025-08-23T02:15:24.724Z] GET /assets/js/imageOptimizer.js - IP: ::1
+[2025-08-23T02:15:24.726Z] [2025-08-23T02:15:24.726Z] GET /assets/js/register-sw.js - IP: ::1
+[2025-08-23T02:15:24.727Z] [2025-08-23T02:15:24.727Z] GET /assets/images/logo.png - IP: ::1
+[2025-08-23T02:15:24.778Z] [2025-08-23T02:15:24.778Z] GET /assets/images/hero-image.jpg - IP: ::1
+[2025-08-23T02:15:24.781Z] [2025-08-23T02:15:24.781Z] GET /assets/images/categories/arrangements.jpg - IP: ::1
+[2025-08-23T02:15:24.782Z] [2025-08-23T02:15:24.782Z] GET /assets/images/categories/bouquets.jpg - IP: ::1
+[2025-08-23T02:15:24.782Z] [2025-08-23T02:15:24.782Z] GET /assets/images/categories/plants.jpg - IP: ::1
+[2025-08-23T02:15:24.783Z] [2025-08-23T02:15:24.783Z] GET /assets/images/categories/accessories.jpg - IP: ::1
+[2025-08-23T02:15:24.783Z] [2025-08-23T02:15:24.783Z] GET /assets/images/about-florist.jpg - IP: ::1
+[2025-08-23T02:15:24.845Z] [2025-08-23T02:15:24.845Z] GET /components/Cart.js - IP: ::1
+[2025-08-23T02:15:24.892Z] [2025-08-23T02:15:24.892Z] GET /assets/images/placeholder.svg - IP: ::1
+[2025-08-23T02:15:25.369Z] [2025-08-23T02:15:25.369Z] GET /assets/images/favicon.ico - IP: ::1
+[2025-08-23T02:15:25.375Z] [2025-08-23T02:15:25.375Z] GET /service-worker.js - IP: ::1
+[2025-08-23T02:15:25.398Z] [2025-08-23T02:15:25.398Z] GET /assets/images/favicon-32x32.png - IP: ::1
+[2025-08-23T02:15:25.427Z] [2025-08-23T02:15:25.427Z] GET / - IP: ::1
+[2025-08-23T02:15:25.430Z] [2025-08-23T02:15:25.430Z] GET /frontend/ - IP: ::1
+[2025-08-23T02:15:25.432Z] [2025-08-23T02:15:25.432Z] GET /frontend/index.html - IP: ::1
+[2025-08-23T02:15:25.432Z] [2025-08-23T02:15:25.432Z] GET /assets/images/favicon-16x16.png - IP: ::1
+[2025-08-23T02:15:25.443Z] [2025-08-23T02:15:25.443Z] GET /frontend/products.html - IP: ::1
+[2025-08-23T02:31:09.791Z] [2025-08-23T02:31:09.791Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:40:48.258Z] [2025-08-23T02:40:48.258Z] GET /api/products/442 - IP: ::1
+[2025-08-23T02:40:48.852Z] [2025-08-23T02:40:48.852Z] GET /api/products/442 - IP: ::1
+[2025-08-23T02:40:49.028Z] [2025-08-23T02:40:49.028Z] GET /api/products/442 - IP: ::1
+[2025-08-23T02:40:49.177Z] [2025-08-23T02:40:49.177Z] GET /api/products/442 - IP: ::1
+[2025-08-23T02:40:49.344Z] [2025-08-23T02:40:49.344Z] GET /api/products/442 - IP: ::1
+[2025-08-23T02:40:49.493Z] [2025-08-23T02:40:49.493Z] GET /api/products/442 - IP: ::1
+[2025-08-23T02:40:49.643Z] [2025-08-23T02:40:49.643Z] GET /api/products/442 - IP: ::1
+[2025-08-23T02:40:49.797Z] [2025-08-23T02:40:49.797Z] GET /api/products/442 - IP: ::1
+[2025-08-23T02:40:59.784Z] [2025-08-23T02:40:59.783Z] GET /api/products - IP: ::1
+[2025-08-23T02:41:09.552Z] [2025-08-23T02:41:09.552Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:41:38.043Z] [2025-08-23T02:41:38.043Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:41:54.486Z] [2025-08-23T02:41:54.486Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:41:57.371Z] [2025-08-23T02:41:57.371Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:42:16.422Z] [2025-08-23T02:42:16.422Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:45:41.147Z] [2025-08-23T02:45:41.147Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:49:46.480Z] [2025-08-23T02:49:46.480Z] GET /api/products?limit=4 - IP: ::1
+[2025-08-23T02:49:50.512Z] [2025-08-23T02:49:50.512Z] GET /api/products?limit=4 - IP: ::1

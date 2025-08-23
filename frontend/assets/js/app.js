@@ -104,7 +104,7 @@ function renderCartItems() {
         cartItemsHTML += `
             <div class="cart-item" data-id="${item.id}">
                 <div class="item-image">
-                    <img src="${item.image || 'https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}" alt="${item.name}">
+                    <img src="${item.image || './assets/images/placeholder.svg'}" alt="${item.name}">
                 </div>
                 <div class="item-info">
                     <h4>${item.name}</h4>
@@ -778,9 +778,16 @@ async function loadProducts() {
             const productsHTML = products.map(product => `
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="${product.image || 'https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}" 
-                             alt="${product.name}" 
-                             onerror="this.src='https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'">
+                        <img src="${product.image || './assets/images/placeholder.svg'}" 
+                             alt="${product.name || 'Producto sin nombre'}"
+                             loading="lazy"
+                             itemprop="image"
+                             width="300"
+                             height="200"
+                             decoding="async"
+                             fetchpriority="auto"
+                             onerror="this.src='./assets/images/placeholder.svg'">
+
                     </div>
                     <div class="product-info">
                         <h3>${product.name}</h3>
@@ -899,3 +906,9 @@ window.addEventListener('load', function() {
         checkAndAttachFormListener();
     }, 100);
 });
+
+// Función para manejar el error de carga de imágenes
+function handleImageError(imgElement) {
+  imgElement.src = './assets/images/placeholder.svg';
+
+}

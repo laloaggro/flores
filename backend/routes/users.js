@@ -270,6 +270,12 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Ruta de prueba simple
+router.post('/google-login-test-simple', (req, res) => {
+  console.log('Endpoint de prueba simple alcanzado');
+  res.json({ message: 'OK', received: req.body });
+});
+
 // Ruta para iniciar sesión con Google
 router.post('/google-login', async (req, res) => {
   try {
@@ -282,6 +288,8 @@ router.post('/google-login', async (req, res) => {
       });
     }
     
+    console.log('Datos recibidos para Google login:', { googleId, email, name, imageUrl });
+    
     // Buscar usuario por email o googleId
     let user = await new Promise((resolve, reject) => {
       db.get(
@@ -289,8 +297,10 @@ router.post('/google-login', async (req, res) => {
         [email, googleId], 
         (err, row) => {
           if (err) {
+            console.error('Error al buscar usuario:', err.message);
             reject(err);
           } else {
+            console.log('Usuario encontrado:', row);
             resolve(row);
           }
         }
@@ -299,15 +309,18 @@ router.post('/google-login', async (req, res) => {
     
     // Si no existe el usuario, crear uno nuevo
     if (!user) {
+      console.log('Creando nuevo usuario...');
       const newUser = await new Promise((resolve, reject) => {
         const stmt = db.prepare(
-          `INSERT INTO users (name, email, google_id, role) VALUES (?, ?, ?, ?)`
+          `INSERT INTO users (name, email, google_id, role, image_url) VALUES (?, ?, ?, ?, ?)`
         );
         
-        stmt.run([name, email, googleId, 'user'], function(err) {
+        stmt.run([name, email, googleId, 'user', imageUrl || null], function(err) {
           if (err) {
+            console.error('Error al crear usuario:', err.message);
             reject(err);
           } else {
+            console.log('Usuario creado con ID:', this.lastID);
             resolve({
               id: this.lastID,
               name,
@@ -323,20 +336,63 @@ router.post('/google-login', async (req, res) => {
       user = newUser;
     } else if (!user.google_id) {
       // Si el usuario existe pero no tiene google_id, actualizarlo
+      console.log('Actualizando usuario existente sin google_id...');
       await new Promise((resolve, reject) => {
         db.run(
-          `UPDATE users SET google_id = ? WHERE id = ?`,
-          [googleId, user.id],
+          `UPDATE users SET google_id = ?, image_url = ? WHERE id = ?`,
+          [googleId, imageUrl || null, user.id],
           (err) => {
             if (err) {
+              console.error('Error al actualizar google_id:', err.message);
               reject(err);
             } else {
+              console.log('google_id actualizado correctamente');
+              resolve();
+            }
+          }
+        );
+      });
+    } else {
+      // Si el usuario ya existe y tiene google_id, actualizar su información
+      console.log('Actualizando información del usuario existente...');
+      await new Promise((resolve, reject) => {
+        db.run(
+          `UPDATE users SET name = ?, email = ?, image_url = ? WHERE id = ?`,
+          [name, email, imageUrl || null, user.id],
+          (err) => {
+            if (err) {
+              console.error('Error al actualizar información del usuario:', err.message);
+              reject(err);
+            } else {
+              console.log('Información del usuario actualizada correctamente');
               resolve();
             }
           }
         );
       });
     }
+    
+    // Registrar el inicio de sesión en la tabla de logs
+    await new Promise((resolve, reject) => {
+      const stmt = db.prepare(
+        `INSERT INTO login_logs (user_id, login_method, login_time, ip_address) VALUES (?, ?, ?, ?)`
+      );
+      
+      // Obtener la IP del cliente
+      const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      
+      stmt.run([user.id || newUser.id, 'google', new Date().toISOString(), ipAddress], function(err) {
+        if (err) {
+          console.error('Error al registrar login:', err.message);
+          reject(err);
+        } else {
+          console.log('Login registrado con ID:', this.lastID);
+          resolve();
+        }
+      });
+      
+      stmt.finalize();
+    });
     
     // Generar token JWT
     const jwtSecret = process.env.JWT_SECRET;
@@ -345,6 +401,7 @@ router.post('/google-login', async (req, res) => {
       return res.status(500).json({ error: 'Error de configuración del servidor' });
     }
     
+    console.log('Generando token JWT...');
     const token = jwt.sign(
       { 
         id: user.id, 
@@ -356,15 +413,28 @@ router.post('/google-login', async (req, res) => {
       { expiresIn: '24h' }
     );
     
+    console.log('Token generado exitosamente');
+    
     res.json({
       message: 'Inicio de sesión con Google exitoso',
-      user,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        imageUrl: imageUrl
+      },
       token
     });
   } catch (error) {
-    console.error('Error al iniciar sesión con Google:', error.message);
-    res.status(500).json({ error: 'Error al iniciar sesión con Google' });
+    console.error('Error detallado al iniciar sesión con Google:', error);
+    res.status(500).json({ error: 'Error al iniciar sesión con Google: ' + error.message });
   }
+});
+
+// Ruta de prueba para verificar que el endpoint funciona
+router.get('/google-login-test', (req, res) => {
+  res.status(200).json({ message: 'Endpoint de Google login accesible' });
 });
 
 // Ruta para obtener el perfil del usuario (verificación de token)
@@ -520,6 +590,48 @@ router.delete('/:id', authenticateToken, isAdmin, (req, res) => {
     }
     
     res.json({ message: 'Usuario eliminado exitosamente' });
+  });
+});
+
+// Endpoint para obtener registros de inicio de sesión (solo para administradores)
+router.get('/login-logs', authenticateToken, isAdmin, (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const offset = (page - 1) * limit;
+  
+  db.all(`
+    SELECT 
+      ll.id,
+      ll.user_id,
+      u.name as user_name,
+      u.email as user_email,
+      ll.login_method,
+      ll.login_time,
+      ll.ip_address
+    FROM login_logs ll
+    JOIN users u ON ll.user_id = u.id
+    ORDER BY ll.login_time DESC
+    LIMIT ? OFFSET ?
+  `, [parseInt(limit), parseInt(offset)], (err, rows) => {
+    if (err) {
+      console.error('Error al obtener registros de login:', err.message);
+      return res.status(500).json({ error: 'Error al obtener registros de inicio de sesión' });
+    }
+    
+    // Obtener el total de registros
+    db.get('SELECT COUNT(*) as total FROM login_logs', (err, countResult) => {
+      if (err) {
+        console.error('Error al obtener conteo de registros:', err.message);
+        return res.status(500).json({ error: 'Error al obtener conteo de registros' });
+      }
+      
+      res.json({
+        logs: rows,
+        total: countResult.total,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        totalPages: Math.ceil(countResult.total / parseInt(limit))
+      });
+    });
   });
 });
 

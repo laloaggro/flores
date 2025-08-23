@@ -1,216 +1,125 @@
-import { API_BASE_URL, formatPrice, showNotification } from './utils.js';
+// errorHandler.js - Manejo centralizado de errores
 
-// Función para cargar y mostrar productos en la página principal
-async function loadHomeProducts() {
-  const productGrid = document.getElementById('products');
-  
-  if (!productGrid) {
-    console.error('No se encontró el contenedor de productos');
-    return;
-  }
+/**
+ * Maneja los errores mostrando una notificación al usuario
+ * @param {Error} error - El objeto de error
+ * @param {string} context - Contexto de la operación que falló
+ */
+function handleError(error, context) {
+    console.error(`Error al ${context}:`, error);
+    showNotification(`Error al ${context}`, 'error');
+}
 
-  try {
-    console.log('Cargando productos...');
-    const response = await fetch(`${API_BASE_URL}/api/products?limit=8`);
+export default handleError;
+// ProductCard.js - Componente unificado para mostrar productos
+import { API_BASE_URL } from '../utils.js';
+
+/**
+ * Genera el HTML para una tarjeta de producto
+ * @param {Object} product - Objeto con los datos del producto
+ * @returns {Promise<string>} - HTML de la tarjeta de producto
+ */
+async function ProductCard(product) {
+    // Si no se proporciona una imagen, usamos un placeholder
+    const image = product.image ? `${API_BASE_URL}/${product.image}` : './assets/images/placeholder.svg';
     
-    if (!response.ok) {
-      throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
-    }
-    
-    const products = await response.json();
-    console.log('Productos cargados:', products);
-    
-    if (products.length === 0) {
-      productGrid.innerHTML = '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
-      return;
-    }
-    
-    // Generar HTML para los productos
-    const productsHTML = products.map(product => `
-      <div class="product-card">
-        <div class="product-image">
-          <img src="${product.image || 'https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}" 
-               alt="${product.name}" 
-               onerror="handleImageError(this)">
-          <div class="image-error-overlay">Imagen no disponible</div>
-        </div>
-        <div class="product-info">
-          <h3>${product.name}</h3>
-          <p class="product-description">${product.description || 'Descripción no disponible'}</p>
-          <p class="product-price">${formatPrice(product.price)}</p>
-          <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">
-            <i class="fas fa-shopping-cart"></i> Agregar al carrito
-          </button>
-        </div>
-      </div>
-    `).join('');
-    
-    productGrid.innerHTML = productsHTML;
-    
-    // Añadir event listeners a los botones de "Agregar al carrito"
-    const addToCartButtons = productGrid.querySelectorAll('.add-to-cart');
-    addToCartButtons.forEach(button => {
-      button.addEventListener('click', async function() {
-        const productId = this.getAttribute('data-product-id');
-        const product = products.find(p => p.id == productId);
-        
-        if (product) {
-          try {
-            // Intentar agregar al carrito mediante API
-            const response = await fetch(`${API_BASE_URL}/api/cart/add`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ 
-                productId: product.id,
-                quantity: 1
-              })
-            });
-            
-            if (response.ok) {
-              // Actualización exitosa en el servidor
-              showAddToCartNotification(product.name);
-              updateCartCount();
-            } else {
-              // Fallback a localStorage si falla la API
-              fallbackAddToCart(product);
-              showNotification(`Producto "${product.name}" agregado al carrito localmente`, 'warning');
-            }
-          } catch (error) {
-            // Fallback a localStorage en caso de error
-            fallbackAddToCart(product);
-            showNotification(`Producto "${product.name}" agregado al carrito localmente`, 'warning');
-          }
+    return `
+        <div class="product-card">
+            <div class="product-image">
+                <img src="${image}" 
+                     alt="${product.name || 'Producto sin nombre'}"
+                     loading="lazy"
+                     onerror="this.src='./assets/images/placeholder.svg'">
+                <button class="add-to-cart" 
+                        data-id="${product.id}"
+                        data-name="${product.name}"
+                        data-price="${product.price}"
+                        data-image="${image}">
+                    <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                </button>
+            </div>
+            <div class="product-info">
+                <h3>${product.name || 'Producto sin nombre'}</h3>
+                <p class="product-description">${product.description || 'Sin descripción disponible'}</p>
+                <div class="product-price">$${(product.price || 0).toLocaleString()}</div>
+            </div>
+        </div>`;
+}
+
+export default ProductCard;
+// homeProducts.js - Gestión de productos en la página de inicio
+import { API_BASE_URL, showNotification } from './utils.js';
+import CartUtils from './cartUtils.js';
+import ProductCard from '../../components/ProductCard.js';
+import ErrorHandler from './errorHandler.js';
+
+// Cargar productos destacados
+async function loadFeaturedProducts() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/products?limit=4`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-      });
-    });
-    
-  } catch (error) {
-    console.error('Error al cargar productos:', error);
-    productGrid.innerHTML = `
-      <div class="error-message">
-        Error al cargar productos. 
-        <button class="retry-button" onclick="location.reload()">Reintentar</button>
-      </div>
-    `;
-  }
-}
-
-// Función alternativa para agregar al carrito usando localStorage
-function fallbackAddToCart(product) {
-  let cart = JSON.parse(localStorage.getItem('arreglosVictoriaCart')) || [];
-  
-  const existingItem = cart.find(item => item.id == product.id);
-  
-  if (existingItem) {
-    existingItem.quantity += 1;
-  } else {
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      quantity: 1
-    });
-  }
-  
-  localStorage.setItem('arreglosVictoriaCart', JSON.stringify(cart));
-}
-
-// Función para actualizar el contador del carrito
-function updateCartCount() {
-  // Primero intentar obtener del servidor
-  fetch(`${API_BASE_URL}/api/cart/count`)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject('No se pudo obtener el conteo del carrito');
-    })
-    .then(data => {
-      // Actualizar todos los elementos con clase cart-count
-      document.querySelectorAll('.cart-count, #cartCount').forEach(element => {
-        element.textContent = data.count;
-      });
-    })
-    .catch(async () => {
-      // Si falla, obtener del localStorage como respaldo
-      let cart = JSON.parse(localStorage.getItem('arreglosVictoriaCart')) || [];
-      const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-      
-      document.querySelectorAll('.cart-count, #cartCount').forEach(element => {
-        element.textContent = cartCount;
-      });
-    });
-}
-
-// Función para mostrar notificación de producto agregado
-function showAddToCartNotification(productName) {
-  const notification = document.createElement('div');
-  notification.className = 'add-to-cart-notification';
-  notification.innerHTML = `
-    <i class="fas fa-check-circle"></i>
-    <span>${productName} agregado al carrito</span>
-  `;
-  
-  // Aplicar estilos directamente
-  notification.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #4caf50;
-    color: white;
-    padding: 16px 24px;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Poppins', sans-serif;
-    animation: slideIn 0.3s, fadeOut 0.5s 2.5s;
-    transition: opacity 0.3s ease-out;
-  `;
-  
-  // Añadir animaciones
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideIn {
-      from { transform: translateX(100%); }
-      to { transform: translateX(0); }
+        
+        const data = await response.json();
+        const products = data.products || data;
+        
+        const featuredProductsContainer = document.getElementById('featuredProducts');
+        
+        if (products && products.length > 0) {
+            // Generar HTML para cada producto usando el componente unificado
+            let productsHTML = '';
+            for (const product of products) {
+                const productHTML = await ProductCard(product);
+                productsHTML += productHTML;
+            }
+            
+            featuredProductsContainer.innerHTML = productsHTML;
+        } else {
+            featuredProductsContainer.innerHTML = '<p class="no-products">No hay productos destacados disponibles.</p>';
+        }
+        
+        // Reinicializar los eventos de carrito después de cargar nuevos productos
+        initCartEventListeners();
+        
+    } catch (error) {
+        ErrorHandler.handleError(error, 'cargar productos destacados');
     }
-    
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-  `;
-  document.head.appendChild(style);
-  
-  document.body.appendChild(notification);
-  
-  // Eliminar la notificación después de 3 segundos
-  setTimeout(() => {
-    notification.classList.add('fadeOut');
-    notification.addEventListener('animationend', () => {
-      notification.remove();
-      style.remove();
-    });
-  }, 3000);
 }
 
-// Cargar productos cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-  loadHomeProducts();
-  
-  // Inicializar el contador del carrito
-  updateCartCount();
-});
+// Inicializa los listeners de eventos para agregar productos al carrito
+function initCartEventListeners() {
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const productId = this.dataset.id;
+            const productName = this.dataset.name;
+            const productPrice = this.dataset.price;
+            const productImage = this.dataset.image;
+            
+            try {
+                // Agregar al carrito usando CartUtils
+                CartUtils.addToCart({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    image: productImage
+                });
+                
+                // Mostrar notificación
+                showNotification(`${productName} agregado al carrito`, 'success');
+                
+                // Actualizar el contador del carrito
+                CartUtils.updateCartCount();
+                
+            } catch (error) {
+                ErrorHandler.handleError(error, 'agregar producto al carrito');
+            }
+        });
+    });
+}
 
-// Exportar funciones necesarias
-window.handleImageError = function(imgElement) {
-  imgElement.src = 'https://images.unsplash.com/photo-1593617133396-03503508724d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80';
-  imgElement.nextElementSibling.style.display = 'block';
-};
-
-// Exportar updateCartCount para acceso global
-window.updateCartCount = updateCartCount;
+export { loadFeaturedProducts, initCartEventListeners };

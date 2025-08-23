@@ -12,160 +12,135 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
-    <link rel="preload" href="assets/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="assets/css/styles.css">
-    </noscript>
-    <meta name="description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
-    <meta name="keywords" content="productos, arreglos florales, flores, ramos, coronas, Recoleta, Región Metropolitana">
+    
+    <!-- Cargar estilos CSS -->
+    <link rel="stylesheet" href="assets/css/preflight.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <meta name="description" content="Explora nuestra amplia variedad de arreglos florales para todas las ocasiones. Flores frescas y hermosos diseños para alegrar cualquier momento.">
+    <meta name="keywords" content="arreglos florales, flores, productos, catálogo, florería">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="index, follow">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/products.html">
     <meta property="og:title" content="Productos - Arreglos Victoria Florería">
-    <meta property="og:description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    
+    <meta property="og:description" content="Explora nuestra amplia variedad de arreglos florales para todas las ocasiones.">
+    <meta property="og:image" content="./assets/images/hero-image.jpg">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/products.html">
     <meta property="twitter:title" content="Productos - Arreglos Victoria Florería">
-    <meta property="twitter:description" content="Descubre nuestra amplia variedad de arreglos florales: ramos, coronas, arreglos para ocasiones especiales y más. Flores frescas y de calidad.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="twitter:description" content="Explora nuestra amplia variedad de arreglos florales para todas las ocasiones.">
+    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
 </head>
 <body>
+    <!-- Skip link para navegación por teclado -->
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
+    <!-- Header -->
     <header>
-        <div class="container">
-            <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
-                
-                <button class="hamburger" aria-label="Menú" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                
-                <ul class="nav-links">
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <img src="./assets/images/logo.png" alt="Logo Arreglos Victoria" class="logo-img">
+                <span class="logo-text">Arreglos Victoria</span>
+            </a>
+            
+            <nav>
+                <ul>
                     <li><a href="index.html">Inicio</a></li>
-                    <li><a href="products.html" class="active" aria-current="page">Productos</a></li>
-                    <li><a href="index.html#about">Nosotros</a></li>
-                    <li><a href="index.html#contacto">Contacto</a></li>
+                    <li><a href="products.html" class="active">Productos</a></li>
+                    <li><a href="contact.html">Contacto</a></li>
                 </ul>
-                
-                <div class="user-actions">
-                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
-                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                        <span>Iniciar sesión</span>
-                    </a>
-                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
-                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
-                            <span id="userNameDisplay"></span>
-                            <i class="fas fa-user" aria-hidden="true"></i>
-                            <i class="fas fa-caret-down" aria-hidden="true"></i>
-                        </button>
-                        <ul class="user-dropdown" role="menu">
-                            <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
-                            <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
-                        </ul>
-                    </div>
-                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
-                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                        <span class="cart-count" id="cartCount">0</span>
-                    </div>
-                </div>
             </nav>
-        </div>
-    </header>
-
-    <main id="main-content">
-        <section class="products-header">
-            <h1>Nuestros Productos</h1>
-            <p>Descubre nuestra amplia variedad de arreglos florales, ramos, plantas y accesorios. Todos nuestros productos son elaborados con flores frescas y de la más alta calidad.</p>
-        </section>
-
-        <div class="container">
-            <div class="product-filters">
-                <div class="category-filter">
-                    <a href="#" data-category="all" class="active">Todos</a>
-                    <a href="#" data-category="arreglos">Arreglos Florales</a>
-                    <a href="#" data-category="ramos">Ramos</a>
-                    <a href="#" data-category="plantas">Plantas</a>
-                    <a href="#" data-category="accesorios">Accesorios</a>
+            
+            <div class="user-menu">
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
                 </div>
-                
-                <div class="search-sort-container">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Buscar productos...">
-                        <i class="fas fa-search"></i>
+                <div class="user-icon" id="userIcon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-dropdown" id="userDropdown">
+                    <div id="guest-menu">
+                        <a href="login.html">Iniciar Sesión</a>
+                        <a href="register.html">Registrarse</a>
                     </div>
-                    
-                    <div class="sort-box">
-                        <select id="sortSelect">
-                            <option value="default">Ordenar por</option>
-                            <option value="name-asc">Nombre (A-Z)</option>
-                            <option value="name-desc">Nombre (Z-A)</option>
-                            <option value="price-asc">Precio (Menor a Mayor)</option>
-                            <option value="price-desc">Precio (Mayor a Menor)</option>
-                        </select>
+                    <div id="user-menu" style="display: none;">
+                        <a href="profile.html">Mi Perfil</a>
+                        <a href="wishlist.html">Lista de Deseos</a>
+                        <a href="#" id="logoutLink">Cerrar Sesión</a>
+                        <a href="admin.html" id="admin-menu-item" style="display: none;">Panel de Administración</a>
                     </div>
                 </div>
             </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="products-page">
+        <div class="container">
+            <div class="products-header">
+                <h1>Nuestros Productos</h1>
+                <div class="filter-sort">
+                    <select id="categoryFilter">
+                        <option value="">Todas las categorías</option>
+                        <option value="arreglos">Arreglos Florales</option>
+                        <option value="ramos">Ramos</option>
+                        <option value="plantas">Plantas</option>
+                        <option value="accesorios">Accesorios</option>
+                    </select>
+                    <select id="sortBy">
+                        <option value="name">Ordenar por: Nombre</option>
+                        <option value="price-low">Precio: Menor a Mayor</option>
+                        <option value="price-high">Precio: Mayor a Menor</option>
+                    </select>
+                </div>
+            </div>
             
-            <div class="product-count" id="productCount">Cargando productos...</div>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar productos...">
+            </div>
             
             <div class="product-grid" id="productGrid">
-                <!-- Los productos se cargarán aquí -->
+                <!-- Productos cargados dinámicamente -->
+            </div>
+            
+            <div class="pagination" id="pagination">
+                <!-- Paginación cargada dinámicamente -->
             </div>
         </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</h3>
-                    <p>Más de 10 años creando hermosos arreglos florales para todas las ocasiones. Flores frescas y de calidad entregadas directamente en tu hogar.</p>
-                    <div class="social-links">
-                        <a href="https://www.facebook.com/arreglosvictoria/" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Enlaces Rápidos</h4>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="products.html" class="active" aria-current="page">Productos</a></li>
-                        <li><a href="index.html#about">Nosotros</a></li>
-                        <li><a href="index.html#contacto">Contacto</a></li>
-                        <li><a href="sitemap.html">Mapa del Sitio</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Información de Contacto</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i> +569 6360 3177</li>
-                        <li><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
-            </div>
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="loading-indicator" aria-hidden="true">
+        <div class="spinner" role="status" aria-label="Cargando contenido">
+            <div></div><div></div><div></div>
         </div>
-    </footer>
+    </div>
 
-    <script src="assets/js/mobile-menu.js" type="module"></script>
-    <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/errorHandler.js" type="module"></script>
-    <script src="assets/js/products.js" type="module"></script>
-    <script src="assets/js/initUserMenu.js" type="module"></script>
-    <script src="assets/js/cart.js" type="module"></script>
+    <!-- Scripts -->
+    <script type="module" src="./assets/js/utils.js"></script>
+    <script type="module" src="./assets/js/auth.js"></script>
+    <script type="module" src="./assets/js/cartUtils.js"></script>
+    <script type="module" src="./assets/js/productManager.js"></script>
+    <script type="module" src="./assets/js/products.js"></script>
+    <script type="module" src="./assets/js/cart.js"></script>
+    <script type="module" src="./assets/js/accessibility.js"></script>
+    <script type="module" src="./assets/js/lazyLoad.js"></script>
+    <script type="module" src="./assets/js/imageOptimizer.js"></script>
+    <script type="module" src="./assets/js/register-sw.js"></script>
 </body>
 </html>
