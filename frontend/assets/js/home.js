@@ -1,7 +1,7 @@
-// home.js - Funcionalidad de la página de inicio
-import { updateCartCount, showNotification, API_BASE_URL } from './utils.js';
-import { loadFeaturedProducts, initCartEventListeners } from './homeProducts.js';
+// home.js - Gestión de la página de inicio
+import { showNotification, API_BASE_URL, updateCartCount } from './utils.js';
 import CartUtils from './cartUtils.js';
+import { loadFeaturedProducts, initCartEventListeners } from './homeProducts.js';
 import { initUserMenu } from './auth.js';
 
 // Initialize when DOM is loaded

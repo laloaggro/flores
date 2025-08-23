@@ -3,6 +3,9 @@ import { initUserMenu } from './auth.js';
 import { initGoogleSignIn } from './googleAuth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM cargado en login.js');
+  console.log('Iniciando inicialización del login');
+  
   // Inicializar menú de usuario
   initUserMenu();
   
@@ -17,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar Google Sign-In si el botón existe
   const googleButton = document.getElementById('googleSignInButton');
   if (googleButton) {
+    console.log('Elemento googleSignInButton encontrado:', !!googleButton);
+    console.log('Inicializando Google Sign-In');
+    
     // Usar el Client ID de Google real
     const googleClientId = '888681528450-havivkoibjv0ht3vu4q46hc8k0i3f8iu.apps.googleusercontent.com';
     initGoogleSignIn(googleClientId, handleGoogleLoginResponse);
@@ -58,10 +64,14 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Inicializar contador del carrito
   updateCartCount();
+  
+  console.log('Inicialización del login completada');
 });
 
 // Función para manejar el inicio de sesión
 async function handleLogin() {
+  console.log('Manejando evento de inicio de sesión');
+  
   try {
     console.log('Iniciando proceso de login');
     console.log('API_BASE_URL:', API_BASE_URL);
@@ -99,6 +109,49 @@ async function handleLogin() {
     // Realizar solicitud de inicio de sesión
     console.log('Realizando solicitud de inicio de sesión...');
     console.log('URL de la solicitud:', `${API_BASE_URL}/api/users/login`);
+    
+    let response;
+    try {
+      response = await fetch(`${API_BASE_URL}/api/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+    } catch (fetchError) {
+      console.error('Error al realizar la solicitud:', fetchError);
+      throw new Error(`No se pudo conectar con el servidor. Error: ${fetchError.message}`);
+    }
+    
+    console.log('Respuesta del servidor:', response);
+    console.log('Estado de la respuesta:', response.status);
+    
+    // Verificar si la respuesta es JSON
+    const contentType = response.headers.get('content-type');
+    console.log('Tipo de contenido:', contentType);
+    
+    if (!contentType || !contentType.includes('application/json')) {
+      // Si la respuesta no es JSON, mostrar el contenido para diagnóstico
+      const responseText = await response.text();
+      console.error('Respuesta no JSON recibida:', responseText);
+      
+      // Si es un error 404, probablemente la ruta no existe
+      if (response.status === 404) {
+        throw new Error('Endpoint no encontrado. Verifica que la ruta /api/auth/login exista en el backend.');
+      }
+      
+      // Si es un error de CORS, mostrar un mensaje específico
+      if (response.status === 0) {
+        throw new Error('Error de conexión. Puede ser un problema de CORS o el servidor no está respondiendo.');
+      }
+      
+      const errorMsg = 'Error de conexión con el servidor. Por favor, verifica que el servidor esté funcionando correctamente.';
+      throw new Error(errorMsg);
+    }
+    
+    const data = await response.json();
+    console.log('Datos recibidos:', data);
     
     let response;
     try {
@@ -263,6 +316,8 @@ async function handleRegister() {
 
 // Función para manejar la respuesta de inicio de sesión con Google
 function handleGoogleLoginResponse(error, result) {
+  console.log('Manejando respuesta de inicio de sesión con Google', { error, result });
+  
   if (error) {
     console.error('Error en inicio de sesión con Google:', error);
     showNotification('Error al iniciar sesión con Google: ' + error.message, 'error');

@@ -6,65 +6,102 @@
  */
 class ImageOptimizer {
     /**
-     * Verifica si el navegador soporta WebP
-     * @returns {Promise<boolean>} - Promesa que resuelve con true si el navegador soporta WebP
-     */
-    static checkWebPSupport() {
-        return new Promise((resolve) => {
-            const webP = new Image();
-            webP.onload = webP.onerror = function () {
-                resolve(webP.height === 2);
-            };
-            webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
-        });
-    }
-
-    /**
      * Convierte una imagen a WebP
      * @param {string} src - Ruta de la imagen original
      * @param {number} quality - Calidad de la imagen WebP (0-100)
      * @returns {Promise<string>} - Promesa que resuelve con la URL de la imagen WebP
      */
     static async convertToWebP(src, quality = 80) {
-        // Si ya es una URL WebP, devolverla tal cual
-        if (src && src.endsWith('.webp')) {
-            return src;
-        }
-
-        // Verificar soporte de WebP
-        const webpSupport = await this.checkWebPSupport();
-        if (!webpSupport) {
-            return src; // Devolver la imagen original si no hay soporte
-        }
-
-        // Si es una imagen local, intentar convertirla
-        if (src && (src.startsWith('./') || src.startsWith('/'))) {
-            return src.replace(/\.(jpg|jpeg|png)/i, '.webp');
-        }
-
-        // Para otras URLs, devolver la original
-        return src;
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            
+            img.onload = () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    // Convertir a WebP
+                    const webpData = canvas.toDataURL('image/webp', quality / 100);
+                    resolve(webpData);
+                } catch (error) {
+                    reject(error);
+                }
+            };
+            
+            img.onerror = () => {
+                reject(new Error(`Failed to load image: ${src}`));
+            };
+            
+            img.src = src;
+        });
     }
-
+    
     /**
-     * Optimiza una imagen a AVIF si es posible
+     * Crea un elemento <picture> con múltiples formatos
      * @param {string} src - Ruta de la imagen original
-     * @returns {Promise<string>} - Promesa que resuelve con la URL de la imagen AVIF
+     * @param {string} alt - Texto alternativo
+     * @param {object} options - Opciones adicionales (clases, etc.)
+     * @returns {Promise<string>} - HTML del elemento <picture>
      */
-    static async convertToAVIF(src) {
-        // Si ya es una URL AVIF, devolverla tal cual
-        if (src && src.endsWith('.avif')) {
-            return src;
+    static async createPictureElement(src, alt, options = {}) {
+        try {
+            // Intentar convertir a WebP
+            const webpSrc = await this.convertToWebP(src);
+            
+            // Crear elemento <picture>
+            const classes = options.classes ? `class="${options.classes}"` : '';
+            const width = options.width ? `width="${options.width}"` : '';
+            const height = options.height ? `height="${options.height}"` : '';
+            
+            return `
+                <picture ${classes}>
+                    <source srcset="${webpSrc}" type="image/webp">
+                    <img src="${src}" alt="${alt}" ${width} ${height} loading="lazy">
+                </picture>
+            `;
+        } catch (error) {
+            // Si falla la conversión, usar solo el elemento <img>
+            const classes = options.classes ? `class="${options.classes}"` : '';
+            const width = options.width ? `width="${options.width}"` : '';
+            const height = options.height ? `height="${options.height}"` : '';
+            
+            return `<img src="${src}" alt="${alt}" ${classes} ${width} ${height} loading="lazy">`;
         }
-
-        // Para imágenes locales, intentar convertirlas
-        if (src && (src.startsWith('./') || src.startsWith('/'))) {
-            return src.replace(/\.(jpg|jpeg|png)/i, '.avif');
-        }
-
-        // Para otras URLs, devolver la original
-        return src;
+    }
+    
+    /**
+     * Optimiza todas las imágenes con el atributo data-optimize
+     */
+    static optimizeAll() {
+        const images = document.querySelectorAll('img[data-optimize]');
+        
+        images.forEach(async (img) => {
+            try {
+                const webpSrc = await this.convertToWebP(img.src);
+                const source = document.createElement('source');
+                source.srcset = webpSrc;
+                source.type = 'image/webp';
+                
+                const picture = document.createElement('picture');
+                picture.appendChild(source);
+                
+                // Clonar la imagen original
+                const imgClone = img.cloneNode(true);
+                picture.appendChild(imgClone);
+                
+                // Reemplazar la imagen original con el elemento <picture>
+                img.parentNode.replaceChild(picture, img);
+            } catch (error) {
+                console.warn('Failed to optimize image:', img.src, error);
+            }
+        });
     }
 }
 
+// Exportar la clase
 export default ImageOptimizer;

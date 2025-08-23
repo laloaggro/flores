@@ -1,106 +1,87 @@
-/**
- * Error Handler - Sistema centralizado de manejo de errores
- */
+// errorHandler.js - Centralized error handling for the application
+
 class ErrorHandler {
-    /**
-     * Maneja errores de red
-     * @param {Error} error - Error de red
-     * @param {string} operation - Operación que causó el error
-     */
-    static handleNetworkError(error, operation) {
-        console.error(`Error de conexión en ${operation}:`, error);
-        this.showNotification(`Error de conexión en ${operation}. Por favor, verifica tu conexión a internet.`, 'error');
+  /**
+   * Handle API errors
+   * @param {Error} error - The error object
+   * @param {string} context - Context where the error occurred
+   */
+  static handleApiError(error, context) {
+    console.error(`API Error in ${context}:`, error);
+    
+    // Log error to analytics service (in a real app)
+    // analytics.logError(error, context);
+    
+    // Show user-friendly error message
+    let message = 'Ocurrió un error inesperado. Por favor, inténtelo más tarde.';
+    
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      message = 'Error de conexión. Por favor, verifique su conexión a internet.';
+    } else if (error.message) {
+      message = error.message;
     }
-
-    /**
-     * Maneja errores de la API
-     * @param {Response} response - Respuesta HTTP
-     * @param {string} operation - Operación que causó el error
-     */
-    static async handleApiError(response, operation) {
-        let errorMessage = `Error en ${operation}: ${response.status} ${response.statusText}`;
-        
-        try {
-            const errorData = await response.json();
-            errorMessage = errorData.message || errorData.error || errorMessage;
-        } catch (parseError) {
-            console.warn('No se pudo parsear la respuesta de error:', parseError);
-        }
-        
-        console.error(errorMessage);
-        this.showNotification(errorMessage, 'error');
+    
+    // Show notification to user
+    this.showNotification(message, 'error');
+  }
+  
+  /**
+   * Handle network errors
+   * @param {Error} error - The network error
+   * @param {string} context - Context where the error occurred
+   */
+  static handleNetworkError(error, context) {
+    console.error(`Network Error in ${context}:`, error);
+    
+    const message = 'Error de conexión. Por favor, verifique su conexión a internet.';
+    this.showNotification(message, 'error');
+  }
+  
+  /**
+   * Show notification to user
+   * @param {string} message - Message to display
+   * @param {string} type - Type of notification (error, warning, info, success)
+   */
+  static showNotification(message, type = 'info') {
+    // Check if we have the showNotification function from utils
+    if (typeof window !== 'undefined' && window.showNotification) {
+      window.showNotification(message, type);
+      return;
     }
-
-    /**
-     * Maneja errores generales
-     * @param {Error} error - Error
-     * @param {string} operation - Operación que causó el error
-     */
-    static handleGenericError(error, operation) {
-        console.error(`Error en ${operation}:`, error);
-        this.showNotification(`Ocurrió un error en ${operation}. Por favor, inténtalo de nuevo.`, 'error');
+    
+    // Fallback to simple alert for critical errors
+    if (type === 'error') {
+      alert(`Error: ${message}`);
     }
+  }
+  
+  /**
+   * Log error information for debugging
+   * @param {Error} error - The error object
+   * @param {string} context - Context where the error occurred
+   * @param {Object} additionalInfo - Additional information about the error
+   */
+  static logError(error, context, additionalInfo = {}) {
+    const errorInfo = {
+      message: error.message,
+      stack: error.stack,
+      context,
+      timestamp: new Date().toISOString(),
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+      url: typeof window !== 'undefined' ? window.location.href : '',
+      additionalInfo
+    };
+    
+    console.error('Error logged:', errorInfo);
+    
+    // In a production environment, you might send this to an error tracking service
+    // sendToErrorTrackingService(errorInfo);
+  }
+}
 
-    /**
-     * Muestra una notificación de error
-     * @param {string} message - Mensaje de error
-     * @param {string} type - Tipo de notificación
-     */
-    static showNotification(message, type = 'error') {
-        // Intentar usar la función showNotification existente
-        if (typeof showNotification === 'function') {
-            showNotification(message, type);
-            return;
-        }
-
-        // Fallback: mostrar alerta en consola
-        console[type](message);
-        
-        // Crear notificación en la página si no existe showNotification
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <div style="
-                position: fixed; 
-                top: 20px; 
-                right: 20px; 
-                background: ${type === 'error' ? '#e53e3e' : type === 'success' ? '#38a169' : '#3182ce'}; 
-                color: white; 
-                padding: 15px; 
-                border-radius: 5px; 
-                z-index: 10000; 
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                max-width: 300px;
-            ">
-                <p>${message}</p>
-            </div>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Eliminar la notificación después de 5 segundos
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 5000);
-    }
-
-    /**
-     * Maneja errores de forma centralizada
-     * @param {Error} error - Error
-     * @param {string} operation - Operación que causó el error
-     * @param {Response} response - Respuesta HTTP (opcional)
-     */
-    static handleError(error, operation, response = null) {
-        if (response) {
-            this.handleApiError(response, operation);
-        } else if (error instanceof TypeError && error.message.includes('fetch')) {
-            this.handleNetworkError(error, operation);
-        } else {
-            this.handleGenericError(error, operation);
-        }
-    }
+// Make ErrorHandler available globally
+if (typeof window !== 'undefined') {
+  window.ErrorHandler = ErrorHandler;
 }
 
 export default ErrorHandler;

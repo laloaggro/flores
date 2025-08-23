@@ -12,7 +12,6 @@ class AccessibilityEnhancements {
         this.setupSkipLinks();
         this.improveImageAccessibility();
         this.setupKeyboardNavigation();
-        this.setupReducedMotion();
     }
     
     /**
@@ -31,15 +30,6 @@ class AccessibilityEnhancements {
                 outline: 2px solid #4A90E2;
                 outline-offset: 2px;
             }
-            
-            /* Estilos para usuarios que prefieren reduced motion */
-            @media (prefers-reduced-motion: reduce) {
-                *, *::before, *::after {
-                    animation-duration: 0.01ms !important;
-                    animation-iteration-count: 1 !important;
-                    transition-duration: 0.01ms !important;
-                }
-            }
         `;
         document.head.appendChild(style);
     }
@@ -54,15 +44,28 @@ class AccessibilityEnhancements {
         skipLink.textContent = 'Saltar al contenido principal';
         skipLink.className = 'skip-link';
         
-        // Mostrar enlace cuando recibe foco
-        skipLink.addEventListener('focus', function() {
-            this.style.top = '0';
-        });
+        // Añadir estilos para el enlace
+        const style = document.createElement('style');
+        style.textContent = `
+            .skip-link {
+                position: absolute;
+                top: -40px;
+                left: 0;
+                background: #4A90E2;
+                color: white;
+                padding: 8px;
+                text-decoration: none;
+                z-index: 1000;
+                transition: top 0.3s;
+            }
+            
+            .skip-link:focus {
+                top: 0;
+            }
+        `;
+        document.head.appendChild(style);
         
-        skipLink.addEventListener('blur', function() {
-            this.style.top = '-40px';
-        });
-        
+        // Añadir el enlace al inicio del body
         document.body.insertBefore(skipLink, document.body.firstChild);
     }
     
@@ -73,13 +76,10 @@ class AccessibilityEnhancements {
         // Asegurar que todas las imágenes tengan atributos alt
         const images = document.querySelectorAll('img:not([alt])');
         images.forEach(img => {
-            if (!img.hasAttribute('alt')) {
-                img.setAttribute('alt', '');
-            }
-                    
-            if (!img.hasAttribute('role')) {
-                img.setAttribute('role', 'img');
-            }
+            // Si no tiene alt, añadir uno basado en el nombre del archivo o un genérico
+            const src = img.src;
+            const altText = src.split('/').pop().split('.')[0].replace(/[-_]/g, ' ') || 'Imagen';
+            img.alt = altText;
         });
         
         // Añadir atributos ARIA a elementos interactivos sin ellos
@@ -97,33 +97,26 @@ class AccessibilityEnhancements {
      * Configura la navegación por teclado
      */
     static setupKeyboardNavigation() {
-        // Manejar la navegación con teclado en menús
+        // Añadir soporte para navegación por teclado en menús
         document.addEventListener('keydown', (e) => {
-            // Manejar Escape para cerrar menús desplegables
-            if (e.key === 'Escape') {
-                const openDropdowns = document.querySelectorAll('.dropdown.open');
-                openDropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('open');
-                });
-                
-                // Enfocar el botón que abrió el menú
-                const lastOpenedButton = document.querySelector('[data-last-opened]');
-                if (lastOpenedButton) {
-                    lastOpenedButton.focus();
-                    lastOpenedButton.removeAttribute('data-last-opened');
-                }
-            }
-            
-            // Manejar Tab para mejorar la navegación
+            // Si se presiona Tab, añadir clase para indicar navegación por teclado
             if (e.key === 'Tab') {
                 document.body.classList.add('user-is-tabbing');
             }
         });
         
-        // Eliminar la clase cuando se usa el mouse
-        document.addEventListener('mousedown', () => {
-            document.body.classList.remove('user-is-tabbing');
-        });
+        // Añadir estilos para cuando se usa navegación por teclado
+        const style = document.createElement('style');
+        style.textContent = `
+            .user-is-tabbing button:focus,
+            .user-is-tabbing input:focus,
+            .user-is-tabbing select:focus,
+            .user-is-tabbing textarea:focus {
+                outline: 2px solid #4A90E2;
+                outline-offset: 2px;
+            }
+        `;
+        document.head.appendChild(style);
     }
     
     /**
@@ -134,27 +127,6 @@ class AccessibilityEnhancements {
     static addAriaAttributes(element, attributes) {
         Object.entries(attributes).forEach(([key, value]) => {
             element.setAttribute(`aria-${key}`, value);
-        });
-    }
-    
-    /**
-     * Configura preferencias para usuarios con movilidad reducida
-     */
-    static setupReducedMotion() {
-        // Detectar preferencia de movilidad reducida
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-        
-        if (mediaQuery.matches) {
-            document.body.classList.add('reduced-motion');
-        }
-        
-        // Escuchar cambios en la preferencia
-        mediaQuery.addEventListener('change', (e) => {
-            if (e.matches) {
-                document.body.classList.add('reduced-motion');
-            } else {
-                document.body.classList.remove('reduced-motion');
-            }
         });
     }
     
@@ -183,7 +155,7 @@ class AccessibilityEnhancements {
     }
 }
 
-// Inicializar mejoras de accesibilidad cuando el DOM esté listo
+// Inicializar automáticamente cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', () => {
     AccessibilityEnhancements.init();
 });

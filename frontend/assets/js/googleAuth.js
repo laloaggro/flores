@@ -3,8 +3,11 @@ import { API_BASE_URL, showNotification } from './utils.js';
 // Cargar la biblioteca de Google Identity Services
 export function loadGoogleAuth(clientId) {
   return new Promise((resolve, reject) => {
+    console.log('Cargando biblioteca de Google Identity Services');
+    
     // Verificar si ya está cargada
     if (typeof window.google !== 'undefined' && window.google.accounts) {
+      console.log('Biblioteca de Google ya cargada');
       resolve(window.google);
       return;
     }
@@ -15,9 +18,11 @@ export function loadGoogleAuth(clientId) {
     script.async = true;
     script.defer = true;
     script.onload = () => {
+      console.log('Biblioteca de Google cargada exitosamente');
       resolve(window.google);
     };
     script.onerror = () => {
+      console.error('Error al cargar la biblioteca de Google');
       reject(new Error('Error al cargar la biblioteca de Google'));
     };
     document.head.appendChild(script);
@@ -26,12 +31,18 @@ export function loadGoogleAuth(clientId) {
 
 // Inicializar el botón de Google Sign-In
 export function initGoogleSignIn(clientId, callback) {
+  console.log('Inicializando Google Sign-In con clientId:', clientId);
+  
   loadGoogleAuth(clientId)
     .then(google => {
+      console.log('Inicializando Google Sign-In');
+      
       google.accounts.id.initialize({
         client_id: clientId,
         callback: async (response) => {
           try {
+            console.log('Respuesta de Google recibida:', response);
+            
             // Decodificar el token JWT
             const payload = parseJwt(response.credential);
             console.log('Usuario de Google:', payload);
@@ -43,6 +54,8 @@ export function initGoogleSignIn(clientId, callback) {
               name: payload.name,
               imageUrl: payload.picture
             });
+            
+            console.log('Resultado del inicio de sesión con Google:', result);
             
             if (result.success) {
               callback(null, result);
@@ -59,6 +72,8 @@ export function initGoogleSignIn(clientId, callback) {
       // Renderizar el botón de Google Sign-In
       const googleButton = document.getElementById('googleSignInButton');
       if (googleButton) {
+        console.log('Renderizando botón de Google Sign-In');
+        
         google.accounts.id.renderButton(
           googleButton,
           { 
@@ -71,6 +86,9 @@ export function initGoogleSignIn(clientId, callback) {
         
         // Mostrar el botón
         googleButton.style.display = 'block';
+        console.log('Botón de Google Sign-In mostrado');
+      } else {
+        console.warn('No se encontró el elemento con ID googleSignInButton');
       }
     })
     .catch(error => {
@@ -82,6 +100,7 @@ export function initGoogleSignIn(clientId, callback) {
 // Función para parsear el token JWT de Google
 function parseJwt(token) {
   try {
+    console.log('Parseando token JWT de Google');
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
@@ -99,6 +118,8 @@ function parseJwt(token) {
 
 // Función para iniciar sesión con Google en el backend
 export async function loginWithGoogle(userData) {
+  console.log('Iniciando sesión con Google en el backend', userData);
+  
   try {
     const response = await fetch(`${API_BASE_URL}/api/users/google-login`, {
       method: 'POST',
@@ -109,13 +130,16 @@ export async function loginWithGoogle(userData) {
     });
 
     const data = await response.json();
+    console.log('Respuesta del backend:', data);
 
     if (response.ok) {
       // Guardar token y usuario en localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
+      console.log('Inicio de sesión con Google exitoso');
       return { success: true, user: data.user, token: data.token };
     } else {
+      console.error('Error en la autenticación con Google:', data.error);
       return { success: false, message: data.error || 'Error en la autenticación' };
     }
   } catch (error) {

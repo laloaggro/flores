@@ -1,14 +1,11 @@
-
-    <!-- Scripts -->
-    <script type="module" src="./assets/js/utils.js"></script>
-    <script type="module" src="./assets/js/auth.js"></script>
-    <script type="module" src="./assets/js/contact.js"></script>
-    <script type="module" src="./assets/js/accessibility.js"></script>
-    <script type="module" src="./assets/js/lazyLoad.js"></script>
-    <script type="module" src="./assets/js/imageOptimizer.js"></script>
-    <script type="module" src="./assets/js/register-sw.js"></script>
-    
-    <!-- Preload critical fonts and styles -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Arreglos Victoria Florería</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
@@ -23,3 +20,204 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     
     <meta name="description" content="Contáctanos en Arreglos Victoria Florería. Estamos aquí para ayudarte con cualquier consulta sobre nuestros arreglos florales.">
+    <meta name="keywords" content="contacto, florería, arreglos florales, Recoleta, Región Metropolitana, WhatsApp, teléfono">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/contact.html">
+    <meta property="og:title" content="Contacto - Arreglos Victoria Florería">
+    <meta property="og:description" content="Contáctanos en Arreglos Victoria Florería. Estamos aquí para ayudarte con cualquier consulta sobre nuestros arreglos florales.">
+    <meta property="og:image" content="./assets/images/hero-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/contact.html">
+    <meta property="twitter:title" content="Contacto - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Contáctanos en Arreglos Victoria Florería. Estamos aquí para ayudarte con cualquier consulta sobre nuestros arreglos florales.">
+    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <span class="logo-text">Arreglos Victoria</span>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="products.html">Productos</a></li>
+                    <li><a href="contact.html" class="active">Contacto</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-menu">
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+                <div class="user-icon" id="userIcon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-dropdown" id="userDropdown">
+                    <div id="guest-menu">
+                        <a href="login.html">Iniciar Sesión</a>
+                        <a href="register.html">Registrarse</a>
+                    </div>
+                    <div id="user-menu" style="display: none;">
+                        <a href="profile.html">Mi Perfil</a>
+                        <a href="wishlist.html">Lista de Deseos</a>
+                        <a href="#" id="logoutLink">Cerrar Sesión</a>
+                        <a href="admin.html" id="admin-menu-item" style="display: none;">Panel de Administración</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="contact-page">
+            <div class="container">
+                <div class="contact-header">
+                    <h1>Contacto</h1>
+                    <p>Estamos aquí para ayudarte. ¡Contáctanos!</p>
+                </div>
+                
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h2>Información de Contacto</h2>
+                        
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Dirección</h4>
+                                <p>Av. Valdivieso 593, Recoleta<br>Región Metropolitana, Chile</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Teléfono</h4>
+                                <p>+569 6360 3177</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>WhatsApp</h4>
+                                <p>+569 6360 3177</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <p>arreglosfloralesvictoria@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-detail">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Horario</h4>
+                                <p>Lunes a Sábado: 9:00 AM - 7:00 PM</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.457824395449!2d-70.6447356847544!3d-33.43877198077852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a5b8c5b5b5%3A0x9d2f5b5b5b5b5b5b!2sAv.%20Valdivieso%20593%2C%20Recoleta%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1628789456789!5m2!1ses!2scl" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <h2>Envíanos un mensaje</h2>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="contactName">Nombre</label>
+                                <input type="text" id="contactName" name="name" required class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail" name="email" required class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactSubject">Asunto</label>
+                                <input type="text" id="contactSubject" name="subject" required class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Mensaje</label>
+                                <textarea id="contactMessage" name="message" required class="form-input"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                        </form>
+                        <div id="contactMessage" class="form-message"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Arreglos Florales Victoria</h3>
+                    <p>Flores frescas y arreglos florales únicos para las ocasiones más especiales.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="products.html">Productos</a></li>
+                        <li><a href="index.html#about">Nosotros</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                        <li><a href="sitemap.html">Mapa del Sitio</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Información de Contacto</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</li>
+                        <li><i class="fas fa-phone" aria-hidden="true"></i> +569 6360 3177</li>
+                        <li><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="./assets/js/utils.js"></script>
+    <script type="module" src="./assets/js/auth.js"></script>
+    <script type="module" src="./assets/js/contact.js"></script>
+    <script type="module" src="./assets/js/accessibility.js"></script>
+    <script type="module" src="./assets/js/lazyLoad.js"></script>
+    <script type="module" src="./assets/js/imageOptimizer.js"></script>
+    <script type="module" src="./assets/js/register-sw.js"></script>
+</body>
+</html>

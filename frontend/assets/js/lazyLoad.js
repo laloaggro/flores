@@ -23,17 +23,12 @@ class LazyLoad {
                     }
                 });
             }, {
-                rootMargin: '50px 0px', // Cargar imágenes 50px antes de que entren en la vista
-                threshold: 0.01 // Disparar cuando 1% de la imagen sea visible
+                rootMargin: '50px 0px' // Cargar imágenes 50px antes de que entren en la vista
             });
             
             // Observar todas las imágenes con atributo loading="lazy"
             const lazyImages = document.querySelectorAll('img[loading="lazy"]');
             lazyImages.forEach(img => this.imageObserver.observe(img));
-            
-            // También observar imágenes en elementos picture
-            const lazyPictures = document.querySelectorAll('picture source[loading="lazy"]');
-            lazyPictures.forEach(source => this.imageObserver.observe(source));
         } else {
             // Fallback para navegadores que no soportan IntersectionObserver
             this.loadAllImages();
@@ -41,38 +36,78 @@ class LazyLoad {
     }
     
     /**
-     * Carga una imagen cuando entra en la vista
-     * @param {HTMLImageElement} img - Elemento de imagen
+     * Carga una imagen específica
+     * @param {HTMLImageElement} img - Elemento de imagen a cargar
      */
     loadImage(img) {
-        // Si es una imagen con data-src, usar ese valor
-        if (img.dataset.src) {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
+        // Si la imagen ya tiene src, no hacer nada
+        if (img.src && img.src !== window.location.href) {
+            return;
         }
         
-        // Si es un source con data-srcset, usar ese valor
-        if (img.dataset.srcset) {
-            img.srcset = img.dataset.srcset;
-            img.removeAttribute('data-srcset');
+        // Obtener la URL de la imagen del atributo data-src
+        const src = img.dataset.src;
+        if (!src) {
+            return;
         }
         
-        // Marcar como cargada
-        img.classList.add('lazy-loaded');
+        // Crear una imagen temporal para cargarla
+        const tempImage = new Image();
+        tempImage.onload = () => {
+            img.src = src;
+            img.classList.add('loaded');
+            
+            // Añadir evento para manejar errores de carga
+            img.onerror = () => {
+                this.handleImageError(img);
+            };
+        };
+        
+        tempImage.onerror = () => {
+            this.handleImageError(img);
+        };
+        
+        tempImage.src = src;
     }
     
     /**
-     * Carga todas las imágenes (fallback para navegadores antiguos)
+     * Maneja errores de carga de imágenes
+     * @param {HTMLImageElement} img - Elemento de imagen con error
+     */
+    handleImageError(img) {
+        // Usar imagen placeholder como fallback
+        img.src = './assets/images/placeholder.svg';
+        img.classList.add('error');
+        img.alt = 'Imagen no disponible';
+    }
+    
+    /**
+     * Carga todas las imágenes de inmediato (fallback)
      */
     loadAllImages() {
         const lazyImages = document.querySelectorAll('img[loading="lazy"]');
         lazyImages.forEach(img => {
-            this.loadImage(img);
+            if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.classList.add('loaded');
+            }
         });
     }
     
     /**
-     * Destruye el observador de imágenes
+     * Añade una imagen al observador
+     * @param {HTMLImageElement} img - Imagen a observar
+     */
+    observeImage(img) {
+        if (this.imageObserver) {
+            this.imageObserver.observe(img);
+        } else {
+            this.loadImage(img);
+        }
+    }
+    
+    /**
+     * Destruye el observador
      */
     destroy() {
         if (this.imageObserver) {
@@ -81,9 +116,10 @@ class LazyLoad {
     }
 }
 
-// Inicializar lazy loading cuando el DOM esté listo
+// Inicializar automáticamente cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', () => {
-    new LazyLoad();
+    window.lazyLoad = new LazyLoad();
 });
 
+// Exportar la clase
 export default LazyLoad;
