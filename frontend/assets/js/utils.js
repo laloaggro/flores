@@ -27,6 +27,7 @@ const checkBackendConnectivity = async () => {
     const endpointsToTry = [
       '/api/users/login',  // Endpoint de login
       '/api/products',  // Endpoint que debería existir
+      '/api/users/profile',  // Endpoint para verificar sesión
       '/',  // Página principal como último recurso
     ];
     
@@ -40,7 +41,7 @@ const checkBackendConnectivity = async () => {
           method: 'GET',
           signal: controller.signal,
           headers: {
-            'Accept': 'application/json'
+            'Content-Type': 'application/json'
           }
         }).catch(error => {
           // Capturar errores de red o abort
@@ -71,7 +72,15 @@ const checkBackendConnectivity = async () => {
 // Función para obtener el token JWT del almacenamiento local
 const getAuthToken = () => {
   try {
-    return localStorage.getItem('authToken');
+    // Primero intentar obtener el token con el nombre 'token' (como lo guarda login.js)
+    let token = localStorage.getItem('token');
+    
+    // Si no existe, intentar con 'authToken' (nombre anterior)
+    if (!token) {
+      token = localStorage.getItem('authToken');
+    }
+    
+    return token;
   } catch (error) {
     console.error('Error al obtener el token de autenticación:', error);
     return null;
@@ -81,6 +90,8 @@ const getAuthToken = () => {
 // Función para guardar el token JWT en el almacenamiento local
 const setAuthToken = (token) => {
   try {
+    // Guardar con ambos nombres para compatibilidad
+    localStorage.setItem('token', token);
     localStorage.setItem('authToken', token);
     console.log('Token de autenticación guardado');
   } catch (error) {
@@ -91,10 +102,36 @@ const setAuthToken = (token) => {
 // Función para eliminar el token JWT del almacenamiento local
 const removeAuthToken = () => {
   try {
+    // Eliminar ambos posibles nombres de token
+    localStorage.removeItem('token');
     localStorage.removeItem('authToken');
     console.log('Token de autenticación eliminado');
   } catch (error) {
     console.error('Error al eliminar el token de autenticación:', error);
+  }
+};
+
+// Función para cerrar sesión
+const logout = () => {
+  try {
+    // Eliminar token de autenticación
+    removeAuthToken();
+    
+    // Eliminar cualquier otro dato de usuario almacenado
+    localStorage.removeItem('user');
+    localStorage.removeItem('cart');
+    localStorage.removeItem('savedForLater');
+    
+    console.log('Sesión cerrada correctamente');
+    showNotification('Sesión cerrada correctamente', 'success');
+    
+    // Redirigir a la página principal después de un breve retraso
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 1000);
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+    showNotification('Error al cerrar sesión', 'error');
   }
 };
 
@@ -122,6 +159,22 @@ const isAuthenticated = () => {
   } catch (error) {
     console.error('Error al verificar el token de autenticación:', error);
     removeAuthToken(); // Eliminar token inválido
+    return false;
+  }
+};
+
+// Función para verificar si el usuario es administrador
+const isAdmin = () => {
+  const token = getAuthToken();
+  if (!token) {
+    return false;
+  }
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role === 'admin';
+  } catch (error) {
+    console.error('Error al verificar rol de administrador:', error);
     return false;
   }
 };
@@ -238,6 +291,19 @@ const isStrongPassword = (password) => {
   return passwordRegex.test(password);
 };
 
+// Función para actualizar el contador del carrito
+const updateCartCount = () => {
+  // Importar dinámicamente cartUtils para acceder a la función updateCartCount
+  import('./cartUtils.js').then((module) => {
+    const cartUtils = module.default || module;
+    if (cartUtils && typeof cartUtils.updateCartCount === 'function') {
+      cartUtils.updateCartCount();
+    }
+  }).catch((error) => {
+    console.error('Error al importar cartUtils:', error);
+  });
+};
+
 // Exportar funciones
 export {
   API_BASE_URL,
@@ -245,10 +311,13 @@ export {
   getAuthToken,
   setAuthToken,
   removeAuthToken,
+  logout,
   isAuthenticated,
+  isAdmin,
   getUserInfoFromToken,
   showNotification,
   formatPrice,
   isValidEmail,
-  isStrongPassword
+  isStrongPassword,
+  updateCartCount
 };

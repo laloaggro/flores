@@ -2,7 +2,7 @@
 
 /* Header Styles */
 header {
-    background-color: var(--white);
+    background-color: #ffffff; /* Fondo blanco para mejor visibilidad */
     box-shadow: var(--shadow);
     position: fixed;
     top: 0;
@@ -14,9 +14,23 @@ header {
     height: 80px;
     display: flex;
     align-items: center;
+    border-bottom: 1px solid var(--gray);
+    /* Asegurarse de que no haya fondo verde */
+    background-image: none;
+    background: #ffffff; /* Fondo blanco explícito */
 }
 
+body[data-theme="dark"] header {
+    background-color: var(--dark-card-bg); /* Usar variable CSS para fondo oscuro */
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+    background-image: none;
+}
+
+/* Asegurar visibilidad de texto en el navbar */
 .navbar {
+    color: #000000;
+    background-color: #ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -24,6 +38,9 @@ header {
     max-width: 1400px;
     width: 100%;
     margin: 0 auto;
+    /* Asegurarse de que el navbar no tenga fondo verde */
+    background-image: none;
+    background: transparent; /* Asegurar que el navbar no tenga fondo */
 }
 
 .logo {
@@ -46,12 +63,13 @@ nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 50px;
-    padding: 5px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(224, 224, 224, 0.7);
+    /* Eliminar todos los fondos y efectos que causan doble fondo */
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: none;
     position: relative;
 }
 
@@ -62,8 +80,9 @@ nav ul li {
 
 nav ul li a {
     text-decoration: none;
-    color: var(--dark-gray);
-    font-weight: 500;
+    /* Mejorar visibilidad del texto - usar color con mejor contraste */
+    color: #212529;
+    font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
@@ -71,12 +90,21 @@ nav ul li a {
     display: block;
     border-radius: 8px;
     letter-spacing: 0.3px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+/* Mejorar visibilidad en hover */
 nav ul li a:hover {
     color: var(--primary);
-    background-color: rgba(46, 125, 50, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Mejorar visibilidad del enlace activo */
+nav ul li a.active {
+    color: var(--primary);
+    font-weight: 700;
 }
 
 nav ul li a::after {
@@ -95,30 +123,66 @@ nav ul li a::after {
 nav ul li a:hover::after,
 nav ul li a.active::after {
     width: 70%;
+    transform: translateX(-50%) scale(1.1);
 }
 
-nav ul li a.active {
-    color: var(--primary);
-    font-weight: 600;
+body[data-theme="dark"] nav ul {
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
-/* Estilos para todos los botones del header */
-.btn-login, .user-info, .cart-icon {
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+body[data-theme="dark"] nav ul li a {
+    /* Mejorar visibilidad en modo oscuro - usar color con mejor contraste */
+    color: #e0e0e0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.btn-login:hover, .user-info:hover, .cart-icon:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+body[data-theme="dark"] nav ul li a:hover {
+    background-color: var(--dark-hover-bg);
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-/* User menu styles */
+body[data-theme="dark"] nav ul li a.active {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* Botón de login mejorado */
+.btn-login {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid var(--primary);
+}
+
+.btn-login:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-login i {
+    font-size: 0.9rem;
+}
+
+/* User Actions */
 .user-actions {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 1rem;
 }
 
+/* User Menu */
 .user-menu {
     position: relative;
 }
@@ -126,259 +190,222 @@ nav ul li a.active {
 .user-info {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: var(--white);
-    border: 2px solid var(--light-gray);
-    border-radius: 30px;
-    padding: 10px 20px;
+    gap: 0.5rem;
+    background-color: #ffffff;
+    color: var(--dark);
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    border: 1px solid var(--gray);
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 1rem;
     font-weight: 500;
-    color: var(--dark);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .user-info:hover {
-    background: var(--primary);
-    color: var(--white);
+    background-color: var(--primary);
     border-color: var(--primary);
-    box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.user-info i {
-    transition: all 0.3s ease;
-}
-
-.user-info:hover i {
-    transform: rotate(180deg);
-}
-
-/* Estilos para la imagen de perfil del usuario */
-.user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #e0e0e0;
-    flex-shrink: 0;
-    border: 2px solid #e0e0e0;
-}
-
-.user-profile-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.user-info i.fa-user {
+    color: var(--primary);
 }
 
 .user-dropdown {
     position: absolute;
-    top: calc(100% + 10px);
+    top: 100%;
     right: 0;
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
+    background-color: var(--white);
+    border-radius: 10px;
     box-shadow: var(--shadow);
-    padding: 10px 0;
-    min-width: 220px;
-    z-index: 1000;
+    padding: 0.5rem 0;
+    min-width: 200px;
+    margin-top: 0.5rem;
     display: none;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    color: #212121;
+    z-index: 1001;
+    border: 1px solid var(--gray);
+    /* Añadido: Transición suave */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.user-dropdown.show {
+.user-menu.show .user-dropdown {
     display: block;
-    opacity: 1;
-    transform: translateY(0);
+    animation: fadeIn 0.3s ease;
 }
 
 .user-dropdown li {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .user-dropdown a {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 20px;
-    color: #424242;
+    gap: 0.8rem;
+    padding: 0.8rem 1.2rem;
     text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 1rem;
+    color: var(--dark); /* Color principal para mejor visibilidad */
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 1rem; /* Asegurar tamaño de fuente adecuado */
 }
 
 .user-dropdown a:hover {
-    background: #f5f5f5;
+    background-color: var(--light);
     color: var(--primary);
 }
 
 .user-dropdown a i {
     width: 20px;
     text-align: center;
+    color: var(--primary); /* Añadido color al icono */
 }
 
-.btn-login {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--primary);
-    border: none;
-    border-radius: 30px;
-    padding: 12px 25px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+/* Añadir estilos para el texto específico del menú */
+.user-dropdown a span,
+.user-dropdown a {
+    color: var(--dark) !important;
+    font-weight: 500 !important;
+    background-color: transparent !important;
 }
 
-.btn-login:hover {
-    background: #ffffff;
-    color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+/* Dark mode styles for user menu */
+body[data-theme="dark"] .user-info {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
 }
 
-.btn-login i {
-    font-size: 1.1rem;
+body[data-theme="dark"] .user-info:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
 }
 
-/* Cart icon styles */
+body[data-theme="dark"] .user-dropdown {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+}
+
+body[data-theme="dark"] .user-dropdown a {
+    color: var(--dark-text) !important;
+    background-color: var(--dark-card-bg) !important;
+}
+
+body[data-theme="dark"] .user-dropdown a:hover {
+    background-color: var(--dark-hover-bg) !important;
+    color: white !important;
+}
+
+body[data-theme="dark"] .user-dropdown a i {
+    color: var(--primary) !important; /* Asegurar color del icono en modo oscuro */
+}
+
+body[data-theme="dark"] .user-dropdown a span {
+    color: var(--dark-text) !important;
+}
+
+/* Cart Icon */
 .cart-icon {
     position: relative;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff;
+    border: 1px solid var(--gray);
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--dark);
+    cursor: pointer;
     transition: all 0.3s ease;
-    color: var(--primary);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.cart-icon:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.cart-icon:hover {
-    background-color: #ffffff;
-    color: var(--primary);
-    transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.cart-icon:hover i {
+    color: white;
+}
+
+.cart-icon i {
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
 }
 
 .cart-count {
     position: absolute;
     top: -5px;
     right: -5px;
-    background-color: #c62828;
-    color: #ffffff;
+    background-color: var(--danger);
+    color: var(--white);
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 600;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* Theme Toggle Button */
+/* Botón de cambio de tema mejorado */
+.theme-toggle {
+    background: var(--light);
+    border: 1px solid var(--gray);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.theme-toggle:hover {
+    background: var(--gray);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+body[data-theme="dark"] .theme-toggle {
+    background: #3a3a3a;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body[data-theme="dark"] .theme-toggle:hover {
+    background: #4a4a4a;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Responsive Design */
-@media (max-width: 992px) {
-    .navbar {
-        padding: 0 3%;
-    }
-    
-    nav ul li {
-        margin: 0 1rem;
-    }
-    
-    .logo-text {
-        font-size: 2rem;
-    }
-    
-    .user-info {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-    }
-    
-    .btn-login {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
-    
-    .cart-icon {
-        width: 45px;
-        height: 45px;
-    }
-}
-
 @media (max-width: 768px) {
-    header {
-        height: auto;
-        padding: 1rem 0;
-    }
-    
     .navbar {
-        flex-direction: column;
-        padding: 0 1rem;
-        gap: 1rem;
-    }
-    
-    .logo {
-        margin-bottom: 0;
-    }
-    
-    nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-        background: rgba(255, 255, 255, 0.2);
-    }
-    
-    nav ul li {
-        margin: 0 0.8rem;
-    }
-    
-    nav ul li a {
-        font-size: 1rem;
-        color: #ffffff;
-    }
-    
-    nav ul li a:hover {
-        color: var(--primary);
-    }
-    
-    nav ul li a.active {
-        color: var(--primary);
-    }
-    
-    .user-actions {
-        gap: 15px;
-    }
-    
-    .cart-icon {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .cart-count {
-        width: 20px;
-        height: 20px;
-        font-size: 0.7rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .navbar {
-        gap: 0.8rem;
+        padding: 0 5%;
     }
     
     .logo-text {
@@ -386,32 +413,26 @@ nav ul li a.active {
     }
     
     nav ul {
-        gap: 0.3rem;
+        display: none;
     }
     
-    nav ul li {
-        margin: 0 0.5rem;
+    .user-actions {
+        gap: 10px;
     }
     
-    nav ul li a {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-    }
-    
-    .user-info {
-        padding: 6px 12px;
-        font-size: 0.8rem;
-        gap: 6px;
+    .btn-login span {
+        display: none;
     }
     
     .btn-login {
-        padding: 8px 15px;
-        font-size: 0.8rem;
-        gap: 6px;
+        padding: 0.5rem;
     }
     
-    .cart-icon {
-        width: 36px;
-        height: 36px;
+    .user-info span {
+        display: none;
+    }
+    
+    .user-info {
+        padding: 0.5rem;
     }
 }

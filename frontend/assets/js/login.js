@@ -1,4 +1,4 @@
-import { showNotification, updateCartCount, API_BASE_URL, checkBackendConnectivity } from './utils.js';
+import { showNotification, updateCartCount, API_BASE_URL, checkBackendConnectivity, setAuthToken } from './utils.js';
 import { initUserMenu } from './auth.js';
 import { initGoogleSignIn } from './googleAuth.js';
 
@@ -138,7 +138,7 @@ async function handleLogin() {
       
       // Si es un error 404, probablemente la ruta no existe
       if (response.status === 404) {
-        throw new Error('Endpoint no encontrado. Verifica que la ruta /api/auth/login exista en el backend.');
+        throw new Error('Endpoint no encontrado. Verifica que la ruta /api/users/login exista en el backend.');
       }
       
       // Si es un error de CORS, mostrar un mensaje específico
@@ -161,6 +161,9 @@ async function handleLogin() {
     // Guardar token y datos del usuario en localStorage
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
+    
+    // Usar la función setAuthToken de utils.js para guardar el token
+    setAuthToken(data.token);
     
     showNotification('Inicio de sesión exitoso', 'success');
     

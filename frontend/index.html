@@ -26,10 +26,18 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="assets/css/conflict-fixes.css">
     
     <meta name="description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana. Más de 10 años de experiencia en el mercado.">
     <meta name="keywords" content="arreglos florales, flores, florería, Recoleta, Región Metropolitana, entrega a domicilio">
-    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="author" content="Arreglos Victoria">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
     <meta name="robots" content="index, follow">
     
     <!-- Preload critical images with explicit width and height -->
@@ -69,8 +77,9 @@
     <link rel="preload" href="assets/js/products.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
+    <link rel="preload" href="assets/js/theme.js" as="script">
 </head>
-<body>
+<body data-theme="light">
     <!-- Skip link para navegación por teclado -->
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
@@ -90,6 +99,9 @@
             </nav>
             
             <div class="user-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar modo de tema">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión">
                     <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
                     <span>Iniciar sesión</span>
@@ -119,7 +131,16 @@
             <div class="hero-content">
                 <h1>Arreglos Victoria</h1>
                 <p>Flores frescas y hermosos arreglos florales para alegrar tus momentos especiales. Entrega a domicilio en Recoleta y alrededores.</p>
-                <a href="products.html" class="btn btn-primary">Ver Productos</a>
+                <div class="hero-buttons">
+                    <a href="products.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-cart"></i> 
+                        Ver Productos
+                    </a>
+                    <a href="contact.html" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-phone-alt"></i> 
+                        Contáctanos
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -353,5 +374,6 @@
     <script type="module" src="assets/js/products.js"></script>
     <script type="module" src="assets/js/userMenu.js"></script>
     <script type="module" src="assets/js/header.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
 </body>
 </html>
