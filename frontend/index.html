@@ -1,30 +1,38 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arreglos Victoria Florería - Inicio</title>
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
     
-    <!-- Cargar estilos CSS -->
+    <!-- Cargar estilos CSS optimizados -->
     <link rel="stylesheet" href="assets/css/preflight.css">
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/index.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/visibility-fix.css">
     
     <meta name="description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana. Más de 10 años de experiencia en el mercado.">
     <meta name="keywords" content="arreglos florales, flores, florería, Recoleta, Región Metropolitana, entrega a domicilio">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="index, follow">
     
-    <!-- Preload critical images -->
+    <!-- Preload critical images with explicit width and height -->
     <link rel="preload" as="image" href="./assets/images/hero-image.jpg">
     <link rel="preload" as="image" href="./assets/images/categories/arrangements.jpg">
     <link rel="preload" as="image" href="./assets/images/categories/bouquets.jpg">
@@ -38,6 +46,8 @@
     <meta property="og:title" content="Arreglos Victoria Florería - Inicio">
     <meta property="og:description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana.">
     <meta property="og:image" content="./assets/images/hero-image.jpg">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
     <meta property="og:site_name" content="Arreglos Victoria Florería">
 
     <!-- Twitter -->
@@ -52,6 +62,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Preload critical scripts -->
+    <link rel="preload" href="assets/js/utils.js" as="script">
+    <link rel="preload" href="assets/js/cart.js" as="script">
+    <link rel="preload" href="assets/js/products.js" as="script">
+    <link rel="preload" href="assets/js/userMenu.js" as="script">
+    <link rel="preload" href="assets/js/header.js" as="script">
 </head>
 <body>
     <!-- Skip link para navegación por teclado -->
@@ -72,25 +89,25 @@
                 </ul>
             </nav>
             
-            <div class="user-menu">
-                <div class="cart-icon" id="cartIcon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">0</span>
+            <div class="user-actions">
+                <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión">
+                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                    <span>Iniciar sesión</span>
+                </a>
+                <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
+                    <button class="user-info" aria-haspopup="true" aria-expanded="false">
+                        <span id="userNameDisplay"></span>
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <i class="fas fa-caret-down" aria-hidden="true"></i>
+                    </button>
+                    <ul class="user-dropdown" role="menu">
+                        <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
+                        <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
+                    </ul>
                 </div>
-                <div class="user-icon" id="userIcon">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-dropdown" id="userDropdown" style="display: none;">
-                    <div id="guest-menu" style="display: block;">
-                        <a href="login.html">Iniciar Sesión</a>
-                        <a href="register.html">Registrarse</a>
-                    </div>
-                    <div id="user-menu" style="display: none;">
-                        <a href="profile.html">Mi Perfil</a>
-                        <a href="wishlist.html">Lista de Deseos</a>
-                        <a href="#" id="logoutLink">Cerrar Sesión</a>
-                        <a href="admin.html" id="admin-menu-item" style="display: none;">Panel de Administración</a>
-                    </div>
+                <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                    <span class="cart-count" id="cartCount">0</span>
                 </div>
             </div>
         </div>
@@ -116,7 +133,7 @@
                 <div class="category-grid">
                     <div class="category-card">
                         <div class="category-image">
-                            <img src="./assets/images/categories/arrangements.jpg" alt="Arreglos Florales" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                            <img src="./assets/images/categories/arrangements.jpg" alt="Arreglos Florales" loading="lazy" width="400" height="300" onerror="this.src='./assets/images/placeholder.svg'">
                         </div>
                         <div class="category-info">
                             <h3>Arreglos Florales</h3>
@@ -126,7 +143,7 @@
                     </div>
                     <div class="category-card">
                         <div class="category-image">
-                            <img src="./assets/images/categories/bouquets.jpg" alt="Ramos" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                            <img src="./assets/images/categories/bouquets.jpg" alt="Ramos" loading="lazy" width="400" height="300" onerror="this.src='./assets/images/placeholder.svg'">
                         </div>
                         <div class="category-info">
                             <h3>Ramos</h3>
@@ -136,7 +153,7 @@
                     </div>
                     <div class="category-card">
                         <div class="category-image">
-                            <img src="./assets/images/categories/plants.jpg" alt="Plantas" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                            <img src="./assets/images/categories/plants.jpg" alt="Plantas" loading="lazy" width="400" height="300" onerror="this.src='./assets/images/placeholder.svg'">
                         </div>
                         <div class="category-info">
                             <h3>Plantas</h3>
@@ -146,29 +163,13 @@
                     </div>
                     <div class="category-card">
                         <div class="category-image">
-                            <img src="./assets/images/categories/accessories.jpg" alt="Accesorios" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                            <img src="./assets/images/categories/accessories.jpg" alt="Accesorios" loading="lazy" width="400" height="300" onerror="this.src='./assets/images/placeholder.svg'">
                         </div>
                         <div class="category-info">
                             <h3>Accesorios</h3>
-                            <p>Accesorios para complementar tus arreglos</p>
+                            <p>Complementos para tus arreglos florales</p>
                             <a href="products.html?category=accesorios" class="btn btn-primary">Ver Más</a>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Productos Destacados -->
-        <section class="featured-products">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Productos Destacados</h2>
-                    <p>Descubre nuestros arreglos florales más populares</p>
-                </div>
-                <div class="product-grid" id="featuredProducts">
-                    <!-- Los productos se cargarán dinámicamente -->
-                    <div class="loading-placeholder">
-                        <p>Cargando productos...</p>
                     </div>
                 </div>
             </div>
@@ -179,14 +180,13 @@
             <div class="container">
                 <div class="about-content">
                     <div class="about-image">
-                        <img src="./assets/images/about-florist.jpg" alt="Florista trabajando en arreglos florales" loading="lazy" onerror="this.src='./assets/images/placeholder.svg'">
+                        <img src="./assets/images/about-florist.jpg" alt="Floristería Arreglos Victoria" loading="lazy" width="600" height="400" onerror="this.src='./assets/images/placeholder.svg'">
                     </div>
                     <div class="about-text">
-                        <h2>Sobre Arreglos Victoria</h2>
-                        <p>Con más de 10 años de experiencia en el mercado, Arreglos Victoria se ha convertido en la florería de confianza para miles de clientes en Recoleta y alrededores.</p>
-                        <p>Nuestros floristas expertos seleccionan cuidadosamente las flores más frescas y crean hermosos arreglos florales para todas las ocasiones especiales.</p>
-                        <p>Desde ramos sencillos hasta elaborados centros de mesa, nos aseguramos de que cada arreglo sea una obra de arte única.</p>
-                        <a href="about.html" class="btn btn-secondary">Leer más sobre nosotros</a>
+                        <h2>Sobre Nosotros</h2>
+                        <p>En Arreglos Victoria llevamos más de 10 años creando hermosos arreglos florales para alegrar los momentos más especiales de nuestros clientes. Nos especializamos en flores frescas de la más alta calidad y diseños únicos que se adaptan a cualquier ocasión.</p>
+                        <p>Nuestro compromiso es brindar un servicio personalizado y de excelencia, entregando hermosos arreglos florales directamente en la puerta de tu hogar u oficina en Recoleta y alrededores.</p>
+                        <a href="contact.html" class="btn btn-secondary">Contáctanos</a>
                     </div>
                 </div>
             </div>
@@ -197,34 +197,36 @@
             <div class="container">
                 <div class="section-title">
                     <h2>Lo que dicen nuestros clientes</h2>
-                    <p>Testimonios de clientes satisfechos</p>
+                    <p>Testimonios de quienes han confiado en nosotros</p>
                 </div>
                 <div class="testimonial-grid">
                     <div class="testimonial-card">
                         <div class="testimonial-content">
-                            <p>"Los arreglos florales de Arreglos Victoria son simplemente espectaculares. Siempre llegan frescos y hermosos. ¡Mi florería favorita!"</p>
+                            <p>"Los arreglos florales de Arreglos Victoria son simplemente hermosos. Siempre cumplen con la entrega puntual y la calidad es excepcional."</p>
                         </div>
                         <div class="testimonial-author">
-                            <h4>María Rodríguez</h4>
-                            <p>Cliente habitual</p>
+                            <h4>María González</h4>
+                            <p>Cliente satisfecha</p>
                         </div>
                     </div>
+
                     <div class="testimonial-card">
                         <div class="testimonial-content">
-                            <p>"Pedí un arreglo para un evento especial y superó todas mis expectativas. El servicio al cliente es excepcional y la entrega puntual."</p>
+                            <p>"Para mi aniversario, mi esposo me sorprendió con un arreglo floral de esta floristería. ¡Fue perfecto! La atención al cliente fue excelente."</p>
                         </div>
                         <div class="testimonial-author">
-                            <h4>Carlos Mendoza</h4>
-                            <p>Cliente corporativo</p>
+                            <h4>Camila Rodríguez</h4>
+                            <p>Cliente feliz</p>
                         </div>
                     </div>
+
                     <div class="testimonial-card">
                         <div class="testimonial-content">
-                            <p>"Como florista freelance, recomiendo Arreglos Victoria a todos mis clientes que buscan calidad y servicio profesional. ¡Son los mejores!"</p>
+                            <p>"Como empresa, contratamos sus servicios para eventos corporativos. Siempre superan nuestras expectativas con diseños creativos y profesionales."</p>
                         </div>
                         <div class="testimonial-author">
-                            <h4>Ana López</h4>
-                            <p>Florista asociada</p>
+                            <h4>Roberto Silva</h4>
+                            <p>Director de Eventos S.A.</p>
                         </div>
                     </div>
                 </div>
@@ -236,95 +238,120 @@
             <div class="container">
                 <div class="section-title">
                     <h2>Contacto</h2>
-                    <p>¿Tienes alguna pregunta? ¡Contáctanos!</p>
+                    <p>Estamos aquí para ayudarte</p>
                 </div>
                 <div class="contact-content">
-                    <div class="contact-details">
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-text">
+                    <div class="contact-info">
+                        <h3>Información de Contacto</h3>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
                                 <h4>Dirección</h4>
-                                <p>Av. Valdivieso 593, Recoleta<br>Región Metropolitana, Chile</p>
+                                <p>Recoleta, Región Metropolitana</p>
                             </div>
                         </div>
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div class="contact-text">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
                                 <h4>Teléfono</h4>
-                                <p>+569 6360 3177</p>
+                                <p>+56 9 1234 5678</p>
                             </div>
                         </div>
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-text">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
                                 <h4>Email</h4>
-                                <p>info@arreglosvictoria.cl</p>
+                                <p>contacto@arreglosvictoria.com</p>
                             </div>
                         </div>
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="contact-text">
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
                                 <h4>Horario</h4>
-                                <p>Lunes a Sábado: 9:00 AM - 8:00 PM<br>Domingo: 10:00 AM - 6:00 PM</p>
+                                <p>Lunes a Domingo: 9:00 - 21:00</p>
                             </div>
                         </div>
                     </div>
                     <div class="contact-form">
                         <h3>Envíanos un mensaje</h3>
                         <form id="contactForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name">Nombre</label>
-                                    <input type="text" id="name" name="name" required class="form-input" autocomplete="name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" required class="form-input" autocomplete="email">
-                                </div>
+                            <div class="form-group">
+                                <label for="contactName">Nombre</label>
+                                <input type="text" id="contactName" name="name" required>
                             </div>
                             <div class="form-group">
-                                <label for="subject">Asunto</label>
-                                <input type="text" id="subject" name="subject" required class="form-input" autocomplete="off">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail" name="email" required>
                             </div>
                             <div class="form-group">
-                                <label for="message">Mensaje</label>
-                                <textarea id="message" name="message" rows="5" required class="form-input" autocomplete="off"></textarea>
+                                <label for="contactSubject">Asunto</label>
+                                <input type="text" id="contactSubject" name="subject">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Mensaje</label>
+                                <textarea id="contactMessage" name="message" rows="5" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                         </form>
-                        <div id="formMessage" class="form-message"></div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="loading-indicator" aria-hidden="true">
-        <div class="spinner" role="status" aria-label="Cargando contenido">
-            <div></div><div></div><div></div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Arreglos Victoria</h3>
+                    <p>Flores frescas y hermosos arreglos florales para alegrar tus momentos especiales.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="products.html">Productos</a></li>
+                        <li><a href="about.html">Nosotros</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categorías</h4>
+                    <ul>
+                        <li><a href="products.html?category=arreglos">Arreglos Florales</a></li>
+                        <li><a href="products.html?category=ramos">Ramos</a></li>
+                        <li><a href="products.html?category=plantas">Plantas</a></li>
+                        <li><a href="products.html?category=accesorios">Accesorios</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Información</h4>
+                    <ul>
+                        <li><a href="privacy.html">Política de Privacidad</a></li>
+                        <li><a href="terms.html">Términos y Condiciones</a></li>
+                        <li><a href="shipping.html">Envíos y Devoluciones</a></li>
+                        <li><a href="faq.html">Preguntas Frecuentes</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Arreglos Victoria Florería. Todos los derechos reservados.</p>
+            </div>
         </div>
-    </div>
+    </footer>
 
-    <!-- Scripts -->
-    <script type="module" src="./assets/js/utils.js"></script>
-    <script type="module" src="./assets/js/auth.js"></script>
-    <script type="module" src="./assets/js/cartUtils.js"></script>
-    <script type="module" src="./assets/js/homeProducts.js"></script>
-    <script type="module" src="./assets/js/cart.js"></script>
-    <script type="module" src="./assets/js/home.js"></script>
-    <script type="module" src="./assets/js/accessibility.js"></script>
-    <script type="module" src="./assets/js/lazyLoad.js"></script>
-    <script type="module" src="./assets/js/imageOptimizer.js"></script>
-    <script type="module" src="./assets/js/register-sw.js"></script>
-
+    <!-- Scripts optimizados -->
+    <script type="module" src="assets/js/utils.js"></script>
+    <script type="module" src="assets/js/cart.js"></script>
+    <script type="module" src="assets/js/products.js"></script>
+    <script type="module" src="assets/js/userMenu.js"></script>
+    <script type="module" src="assets/js/header.js"></script>
 </body>
 </html>

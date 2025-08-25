@@ -11,6 +11,11 @@ const ProductCard = (product) => {
   const defaultImage = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\' viewBox=\'0 0 300 200\'%3E%3Crect width=\'300\' height=\'200\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'Arial\' font-size=\'20\' fill=\'%23999\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EImagen%3C/text%3E%3Ctext x=\'50%25\' y=\'65%25\' font-family=\'Arial\' font-size=\'16\' fill=\'%23999\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ENo disponible%3C/text%3E%3C/svg%3E';
   const imageUrl = product.image_url || defaultImage;
   
+  // Crear srcset para imágenes responsivas
+  const srcset = product.image_url 
+    ? `${product.image_url}?w=300 300w, ${product.image_url}?w=600 600w, ${product.image_url}?w=900 900w`
+    : '';
+  
   return `
     <article class="product-card" itemscope itemtype="http://schema.org/Product" tabindex="0" role="article" aria-labelledby="product-name-${product.id}">
       <div class="product-image">
@@ -18,6 +23,8 @@ const ProductCard = (product) => {
           ${avifSrc ? `<source srcset="${avifSrc}" type="image/avif">` : ''}
           ${webpSrc ? `<source srcset="${webpSrc}" type="image/webp">` : ''}
           <img src="${imageUrl}" 
+               srcset="${srcset}"
+               sizes="(max-width: 600px) 300px, (max-width: 900px) 600px, 900px"
                alt="${product.name || 'Producto sin nombre'}" 
                loading="lazy" 
                itemprop="image"

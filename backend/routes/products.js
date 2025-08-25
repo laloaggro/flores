@@ -426,4 +426,140 @@ router.delete('/:id', authenticateAdmin, (req, res) => {
   });
 });
 
+// Ruta para obtener productos con reseñas y calificaciones
+router.get('/with-reviews', (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 12;
+  const offset = (page - 1) * limit;
+  const category = req.query.category;
+  const search = req.query.search;
+  
+  let query = `
+    SELECT p.*, 
+           AVG(r.rating) as average_rating,
+           COUNT(r.id) as review_count
+    FROM products p
+    LEFT JOIN reviews r ON p.id = r.product_id
+  `;
+  
+  let countQuery = `
+    SELECT COUNT(DISTINCT p.id) as total
+    FROM products p
+    LEFT JOIN reviews r ON p.id = r.product_id
+  `;
+  
+  const params = [];
+  const countParams = [];
+  
+  // Agregar filtros si existen
+  if (category) {
+    query += ' WHERE p.category = ?';
+    countQuery += ' WHERE p.category = ?';
+    params.push(category);
+    countParams.push(category);
+  }
+  
+  if (search) {
+    if (category) {
+      query += ' AND p.name LIKE ?';
+      countQuery += ' AND p.name LIKE ?';
+    } else {
+      query += ' WHERE p.name LIKE ?';
+      countQuery += ' WHERE p.name LIKE ?';
+    }
+    params.push(`%${search}%`);
+    countParams.push(`%${search}%`);
+  }
+  
+  // Agregar agrupamiento y orden
+  query += ' GROUP BY p.id ORDER BY p.id LIMIT ? OFFSET ?';
+  params.push(limit, offset);
+  
+  // Obtener productos con reseñas y calificaciones
+  db.all(query, params, (err, rows) => {
+    if (err) {
+      console.error('Error al obtener productos con reseñas:', err.message);
+      return res.status(500).json({ error: 'Error al obtener productos con reseñas' });
+    }
+    
+    // Contar el total de productos con los filtros aplicados
+    db.get(countQuery, countParams, (err, countRow) => {
+      if (err) {
+        console.error('Error al contar productos:', err.message);
+        return res.status(500).json({ error: 'Error al contar productos' });
+      }
+      
+      const total = countRow.total;
+      const totalPages = Math.ceil(total / limit);
+      
+      res.json({
+        products: rows,
+        pagination: {
+          currentPage: page,
+          totalPages: totalPages,
+          totalProducts: total,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1
+        }
+      });
+    });
+  });
+});
+
+// Ruta para obtener productos más populares (por número de reseñas)
+router.get('/popular', (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  
+  const query = `
+    SELECT p.*, 
+           AVG(r.rating) as average_rating,
+           COUNT(r.id) as review_count
+    FROM products p
+    LEFT JOIN reviews r ON p.id = r.product_id
+    GROUP BY p.id
+    HAVING review_count > 0
+    ORDER BY review_count DESC, average_rating DESC
+    LIMIT ?
+  `;
+  
+  db.all(query, [limit], (err, rows) => {
+    if (err) {
+      console.error('Error al obtener productos populares:', err.message);
+      return res.status(500).json({ error: 'Error al obtener productos populares' });
+    }
+    
+    res.json({
+      products: rows
+    });
+  });
+});
+
+// Ruta para obtener productos mejor calificados
+router.get('/top-rated', (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  
+  const query = `
+    SELECT p.*, 
+           AVG(r.rating) as average_rating,
+           COUNT(r.id) as review_count
+    FROM products p
+    LEFT JOIN reviews r ON p.id = r.product_id
+    GROUP BY p.id
+    HAVING review_count > 2
+    ORDER BY average_rating DESC, review_count DESC
+    LIMIT ?
+  `;
+  
+  db.all(query, [limit], (err, rows) => {
+    if (err) {
+      console.error('Error al obtener productos mejor calificados:', err.message);
+      return res.status(500).json({ error: 'Error al obtener productos mejor calificados' });
+    }
+    
+    res.json({
+      products: rows
+    });
+  });
+});
+
 module.exports = router;

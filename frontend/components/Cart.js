@@ -25,7 +25,13 @@ function Cart(cartItems = [], savedForLater = []) {
 
   // Función para formatear precios
   function formatPrice(price) {
-    return `$${price.toLocaleString()}`;
+    // Formatear como moneda chilena sin decimales
+    return new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price);
   }
 
   // Función para renderizar items del carrito
@@ -36,6 +42,7 @@ function Cart(cartItems = [], savedForLater = []) {
           <i class="fas fa-shopping-cart fa-3x"></i>
           <h3>Tu carrito está vacío</h3>
           <p>Agrega productos para comenzar</p>
+          <a href="products.html" class="btn btn-primary">Ver productos</a>
         </div>
       `;
     }
@@ -49,18 +56,25 @@ function Cart(cartItems = [], savedForLater = []) {
         </div>
         <div class="item-info">
           <h4>${item.name}</h4>
-          <div class="item-price">${formatPrice(item.price)}</div>
-          <div class="item-quantity">
-            <button class="quantity-btn decrease-quantity" data-id="${item.id}">-</button>
-            <span>${item.quantity}</span>
-            <button class="quantity-btn increase-quantity" data-id="${item.id}">+</button>
-          </div>
+          <p class="item-price">${formatPrice(item.price)}</p>
+        </div>
+        <div class="item-quantity">
+          <button class="quantity-btn decrease" aria-label="Disminuir cantidad">
+            <i class="fas fa-minus"></i>
+          </button>
+          <span class="quantity">${item.quantity}</span>
+          <button class="quantity-btn increase" aria-label="Aumentar cantidad">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <div class="item-total">
+          <span>${formatPrice(item.price * item.quantity)}</span>
         </div>
         <div class="item-actions">
-          <button class="save-for-later" data-id="${item.id}">
-            <i class="fas fa-save"></i> Guardar
+          <button class="save-for-later" aria-label="Guardar para más tarde">
+            <i class="fas fa-save"></i>
           </button>
-          <button class="remove-item" data-id="${item.id}">
+          <button class="remove-item" aria-label="Eliminar del carrito">
             <i class="fas fa-trash"></i>
           </button>
         </div>
@@ -69,102 +83,90 @@ function Cart(cartItems = [], savedForLater = []) {
   }
 
   // Función para renderizar items guardados para más tarde
-  function renderSavedForLater(items) {
+  function renderSavedItems(items) {
     if (items.length === 0) {
-      return '';
+      return '<p class="empty-saved">No hay productos guardados para más tarde</p>';
     }
 
-    return `
-      <h3>Guardado para más tarde</h3>
-      ${items.map(item => `
-        <div class="saved-item" data-id="${item.id}">
-          <div class="item-image">
-            <img src="${item.image || './assets/images/placeholder.svg'}" 
-                 alt="${item.name}" 
-                 onerror="this.src='./assets/images/placeholder.svg'">
-          </div>
-          <div class="item-info">
-            <h4>${item.name}</h4>
-            <div class="item-price">${formatPrice(item.price)}</div>
-          </div>
-          <div class="item-actions">
-            <button class="move-to-cart" data-id="${item.id}">
-              <i class="fas fa-shopping-cart"></i> Mover al carrito
-            </button>
-            <button class="remove-saved-item" data-id="${item.id}">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
+    return items.map(item => `
+      <div class="saved-item" data-id="${item.id}">
+        <div class="item-image">
+          <img src="${item.image || './assets/images/placeholder.svg'}" 
+               alt="${item.name}" 
+               onerror="this.src='./assets/images/placeholder.svg'">
         </div>
-      `).join('')}
-    `;
+        <div class="item-info">
+          <h4>${item.name}</h4>
+          <p class="item-price">${formatPrice(item.price)}</p>
+        </div>
+        <div class="saved-item-actions">
+          <button class="move-to-cart" aria-label="Mover al carrito">
+            <i class="fas fa-shopping-cart"></i> Mover al carrito
+          </button>
+          <button class="remove-saved-item" aria-label="Eliminar">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    `).join('');
   }
 
-  // Función para actualizar la cantidad de un producto
-  function updateQuantity(productId, newQuantity) {
-    // Esta función se implementa en cartUtils.js
-    console.warn('updateQuantity should be called from CartUtils');
-  }
+  // Calcular totales
+  const cartTotal = calculateCartTotal(cartItems);
+  const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  // Función para eliminar un producto del carrito
-  function removeFromCart(productId) {
-    // Esta función se implementa en cartUtils.js
-    console.warn('removeFromCart should be called from CartUtils');
-  }
-
-  // Función para guardar un producto para más tarde
-  function saveForLater(productId) {
-    // Esta función se implementa en cartUtils.js
-    console.warn('saveForLater should be called from CartUtils');
-  }
-
-  // Función para mover un producto del guardado al carrito
-  function moveToCart(productId) {
-    // Esta función se implementa en cartUtils.js
-    console.warn('moveToCart should be called from CartUtils');
-  }
-
-  // Renderizar el carrito completo
+  // Generar HTML del carrito
   return `
-    <div id="cartModal" class="cart-modal">
-      <div class="cart-header">
-        <h2 class="cart-title">Tu Carrito</h2>
-        <button class="cart-close">&times;</button>
-      </div>
-      <div class="cart-items">
-        ${renderCartItems(cartItems)}
-        ${renderSavedForLater(savedForLater)}
-      </div>
-      <div class="cart-footer">
-        <div class="cart-total">
-          <span>Total:</span>
-          <span class="total-amount">${formatPrice(calculateCartTotal(cartItems))}</span>
+    <div class="cart-modal" id="cartModal">
+      <div class="cart-content">
+        <div class="cart-header">
+          <h2>Carrito de Compras</h2>
+          <button class="cart-close" aria-label="Cerrar carrito">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-        <button class="checkout-button">Proceder al Pedido</button>
+        
+        <div class="cart-body">
+          <div class="cart-items-section">
+            <h3>Tus Productos (${itemCount} ${itemCount === 1 ? 'item' : 'items'})</h3>
+            <div class="cart-items">
+              ${renderCartItems(cartItems)}
+            </div>
+          </div>
+          
+          <div class="saved-for-later-section">
+            <h3>Guardados para más tarde</h3>
+            <div class="saved-items">
+              ${renderSavedItems(savedForLater)}
+            </div>
+          </div>
+        </div>
+        
+        <div class="cart-footer">
+          <div class="cart-summary">
+            <div class="summary-row">
+              <span>Total:</span>
+              <span class="total-amount">${formatPrice(cartTotal)}</span>
+            </div>
+          </div>
+          <div class="cart-actions">
+            <button class="btn btn-secondary clear-cart">Vaciar carrito</button>
+            <button class="btn btn-primary checkout-button" ${cartItems.length === 0 ? 'disabled' : ''}>
+              Proceder al pedido
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="overlay" id="overlay"></div>
   `;
 }
 
-// Funciones para guardar y cargar el carrito desde localStorage
-function saveCartToLocalStorage(cart) {
-  try {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  } catch (error) {
-    console.error('Error saving cart to localStorage:', error);
-  }
+// Función para mostrar el carrito
+function showCart() {
+  // Esta función será implementada en cart.js
+  console.log('Mostrar carrito');
 }
 
-function loadCartFromLocalStorage() {
-  try {
-    const cart = localStorage.getItem('cart');
-    return cart ? JSON.parse(cart) : [];
-  } catch (error) {
-    console.error('Error loading cart from localStorage:', error);
-    return [];
-  }
-}
-
+// Exportar componente y función
 export default Cart;
-export { saveCartToLocalStorage, loadCartFromLocalStorage };
+export { showCart };

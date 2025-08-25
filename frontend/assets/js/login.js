@@ -151,50 +151,6 @@ async function handleLogin() {
     }
     
     const data = await response.json();
-    console.log('Datos recibidos:', data);
-    
-    let response;
-    try {
-      response = await fetch(`${API_BASE_URL}/api/users/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
-    } catch (fetchError) {
-      console.error('Error al realizar la solicitud:', fetchError);
-      throw new Error(`No se pudo conectar con el servidor. Error: ${fetchError.message}`);
-    }
-    
-    console.log('Respuesta del servidor:', response);
-    console.log('Estado de la respuesta:', response.status);
-    
-    // Verificar si la respuesta es JSON
-    const contentType = response.headers.get('content-type');
-    console.log('Tipo de contenido:', contentType);
-    
-    if (!contentType || !contentType.includes('application/json')) {
-      // Si la respuesta no es JSON, mostrar el contenido para diagnóstico
-      const responseText = await response.text();
-      console.error('Respuesta no JSON recibida:', responseText);
-      
-      // Si es un error 404, probablemente la ruta no existe
-      if (response.status === 404) {
-        throw new Error('Endpoint no encontrado. Verifica que la ruta /api/auth/login exista en el backend.');
-      }
-      
-      // Si es un error de CORS, mostrar un mensaje específico
-      if (response.status === 0) {
-        throw new Error('Error de conexión. Puede ser un problema de CORS o el servidor no está respondiendo.');
-      }
-      
-      const errorMsg = 'Error de conexión con el servidor. Por favor, verifica que el servidor esté funcionando correctamente.';
-      throw new Error(errorMsg);
-    }
-    
-    const data = await response.json();
-    console.log('Datos recibidos:', data);
     
     if (!response.ok) {
       const errorMsg = data.message || 'Error al iniciar sesión';

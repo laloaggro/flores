@@ -4,460 +4,212 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Usuario - Arreglos Victoria Florería</title>
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
     
-    <!-- Cargar estilos CSS en el orden correcto -->
+    <!-- Cargar estilos CSS optimizados -->
     <link rel="stylesheet" href="assets/css/preflight.css">
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/index.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/visibility-fix.css">
     
-    <meta name="description" content="Tu perfil en Arreglos Victoria Florería. Gestiona tu información personal, pedidos y preferencias.">
-    <meta name="keywords" content="perfil, usuario, cuenta, información personal, pedidos, florería, arreglos florales">
+    <meta name="description" content="Tu perfil de usuario en Arreglos Victoria Florería. Gestiona tu información personal, pedidos y lista de deseos.">
+    <meta name="keywords" content="perfil, usuario, cuenta, pedidos, lista de deseos, información personal">
     <meta name="author" content="Arreglos Victoria Florería">
-    <meta name="robots" content="noindex, follow">
+    <meta name="robots" content="noindex, nofollow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/profile.html">
     <meta property="og:title" content="Perfil de Usuario - Arreglos Victoria Florería">
-    <meta property="og:description" content="Gestiona tu información personal, pedidos y configuración de cuenta en Arreglos Florales Victoria.">
-    <meta property="og:image" content="./assets/images/hero-image.jpg">
-
+    <meta property="og:description" content="Tu perfil de usuario en Arreglos Victoria Florería.">
+    <meta property="og:image" content="./assets/images/profile-hero.jpg">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
+    
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/profile.html">
     <meta property="twitter:title" content="Perfil de Usuario - Arreglos Victoria Florería">
-    <meta property="twitter:description" content="Gestiona tu información personal, pedidos y configuración de cuenta en Arreglos Florales Victoria.">
-    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
-
-    <style>
-        .profile-section {
-            padding: 40px 0;
-            background-color: #f9f9f9;
-            min-height: calc(100vh - 160px);
-        }
-        
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
-        .page-header p {
-            font-size: 1.1rem;
-            color: #666;
-        }
-        
-        .profile-container {
-            display: flex;
-            gap: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            padding: 30px;
-            margin-top: 20px;
-        }
-        
-        .profile-sidebar {
-            flex: 0 0 300px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-        }
-        
-        .user-info-card {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .user-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            color: white;
-            font-size: 2.5rem;
-        }
-        
-        .user-info-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-            color: var(--dark);
-        }
-        
-        .user-info-card p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .profile-nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .profile-nav ul li {
-            margin-bottom: 10px;
-        }
-        
-        .profile-nav ul li a {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            color: #333;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: var(--transition);
-        }
-        
-        .profile-nav ul li a:hover,
-        .profile-nav ul li.active a {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .profile-nav ul li a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .profile-content {
-            flex: 1;
-        }
-        
-        .profile-tab {
-            display: none;
-        }
-        
-        .profile-tab.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .profile-tab h2 {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--gray);
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .form-group {
-            flex: 1;
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #333;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(90, 143, 105, 0.1);
-        }
-        
-        .form-input:disabled {
-            background-color: #f5f5f5;
-            cursor: not-allowed;
-        }
-        
-        textarea.form-input {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .btn i {
-            margin-right: 8px;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        #ordersList {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            min-height: 200px;
-        }
-        
-        #ordersList p {
-            text-align: center;
-            color: #666;
-            font-style: italic;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @media (max-width: 992px) {
-            .profile-container {
-                flex-direction: column;
-            }
-            
-            .profile-sidebar {
-                flex: 0 0 auto;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            
-            .profile-section {
-                padding: 20px 0;
-            }
-            
-            .profile-container {
-                padding: 20px 15px;
-            }
-            
-            .profile-sidebar {
-                padding: 20px 15px;
-            }
-            
-            .page-header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    <meta property="twitter:description" content="Tu perfil de usuario en Arreglos Victoria Florería.">
+    <meta property="twitter:image" content="./assets/images/profile-hero.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Preload critical scripts -->
+    <link rel="preload" href="assets/js/utils.js" as="script">
+    <link rel="preload" href="assets/js/profile.js" as="script">
+    <link rel="preload" href="assets/js/userMenu.js" as="script">
+    <link rel="preload" href="assets/js/header.js" as="script">
 </head>
 <body>
+    <!-- Skip link para navegación por teclado -->
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
+    <!-- Header -->
     <header>
-        <div class="container">
-            <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
-                
-                <!-- Botón de menú hamburguesa -->
-                <button class="hamburger" aria-label="Menú" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                
-                <ul class="nav-links">
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <span class="logo-text">Arreglos Victoria</span>
+            </a>
+            
+            <nav>
+                <ul>
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="products.html">Productos</a></li>
-                    <li><a href="index.html#about">Nosotros</a></li>
                     <li><a href="index.html#contacto">Contacto</a></li>
-                    <li><a href="sitemap.html">Mapa del Sitio</a></li>
                 </ul>
-                <div class="user-actions">
-                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
-                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                        <span>Iniciar sesión</span>
-                    </a>
-                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
-                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
-                            <span id="userNameDisplay"></span>
-                            <i class="fas fa-user" aria-hidden="true"></i>
-                            <i class="fas fa-caret-down" aria-hidden="true"></i>
-                        </button>
-                        <ul class="user-dropdown" role="menu">
-                            <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
-                            <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
-                        </ul>
+            </nav>
+            
+            <div class="user-menu">
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+                <div class="user-icon" id="userIcon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-dropdown" id="userDropdown" style="display: none;">
+                    <div id="guest-menu" style="display: block;">
+                        <a href="login.html">Iniciar Sesión</a>
+                        <a href="register.html">Registrarse</a>
                     </div>
-                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
-                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                        <span class="cart-count" id="cartCount">0</span>
+                    <div id="user-menu" style="display: none;">
+                        <a href="profile.html">Mi Perfil</a>
+                        <a href="wishlist.html">Lista de Deseos</a>
+                        <a href="#" id="logoutLink">Cerrar Sesión</a>
+                        <a href="admin.html" id="admin-menu-item" style="display: none;">Panel de Administración</a>
                     </div>
                 </div>
-            </nav>
+            </div>
         </div>
     </header>
 
     <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero-profile">
+            <div class="hero-content">
+                <h1>Mi Perfil</h1>
+                <p>Administra tu información personal y tus pedidos</p>
+            </div>
+        </section>
+
+        <!-- Perfil de usuario -->
         <section class="profile-section">
             <div class="container">
-                <div class="page-header">
-                    <h1>Perfil de Usuario</h1>
-                    <p>Gestiona tu información personal y pedidos</p>
-                </div>
-                
                 <div class="profile-container">
-                    <aside class="profile-sidebar">
-                        <div class="user-info-card">
-                            <div class="user-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <h3 id="userName">Usuario</h3>
-                            <p id="userEmail">usuario@example.com</p>
-                        </div>
-                        
-                        <nav class="profile-nav">
+                    <div class="profile-sidebar">
+                        <div class="profile-menu">
                             <ul>
-                                <li class="active"><a href="#profile-info" data-tab="profile-info"><i class="fas fa-user-circle"></i> Información Personal</a></li>
-                                <li><a href="#orders" data-tab="orders"><i class="fas fa-shopping-bag"></i> Mis Pedidos</a></li>
-                                <li><a href="#settings" data-tab="settings"><i class="fas fa-cog"></i> Configuración</a></li>
-                                <li><a href="#change-password" data-tab="change-password"><i class="fas fa-lock"></i> Cambiar Contraseña</a></li>
+                                <li><a href="#" class="active" data-tab="profile">Información Personal</a></li>
+                                <li><a href="#" data-tab="orders">Mis Pedidos</a></li>
+                                <li><a href="#" data-tab="wishlist">Lista de Deseos</a></li>
+                                <li><a href="#" data-tab="addresses">Direcciones</a></li>
+                                <li><a href="#" data-tab="settings">Configuración</a></li>
                             </ul>
-                        </nav>
-                        
-                        <button id="logoutButton" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-                    </aside>
-                    
+                        </div>
+                    </div>
                     <div class="profile-content">
-                        <!-- Profile Info Tab -->
-                        <div id="profile-info" class="profile-tab active">
+                        <!-- Información Personal -->
+                        <div class="profile-tab active" id="profile-tab">
                             <h2>Información Personal</h2>
                             <form id="profileForm">
-                                <div class="profile-info">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="profileFirstName">Nombre</label>
-                                            <input type="text" id="profileFirstName" name="firstName" class="form-input" autocomplete="given-name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="profileLastName">Apellido</label>
-                                            <input type="text" id="profileLastName" name="lastName" class="form-input" autocomplete="family-name">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="profileEmail">Email</label>
-                                        <input type="email" id="profileEmail" name="email" class="form-input" readonly>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="profilePhone">Teléfono</label>
-                                            <input type="tel" id="profilePhone" name="phone" class="form-input" autocomplete="tel">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="profileAddress">Dirección</label>
-                                            <textarea id="profileAddress" name="address" class="form-input" autocomplete="street-address"></textarea>
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="profileName">Nombre</label>
+                                    <input type="text" id="profileName" name="name" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Actualizar Información</button>
+                                <div class="form-group">
+                                    <label for="profileEmail">Email</label>
+                                    <input type="email" id="profileEmail" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profilePhone">Teléfono</label>
+                                    <input type="tel" id="profilePhone" name="phone">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                             </form>
                         </div>
-                        
-                        <!-- Orders Tab -->
-                        <div id="orders" class="profile-tab">
+
+                        <!-- Mis Pedidos -->
+                        <div class="profile-tab" id="orders-tab">
                             <h2>Mis Pedidos</h2>
-                            <div id="ordersList">
-                                <p>Cargando pedidos...</p>
+                            <div class="orders-container" id="ordersContainer">
+                                <!-- Los pedidos se cargarán aquí dinámicamente -->
                             </div>
                         </div>
-                        
-                        <!-- Settings Tab -->
-                        <div id="settings" class="profile-tab">
+
+                        <!-- Lista de Deseos -->
+                        <div class="profile-tab" id="wishlist-tab">
+                            <h2>Lista de Deseos</h2>
+                            <div class="wishlist-container" id="wishlistContainer">
+                                <!-- Los productos de la lista de deseos se cargarán aquí -->
+                            </div>
+                        </div>
+
+                        <!-- Direcciones -->
+                        <div class="profile-tab" id="addresses-tab">
+                            <h2>Direcciones</h2>
+                            <div class="addresses-container">
+                                <form id="addressForm">
+                                    <div class="form-group">
+                                        <label for="addressName">Nombre de la Dirección</label>
+                                        <input type="text" id="addressName" name="addressName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="street">Calle</label>
+                                        <input type="text" id="street" name="street" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="city">Ciudad</label>
+                                            <input type="text" id="city" name="city" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="region">Región</label>
+                                            <input type="text" id="region" name="region" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Agregar Dirección</button>
+                                </form>
+                                <div class="saved-addresses" id="savedAddresses">
+                                    <!-- Las direcciones guardadas se mostrarán aquí -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Configuración -->
+                        <div class="profile-tab" id="settings-tab">
                             <h2>Configuración</h2>
                             <form id="settingsForm">
                                 <div class="form-group">
-                                    <label for="notifications">
-                                        <input type="checkbox" id="notifications" name="notifications"> 
-                                        Recibir notificaciones por email
-                                    </label>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="newsletter">
-                                        <input type="checkbox" id="newsletter" name="newsletter"> 
-                                        Suscribirse a nuestro boletín
-                                    </label>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary">Guardar Configuración</button>
-                            </form>
-                        </div>
-                        
-                        <!-- Change Password Tab -->
-                        <div id="change-password" class="profile-tab">
-                            <h2>Cambiar Contraseña</h2>
-                            <form id="changePasswordForm">
-                                <div class="form-group">
                                     <label for="currentPassword">Contraseña Actual</label>
-                                    <input type="password" id="currentPassword" name="currentPassword" class="form-input" required autocomplete="current-password">
+                                    <input type="password" id="currentPassword" name="currentPassword">
                                 </div>
                                 <div class="form-group">
                                     <label for="newPassword">Nueva Contraseña</label>
-                                    <input type="password" id="newPassword" name="newPassword" class="form-input" required minlength="6" autocomplete="new-password">
+                                    <input type="password" id="newPassword" name="newPassword">
                                 </div>
                                 <div class="form-group">
-                                    <label for="confirmNewPassword">Confirmar Nueva Contraseña</label>
-                                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="form-input" required autocomplete="new-password">
+                                    <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                                    <input type="password" id="confirmPassword" name="confirmPassword">
                                 </div>
-                                
                                 <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
                             </form>
                         </div>
@@ -467,16 +219,18 @@
         </section>
     </main>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>Arreglos Florales Victoria</h3>
-                    <p>Flores frescas y arreglos florales únicos para las ocasiones más especiales.</p>
+                    <h3>Arreglos Victoria</h3>
+                    <p>Flores frescas y hermosos arreglos florales para alegrar tus momentos especiales.</p>
                     <div class="social-links">
-                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
                     </div>
                 </div>
                 <div class="footer-section">
@@ -484,62 +238,41 @@
                     <ul>
                         <li><a href="index.html">Inicio</a></li>
                         <li><a href="products.html">Productos</a></li>
-                        <li><a href="index.html#about">Nosotros</a></li>
-                        <li><a href="index.html#contacto">Contacto</a></li>
-                        <li><a href="sitemap.html">Mapa del Sitio</a></li>
+                        <li><a href="about.html">Nosotros</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Información de Contacto</h4>
+                    <h4>Categorías</h4>
                     <ul>
-                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i> +569 6360 3177</li>
-                        <li><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</li>
+                        <li><a href="products.html?category=arreglos">Arreglos Florales</a></li>
+                        <li><a href="products.html?category=ramos">Ramos</a></li>
+                        <li><a href="products.html?category=plantas">Plantas</a></li>
+                        <li><a href="products.html?category=accesorios">Accesorios</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Información</h4>
+                    <ul>
+                        <li><a href="privacy.html">Política de Privacidad</a></li>
+                        <li><a href="terms.html">Términos y Condiciones</a></li>
+                        <li><a href="shipping.html">Envíos y Devoluciones</a></li>
+                        <li><a href="faq.html">Preguntas Frecuentes</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+                <p>&copy; 2025 Arreglos Victoria Florería. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script type="module" src="./assets/js/utils.js"></script>
-    <script type="module" src="./assets/js/auth.js"></script>
-    <script type="module" src="./assets/js/profile.js"></script>
-    <script type="module" src="./assets/js/cart.js"></script>
-    <script type="module" src="./assets/js/accessibility.js"></script>
-    <script type="module" src="./assets/js/lazyLoad.js"></script>
-    <script type="module" src="./assets/js/imageOptimizer.js"></script>
-    <script type="module" src="./assets/js/register-sw.js"></script>
-    
-    <script>
-        // Funcionalidad para cambiar entre pestañas del perfil
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabLinks = document.querySelectorAll('.profile-nav a');
-            const tabs = document.querySelectorAll('.profile-tab');
-            
-            tabLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Remover clase active de todos los enlaces y tabs
-                    tabLinks.forEach(l => l.parentElement.classList.remove('active'));
-                    tabs.forEach(tab => tab.classList.remove('active'));
-                    
-                    // Añadir clase active al enlace clickeado
-                    this.parentElement.classList.add('active');
-                    
-                    // Mostrar el tab correspondiente
-                    const tabId = this.getAttribute('data-tab');
-                    const targetTab = document.getElementById(tabId);
-                    if (targetTab) {
-                        targetTab.classList.add('active');
-                    }
-                });
-            });
-        });
-    </script>
+    <script type="module" src="assets/js/utils.js"></script>
+    <script type="module" src="assets/js/cart.js"></script>
+    <script type="module" src="assets/js/profile.js"></script>
+    <script type="module" src="assets/js/accessibility.js"></script>
+    <script type="module" src="assets/js/userMenu.js"></script>
+    <script type="module" src="assets/js/header.js"></script>
 </body>
 </html>

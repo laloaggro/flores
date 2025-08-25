@@ -4,40 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Deseos - Arreglos Victoria Florería</title>
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
     
-    <!-- Cargar estilos CSS en el orden correcto -->
+    <!-- Cargar estilos CSS optimizados -->
     <link rel="stylesheet" href="assets/css/preflight.css">
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/index.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/visibility-fix.css">
     
-    <meta name="description" content="Tu lista de deseos en Arreglos Victoria Florería. Guarda tus arreglos florales favoritos para futuras compras.">
-    <meta name="keywords" content="lista de deseos, wishlist, productos favoritos, florería, arreglos florales">
+    <meta name="description" content="Tu lista de deseos en Arreglos Victoria Florería. Guarda tus arreglos florales favoritos para comprarlos más tarde.">
+    <meta name="keywords" content="lista de deseos, favoritos, productos guardados, arreglo floral, florería">
     <meta name="author" content="Arreglos Victoria Florería">
-    <meta name="robots" content="noindex, follow">
+    <meta name="robots" content="noindex, nofollow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/wishlist.html">
     <meta property="og:title" content="Lista de Deseos - Arreglos Victoria Florería">
-    <meta property="og:description" content="Tu lista de deseos en Arreglos Florales Victoria. Guarda tus productos favoritos para comprarlos más tarde.">
-    <meta property="og:image" content="./assets/images/hero-image.jpg">
+    <meta property="og:description" content="Tu lista de deseos en Arreglos Victoria Florería.">
+    <meta property="og:image" content="./assets/images/wishlist-hero.jpg">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/wishlist.html">
     <meta property="twitter:title" content="Lista de Deseos - Arreglos Victoria Florería">
-    <meta property="twitter:description" content="Tu lista de deseos en Arreglos Florales Victoria. Guarda tus productos favoritos para comprarlos más tarde.">
-    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
-
+    <meta property="twitter:description" content="Tu lista de deseos en Arreglos Victoria Florería.">
+    <meta property="twitter:image" content="./assets/images/wishlist-hero.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Preload critical scripts -->
+    <link rel="preload" href="assets/js/utils.js" as="script">
+    <link rel="preload" href="assets/js/wishlist.js" as="script">
+    <link rel="preload" href="assets/js/userMenu.js" as="script">
+    <link rel="preload" href="assets/js/header.js" as="script">
 </head>
 <body>
     <a href="#main-content" id="skip-link" class="skip-link" tabindex="0" aria-label="Saltar al contenido principal">Saltar al contenido principal</a>

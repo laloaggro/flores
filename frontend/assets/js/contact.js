@@ -14,16 +14,16 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     
     // Obtener valores del formulario
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const message = document.getElementById('message').value;
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const subject = document.getElementById('contactSubject').value;
+    const message = document.getElementById('contactMessageText').value;
     
     // Crear objeto con los datos del formulario
     const formData = {
       name: name,
       email: email,
-      phone: phone,
+      subject: subject,
       message: message
     };
     

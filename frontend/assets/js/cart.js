@@ -1,6 +1,6 @@
 // cart.js - Funcionalidad del carrito de compras
 import CartUtils from './cartUtils.js';
-import Cart from '../../components/Cart.js';
+import Cart, { showCart as showCartComponent } from '../../components/Cart.js';
 import { isAuthenticated, showNotification } from './utils.js';
 
 // Funcionalidad del carrito de compras
@@ -57,44 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Redirigir a la página de checkout
             window.location.href = 'checkout.html';
         });
-    }
-    
-    // Función para mostrar el carrito
-    function showCart() {
-        const cart = CartUtils.getCartItems();
-        const savedForLater = CartUtils.getSavedItems();
-        
-        // Crear o actualizar el modal del carrito
-        let cartModal = document.getElementById('cartModal');
-        if (!cartModal) {
-            // Crear el contenedor para el carrito si no existe
-            const cartContainer = document.createElement('div');
-            cartContainer.innerHTML = Cart(cart, savedForLater);
-            document.body.appendChild(cartContainer);
-            
-            // Agregar event listeners para los nuevos elementos
-            attachEventListeners();
-        } else {
-            // Actualizar el contenido existente
-            const cartItemsContainer = cartModal.querySelector('.cart-items');
-            const savedForLaterContainer = cartModal.querySelector('.saved-for-later');
-            const totalAmountElement = cartModal.querySelector('.total-amount');
-            
-            if (cartItemsContainer) {
-                cartItemsContainer.innerHTML = renderCartItems(cart);
-            }
-            
-            if (savedForLaterContainer) {
-                savedForLaterContainer.innerHTML = renderSavedForLater(savedForLater);
-            }
-            
-            if (totalAmountElement) {
-                totalAmountElement.textContent = formatPrice(CalculateCartTotal(cart));
-            }
-        }
-        
-        // Mostrar el modal
-        document.getElementById('cartModal').style.display = 'block';
     }
     
     // Función para ocultar el carrito
@@ -249,3 +211,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Función para mostrar el carrito (exportada para uso externo)
+function showCart() {
+    const cart = CartUtils.getCartItems();
+    const savedForLater = CartUtils.getSavedItems();
+    showCartComponent(cart, savedForLater);
+}
+
+// Escuchar evento personalizado para mostrar el carrito
+document.addEventListener('showCart', function() {
+    showCart();
+});
+
+export { showCart };

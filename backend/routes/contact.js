@@ -42,12 +42,12 @@ router.post('/', async (req, res) => {
     logMessage('Iniciando procesamiento de formulario de contacto');
     
     // Obtener los datos del cuerpo de la solicitud
-    const { name, email, phone, message } = req.body;
+    const { name, email, subject, message } = req.body;
     
-    logMessage(`Datos recibidos - Nombre: ${name}, Email: ${email}, Teléfono: ${phone}, Mensaje: ${message}`);
+    logMessage(`Datos recibidos - Nombre: ${name}, Email: ${email}, Asunto: ${subject}, Mensaje: ${message}`);
     
     // Validar los datos
-    if (!name || !email || !message) {
+    if (!name || !email || !subject || !message) {
         logMessage('Error: Faltan campos requeridos');
         return res.status(400).json({ 
             message: 'Faltan campos requeridos',
@@ -70,7 +70,7 @@ router.post('/', async (req, res) => {
         const mailOptions = {
             from: `"${process.env.MAIL_FROM_NAME || 'Arreglos Victoria Florería'}" <${process.env.MAIL_FROM_ADDRESS || 'arreglosvictoriafloreria@gmail.com'}>`,
             to: process.env.MAIL_TO_ADDRESS || 'arreglosvictoriafloreria@gmail.com',
-            subject: `Nuevo mensaje de contacto de la web - ${name}`,
+            subject: `Mensaje de contacto: ${subject}`,
             html: `
             <html>
             <head>
@@ -80,7 +80,7 @@ router.post('/', async (req, res) => {
                 <h2>Nuevo mensaje de contacto desde la web</h2>
                 <p><strong>Nombre:</strong> ${name}</p>
                 <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Teléfono:</strong> ${phone || 'No proporcionado'}</p>
+                <p><strong>Asunto:</strong> ${subject}</p>
                 <p><strong>Mensaje:</strong></p>
                 <p>${message.replace(/\n/g, '<br>')}</p>
                 <hr>
