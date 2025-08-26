@@ -94,10 +94,14 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Middleware para manejar errores
-app.use(globalErrorHandler);
+// Manejar rutas .well-known específicamente (evitar errores en logs para herramientas de desarrollo)
+app.use('/.well-known/*', (req, res) => {
+    // No registrar como error ya que estas rutas son solicitadas por herramientas de desarrollo
+    // En lugar de eso, simplemente devolver 404 sin registrar el error
+    res.status(404).send('Not Found');
+});
 
-// Middleware para manejar rutas no encontradas
+// Manejar todas las demás rutas no encontradas
 app.use('*', (req, res) => {
     const message = `No se puede encontrar ${req.originalUrl} en este servidor`;
     logApplicationError('Ruta no encontrada', null, { 
@@ -111,6 +115,9 @@ app.use('*', (req, res) => {
         message
     });
 });
+
+// Middleware para manejar errores
+app.use(globalErrorHandler);
 
 // Iniciar el servidor
 const server = app.listen(PORT, () => {
