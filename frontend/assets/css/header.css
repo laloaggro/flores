@@ -54,6 +54,9 @@ body[data-theme="dark"] header {
     font-weight: 700;
     font-size: 1.8rem;
     transition: all 0.3s ease;
+    /* Ajustar posición del logo */
+    align-self: center;
+    margin: 10px 0; /* Agregar margen para centrar verticalmente */
 }
 
 .logo:hover {
@@ -80,6 +83,11 @@ body[data-theme="dark"] header {
     color: var(--primary);
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
     letter-spacing: 0.5px;
+    /* Asegurar que el texto no se salga de los bordes */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px; /* Limitar el ancho máximo */
 }
 
 body[data-theme="dark"] .logo {
