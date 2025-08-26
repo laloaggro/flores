@@ -1,6 +1,9 @@
 import { API_BASE_URL, showNotification } from './utils.js';
 import { initUserMenu } from './auth.js';
 
+// Variable para almacenar todos los productos
+let allProducts = [];
+
 // Función para implementar debounce
 function debounce(func, wait) {
     let timeout;
@@ -23,9 +26,10 @@ async function loadAllProducts() {
             throw new Error('Error al cargar los productos');
         }
         const products = await response.json();
-        displayProducts(products.products || products); // Asegurarse de acceder a los productos correctamente
-        updateProductCount((products.products || products).length);
-        return products;
+        allProducts = products.products || products; // Almacenar productos en variable global
+        displayProducts(allProducts);
+        updateProductCount(allProducts.length);
+        return allProducts;
     } catch (error) {
         console.error('Error al cargar productos:', error);
         showNotification('Error al cargar los productos. Por favor, intente nuevamente.', 'error');
@@ -95,7 +99,7 @@ function filterProducts(category) {
     let visibleCount = 0;
     
     products.forEach(product => {
-        if (category === 'all' || product.getAttribute('data-category') === category) {
+        if (category === '' || product.getAttribute('data-category') === category) {
             product.style.display = 'block';
             visibleCount++;
         } else {
@@ -108,14 +112,11 @@ function filterProducts(category) {
 
 // Función para actualizar el contador de productos
 function updateProductCount(count) {
-    const countElement = document.getElementById('productCount');
-    if (countElement) {
-        countElement.textContent = `${count} productos disponibles`;
-    }
+    // No hay contador en el HTML actual, pero mantenemos la función por si se agrega en el futuro
 }
 
 // Función para buscar productos
-function searchProducts(query, allProducts) {
+function searchProducts(query) {
     if (!query) {
         displayProducts(allProducts);
         updateProductCount(allProducts.length);
@@ -137,16 +138,13 @@ function sortProducts(products, sortBy) {
     const sortedProducts = [...products];
     
     switch(sortBy) {
-        case 'name-asc':
+        case 'name':
             sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
             break;
-        case 'name-desc':
-            sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
-            break;
-        case 'price-asc':
+        case 'price-low':
             sortedProducts.sort((a, b) => a.price - b.price);
             break;
-        case 'price-desc':
+        case 'price-high':
             sortedProducts.sort((a, b) => b.price - a.price);
             break;
         default:
@@ -160,38 +158,31 @@ function sortProducts(products, sortBy) {
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('DOM cargado en products.js');
     
+    // Cargar productos
+    await loadAllProducts();
+    
     // Configurar filtro de categorías
-    const categoryLinks = document.querySelectorAll('.category-filter a');
-    categoryLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const category = this.getAttribute('data-category');
-            
-            // Actualizar enlaces activos
-            categoryLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Filtrar productos
-            filterProducts(category);
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', function() {
+            filterProducts(this.value);
         });
-    });
+    }
     
     // Configurar búsqueda con debounce
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-        const debouncedSearch = debounce((query) => {
-            searchProducts(query, allProducts);
+        const debouncedSearch = debounce((e) => {
+            searchProducts(e.target.value);
         }, 300);
         
-        searchInput.addEventListener('input', function() {
-            debouncedSearch(this.value);
-        });
+        searchInput.addEventListener('input', debouncedSearch);
     }
     
     // Configurar ordenamiento
-    const sortSelect = document.getElementById('sortSelect');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
+    const sortOrder = document.getElementById('sortOrder');
+    if (sortOrder) {
+        sortOrder.addEventListener('change', function() {
             const sortedProducts = sortProducts(allProducts, this.value);
             displayProducts(sortedProducts);
         });
@@ -207,7 +198,4 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
         console.error('Error al inicializar el menú de usuario en products.js:', error);
     }
-    
-    // Cargar productos
-    loadAllProducts();
 });

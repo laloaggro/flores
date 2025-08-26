@@ -1,4 +1,5 @@
 import { isAuthenticated, getUserInfoFromToken as getUser, isAdmin, updateCartCount } from './utils.js';
+import Cart, { showCart } from '../../components/Cart.js';
 
 /**
  * Header Component - Maneja la funcionalidad del header en todas las páginas

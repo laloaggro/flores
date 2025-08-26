@@ -1,6 +1,6 @@
 // profile.js - Manejo de la página de perfil de usuario
 import { initUserMenu } from './auth.js';
-import { formatPrice, getUser } from './utils.js';
+import { formatPrice, getUserInfoFromToken as getUser } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar menú de usuario
@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar datos adicionales del usuario
     loadUserStats();
     
+    // Configurar navegación del perfil
+    setupProfileNavigation();
+    
+    // Cargar datos adicionales del usuario
+    loadUserStats();
+    
     // Cargar pedidos del usuario
     loadUserOrders(user.id);
 });
@@ -34,24 +40,17 @@ function displayUserInfo(user) {
     // Actualizar elementos del DOM con la información del usuario
     const userNameElement = document.getElementById('userName');
     const userEmailElement = document.getElementById('userEmail');
-    const profileFirstName = document.getElementById('profileFirstName');
-    const profileLastName = document.getElementById('profileLastName');
+    const profileName = document.getElementById('profileName');
     const profileEmail = document.getElementById('profileEmail');
     const profilePhone = document.getElementById('profilePhone');
-    const profileAddress = document.getElementById('profileAddress');
     
     if (userNameElement) userNameElement.textContent = user.name || 'Usuario';
     if (userEmailElement) userEmailElement.textContent = user.email || '';
     
     // Rellenar el formulario con los datos del usuario
-    if (profileFirstName) profileFirstName.value = user.name ? user.name.split(' ')[0] : '';
-    if (profileLastName) {
-        const nameParts = user.name ? user.name.split(' ') : [];
-        profileLastName.value = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-    }
+    if (profileName) profileName.value = user.name || '';
     if (profileEmail) profileEmail.value = user.email || '';
     if (profilePhone) profilePhone.value = user.phone || '';
-    if (profileAddress) profileAddress.value = user.address || '';
 }
 
 // Configurar event listeners
@@ -95,14 +94,13 @@ function setupEventListeners() {
 
 // Actualizar perfil
 function updateProfile() {
-    const profileFirstName = document.getElementById('profileFirstName').value;
-    const profileLastName = document.getElementById('profileLastName').value;
+    const profileName = document.getElementById('profileName').value;
+    const profileEmail = document.getElementById('profileEmail').value;
     const profilePhone = document.getElementById('profilePhone').value;
-    const profileAddress = document.getElementById('profileAddress').value;
     
     // Validación básica
-    if (!profileFirstName || !profileLastName) {
-        alert('Por favor complete los campos obligatorios (Nombre y Apellido)');
+    if (!profileName) {
+        alert('Por favor complete los campos obligatorios (Nombre)');
         return;
     }
     
@@ -110,9 +108,9 @@ function updateProfile() {
     const user = getUser() || {};
     
     // Actualizar datos del usuario
-    user.name = `${profileFirstName} ${profileLastName}`;
+    user.name = profileName;
+    user.email = profileEmail;
     user.phone = profilePhone;
-    user.address = profileAddress;
     
     // Guardar en localStorage
     localStorage.setItem('user', JSON.stringify(user));

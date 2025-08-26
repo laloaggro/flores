@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="assets/css/profile.css">
     
     <meta name="description" content="Tu perfil de usuario en Arreglos Victoria Florería. Gestiona tu información personal, pedidos y lista de deseos.">
     <meta name="keywords" content="perfil, usuario, cuenta, pedidos, lista de deseos, información personal">
@@ -64,43 +65,7 @@
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
     <!-- Header -->
-    <header>
-        <div class="navbar">
-            <a href="index.html" class="logo">
-                <span class="logo-text">Arreglos Victoria</span>
-            </a>
-            
-            <nav>
-                <ul>
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="products.html">Productos</a></li>
-                    <li><a href="index.html#contacto">Contacto</a></li>
-                </ul>
-            </nav>
-            
-            <div class="user-menu">
-                <div class="cart-icon" id="cartIcon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">0</span>
-                </div>
-                <div class="user-icon" id="userIcon">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-dropdown" id="userDropdown" style="display: none;">
-                    <div id="guest-menu" style="display: block;">
-                        <a href="login.html">Iniciar Sesión</a>
-                        <a href="register.html">Registrarse</a>
-                    </div>
-                    <div id="user-menu" style="display: none;">
-                        <a href="profile.html">Mi Perfil</a>
-                        <a href="wishlist.html">Lista de Deseos</a>
-                        <a href="#" id="logoutLink">Cerrar Sesión</a>
-                        <a href="admin.html" id="admin-menu-item" style="display: none;">Panel de Administración</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <site-header></site-header>
 
     <main id="main-content">
         <!-- Hero Section -->
@@ -132,16 +97,16 @@
                             <h2>Información Personal</h2>
                             <form id="profileForm">
                                 <div class="form-group">
-                                    <label for="profileName">Nombre</label>
-                                    <input type="text" id="profileName" name="name" required>
+                                    <label for="profileName" class="form-label">Nombre</label>
+                                    <input type="text" id="profileName" name="name" class="form-input" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="profileEmail">Email</label>
-                                    <input type="email" id="profileEmail" name="email" required>
+                                    <label for="profileEmail" class="form-label">Email</label>
+                                    <input type="email" id="profileEmail" name="email" class="form-input" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="profilePhone">Teléfono</label>
-                                    <input type="tel" id="profilePhone" name="phone">
+                                    <label for="profilePhone" class="form-label">Teléfono</label>
+                                    <input type="tel" id="profilePhone" name="phone" class="form-input">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                             </form>
@@ -150,46 +115,103 @@
                         <!-- Mis Pedidos -->
                         <div class="profile-tab" id="orders-tab">
                             <h2>Mis Pedidos</h2>
-                            <div class="orders-container" id="ordersContainer">
-                                <!-- Los pedidos se cargarán aquí dinámicamente -->
+                            <div class="orders-content">
+                                <table class="orders-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID Pedido</th>
+                                            <th>Fecha</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-001</td>
+                                            <td>15/08/2025</td>
+                                            <td>$45.990</td>
+                                            <td><span class="order-status delivered">Entregado</span></td>
+                                            <td><button class="btn-small btn-secondary">Ver Detalles</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-002</td>
+                                            <td>22/08/2025</td>
+                                            <td>$32.500</td>
+                                            <td><span class="order-status shipped">Enviado</span></td>
+                                            <td><button class="btn-small btn-secondary">Ver Detalles</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-003</td>
+                                            <td>01/09/2025</td>
+                                            <td>$78.900</td>
+                                            <td><span class="order-status processing">Procesando</span></td>
+                                            <td><button class="btn-small btn-secondary">Ver Detalles</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
                         <!-- Lista de Deseos -->
                         <div class="profile-tab" id="wishlist-tab">
                             <h2>Lista de Deseos</h2>
-                            <div class="wishlist-container" id="wishlistContainer">
-                                <!-- Los productos de la lista de deseos se cargarán aquí -->
+                            <div class="wishlist-content">
+                                <div class="wishlist-items">
+                                    <div class="wishlist-item">
+                                        <img src="./assets/images/products/ramo-rosas-rojas.jpg" alt="Ramo de Rosas Rojas">
+                                        <div class="wishlist-item-content">
+                                            <h4>Ramo de Rosas Rojas</h4>
+                                            <div class="price">$15.990</div>
+                                            <div class="wishlist-item-actions">
+                                                <button class="btn-small btn-add-to-cart">Agregar al Carrito</button>
+                                                <button class="btn-small btn-remove-wishlist"><i class="fas fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="wishlist-item">
+                                        <img src="./assets/images/products/orquidea-blanca.jpg" alt="Orquídea Blanca">
+                                        <div class="wishlist-item-content">
+                                            <h4>Orquídea Blanca</h4>
+                                            <div class="price">$22.500</div>
+                                            <div class="wishlist-item-actions">
+                                                <button class="btn-small btn-add-to-cart">Agregar al Carrito</button>
+                                                <button class="btn-small btn-remove-wishlist"><i class="fas fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Direcciones -->
                         <div class="profile-tab" id="addresses-tab">
                             <h2>Direcciones</h2>
-                            <div class="addresses-container">
-                                <form id="addressForm">
-                                    <div class="form-group">
-                                        <label for="addressName">Nombre de la Dirección</label>
-                                        <input type="text" id="addressName" name="addressName" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="street">Calle</label>
-                                        <input type="text" id="street" name="street" required>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="city">Ciudad</label>
-                                            <input type="text" id="city" name="city" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="region">Región</label>
-                                            <input type="text" id="region" name="region" required>
+                            <div class="addresses-content">
+                                <button class="btn">Agregar Nueva Dirección</button>
+                                <div class="address-list">
+                                    <div class="address-card default">
+                                        <h4>Dirección Principal</h4>
+                                        <p>Av. Providencia 1234</p>
+                                        <p>Departamento 501</p>
+                                        <p>Recoleta, Región Metropolitana</p>
+                                        <p>Tel: +56 9 1234 5678</p>
+                                        <div class="address-actions">
+                                            <button class="btn-small btn-secondary">Editar</button>
+                                            <button class="btn-small btn-remove-wishlist">Eliminar</button>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Agregar Dirección</button>
-                                </form>
-                                <div class="saved-addresses" id="savedAddresses">
-                                    <!-- Las direcciones guardadas se mostrarán aquí -->
+                                    <div class="address-card">
+                                        <h4>Oficina</h4>
+                                        <p>Calle Ejemplo 567</p>
+                                        <p>Oficina 302</p>
+                                        <p>Providencia, Región Metropolitana</p>
+                                        <p>Tel: +56 2 2345 6789</p>
+                                        <div class="address-actions">
+                                            <button class="btn-small btn-secondary">Editar</button>
+                                            <button class="btn-small btn-remove-wishlist">Eliminar</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -197,21 +219,32 @@
                         <!-- Configuración -->
                         <div class="profile-tab" id="settings-tab">
                             <h2>Configuración</h2>
-                            <form id="settingsForm">
-                                <div class="form-group">
-                                    <label for="currentPassword">Contraseña Actual</label>
-                                    <input type="password" id="currentPassword" name="currentPassword">
-                                </div>
-                                <div class="form-group">
-                                    <label for="newPassword">Nueva Contraseña</label>
-                                    <input type="password" id="newPassword" name="newPassword">
-                                </div>
-                                <div class="form-group">
-                                    <label for="confirmPassword">Confirmar Nueva Contraseña</label>
-                                    <input type="password" id="confirmPassword" name="confirmPassword">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
-                            </form>
+                            <div class="settings-content">
+                                <form class="settings-form">
+                                    <div class="form-group">
+                                        <label for="notificationEmail" class="form-label">Notificaciones por Email</label>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="notificationEmail" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="notificationSMS" class="form-label">Notificaciones por SMS</label>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="notificationSMS">
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newsletter" class="form-label">Suscribirse al Newsletter</label>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="newsletter" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Guardar Configuración</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -220,54 +253,11 @@
     </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Arreglos Victoria</h3>
-                    <p>Flores frescas y hermosos arreglos florales para alegrar tus momentos especiales.</p>
-                    <div class="social-links">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Enlaces Rápidos</h4>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="products.html">Productos</a></li>
-                        <li><a href="about.html">Nosotros</a></li>
-                        <li><a href="contact.html">Contacto</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Categorías</h4>
-                    <ul>
-                        <li><a href="products.html?category=arreglos">Arreglos Florales</a></li>
-                        <li><a href="products.html?category=ramos">Ramos</a></li>
-                        <li><a href="products.html?category=plantas">Plantas</a></li>
-                        <li><a href="products.html?category=accesorios">Accesorios</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Información</h4>
-                    <ul>
-                        <li><a href="privacy.html">Política de Privacidad</a></li>
-                        <li><a href="terms.html">Términos y Condiciones</a></li>
-                        <li><a href="shipping.html">Envíos y Devoluciones</a></li>
-                        <li><a href="faq.html">Preguntas Frecuentes</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Victoria Florería. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+    <site-footer></site-footer>
 
     <!-- Scripts -->
+    <script type="module" src="components/Header.js"></script>
+    <script type="module" src="components/Footer.js"></script>
     <script type="module" src="assets/js/utils.js"></script>
     <script type="module" src="assets/js/cart.js"></script>
     <script type="module" src="assets/js/profile.js"></script>

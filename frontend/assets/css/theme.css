@@ -1,313 +1,442 @@
-@theme default {
-  --font-sans:
-    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
-  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
-
-  --color-red-50: oklch(97.1% 0.013 17.38);
-  --color-red-100: oklch(93.6% 0.032 17.717);
-  --color-red-200: oklch(88.5% 0.062 18.334);
-  --color-red-300: oklch(80.8% 0.114 19.571);
-  --color-red-400: oklch(70.4% 0.191 22.216);
-  --color-red-500: oklch(63.7% 0.237 25.331);
-  --color-red-600: oklch(57.7% 0.245 27.325);
-  --color-red-700: oklch(50.5% 0.213 27.518);
-  --color-red-800: oklch(44.4% 0.177 26.899);
-  --color-red-900: oklch(39.6% 0.141 25.723);
-  --color-red-950: oklch(25.8% 0.092 26.042);
-
-  --color-orange-50: oklch(98% 0.016 73.684);
-  --color-orange-100: oklch(95.4% 0.038 75.164);
-  --color-orange-200: oklch(90.1% 0.076 70.697);
-  --color-orange-300: oklch(83.7% 0.128 66.29);
-  --color-orange-400: oklch(75% 0.183 55.934);
-  --color-orange-500: oklch(70.5% 0.213 47.604);
-  --color-orange-600: oklch(64.6% 0.222 41.116);
-  --color-orange-700: oklch(55.3% 0.195 38.402);
-  --color-orange-800: oklch(47% 0.157 37.304);
-  --color-orange-900: oklch(40.8% 0.123 38.172);
-  --color-orange-950: oklch(26.6% 0.079 36.259);
-
-  --color-amber-50: oklch(98.7% 0.022 95.277);
-  --color-amber-100: oklch(96.2% 0.059 95.617);
-  --color-amber-200: oklch(92.4% 0.12 95.746);
-  --color-amber-300: oklch(87.9% 0.169 91.605);
-  --color-amber-400: oklch(82.8% 0.189 84.429);
-  --color-amber-500: oklch(76.9% 0.188 70.08);
-  --color-amber-600: oklch(66.6% 0.179 58.318);
-  --color-amber-700: oklch(55.5% 0.163 48.998);
-  --color-amber-800: oklch(47.3% 0.137 46.201);
-  --color-amber-900: oklch(41.4% 0.112 45.904);
-  --color-amber-950: oklch(27.9% 0.077 45.635);
-
-  --color-yellow-50: oklch(98.7% 0.026 102.212);
-  --color-yellow-100: oklch(97.3% 0.071 103.193);
-  --color-yellow-200: oklch(94.5% 0.129 101.54);
-  --color-yellow-300: oklch(90.5% 0.182 98.111);
-  --color-yellow-400: oklch(85.2% 0.199 91.936);
-  --color-yellow-500: oklch(79.5% 0.184 86.047);
-  --color-yellow-600: oklch(70.3% 0.179 75.524);
-  --color-yellow-700: oklch(59.5% 0.167 66.735);
-  --color-yellow-800: oklch(50.4% 0.156 59.743);
-  --color-yellow-900: oklch(43.3% 0.135 53.881);
-  --color-yellow-950: oklch(28.2% 0.091 50.795);
-
-  --color-lime-50: oklch(98.7% 0.029 127.732);
-  --color-lime-100: oklch(96.5% 0.061 128.565);
-  --color-lime-200: oklch(92.8% 0.114 128.864);
-  --color-lime-300: oklch(87.7% 0.192 130.033);
-  --color-lime-400: oklch(80.8% 0.259 131.328);
-  --color-lime-500: oklch(73.2% 0.293 132.905);
-  --color-lime-600: oklch(63.1% 0.283 133.317);
-  --color-lime-700: oklch(53.4% 0.253 133.674);
-  --color-lime-800: oklch(45.1% 0.215 133.246);
-  --color-lime-900: oklch(38.5% 0.176 132.202);
-  --color-lime-950: oklch(26.5% 0.125 131.939);
-
-  --color-green-50: oklch(98.4% 0.019 155.861);
-  --color-green-100: oklch(95.9% 0.042 155.341);
-  --color-green-200: oklch(91.1% 0.077 154.334);
-  --color-green-300: oklch(83.7% 0.138 154.52);
-  --color-green-400: oklch(74.6% 0.203 155.855);
-  --color-green-500: oklch(66.5% 0.237 156.773);
-  --color-green-600: oklch(57.9% 0.233 157.389);
-  --color-green-700: oklch(49.3% 0.208 157.722);
-  --color-green-800: oklch(41.6% 0.175 157.72);
-  --color-green-900: oklch(35.3% 0.142 157.248);
-  --color-green-950: oklch(21.8% 0.092 156.355);
-
-  --color-emerald-50: oklch(98.1% 0.021 166.013);
-  --color-emerald-100: oklch(95.2% 0.048 163.012);
-  --color-emerald-200: oklch(90.2% 0.087 164.033);
-  --color-emerald-300: oklch(82.8% 0.156 165.397);
-  --color-emerald-400: oklch(73.3% 0.215 166.77);
-  --color-emerald-500: oklch(65.3% 0.233 167.22);
-  --color-emerald-600: oklch(56.3% 0.231 167.825);
-  --color-emerald-700: oklch(48.2% 0.208 168.265);
-  --color-emerald-800: oklch(40.9% 0.177 168.149);
-  --color-emerald-900: oklch(34.5% 0.146 167.134);
-  --color-emerald-950: oklch(21.1% 0.095 166.242);
-
-  --color-teal-50: oklch(98.3% 0.015 180.72);
-  --color-teal-100: oklch(95.1% 0.038 180.463);
-  --color-teal-200: oklch(89.9% 0.076 180.75);
-  --color-teal-300: oklch(82.3% 0.134 181.711);
-  --color-teal-400: oklch(72.2% 0.183 182.755);
-  --color-teal-500: oklch(63.9% 0.204 183.345);
-  --color-teal-600: oklch(55.4% 0.203 184.091);
-  --color-teal-700: oklch(47.5% 0.182 184.931);
-  --color-teal-800: oklch(40.7% 0.154 185.039);
-  --color-teal-900: oklch(34.9% 0.125 184.665);
-  --color-teal-950: oklch(21.5% 0.081 184.753);
-
-  --color-cyan-50: oklch(98.2% 0.018 200.873);
-  --color-cyan-100: oklch(95.2% 0.042 203.388);
-  --color-cyan-200: oklch(90.3% 0.082 205.078);
-  --color-cyan-300: oklch(83.1% 0.139 207.066);
-  --color-cyan-400: oklch(73.7% 0.185 211.53);
-  --color-cyan-500: oklch(65.8% 0.202 216.534);
-  --color-cyan-600: oklch(57.2% 0.204 224.145);
-  --color-cyan-700: oklch(48.8% 0.188 230.902);
-  --color-cyan-800: oklch(41.5% 0.162 234.675);
-  --color-cyan-900: oklch(35.4% 0.132 238.241);
-  --color-cyan-950: oklch(22.6% 0.093 241.193);
-
-  --color-sky-50: oklch(97.5% 0.014 236.62);
-  --color-sky-100: oklch(94.5% 0.028 236.824);
-  --color-sky-200: oklch(89.3% 0.057 232.649);
-  --color-sky-300: oklch(81.8% 0.108 230.905);
-  --color-sky-400: oklch(71.8% 0.173 232.661);
-  --color-sky-500: oklch(64.5% 0.212 238.219);
-  --color-sky-600: oklch(55.9% 0.235 245.225);
-  --color-sky-700: oklch(47.4% 0.222 250.873);
-  --color-sky-800: oklch(39.8% 0.188 254.6);
-  --color-sky-900: oklch(33.3% 0.153 257.664);
-  --color-sky-950: oklch(23.1% 0.105 261.691);
-
-  --color-blue-50: oklch(97.2% 0.012 254.604);
-  --color-blue-100: oklch(94.1% 0.026 255.585);
-  --color-blue-200: oklch(88.8% 0.056 254.695);
-  --color-blue-300: oklch(81.2% 0.106 254.038);
-  --color-blue-400: oklch(70.5% 0.169 256.818);
-  --color-blue-500: oklch(62.1% 0.219 258.204);
-  --color-blue-600: oklch(53.9% 0.245 261.346);
-  --color-blue-700: oklch(46.3% 0.243 264.139);
-  --color-blue-800: oklch(39.5% 0.215 265.614);
-  --color-blue-900: oklch(33.2% 0.178 265.522);
-  --color-blue-950: oklch(22.9% 0.125 264.922);
-
-  --color-indigo-50: oklch(97.1% 0.014 274.711);
-  --color-indigo-100: oklch(94% 0.029 274.735);
-  --color-indigo-200: oklch(88.6% 0.059 276.927);
-  --color-indigo-300: oklch(80.8% 0.111 277.374);
-  --color-indigo-400: oklch(70% 0.181 278.406);
-  --color-indigo-500: oklch(61.7% 0.233 277.376);
-  --color-indigo-600: oklch(53.4% 0.265 276.536);
-  --color-indigo-700: oklch(45.7% 0.257 275.699);
-  --color-indigo-800: oklch(38.8% 0.221 275.085);
-  --color-indigo-900: oklch(32.5% 0.182 274.558);
-  --color-indigo-950: oklch(21.7% 0.131 273.652);
-
-  --color-violet-50: oklch(97.5% 0.015 293.756);
-  --color-violet-100: oklch(95.1% 0.027 294.586);
-  --color-violet-200: oklch(90.2% 0.057 295.054);
-  --color-violet-300: oklch(82.6% 0.111 295.795);
-  --color-violet-400: oklch(72.1% 0.185 296.543);
-  --color-violet-500: oklch(63.8% 0.241 297.033);
-  --color-violet-600: oklch(55.3% 0.271 297.716);
-  --color-violet-700: oklch(47.5% 0.261 298.243);
-  --color-violet-800: oklch(40.5% 0.226 298.135);
-  --color-violet-900: oklch(34.2% 0.189 297.535);
-  --color-violet-950: oklch(22.9% 0.136 296.439);
-
-  --color-purple-50: oklch(98% 0.012 305.008);
-  --color-purple-100: oklch(95.5% 0.023 304.255);
-  --color-purple-200: oklch(90.8% 0.047 305.154);
-  --color-purple-300: oklch(83.4% 0.095 305.814);
-  --color-purple-400: oklch(73.3% 0.163 306.906);
-  --color-purple-500: oklch(64.9% 0.223 307.28);
-  --color-purple-600: oklch(56.2% 0.253 307.503);
-  --color-purple-700: oklch(48.1% 0.244 307.227);
-  --color-purple-800: oklch(40.9% 0.209 306.485);
-  --color-purple-900: oklch(34.5% 0.172 305.508);
-  --color-purple-950: oklch(22.9% 0.123 304.184);
-
-  --color-fuchsia-50: oklch(98.2% 0.014 320.055);
-  --color-fuchsia-100: oklch(95.8% 0.028 319.313);
-  --color-fuchsia-200: oklch(91.3% 0.063 317.573);
-  --color-fuchsia-300: oklch(84.3% 0.124 316.348);
-  --color-fuchsia-400: oklch(74.3% 0.203 315.724);
-  --color-fuchsia-500: oklch(66.5% 0.257 315.379);
-  --color-fuchsia-600: oklch(57.8% 0.276 315.835);
-  --color-fuchsia-700: oklch(49.4% 0.251 316.634);
-  --color-fuchsia-800: oklch(41.9% 0.215 316.92);
-  --color-fuchsia-900: oklch(35.3% 0.176 316.685);
-  --color-fuchsia-950: oklch(23.5% 0.128 315.961);
-
-  --color-pink-50: oklch(98% 0.013 336.714);
-  --color-pink-100: oklch(95.7% 0.028 336.826);
-  --color-pink-200: oklch(91.1% 0.061 336.292);
-  --color-pink-300: oklch(83.9% 0.125 335.547);
-  --color-pink-400: oklch(74.4% 0.203 335.031);
-  --color-pink-500: oklch(67% 0.252 334.093);
-  --color-pink-600: oklch(58.5% 0.268 332.219);
-  --color-pink-700: oklch(50.1% 0.247 330.972);
-  --color-pink-800: oklch(42.7% 0.211 330.511);
-  --color-pink-900: oklch(36.4% 0.173 330.406);
-  --color-pink-950: oklch(24.5% 0.127 330.536);
-
-  --color-rose-50: oklch(97.7% 0.015 17.717);
-  --color-rose-100: oklch(95.1% 0.032 16.493);
-  --color-rose-200: oklch(90.2% 0.063 15.955);
-  --color-rose-300: oklch(82.9% 0.121 17.187);
-  --color-rose-400: oklch(72.7% 0.196 19.062);
-  --color-rose-500: oklch(64.9% 0.246 20.77);
-  --color-rose-600: oklch(57.5% 0.252 22.303);
-  --color-rose-700: oklch(50.2% 0.227 23.405);
-  --color-rose-800: oklch(43.5% 0.194 24.107);
-  --color-rose-900: oklch(37.5% 0.159 24.712);
-  --color-rose-950: oklch(25.5% 0.106 25.523);
-
-  --color-primary: var(--color-green-800);
-  --color-secondary: var(--color-green-900);
-  --color-accent: var(--color-emerald-600);
-  --color-background: var(--color-neutral-50);
-  --color-surface: var(--color-white);
-  --color-on-primary: var(--color-white);
-  --color-on-secondary: var(--color-white);
-  --color-on-surface: var(--color-neutral-900);
-  --color-on-background: var(--color-neutral-900);
-  --color-error: var(--color-red-600);
-  --color-on-error: var(--color-white);
-  --color-warning: var(--color-amber-600);
-  --color-on-warning: var(--color-white);
-  --color-info: var(--color-blue-600);
-  --color-on-info: var(--color-white);
-  --color-success: var(--color-green-600);
-  --color-on-success: var(--color-white);
-
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-
-  --radius-sm: 0.125rem;
-  --radius: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-  --radius-3xl: 1.5rem;
-  --radius-full: 9999px;
-
-  --transition: all 0.3s ease;
-  --transition-fast: all 0.15s ease;
-  --transition-slow: all 0.45s ease;
-}
-
+/* Variables CSS para tema claro */
 :root {
-  /* Colores principales */
   --primary: #2e7d32;
-  --primary-light: #60ad5e;
-  --primary-dark: #005005;
-  --secondary: #f9fbe7;
-  --accent: #ffb300;
-  
-  /* Colores neutros */
+  --primary-dark: #1b5e20;
+  --secondary: #f5f5f5;
+  --dark: #333;
+  --dark-gray: #666;
+  --light-gray: #ddd;
   --white: #ffffff;
-  --light: #f5f5f5;
-  --gray: #e0e0e0;
-  --dark-gray: #757575;
-  --dark: #212121;
-  --black: #000000;
-  
-  /* Colores de estado */
-  --success: #4caf50;
-  --warning: #ff9800;
-  --danger: #f44336;
-  --info: #2196f3;
-  
-  /* Sombras */
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  --shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.2);
-  
-  /* Transiciones */
+  --light: #f8f9fa;
+  --gray: #e9ecef;
+  --danger: #dc3545;
+  --danger-dark: #bd2130;
+  --success: #28a745;
+  --warning: #ffc107;
+  --info: #17a2b8;
+  --border-radius: 5px;
+  --border-radius-lg: 10px;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 5px 15px rgba(0, 0, 0, 0.2);
   --transition: all 0.3s ease;
-  --transition-fast: all 0.15s ease;
-  --transition-slow: all 0.45s ease;
-  
-  /* Espaciados */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-xxl: 3rem;
-  
-  /* Tamaños */
-  --border-radius: 8px;
-  --border-radius-lg: 12px;
-  --border-radius-sm: 4px;
-  
-  /* Tipografía */
   --font-primary: 'Poppins', sans-serif;
   --font-secondary: 'Dancing Script', cursive;
-  --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-xxl: 1.5rem;
-  --font-size-xxxl: 2rem;
-  --font-size-xxxxl: 2.5rem;
-  
-  /* Otros */
-  --max-width: 1200px;
-  --header-height: 80px;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 2rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --dark-bg: #121212;
+  --dark-card-bg: #1e1e1e;
+  --dark-text: #e0e0e0;
+  --dark-border: #333;
+  --dark-hover-bg: #2d2d2d;
+  --dark-input-bg: #2d2d2d;
+  --dark-input-border: #444;
+}
+
+/* Reset de estilos para asegurar que no haya fondos verdes no deseados */
+header, .header, #header, .navbar, #navbar {
+    background-color: var(--white) !important;
+    background: var(--white) !important;
+    background-image: none !important;
+}
+
+/* Estilos para tema oscuro */
+body[data-theme="dark"] {
+  --dark-bg: #121212;
+  --dark-card-bg: #1e1e1e;
+  --dark-text: #e0e0e0;
+  --dark-border: #333;
+  --dark-hover-bg: #2d2d2d;
+  --dark-input-bg: #2d2d2d;
+  --dark-input-border: #444;
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* Asegurar que el header tenga el fondo correcto en modo oscuro */
+body[data-theme="dark"] header,
+body[data-theme="dark"] .header,
+body[data-theme="dark"] #header,
+body[data-theme="dark"] .navbar,
+body[data-theme="dark"] #navbar {
+    background-color: var(--dark-card-bg) !important;
+    background: var(--dark-card-bg) !important;
+    background-image: none !important;
+    border-color: var(--dark-border) !important;
+}
+
+/* Asegurar que otros elementos tengan fondos consistentes en modo oscuro */
+body[data-theme="dark"] .hero,
+body[data-theme="dark"] .hero-products,
+body[data-theme="dark"] .hero-profile {
+    background-color: var(--dark-bg) !important;
+}
+
+body[data-theme="dark"] .auth-section,
+body[data-theme="dark"] .products-section,
+body[data-theme="dark"] .categories,
+body[data-theme="dark"] .about,
+body[data-theme="dark"] .testimonials,
+body[data-theme="dark"] .contact {
+    background-color: var(--dark-bg) !important;
+}
+
+body[data-theme="dark"] .auth-container,
+body[data-theme="dark"] .product-grid,
+body[data-theme="dark"] .category-grid,
+body[data-theme="dark"] .testimonial-grid,
+body[data-theme="dark"] .contact-content {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .form-input,
+body[data-theme="dark"] .search-input,
+body[data-theme="dark"] .filter-select {
+    background-color: var(--dark-input-bg) !important;
+    border-color: var(--dark-input-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .btn-primary {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+body[data-theme="dark"] .btn-primary:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+body[data-theme="dark"] .btn-secondary {
+    background-color: transparent !important;
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+}
+
+body[data-theme="dark"] .btn-secondary:hover {
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+}
+
+/* Asegurar que los elementos del footer tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] footer {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .footer-section h3,
+body[data-theme="dark"] .footer-section h4 {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .footer-section p,
+body[data-theme="dark"] .footer-section ul li a {
+    color: #adb5bd !important;
+}
+
+body[data-theme="dark"] .footer-section ul li a:hover {
+    color: var(--white) !important;
+}
+
+body[data-theme="dark"] .footer-bottom {
+    border-color: var(--dark-border) !important;
+    color: #adb5bd !important;
+}
+
+/* Asegurar que los enlaces sociales tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .social-links a {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+    color: var(--primary) !important;
+}
+
+body[data-theme="dark"] .social-links a:hover {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: var(--white) !important;
+}
+
+/* Asegurar que los elementos de navegación tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .nav-links li a {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .nav-links li a:hover {
+    color: var(--primary) !important;
+}
+
+body[data-theme="dark"] .nav-links li a.active {
+    color: var(--primary) !important;
+}
+
+/* Asegurar que los elementos del carrito tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .cart-icon {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .cart-count {
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+}
+
+/* Asegurar que los elementos del menú de usuario tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .user-actions {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .btn-login {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .btn-login:hover {
+    color: var(--primary) !important;
+}
+
+body[data-theme="dark"] .user-info {
+    color: var(--dark-text) !important;
+    background-color: transparent !important;
+}
+
+body[data-theme="dark"] .user-dropdown {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .user-dropdown a {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .user-dropdown a:hover {
+    background-color: var(--dark-hover-bg) !important;
+    color: var(--white) !important;
+}
+
+/* Asegurar que los elementos de productos tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .product-card {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .product-card:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+body[data-theme="dark"] .product-card h3,
+body[data-theme="dark"] .product-card .price {
+    color: var(--dark-text) !important;
+}
+
+/* Asegurar que los elementos de categorías tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .category-card {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .category-card:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+body[data-theme="dark"] .category-card h3 {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .category-card p {
+    color: #adb5bd !important;
+}
+
+/* Asegurar que los elementos de testimonios tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .testimonial-card {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .testimonial-card p {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .testimonial-author h4 {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .testimonial-author p {
+    color: #adb5bd !important;
+}
+
+/* Asegurar que los elementos de contacto tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .contact-form .form-input {
+    background-color: var(--dark-input-bg) !important;
+    border-color: var(--dark-input-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .contact-info li {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .contact-info li span {
+    color: #adb5bd !important;
+}
+
+/* Asegurar que los elementos de autenticación tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .auth-container {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .auth-header h2,
+body[data-theme="dark"] .auth-header p {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .auth-form .form-group label {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .divider span {
+    background-color: var(--dark-card-bg) !important;
+    color: #adb5bd !important;
+}
+
+body[data-theme="dark"] .auth-links p,
+body[data-theme="dark"] .auth-links a {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .auth-links a:hover {
+    color: var(--primary) !important;
+}
+
+/* Asegurar que los elementos de paginación tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .pagination-btn {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .pagination-btn:hover,
+body[data-theme="dark"] .pagination-btn.active {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: var(--white) !important;
+}
+
+/* Asegurar que los elementos de carga tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .loading {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .no-products {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .no-products h3 {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .no-products p {
+    color: #adb5bd !important;
+}
+
+/* Asegurar que los elementos de notificación tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .notification {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+/* Asegurar que los elementos de perfil tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .profile-container {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .profile-sidebar {
+    background-color: var(--dark-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .profile-menu a {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .profile-menu a:hover {
+    background-color: var(--dark-hover-bg) !important;
+    color: var(--white) !important;
+}
+
+body[data-theme="dark"] .profile-menu a.active {
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+}
+
+body[data-theme="dark"] .profile-content {
+    background-color: var(--dark-card-bg) !important;
+}
+
+body[data-theme="dark"] .profile-tab h2 {
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+}
+
+/* Asegurar que los elementos de tabla tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .orders-table th {
+    background-color: var(--dark-hover-bg) !important;
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .orders-table td {
+    border-color: var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .orders-table tr:hover {
+    background-color: var(--dark-hover-bg) !important;
+}
+
+/* Asegurar que los elementos de wishlist tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .wishlist-item {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .wishlist-item-content h4 {
+    color: var(--dark-text) !important;
+}
+
+/* Asegurar que los elementos de direcciones tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .address-card {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body[data-theme="dark"] .address-card h4 {
+    color: var(--dark-text) !important;
+}
+
+body[data-theme="dark"] .address-card p {
+    color: #adb5bd !important;
+}
+
+/* Asegurar que los elementos de configuración tengan el fondo correcto en modo oscuro */
+body[data-theme="dark"] .settings-form .form-label {
+    color: var(--dark-text) !important;
+}
+
+/* Media queries para modo oscuro */
+@media (max-width: 768px) {
+    body[data-theme="dark"] .profile-container {
+        background-color: var(--dark-card-bg) !important;
+    }
+    
+    body[data-theme="dark"] .profile-sidebar {
+        border-color: var(--dark-border) !important;
+    }
 }

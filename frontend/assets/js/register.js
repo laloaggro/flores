@@ -1,94 +1,117 @@
-import { showNotification, updateCartCount, API_BASE_URL } from './utils.js';
-import { initUserMenu } from './auth.js';
+import { API_BASE_URL, showNotification } from './utils.js';
+import { initializeGoogleSignIn, handleGoogleLoginResponse } from './googleAuth.js';
 
-document.addEventListener('DOMContentLoaded', function() {
-  // Inicializar menú de usuario
-  initUserMenu();
-  
-  // Elementos del DOM
-  const registerForm = document.getElementById('registerForm');
-  
-  // Manejar envío de formulario de registro
-  if (registerForm) {
-    registerForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Obtener valores de los campos
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const email = document.getElementById('email').value;
-      const phone = document.getElementById('phone').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      
-      // Validar campos
-      if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
-        showNotification('Por favor, completa todos los campos', 'error');
-        return;
-      }
-      
-      // Validar email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        showNotification('Por favor, ingresa un email válido', 'error');
-        return;
-      }
-      
-      // Validar teléfono
-      const phoneRegex = /^(\+56)?[\s\-]?[9\d][\s\-]?\d{4}[\s\-]?\d{4}$/;
-      if (!phoneRegex.test(phone.replace(/\s+/g, ' ').trim())) {
-        showNotification('Por favor, ingresa un teléfono válido (ej: +56912345678)', 'error');
-        return;
-      }
-      
-      // Validar contraseña
-      if (password.length < 6) {
-        showNotification('La contraseña debe tener al menos 6 caracteres', 'error');
-        return;
-      }
-      
-      // Verificar que las contraseñas coincidan
-      if (password !== confirmPassword) {
-        showNotification('Las contraseñas no coinciden', 'error');
-        return;
-      }
-      
-      // Registrar usuario
-      registerUser({ firstName, lastName, email, phone, password });
-    });
-  }
-  
-  // Inicializar contador del carrito
-  updateCartCount();
-});
-
-// Función para registrar usuario
-async function registerUser(userData) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(userData)
-    });
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('DOM cargado en register.js');
+    console.log('Iniciando inicialización del registro');
     
-    const data = await response.json();
+    const registerForm = document.getElementById('registerForm');
+    const googleSignInButton = document.getElementById('googleSignInButton');
     
-    if (!response.ok) {
-      throw new Error(data.message || 'Error al registrar usuario');
+    console.log('Elemento googleSignInButton encontrado:', !!googleSignInButton);
+    
+    if (googleSignInButton) {
+        console.log('Inicializando Google Sign-In');
+        try {
+            await initializeGoogleSignIn();
+            console.log('Google Sign-In inicializado correctamente');
+        } catch (error) {
+            console.error('Error al inicializar Google Sign-In:', error);
+            showNotification('Error al cargar la autenticación con Google', 'error');
+        }
     }
     
-    showNotification('Usuario registrado exitosamente. Ahora puedes iniciar sesión.', 'success');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('Formulario de registro enviado');
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const registerButton = document.getElementById('registerButton');
+            
+            // Validar campos
+            if (!name || !email || !password || !confirmPassword) {
+                showNotification('Por favor completa todos los campos obligatorios', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('Las contraseñas no coinciden', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+            
+            // Deshabilitar botón durante el proceso
+            const originalText = registerButton.innerHTML;
+            registerButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
+            registerButton.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/users/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, phone, password }),
+                });
+                
+                const data = await response.json();
+                console.log('Respuesta del servidor:', data);
+                
+                if (response.ok) {
+                    showNotification('¡Registro exitoso! Ahora puedes iniciar sesión.', 'success');
+                    
+                    // Redirigir al login después de 2 segundos
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showNotification(data.message || 'Error al registrarse', 'error');
+                }
+            } catch (error) {
+                console.error('Error al registrarse:', error);
+                showNotification('Error de conexión. Por favor intenta nuevamente.', 'error');
+            } finally {
+                // Restaurar botón
+                registerButton.innerHTML = originalText;
+                registerButton.disabled = false;
+            }
+        });
+    }
     
-    // Redirigir a la página de login después de 2 segundos
-    setTimeout(() => {
-      window.location.href = 'login.html';
-    }, 2000);
-  } catch (error) {
-    showNotification(error.message, 'error');
-  }
-}
-
-// Inicializar contador del carrito
-updateCartCount();
+    // Mostrar/ocultar contraseña
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    }
+    
+    // Mostrar/ocultar confirmar contraseña
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    
+    if (toggleConfirmPassword && confirmPasswordInput) {
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    }
+    
+    console.log('Inicialización del registro completada');
+});
