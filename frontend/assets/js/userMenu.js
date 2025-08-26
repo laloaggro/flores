@@ -143,18 +143,26 @@ class UserMenu {
                 
                 // Añadir un pequeño retraso para asegurar que los estilos se apliquen correctamente
                 setTimeout(() => {
-                    userDropdown.style.visibility = isExpanded ? 'hidden' : 'visible';
-                    userDropdown.style.opacity = isExpanded ? '0' : '1';
-                    
-                    // Asegurar posicionamiento y z-index
-                    userDropdown.style.position = 'absolute';
-                    userDropdown.style.zIndex = '999999999';
-                    userDropdown.style.right = '0';
-                    userDropdown.style.top = 'calc(100% + 10px)';
-                    
-                    // Asegurar que el dropdown tenga un contexto de apilamiento
-                    userDropdown.style.isolation = 'isolate';
-                    userDropdown.style.pointerEvents = 'auto';
+                    // Solo actualizar estilos si el dropdown está visible
+                    if (!isExpanded) {
+                        // Asegurar posicionamiento y z-index
+                        userDropdown.style.position = 'absolute';
+                        userDropdown.style.zIndex = '999999999';
+                        userDropdown.style.right = '0';
+                        userDropdown.style.top = 'calc(100% + 10px)';
+                        
+                        // Asegurar que el dropdown tenga un contexto de apilamiento
+                        userDropdown.style.isolation = 'isolate';
+                        userDropdown.style.pointerEvents = 'auto';
+                        
+                        // Hacer visible con transición
+                        userDropdown.style.visibility = 'visible';
+                        userDropdown.style.opacity = '1';
+                    } else {
+                        // Si está ocultando, solo actualizar la visibilidad y opacidad
+                        userDropdown.style.visibility = 'hidden';
+                        userDropdown.style.opacity = '0';
+                    }
                 }, 10);
                 
                 console.log('Menú de usuario', isExpanded ? 'oculto' : 'mostrado');

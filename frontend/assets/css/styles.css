@@ -583,41 +583,40 @@ body[data-theme="dark"] .testimonials {
 
 .user-dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 10px);
     right: 0;
     background: var(--white);
     border: 1px solid var(--light-gray);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     padding: 10px 0;
     min-width: 200px;
-    z-index: 999999999; /* Aumentar aún más el z-index para asegurar que esté por encima de todos los elementos */
+    z-index: 999999999;
     display: none;
-    /* Optimizar animaciones */
-    will-change: transform, opacity;
-    /* Mejorar el rendimiento con transform */
     transform: translateY(0);
     transition: opacity 0.3s ease, transform 0.3s ease;
     color: var(--dark);
-    /* Asegurar que el dropdown no se corte */
     overflow: visible;
-    /* Asegurar que el menú esté por encima de todos los elementos */
-    contain: layout style;
-    /* Asegurar que el menú no se oculte detrás de otros elementos */
     isolation: isolate;
-    /* Asegurar que el menú sea completamente interactuable */
     pointer-events: auto;
+    margin: 0;
+    /* Añadir estilos adicionales para asegurar visibilidad */
+    contain: layout style paint;
+    will-change: transform, opacity;
 }
 
 .user-dropdown.show {
     display: block;
     opacity: 1;
     transform: translateY(0);
+    visibility: visible;
 }
 
 .user-dropdown.hide {
+    display: none;
     opacity: 0;
     transform: translateY(-10px);
+    visibility: hidden;
 }
 
 .user-dropdown li {
