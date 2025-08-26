@@ -304,6 +304,88 @@ const updateCartCount = () => {
   });
 };
 
+// Función para generar un token CSRF simple (en producción, esto debería venir del servidor)
+function generateCSRFToken() {
+    // En una implementación real, este token debería ser generado por el servidor
+    // y almacenado de forma segura
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
+// Función para añadir token CSRF a formularios
+function addCSRFTokenToForms() {
+    const forms = document.querySelectorAll('form');
+    const csrfToken = generateCSRFToken();
+    
+    forms.forEach(form => {
+        // Verificar si el formulario ya tiene un token CSRF
+        const existingToken = form.querySelector('input[name="_csrf"]');
+        if (!existingToken) {
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_csrf';
+            tokenInput.value = csrfToken;
+            form.appendChild(tokenInput);
+        }
+    });
+}
+
+// Función para validar entradas de usuario
+function validateInput(input) {
+    // Eliminar caracteres peligrosos
+    const sanitized = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return sanitized;
+}
+
+// Función para validar formularios
+function validateForm(form) {
+    const inputs = form.querySelectorAll('input, textarea, select');
+    let isValid = true;
+    
+    inputs.forEach(input => {
+        // Validar campos requeridos
+        if (input.hasAttribute('required') && !input.value.trim()) {
+            isValid = false;
+            input.classList.add('error');
+        } else {
+            input.classList.remove('error');
+        }
+        
+        // Validar emails
+        if (input.type === 'email' && input.value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(input.value)) {
+                isValid = false;
+                input.classList.add('error');
+            } else {
+                input.classList.remove('error');
+            }
+        }
+        
+        // Sanitizar entradas
+        if (input.type !== 'password') {
+            input.value = validateInput(input.value);
+        }
+    });
+    
+    return isValid;
+}
+
+// Función para manejar el envío de formularios con validación
+function handleFormSubmission(form, submitHandler) {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validar formulario
+        if (!validateForm(this)) {
+            console.warn('Formulario inválido');
+            return;
+        }
+        
+        // Ejecutar manejador de envío
+        submitHandler(new FormData(this));
+    });
+}
+
 // Exportar funciones
 export {
   API_BASE_URL,

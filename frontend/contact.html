@@ -59,6 +59,41 @@
     <link rel="preload" href="assets/js/contact.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
+    
+    <!-- Schema.org para contacto -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Arreglos Victoria Florería",
+      "image": "https://arreglos-victoria-backend.onrender.com/assets/images/contact-hero.jpg",
+      "telephone": "+569 6360 3177",
+      "email": "arreglosfloralesvictoria@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Valdivieso 593",
+        "addressLocality": "Recoleta",
+        "addressRegion": "Región Metropolitana",
+        "postalCode": "8420000",
+        "addressCountry": "CL"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "09:00",
+          "closes": "19:00"
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -138,19 +173,19 @@
                         <form id="contactForm">
                             <div class="form-group">
                                 <label for="contactName">Nombre</label>
-                                <input type="text" id="contactName" name="name" required class="form-input">
+                                <input type="text" id="contactName" name="name" required class="form-input" aria-required="true">
                             </div>
                             <div class="form-group">
                                 <label for="contactEmail">Email</label>
-                                <input type="email" id="contactEmail" name="email" required class="form-input">
+                                <input type="email" id="contactEmail" name="email" required class="form-input" aria-required="true">
                             </div>
                             <div class="form-group">
                                 <label for="contactSubject">Asunto</label>
-                                <input type="text" id="contactSubject" name="subject" required class="form-input">
+                                <input type="text" id="contactSubject" name="subject" required class="form-input" aria-required="true">
                             </div>
                             <div class="form-group">
                                 <label for="contactMessageText">Mensaje</label>
-                                <textarea id="contactMessageText" name="message" required class="form-input"></textarea>
+                                <textarea id="contactMessageText" name="message" required class="form-input" aria-required="true"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                         </form>

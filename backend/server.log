@@ -12195,3 +12195,5 @@ Error: listen EADDRINUSE: address already in use :::5000
 [2025-08-26T06:08:14.766Z] [2025-08-26T06:08:14.766Z] GET /assets/js/userMenu.js - IP: ::1
 [2025-08-26T06:08:14.769Z] [2025-08-26T06:08:14.769Z] GET /assets/js/header.js - IP: ::1
 [2025-08-26T06:08:14.900Z] [2025-08-26T06:08:14.900Z] GET /assets/js/auth.js - IP: ::1
+[2025-08-26T16:32:27.088Z] 🚀 Servidor backend corriendo en http://localhost:5000
+[2025-08-26T16:32:28.247Z] Servidor de correo configurado correctamente

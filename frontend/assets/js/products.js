@@ -17,6 +17,58 @@ function debounce(func, wait) {
     };
 }
 
+// Función para mostrar indicador de carga
+function showLoading() {
+    const loadingElement = document.getElementById('loading');
+    if (loadingElement) {
+        loadingElement.style.display = 'block';
+    }
+}
+
+// Función para ocultar indicador de carga
+function hideLoading() {
+    const loadingElement = document.getElementById('loading');
+    if (loadingElement) {
+        loadingElement.style.display = 'none';
+    }
+}
+
+// Función para mostrar mensaje de error
+function showError(message) {
+    const productGrid = document.getElementById('productGrid');
+    if (productGrid) {
+        productGrid.innerHTML = `
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>${message}</p>
+                <button class="btn btn-primary" onclick="loadProducts()">Reintentar</button>
+            </div>
+        `;
+    }
+}
+
+// Función para cargar productos con manejo de errores
+async function loadProducts() {
+    showLoading();
+    
+    try {
+        // Simular carga de productos
+        const response = await fetch('/api/products');
+        
+        if (!response.ok) {
+            throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
+        }
+        
+        const products = await response.json();
+        displayProducts(products);
+    } catch (error) {
+        console.error('Error al cargar productos:', error);
+        showError('No se pudieron cargar los productos. Por favor, inténtalo de nuevo más tarde.');
+    } finally {
+        hideLoading();
+    }
+}
+
 // Función para cargar todos los productos
 async function loadAllProducts() {
     try {
