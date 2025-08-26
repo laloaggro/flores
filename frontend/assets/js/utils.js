@@ -386,6 +386,49 @@ function handleFormSubmission(form, submitHandler) {
     });
 }
 
+// Función para aplicar el tema (siempre comenzar con modo claro)
+export function applyTheme(theme) {
+    const body = document.body;
+    
+    if (theme === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+    } else {
+        // Siempre aplicar el modo claro por defecto
+        body.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+    }
+    
+    // Actualizar el icono del botón de cambio de tema
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        const icon = themeToggle.querySelector('i');
+        if (icon) {
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+    }
+}
+
+// Función para inicializar el tema (siempre comenzar con modo claro)
+export function initTheme() {
+    // Siempre comenzar con el modo claro
+    applyTheme('light');
+    
+    // Configurar el event listener para el botón de cambio de tema
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    }
+}
+
 // Exportar funciones
 export {
   API_BASE_URL,

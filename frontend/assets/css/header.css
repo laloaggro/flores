@@ -242,7 +242,8 @@ body[data-theme="dark"] nav ul li a.active {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
-    z-index: 999999998;
+    z-index: 999999999;
+    position: relative;
 }
 
 .user-info:hover {
@@ -266,7 +267,8 @@ body[data-theme="dark"] nav ul li a.active {
     border-radius: var(--border-radius);
     min-width: 200px;
     /* Increase z-index to bring the dropdown above other elements */
-    z-index: 999999999; /* Ensure it's higher than other elements */
+    z-index: 999999999;
+    /* Ensure it's higher than other elements */
     /* Asegurar que no haya fondo verde */
     background-color: #ffffff;
     background-image: none;
@@ -276,6 +278,11 @@ body[data-theme="dark"] nav ul li a.active {
     overflow: visible;
     /* Asegurar contexto de apilamiento */
     isolation: isolate;
+    display: none;
+}
+
+.user-dropdown.show {
+    display: block;
 }
 
 /* User Menu Options */
@@ -288,7 +295,8 @@ body[data-theme="dark"] nav ul li a.active {
     transition: background-color 0.3s ease;
     /* Ensure options are also above other elements */
     position: relative;
-    z-index: 999999999; /* Slightly higher than the dropdown container */
+    z-index: 999999999;
+    /* Slightly higher than the dropdown container */
     /* Asegurar que no haya fondo verde */
     background-color: transparent;
     background-image: none;
