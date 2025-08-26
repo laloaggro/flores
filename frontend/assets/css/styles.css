@@ -518,9 +518,9 @@ body[data-theme="dark"] .testimonials {
 }
 
 .user-menu {
-    position: relative !important;
-    z-index: 999999999 !important;
-    pointer-events: auto !important;
+    position: relative;
+    z-index: 999999999;
+    pointer-events: auto;
 }
 
 .user-info {
@@ -621,8 +621,9 @@ body[data-theme="dark"] .testimonials {
 
 .user-dropdown li {
     list-style: none;
-    /* Asegurar que los elementos de la lista no interfieran con la interacción */
-    pointer-events: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .user-dropdown a {
@@ -633,12 +634,12 @@ body[data-theme="dark"] .testimonials {
     color: var(--dark-gray);
     text-decoration: none;
     transition: all 0.3s ease;
-    /* Asegurar que los enlaces del menú sean clickeables */
     pointer-events: auto;
     position: relative;
-    z-index: 999999999;
-    /* Asegurar que los enlaces estén por encima de cualquier otro elemento */
+    z-index: 1;
     isolation: isolate;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .user-dropdown a:hover {
