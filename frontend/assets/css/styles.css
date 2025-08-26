@@ -206,6 +206,8 @@ body::before {
 #main-content {
     padding-top: 80px; /* Ajustar para compensar la altura del navbar fijo */
     scroll-margin-top: 80px; /* Asegurar que el contenido no quede oculto detrás del navbar al usar enlaces de anclaje */
+    position: relative;
+    z-index: 1; /* Asegurar que el contenido principal esté detrás del menú desplegable */
 }
 
 /* Mejorar el contraste para accesibilidad */
@@ -968,6 +970,7 @@ body[data-theme="dark"] .testimonials {
     text-align: center;
     color: var(--white);
     position: relative;
+    z-index: 1; /* Asegurar que el hero esté detrás del menú desplegable */
     /* Optimizar animaciones */
     will-change: transform;
 }

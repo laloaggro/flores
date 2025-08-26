@@ -7,7 +7,7 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 999999999; /* Aumentar z-index para asegurar que esté por encima de todo el contenido */
     transition: all 0.3s ease;
     color: var(--dark);
     padding: 0;
@@ -18,6 +18,8 @@ header {
     /* Asegurarse de que no haya fondo verde */
     background-image: none;
     background: #ffffff; /* Fondo blanco explícito */
+    /* Asegurar contexto de apilamiento */
+    isolation: isolate;
 }
 
 body[data-theme="dark"] header {
