@@ -15,3 +15,27 @@ vendor/
 # OS
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
+backend/logs/
+*.log.*
+
+# Archivos con información sensible
+.env.*
+config/*.env*
+.env.local
+.env.*.local
+
+# Archivos de test
+users-test.json
+cart-test.json
+orders-test.json
+*-test.json
+
+# Otros archivos que no deben subirse
+*.tmp
+*.temp
+.DS_Store
+desktop.ini
+```

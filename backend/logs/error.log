@@ -1,6 +1,0 @@
-[2025-08-26T16:45:11.051Z] [ERROR] [APPLICATION_ERROR] Ruta no encontrada Context: {"url":"/.well-known/appspecific/com.chrome.devtools.json","method":"GET","ip":"::1"}
-[2025-08-26T16:46:23.077Z] [ERROR] [APPLICATION_ERROR] Ruta no encontrada Context: {"url":"/.well-known/appspecific/com.chrome.devtools.json","method":"GET","ip":"::1"}
-[2025-08-26T16:46:45.604Z] [ERROR] [APPLICATION_ERROR] Ruta no encontrada Context: {"url":"/.well-known/appspecific/com.chrome.devtools.json","method":"GET","ip":"::1"}
-[2025-08-26T16:48:52.698Z] [ERROR] [APPLICATION_ERROR] Ruta no encontrada Context: {"url":"/.well-known/appspecific/com.chrome.devtools.json","method":"GET","ip":"::1"}
-[2025-08-26T16:49:45.278Z] [ERROR] [APPLICATION_ERROR] Ruta no encontrada Context: {"url":"/assets/images/products/ramo-rosas-rojas.jpg","method":"GET","ip":"::1"}
-[2025-08-26T16:49:45.284Z] [ERROR] [APPLICATION_ERROR] Ruta no encontrada Context: {"url":"/assets/images/products/orquidea-blanca.jpg","method":"GET","ip":"::1"}
