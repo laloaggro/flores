@@ -534,6 +534,8 @@ body[data-theme="dark"] .testimonials {
     /* Optimizar animaciones */
     will-change: background-color, border-color;
     color: var(--dark);
+    position: relative; /* Asegurar posicionamiento relativo */
+    z-index: 1001; /* Asegurar que esté por encima del dropdown */
 }
 
 .user-info:hover {
@@ -546,8 +548,9 @@ body[data-theme="dark"] .testimonials {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: cover; /* Asegurar que la imagen se ajuste correctamente */
     background-color: var(--gray);
+    border: 2px solid var(--white); /* Agregar borde blanco para mejor visibilidad */
 }
 
 .user-name {
@@ -590,6 +593,8 @@ body[data-theme="dark"] .testimonials {
     transform: translateY(0);
     transition: opacity 0.3s ease, transform 0.3s ease;
     color: var(--dark);
+    /* Asegurar que el dropdown no se corte */
+    overflow: visible;
 }
 
 .user-dropdown.show {

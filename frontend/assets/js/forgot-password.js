@@ -53,7 +53,7 @@ async function handleForgotPassword(event) {
         console.log('Enviando solicitud de recuperación de contraseña para:', email);
         
         // Enviar solicitud al backend
-        const response = await fetch(`${API_BASE_URL}/api/users/forgot-password`, {
+        const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -60,10 +60,20 @@ class UserMenu {
                     // Avatar de Google
                     userProfileImage.src = user.picture;
                     userProfileImage.alt = `Avatar de ${displayName}`;
+                    userProfileImage.onerror = function() {
+                        // Si la imagen de Google no carga, usar avatar por defecto
+                        this.src = './assets/images/default-avatar.png';
+                        this.alt = 'Avatar por defecto';
+                    };
                 } else if (userLocalStorage && userLocalStorage.picture) {
                     // Avatar de Google desde localStorage
                     userProfileImage.src = userLocalStorage.picture;
                     userProfileImage.alt = `Avatar de ${displayName}`;
+                    userProfileImage.onerror = function() {
+                        // Si la imagen de Google no carga, usar avatar por defecto
+                        this.src = './assets/images/default-avatar.png';
+                        this.alt = 'Avatar por defecto';
+                    };
                 } else {
                     // Avatar por defecto
                     userProfileImage.src = './assets/images/default-avatar.png';

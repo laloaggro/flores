@@ -16,7 +16,10 @@ export async function initializeGoogleSignIn() {
         script.defer = true;
         script.onload = () => {
             console.log('Biblioteca de Google cargada exitosamente');
-            initializeGoogleClient();
+            // Añadir un pequeño retraso para asegurar que la biblioteca esté completamente lista
+            setTimeout(() => {
+                initializeGoogleClient();
+            }, 100);
         };
         script.onerror = () => {
             console.error('Error al cargar la biblioteca de Google');
@@ -25,7 +28,10 @@ export async function initializeGoogleSignIn() {
         document.head.appendChild(script);
     } else {
         console.log('Biblioteca de Google ya está cargada');
-        initializeGoogleClient();
+        // Añadir un pequeño retraso para asegurar que la biblioteca esté completamente lista
+        setTimeout(() => {
+            initializeGoogleClient();
+        }, 100);
     }
 }
 
@@ -34,29 +40,38 @@ function initializeGoogleClient() {
     console.log('Inicializando Google Sign-In');
     
     if (typeof google !== 'undefined' && google.accounts) {
-        google.accounts.id.initialize({
-            client_id: "888681528450-havivkoibjv0ht3vu4q46hc8k0i3f8iu.apps.googleusercontent.com",
-            callback: handleGoogleResponse
-        });
-        
-        console.log('Renderizando botón de Google Sign-In');
-        google.accounts.id.renderButton(
-            document.getElementById("googleSignInButton"),
-            { 
-                theme: "outline", 
-                size: "large",
-                width: 200,
-                text: "signin_with"
-            }
-        );
-        
-        // Solicitar también el perfil del usuario para registro
-        google.accounts.id.prompt();
-        
-        console.log('Botón de Google Sign-In mostrado');
-        googleClientInitialized = true;
+        try {
+            google.accounts.id.initialize({
+                client_id: "888681528450-havivkoibjv0ht3vu4q46hc8k0i3f8iu.apps.googleusercontent.com",
+                callback: handleGoogleResponse,
+                cancel_on_tap_outside: false, // Prevenir cancelación accidental
+            });
+            
+            console.log('Renderizando botón de Google Sign-In');
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignInButton"),
+                { 
+                    theme: "outline", 
+                    size: "large",
+                    width: 200,
+                    text: "signin_with",
+                    logo_alignment: "center"
+                }
+            );
+            
+            // Solicitar también el perfil del usuario para registro
+            google.accounts.id.prompt((notification) => {
+                console.log('Google Sign-In prompt notification:', notification);
+            });
+            
+            console.log('Botón de Google Sign-In mostrado');
+            googleClientInitialized = true;
+        } catch (error) {
+            console.error('Error al inicializar Google Sign-In:', error);
+            showNotification('Error al inicializar la autenticación con Google', 'error');
+        }
     } else {
-        console.error('Google Identity Services no disponible');
+        console.warn('Google Identity Services no disponible aún, reintentando en 1 segundo...');
         setTimeout(initializeGoogleClient, 1000);
     }
 }
