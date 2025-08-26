@@ -140,18 +140,22 @@ class UserMenu {
                 
                 // Forzar visibilidad del dropdown
                 userDropdown.style.display = isExpanded ? 'none' : 'block';
-                userDropdown.style.visibility = isExpanded ? 'hidden' : 'visible';
-                userDropdown.style.opacity = isExpanded ? '0' : '1';
                 
-                // Asegurar posicionamiento y z-index
-                userDropdown.style.position = 'absolute';
-                userDropdown.style.zIndex = '999999999';
-                userDropdown.style.right = '0';
-                userDropdown.style.top = 'calc(100% + 10px)';
-                
-                // Asegurar que el dropdown tenga un contexto de apilamiento
-                userDropdown.style.isolation = 'isolate';
-                userDropdown.style.pointerEvents = 'auto';
+                // Añadir un pequeño retraso para asegurar que los estilos se apliquen correctamente
+                setTimeout(() => {
+                    userDropdown.style.visibility = isExpanded ? 'hidden' : 'visible';
+                    userDropdown.style.opacity = isExpanded ? '0' : '1';
+                    
+                    // Asegurar posicionamiento y z-index
+                    userDropdown.style.position = 'absolute';
+                    userDropdown.style.zIndex = '999999999';
+                    userDropdown.style.right = '0';
+                    userDropdown.style.top = 'calc(100% + 10px)';
+                    
+                    // Asegurar que el dropdown tenga un contexto de apilamiento
+                    userDropdown.style.isolation = 'isolate';
+                    userDropdown.style.pointerEvents = 'auto';
+                }, 10);
                 
                 console.log('Menú de usuario', isExpanded ? 'oculto' : 'mostrado');
             });

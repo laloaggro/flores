@@ -668,7 +668,45 @@ body[data-theme="dark"] .testimonials {
     transform: translateY(-2px);
 }
 
-/* Estilos específicos para evitar conflictos con otros elementos */
+.user-dropdown {
+    position: absolute !important;
+    top: calc(100% + 10px) !important;
+    right: 0 !important;
+    background: var(--white) !important;
+    border: 1px solid var(--light-gray) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    padding: 10px 0 !important;
+    min-width: 200px !important;
+    z-index: 999999999 !important;
+    display: none !important;
+    transform: translateY(0) !important;
+    transition: opacity 0.3s ease, transform 0.3s ease !important;
+    color: var(--dark) !important;
+    overflow: visible !important;
+    isolation: isolate !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+    /* Añadir estilos adicionales para asegurar visibilidad */
+    contain: layout style paint !important;
+    will-change: transform, opacity !important;
+}
+
+.user-dropdown.show {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    visibility: visible !important;
+}
+
+.user-dropdown.hide {
+    display: none !important;
+    opacity: 0 !important;
+    transform: translateY(-10px) !important;
+    visibility: hidden !important;
+}
+
+/* Estilos específicos para evitar conflictos con el fondo verde */
 .user-menu,
 .user-dropdown,
 .user-dropdown *,
@@ -680,6 +718,9 @@ body[data-theme="dark"] .testimonials {
 
 .user-dropdown {
     background-color: var(--white) !important;
+    /* Asegurar que el fondo sea blanco sólido */
+    background-clip: border-box !important;
+    border-color: var(--light-gray) !important;
 }
 
 /* Asegurar que el menú esté siempre visible */
@@ -699,6 +740,8 @@ body[data-theme="dark"] .testimonials {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+}
+
     background-color: var(--light);
     transition: all 0.3s ease;
     /* Optimizar animaciones */
