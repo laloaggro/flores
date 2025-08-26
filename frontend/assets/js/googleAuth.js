@@ -41,14 +41,16 @@ function initializeGoogleClient() {
     
     if (typeof google !== 'undefined' && google.accounts) {
         try {
+            // Inicializar Google Sign-In con configuración para FedCM
             google.accounts.id.initialize({
                 client_id: "888681528450-havivkoibjv0ht3vu4q46hc8k0i3f8iu.apps.googleusercontent.com",
                 callback: handleGoogleResponse,
-                cancel_on_tap_outside: false, // Prevenir cancelación accidental
+                cancel_on_tap_outside: false,
                 // Configuración para FedCM (Federated Credential Management)
                 use_fedcm_for_prompt: true
             });
             
+            // Renderizar el botón de Google Sign-In
             console.log('Renderizando botón de Google Sign-In');
             google.accounts.id.renderButton(
                 document.getElementById("googleSignInButton"),
@@ -61,17 +63,15 @@ function initializeGoogleClient() {
                 }
             );
             
-            // Solicitar también el perfil del usuario para registro
+            // Configurar el prompt de Google One Tap con manejo adecuado de FedCM
             google.accounts.id.prompt((notification) => {
                 console.log('Google Sign-In prompt notification:', notification);
                 
                 // Manejar las notificaciones de FedCM
-                if (notification.isDisplayMoment()) {
-                    console.log('Se muestra el prompt de Google One Tap');
-                } else if (notification.isSkippedMoment()) {
-                    console.log('Usuario omitió el prompt de Google One Tap');
-                } else if (notification.isDismissedMoment()) {
-                    console.log('Usuario cerró el prompt de Google One Tap');
+                if (notification.isNotDisplayed() || notification.isSkippedMoment() || notification.isDismissedMoment()) {
+                    console.log('Google One Tap no se muestra o fue omitido/cerrado');
+                } else if (notification.isDisplayed()) {
+                    console.log('Google One Tap se muestra correctamente');
                 }
             });
             
