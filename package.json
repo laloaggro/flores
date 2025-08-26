@@ -18,5 +18,9 @@
     "online"
   ],
   "author": "Mauricio Garay",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "jsonwebtoken": "^9.0.2"
+  }
 }

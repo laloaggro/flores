@@ -3,16 +3,8 @@ const { config } = require('dotenv');
 const path = require('path');
 const fs = require('fs');
 
-// Crear un stream de escritura para el archivo de logs
-const logStream = fs.createWriteStream(path.join(__dirname, 'server.log'), { flags: 'a' });
-
-// Función para registrar mensajes en el archivo de logs
-function logMessage(message) {
-    const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}\n`;
-    logStream.write(logEntry);
-    console.log(message); // También mostrar en consola
-}
+// Importar el nuevo sistema de logging
+const { logInfo, logError, logHttpRequest, logApplicationError } = require('./utils/logger');
 
 // Cargar variables de entorno
 config();
@@ -50,9 +42,16 @@ if (!fs.existsSync(uploadDir)) {
 
 // Middleware para registrar solicitudes
 app.use((req, res, next) => {
-    const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${req.method} ${req.url} - IP: ${req.ip}`;
-    logMessage(logEntry);
+    // Registrar inicio de solicitud
+    logHttpRequest(req.method, req.url, req.ip);
+    
+    // Registrar cuando la solicitud se complete
+    const originalSend = res.send;
+    res.send = function(body) {
+        logHttpRequest(req.method, req.url, req.ip, res.statusCode);
+        originalSend.call(this, body);
+    };
+    
     next();
 });
 
@@ -73,7 +72,7 @@ const analyticsRouter = require('./routes/analytics');
 const cartRouter = require('./routes/cart');
 
 app.use('/api/contact', (req, res, next) => {
-    logMessage(`Ruta /api/contact accedida con método ${req.method}`);
+    logInfo(`Ruta /api/contact accedida con método ${req.method}`);
     next();
 }, contactRoutes);
 
@@ -100,24 +99,31 @@ app.use(globalErrorHandler);
 
 // Middleware para manejar rutas no encontradas
 app.use('*', (req, res) => {
+    const message = `No se puede encontrar ${req.originalUrl} en este servidor`;
+    logApplicationError('Ruta no encontrada', null, { 
+        url: req.originalUrl, 
+        method: req.method, 
+        ip: req.ip 
+    });
+    
     res.status(404).json({
         status: 'fail',
-        message: `No se puede encontrar ${req.originalUrl} en este servidor`
+        message
     });
 });
 
 // Iniciar el servidor
 const server = app.listen(PORT, () => {
     const message = `🚀 Servidor backend corriendo en http://localhost:${PORT}`;
-    logMessage(message);
+    logInfo(message);
     console.log(message);
 });
 
 // Manejo de errores no capturados
 process.on('uncaughtException', (err) => {
-    const message = `❌ Error no capturado: ${err.message}\n${err.stack}`;
-    logMessage(message);
-    console.error(message);
+    const message = `❌ Error no capturado: ${err.message}`;
+    logError(message, err);
+    console.error(message, err);
     
     // Cerrar el servidor y salir
     server.close(() => {
@@ -127,11 +133,28 @@ process.on('uncaughtException', (err) => {
 
 process.on('unhandledRejection', (reason, promise) => {
     const message = `❌ Promesa rechazada no manejada: ${reason}`;
-    logMessage(message);
-    console.error(message);
+    logError(message, reason instanceof Error ? reason : new Error(String(reason)));
+    console.error(message, reason);
     
     // Cerrar el servidor y salir
     server.close(() => {
         process.exit(1);
+    });
+});
+
+// Manejar cierre limpio de la aplicación
+process.on('SIGTERM', () => {
+    logInfo('Recibida señal SIGTERM. Cerrando servidor...');
+    server.close(() => {
+        logInfo('Servidor cerrado correctamente');
+        process.exit(0);
+    });
+});
+
+process.on('SIGINT', () => {
+    logInfo('Recibida señal SIGINT. Cerrando servidor...');
+    server.close(() => {
+        logInfo('Servidor cerrado correctamente');
+        process.exit(0);
     });
 });
