@@ -3,7 +3,7 @@ import { API_BASE_URL, showNotification } from './utils.js';
 let googleClientInitialized = false;
 
 // Inicializar Google Sign-In
-export async function initializeGoogleSignIn() {
+async function initializeGoogleSignIn() {
     console.log('Inicializando Google Sign-In con clientId: 888681528450-havivkoibjv0ht3vu4q46hc8k0i3f8iu.apps.googleusercontent.com');
     
     // Cargar la biblioteca de Google Identity Services
@@ -187,4 +187,4 @@ function parseJwt(token) {
 }
 
 // Exportar funciones necesarias
-export { initializeGoogleClient, handleGoogleResponse };
+export { initializeGoogleSignIn, initializeGoogleClient, handleGoogleResponse };
