@@ -62,7 +62,7 @@ class UserMenu {
                     userProfileImage.alt = `Avatar de ${displayName}`;
                     userProfileImage.onerror = function() {
                         // Si la imagen de Google no carga, usar avatar por defecto
-                        this.src = './assets/images/default-avatar.png';
+                        this.src = './assets/images/default-avatar.svg';
                         this.alt = 'Avatar por defecto';
                     };
                 } else if (userLocalStorage && userLocalStorage.picture) {
@@ -71,16 +71,16 @@ class UserMenu {
                     userProfileImage.alt = `Avatar de ${displayName}`;
                     userProfileImage.onerror = function() {
                         // Si la imagen de Google no carga, usar avatar por defecto
-                        this.src = './assets/images/default-avatar.png';
+                        this.src = './assets/images/default-avatar.svg';
                         this.alt = 'Avatar por defecto';
                     };
                 } else {
                     // Avatar por defecto
-                    userProfileImage.src = './assets/images/default-avatar.png';
+                    userProfileImage.src = './assets/images/default-avatar.svg';
                     userProfileImage.alt = 'Avatar por defecto';
                 }
             }
-            
+
             console.log('Usuario autenticado:', user || userLocalStorage);
         } else {
             // Usuario no autenticado - mostrar enlace de login

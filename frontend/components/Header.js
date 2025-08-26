@@ -26,7 +26,7 @@ class Header extends HTMLElement {
                     </a>
                     <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
                         <button class="user-info" aria-haspopup="true" aria-expanded="false">
-                            <img id="userProfileImage" class="user-avatar" src="./assets/images/default-avatar.png" alt="Avatar de usuario">
+                            <img id="userProfileImage" class="user-avatar" src="./assets/images/default-avatar.svg" alt="Avatar de usuario">
                             <span id="userNameDisplay" class="user-name"></span>
                             <i class="fas fa-caret-down" aria-hidden="true"></i>
                         </button>
