@@ -12642,3 +12642,5 @@ Error: listen EADDRINUSE: address already in use :::5000
 [2025-08-26T16:41:31.595Z] [2025-08-26T16:41:31.595Z] GET /assets/js/auth.js - IP: ::1
 [2025-08-26T16:43:00.594Z] Servidor de correo configurado correctamente
 [2025-08-26T16:44:43.860Z] Servidor de correo configurado correctamente
+[2025-08-26T20:50:19.926Z] Servidor de correo configurado correctamente
+[2025-08-26T20:51:49.281Z] Servidor de correo configurado correctamente

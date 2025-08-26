@@ -220,6 +220,10 @@ body[data-theme="dark"] nav ul li a.active {
 /* User Menu */
 .user-menu {
     position: relative;
+    z-index: 999999999;
+    /* Asegurar que el menú no tenga fondo verde */
+    background-color: transparent;
+    background-image: none;
 }
 
 .user-info {
@@ -234,6 +238,7 @@ body[data-theme="dark"] nav ul li a.active {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
+    z-index: 999999998;
 }
 
 .user-info:hover {
@@ -249,54 +254,62 @@ body[data-theme="dark"] nav ul li a.active {
 }
 
 .user-dropdown {
+    /* Existing styles */
     position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: var(--white);
-    border-radius: 10px;
+    background-color: #ffffff;
     box-shadow: var(--shadow);
-    padding: 0.5rem 0;
+    padding: 1rem;
+    border-radius: var(--border-radius);
     min-width: 200px;
-    margin-top: 0.5rem;
-    display: none;
-    z-index: 1001;
-    border: 1px solid var(--gray);
-    /* Añadido: Transición suave */
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    /* Increase z-index to bring the dropdown above other elements */
+    z-index: 999999999; /* Ensure it's higher than other elements */
+    /* Asegurar que no haya fondo verde */
+    background-color: #ffffff;
+    background-image: none;
+    top: calc(100% + 10px);
+    right: 0;
+    border: 1px solid var(--light-gray);
+    overflow: visible;
 }
 
-.user-menu.show .user-dropdown {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
-
-.user-dropdown li {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
+/* User Menu Options */
 .user-dropdown a {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.8rem 1.2rem;
+    /* Existing styles */
+    display: block;
+    padding: 0.5rem 1rem;
     text-decoration: none;
-    color: var(--dark); /* Color principal para mejor visibilidad */
-    transition: all 0.2s ease;
-    font-weight: 500;
-    font-size: 1rem; /* Asegurar tamaño de fuente adecuado */
+    color: var(--dark);
+    transition: background-color 0.3s ease;
+    /* Ensure options are also above other elements */
+    position: relative;
+    z-index: 999999999; /* Slightly higher than the dropdown container */
+    /* Asegurar que no haya fondo verde */
+    background-color: transparent;
+    background-image: none;
 }
 
 .user-dropdown a:hover {
     background-color: var(--light);
     color: var(--primary);
+    /* Asegurar que no haya fondo verde en hover */
+    background-color: var(--light);
+    background-image: none;
 }
 
 .user-dropdown a i {
+    color: var(--primary);
+    margin-right: 0.5rem;
     width: 20px;
     text-align: center;
-    color: var(--primary); /* Añadido color al icono */
+}
+
+.user-dropdown li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Asegurar que no haya fondo verde */
+    background-color: transparent;
+    background-image: none;
 }
 
 /* Añadir estilos para el texto específico del menú */
