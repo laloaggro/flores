@@ -187,4 +187,4 @@ function parseJwt(token) {
 }
 
 // Exportar funciones necesarias
-export { initializeGoogleSignIn, handleGoogleResponse };
+export { initializeGoogleClient, handleGoogleResponse };
