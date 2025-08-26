@@ -43,11 +43,32 @@ body[data-theme="dark"] header {
     background: transparent; /* Asegurar que el navbar no tenga fondo */
 }
 
+.logo i {
+    color: var(--primary); /* Color del icono de hoja */
+    margin-right: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.logo:hover {
+    color: var(--primary); /* Cambiar color al pasar el mouse */
+}
+
+body[data-theme="dark"] .logo {
+    color: var(--dark-text);
+}
+
+body[data-theme="dark"] .logo:hover {
+    color: var(--primary);
+}
+
 .logo {
     display: flex;
     align-items: center;
     text-decoration: none;
     height: 60px;
+    color: var(--dark); /* Asegurar color visible del texto */
+    font-weight: 700;
+    font-size: 1.5rem;
 }
 
 .logo-text {
