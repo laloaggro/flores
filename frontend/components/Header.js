@@ -4,7 +4,10 @@ class Header extends HTMLElement {
         this.innerHTML = `
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
+                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio">
+                    <i class="fas fa-leaf logo-icon" aria-hidden="true"></i>
+                    <span class="logo-text">Arreglos Florales Victoria</span>
+                </a>
                 
                 <button class="hamburger" aria-label="Menú" aria-expanded="false">
                     <span></span>

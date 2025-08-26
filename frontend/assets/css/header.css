@@ -43,14 +43,41 @@ body[data-theme="dark"] header {
     background: transparent; /* Asegurar que el navbar no tenga fondo */
 }
 
-.logo i {
-    color: var(--primary); /* Color del icono de hoja */
-    margin-right: 0.5rem;
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    height: 60px;
+    color: var(--dark); /* Asegurar color visible del texto */
+    font-weight: 700;
     font-size: 1.8rem;
+    transition: all 0.3s ease;
 }
 
 .logo:hover {
     color: var(--primary); /* Cambiar color al pasar el mouse */
+    transform: scale(1.05);
+}
+
+.logo-icon {
+    color: var(--primary); /* Color del icono de hoja */
+    font-size: 2rem;
+    margin-right: 0.8rem;
+    transition: all 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo:hover .logo-icon {
+    transform: rotate(15deg);
+}
+
+.logo-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
 }
 
 body[data-theme="dark"] .logo {
@@ -61,22 +88,9 @@ body[data-theme="dark"] .logo:hover {
     color: var(--primary);
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    height: 60px;
-    color: var(--dark); /* Asegurar color visible del texto */
-    font-weight: 700;
-    font-size: 1.5rem;
-}
-
-.logo-text {
-    font-family: 'Dancing Script', cursive;
-    font-size: 2.2rem;
-    font-weight: 700;
+body[data-theme="dark"] .logo-text {
     color: var(--primary);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 nav ul {
