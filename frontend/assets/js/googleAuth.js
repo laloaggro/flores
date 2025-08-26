@@ -67,9 +67,13 @@ function initializeGoogleClient() {
             google.accounts.id.prompt((notification) => {
                 console.log('Google Sign-In prompt notification:', notification);
                 
-                // Manejar las notificaciones de FedCM
-                if (notification.isNotDisplayed() || notification.isSkippedMoment() || notification.isDismissedMoment()) {
-                    console.log('Google One Tap no se muestra o fue omitido/cerrado');
+                // Manejar todas las notificaciones de FedCM para evitar advertencias
+                if (notification.isNotDisplayed()) {
+                    console.log('Google One Tap no se muestra');
+                } else if (notification.isSkippedMoment()) {
+                    console.log('Usuario omitió el prompt de Google One Tap');
+                } else if (notification.isDismissedMoment()) {
+                    console.log('Usuario cerró el prompt de Google One Tap');
                 } else if (notification.isDisplayed()) {
                     console.log('Google One Tap se muestra correctamente');
                 }
@@ -99,110 +103,75 @@ function handleGoogleResponse(response) {
         const currentPage = window.location.pathname;
         
         if (currentPage.includes('register')) {
-            // Registro con Google
-            registerWithGoogle(response.credential, user);
+            // En registro, mostrar formulario con datos de Google
+            document.getElementById('name').value = user.name || '';
+            document.getElementById('email').value = user.email || '';
+            
+            // Guardar datos de Google en localStorage temporalmente
+            localStorage.setItem('googleUser', JSON.stringify(user));
+            
+            showNotification('Datos de Google cargados. Completa el registro.', 'info');
         } else {
-            // Inicio de sesión con Google
-            loginWithGoogle(response.credential, user);
+            // En login, iniciar sesión automáticamente
+            handleGoogleLogin(user);
         }
     } else {
-        console.error('No se recibió credencial de Google');
-        showNotification('Error en la autenticación con Google', 'error');
+        console.error('No se recibió credencial válida de Google');
+        showNotification('Error al iniciar sesión con Google', 'error');
     }
 }
 
-// Registrar con Google
-async function registerWithGoogle(credential, userData) {
-    console.log('Registrando con Google en el backend', credential, userData);
-    
+// Manejar login con Google
+async function handleGoogleLogin(user) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/users/google-register`, {
+        console.log('Iniciando sesión con Google:', user);
+        
+        // Enviar datos al backend para verificar/crear usuario
+        const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
-                token: credential,
-                name: userData.name,
-                email: userData.email,
-                googleId: userData.sub
-            }),
+            body: JSON.stringify({
+                googleId: user.sub,
+                email: user.email,
+                name: user.name,
+                picture: user.picture
+            })
         });
         
         const data = await response.json();
-        console.log('Respuesta del backend para registro:', data);
+        console.log('Respuesta del servidor:', data);
         
-        if (response.ok) {
-            // Guardar token
+        if (response.ok && data.token) {
+            // Guardar token y datos del usuario
             localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('user', JSON.stringify({
+                id: data.user.id,
+                name: data.user.name,
+                email: data.user.email,
+                picture: data.user.picture
+            }));
             
-            showNotification('¡Registro con Google exitoso!', 'success');
+            // Mostrar notificación de éxito
+            showNotification(`¡Bienvenido ${data.user.name}!`, 'success');
             
-            // Redirigir al usuario al perfil
-            setTimeout(() => {
-                window.location.href = 'profile.html';
-            }, 1500);
-        } else {
-            // Si el usuario ya existe, iniciar sesión
-            if (data.message && data.message.includes('ya existe')) {
-                loginWithGoogle(credential, userData);
-            } else {
-                console.error('Error en el registro con Google:', data.message);
-                showNotification(`Error al registrarse con Google: ${data.message}`, 'error');
-            }
-        }
-    } catch (error) {
-        console.error('Error en el registro con Google:', error);
-        showNotification(`Error al registrarse con Google: ${error.message}`, 'error');
-    }
-}
-
-// Iniciar sesión con Google en el backend
-async function loginWithGoogle(credential, userData) {
-    console.log('Iniciando sesión con Google en el backend', credential);
-    
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/users/google-login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                token: credential,
-                email: userData.email,
-                name: userData.name,
-                googleId: userData.sub
-            }),
-        });
-        
-        const data = await response.json();
-        console.log('Respuesta del backend:', data);
-        
-        if (response.ok) {
-            // Guardar token
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
-            showNotification('¡Inicio de sesión con Google exitoso!', 'success');
-            
-            // Redirigir al usuario
+            // Redirigir al usuario a la página principal después de un breve retraso
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1500);
         } else {
-            console.error('Error en la autenticación con Google:', data.message);
-            showNotification(`Error al iniciar sesión con Google: ${data.message}`, 'error');
+            // Mostrar mensaje de error
+            showNotification(data.message || 'Error al iniciar sesión con Google', 'error');
         }
     } catch (error) {
-        console.error('Error en la autenticación con Google:', error);
-        showNotification(`Error al iniciar sesión con Google: ${error.message}`, 'error');
+        console.error('Error en login con Google:', error);
+        showNotification('Error de conexión. Por favor intenta nuevamente.', 'error');
     }
 }
 
 // Parsear JWT
 function parseJwt(token) {
-    console.log('Parseando token JWT de Google');
     try {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -217,28 +186,5 @@ function parseJwt(token) {
     }
 }
 
-// Manejar respuesta de inicio de sesión con Google
-export function handleGoogleLoginResponse(response) {
-    console.log('Manejando respuesta de inicio de sesión con Google', response);
-    
-    if (response.error) {
-        console.error('Error en inicio de sesión con Google:', response.error);
-        showNotification(`Error en inicio de sesión con Google: ${response.error}`, 'error');
-        return { success: false, error: response.error };
-    }
-    
-    if (response.token) {
-        // Guardar token y usuario
-        localStorage.setItem('token', response.token);
-        if (response.user) {
-            localStorage.setItem('user', JSON.stringify(response.user));
-        }
-        
-        showNotification('¡Inicio de sesión con Google exitoso!', 'success');
-        return { success: true, token: response.token, user: response.user };
-    }
-    
-    console.error('Respuesta inválida de Google Sign-In');
-    showNotification('Error en la autenticación con Google', 'error');
-    return { success: false, error: 'Respuesta inválida' };
-}
+// Exportar funciones necesarias
+export { initializeGoogleClient, handleGoogleResponse };
