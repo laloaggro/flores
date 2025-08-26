@@ -47,7 +47,10 @@ function initializeGoogleClient() {
                 callback: handleGoogleResponse,
                 cancel_on_tap_outside: false,
                 // Configuración para FedCM (Federated Credential Management)
-                use_fedcm_for_prompt: true
+                use_fedcm_for_prompt: true,
+                // Configuración adicional para evitar advertencias de FedCM
+                auto_select: false,
+                prompt_parent_id: 'googleSignInButton'
             });
             
             // Renderizar el botón de Google Sign-In
@@ -127,7 +130,7 @@ async function handleGoogleLogin(user) {
         console.log('Iniciando sesión con Google:', user);
         
         // Enviar datos al backend para verificar/crear usuario
-        const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
+        const response = await fetch(`${API_BASE_URL}/api/users/google-login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -136,7 +139,7 @@ async function handleGoogleLogin(user) {
                 googleId: user.sub,
                 email: user.email,
                 name: user.name,
-                picture: user.picture
+                imageUrl: user.picture
             })
         });
         
@@ -150,7 +153,7 @@ async function handleGoogleLogin(user) {
                 id: data.user.id,
                 name: data.user.name,
                 email: data.user.email,
-                picture: data.user.picture
+                picture: data.user.imageUrl
             }));
             
             // Mostrar notificación de éxito
