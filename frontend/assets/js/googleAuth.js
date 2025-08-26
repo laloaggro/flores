@@ -45,6 +45,8 @@ function initializeGoogleClient() {
                 client_id: "888681528450-havivkoibjv0ht3vu4q46hc8k0i3f8iu.apps.googleusercontent.com",
                 callback: handleGoogleResponse,
                 cancel_on_tap_outside: false, // Prevenir cancelación accidental
+                // Configuración para FedCM (Federated Credential Management)
+                use_fedcm_for_prompt: true
             });
             
             console.log('Renderizando botón de Google Sign-In');
@@ -62,6 +64,15 @@ function initializeGoogleClient() {
             // Solicitar también el perfil del usuario para registro
             google.accounts.id.prompt((notification) => {
                 console.log('Google Sign-In prompt notification:', notification);
+                
+                // Manejar las notificaciones de FedCM
+                if (notification.isDisplayMoment()) {
+                    console.log('Se muestra el prompt de Google One Tap');
+                } else if (notification.isSkippedMoment()) {
+                    console.log('Usuario omitió el prompt de Google One Tap');
+                } else if (notification.isDismissedMoment()) {
+                    console.log('Usuario cerró el prompt de Google One Tap');
+                }
             });
             
             console.log('Botón de Google Sign-In mostrado');
