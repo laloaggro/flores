@@ -176,13 +176,6 @@ class UserMenu {
                     userDropdown.style.display = 'none';
                     userDropdown.style.visibility = 'hidden';
                     userDropdown.style.opacity = '0';
-                    // Resetear estilos adicionales
-                    userDropdown.style.position = '';
-                    userDropdown.style.zIndex = '';
-                    userDropdown.style.right = '';
-                    userDropdown.style.top = '';
-                    userDropdown.style.isolation = '';
-                    userDropdown.style.pointerEvents = '';
                 }
             });
             

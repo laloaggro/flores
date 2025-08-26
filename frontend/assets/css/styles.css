@@ -594,7 +594,7 @@ body[data-theme="dark"] .testimonials {
     z-index: 999999999;
     display: none;
     transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
     color: var(--dark);
     overflow: visible;
     isolation: isolate;
@@ -602,7 +602,7 @@ body[data-theme="dark"] .testimonials {
     margin: 0;
     /* Añadir estilos adicionales para asegurar visibilidad */
     contain: layout style paint;
-    will-change: transform, opacity;
+    will-change: transform, opacity, visibility;
 }
 
 .user-dropdown.show {
