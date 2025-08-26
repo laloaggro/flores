@@ -520,7 +520,7 @@ body[data-theme="dark"] .testimonials {
 .user-menu {
     position: relative;
     /* Asegurar que el menú tenga un contexto de apilamiento adecuado */
-    z-index: 999999;
+    z-index: 999999999;
 }
 
 .user-info {
@@ -589,7 +589,7 @@ body[data-theme="dark"] .testimonials {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
     min-width: 200px;
-    z-index: 999999; /* Aumentar significativamente el z-index para asegurar que esté por encima de todos los elementos */
+    z-index: 999999999; /* Aumentar aún más el z-index para asegurar que esté por encima de todos los elementos */
     display: none;
     /* Optimizar animaciones */
     will-change: transform, opacity;
@@ -601,6 +601,8 @@ body[data-theme="dark"] .testimonials {
     overflow: visible;
     /* Asegurar que el menú esté por encima de todos los elementos */
     contain: layout style;
+    /* Asegurar que el menú no se oculte detrás de otros elementos */
+    isolation: isolate;
 }
 
 .user-dropdown.show {
@@ -629,7 +631,7 @@ body[data-theme="dark"] .testimonials {
     /* Asegurar que los enlaces del menú sean clickeables */
     pointer-events: auto;
     position: relative;
-    z-index: 999999;
+    z-index: 999999999;
 }
 
 .user-dropdown a:hover {
