@@ -33,12 +33,20 @@
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="noindex, nofollow">
     
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/login.html">
     <meta property="og:title" content="Iniciar Sesión - Arreglos Victoria Florería">
     <meta property="og:description" content="Inicia sesión en Arreglos Victoria Florería para acceder a tu cuenta y realizar compras.">
     <meta property="og:image" content="./assets/images/login-hero.jpg">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
     <meta property="og:site_name" content="Arreglos Victoria Florería">
     
     <!-- Twitter -->
@@ -60,8 +68,18 @@
     <link rel="preload" href="assets/js/googleAuth.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
+    
+    <!-- Schema.org para login -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Iniciar Sesión - Arreglos Victoria Florería",
+      "description": "Accede a tu cuenta en Arreglos Victoria Florería para realizar compras y gestionar tu perfil."
+    }
+    </script>
 </head>
-<body data-theme="light">
+<body data-theme="light" class="login-page">
     <!-- Skip link para navegación por teclado -->
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
