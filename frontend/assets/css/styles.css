@@ -85,6 +85,26 @@ body[data-theme="dark"] h6 {
     color: var(--light);
 }
 
+/* Estilos específicos para la página de recuperación de contraseña */
+.forgot-password-page .hero {
+    height: 40vh;
+    min-height: 300px;
+}
+
+.forgot-password-page .hero-content {
+    padding: 1rem;
+}
+
+.forgot-password-page .hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.forgot-password-page .hero p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
 /* Estilos específicos para la página de login */
 .login-page .hero {
     height: 40vh;
@@ -123,6 +143,8 @@ body[data-theme="dark"] h6 {
 .register-page .hero p {
     font-size: 1rem;
     margin-bottom: 1rem;
+}
+
 }
 
 body[data-theme="dark"] h6 {
