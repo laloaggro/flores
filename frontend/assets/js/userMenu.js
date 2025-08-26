@@ -56,21 +56,15 @@ class UserMenu {
             
             // Mostrar avatar de usuario
             if (userProfileImage) {
-                if (user && user.picture) {
-                    // Avatar de Google
-                    userProfileImage.src = user.picture;
+                // Verificar si hay una imagen de perfil en localStorage o en el token
+                const userPicture = (user && user.picture) || (userLocalStorage && userLocalStorage.picture);
+                
+                if (userPicture) {
+                    // Avatar de Google u otra fuente
+                    userProfileImage.src = userPicture;
                     userProfileImage.alt = `Avatar de ${displayName}`;
                     userProfileImage.onerror = function() {
-                        // Si la imagen de Google no carga, usar avatar por defecto
-                        this.src = './assets/images/default-avatar.svg';
-                        this.alt = 'Avatar por defecto';
-                    };
-                } else if (userLocalStorage && userLocalStorage.picture) {
-                    // Avatar de Google desde localStorage
-                    userProfileImage.src = userLocalStorage.picture;
-                    userProfileImage.alt = `Avatar de ${displayName}`;
-                    userProfileImage.onerror = function() {
-                        // Si la imagen de Google no carga, usar avatar por defecto
+                        // Si la imagen no carga, usar avatar por defecto
                         this.src = './assets/images/default-avatar.svg';
                         this.alt = 'Avatar por defecto';
                     };
@@ -100,56 +94,27 @@ class UserMenu {
             const newLogoutLink = logoutLink.cloneNode(true);
             logoutLink.parentNode.replaceChild(newLogoutLink, logoutLink);
             
-            newLogoutLink.addEventListener('click', function(e) {
+            newLogoutLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                console.log('Cerrando sesión...');
                 logout();
+                window.location.reload();
             });
         }
         
-        // Configurar menú desplegable del usuario
+        // Configurar evento para mostrar/ocultar menú desplegable
         if (userMenuButton && userDropdown) {
             // Eliminar event listeners previos para evitar duplicados
             const newUserMenuButton = userMenuButton.cloneNode(true);
-            if (userMenuButton.parentNode) {
-                userMenuButton.parentNode.replaceChild(newUserMenuButton, userMenuButton);
-            }
+            userMenuButton.parentNode.replaceChild(newUserMenuButton, userMenuButton);
             
-            newUserMenuButton.addEventListener('click', function(e) {
+            newUserMenuButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                e.preventDefault();
-                console.log('Click en menú de usuario...');
-                
-                // Alternar estado del menú actual
-                const isExpanded = newUserMenuButton.getAttribute('aria-expanded') === 'true';
-                newUserMenuButton.setAttribute('aria-expanded', !isExpanded);
-                
-                // Mostrar u ocultar el dropdown
-                if (!isExpanded) {
-                    userDropdown.classList.add('show');
-                    userDropdown.classList.remove('hide');
-                } else {
-                    userDropdown.classList.add('hide');
-                    userDropdown.classList.remove('show');
-                }
-                
-                console.log('Menú de usuario', isExpanded ? 'oculto' : 'mostrado');
+                userDropdown.classList.toggle('show');
             });
             
             // Cerrar menú al hacer clic fuera
-            document.addEventListener('click', function(e) {
-                if (!newUserMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
-                    newUserMenuButton.setAttribute('aria-expanded', 'false');
-                    userDropdown.classList.add('hide');
-                    userDropdown.classList.remove('show');
-                }
-            });
-            
-            // Cerrar menú al presionar Escape
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    newUserMenuButton.setAttribute('aria-expanded', 'false');
-                    userDropdown.classList.add('hide');
+            document.addEventListener('click', (e) => {
+                if (!newUserMenuButton.contains(e.target) && userDropdown.classList.contains('show')) {
                     userDropdown.classList.remove('show');
                 }
             });
