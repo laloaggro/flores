@@ -80,10 +80,10 @@ function getStatusLabel(status) {
     return statusLabels[status] || status;
 }
 
-// Ver detalles de un pedido
-function viewOrderDetails(orderId) {
+// Hacer la función viewOrderDetails disponible globalmente
+window.viewOrderDetails = function(orderId) {
     alert(`Funcionalidad para ver detalles del pedido #${orderId}. En una implementación completa, esto mostraría los detalles del pedido.`);
-}
+};
 
 // Exportar funciones necesarias
 export { loadUserOrders };
