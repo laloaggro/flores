@@ -519,6 +519,8 @@ body[data-theme="dark"] .testimonials {
 
 .user-menu {
     position: relative;
+    /* Asegurar que el menú tenga un contexto de apilamiento adecuado */
+    z-index: 999999;
 }
 
 .user-info {
@@ -535,7 +537,9 @@ body[data-theme="dark"] .testimonials {
     will-change: background-color, border-color;
     color: var(--dark);
     position: relative; /* Asegurar posicionamiento relativo */
-    z-index: 1001; /* Asegurar que esté por encima del dropdown */
+    z-index: 999999; /* Asegurar que esté por encima del dropdown */
+    /* Asegurar que el botón del menú sea clickeable */
+    pointer-events: auto;
 }
 
 .user-info:hover {
@@ -595,6 +599,8 @@ body[data-theme="dark"] .testimonials {
     color: var(--dark);
     /* Asegurar que el dropdown no se corte */
     overflow: visible;
+    /* Asegurar que el menú esté por encima de todos los elementos */
+    contain: layout style;
 }
 
 .user-dropdown.show {
@@ -620,6 +626,10 @@ body[data-theme="dark"] .testimonials {
     color: var(--dark-gray);
     text-decoration: none;
     transition: all 0.3s ease;
+    /* Asegurar que los enlaces del menú sean clickeables */
+    pointer-events: auto;
+    position: relative;
+    z-index: 999999;
 }
 
 .user-dropdown a:hover {

@@ -80,7 +80,7 @@ class UserMenu {
                     userProfileImage.alt = 'Avatar por defecto';
                 }
             }
-
+            
             console.log('Usuario autenticado:', user || userLocalStorage);
         } else {
             // Usuario no autenticado - mostrar enlace de login
@@ -117,6 +117,7 @@ class UserMenu {
             
             newUserMenuButton.addEventListener('click', function(e) {
                 e.stopPropagation();
+                e.preventDefault();
                 console.log('Click en menú de usuario...');
                 
                 // Cerrar todos los dropdowns primero
@@ -144,6 +145,14 @@ class UserMenu {
             // Cerrar menú al hacer clic fuera
             document.addEventListener('click', function(e) {
                 if (!newUserMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                    newUserMenuButton.setAttribute('aria-expanded', 'false');
+                    userDropdown.style.display = 'none';
+                }
+            });
+            
+            // Cerrar menú al presionar Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
                     newUserMenuButton.setAttribute('aria-expanded', 'false');
                     userDropdown.style.display = 'none';
                 }
