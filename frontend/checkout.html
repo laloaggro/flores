@@ -26,11 +26,18 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="assets/css/conflict-fixes.css">
     
     <meta name="description" content="Finaliza tu compra en Arreglos Victoria Florería. Proceso de pago seguro y entrega a domicilio en Recoleta.">
     <meta name="keywords" content="checkout, compra, pago, carrito, entrega, florería">
     <meta name="author" content="Arreglos Victoria Florería">
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -38,6 +45,8 @@
     <meta property="og:title" content="Checkout - Arreglos Victoria Florería">
     <meta property="og:description" content="Finaliza tu compra en Arreglos Victoria Florería.">
     <meta property="og:image" content="./assets/images/checkout-hero.jpg">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
     <meta property="og:site_name" content="Arreglos Victoria Florería">
     
     <!-- Twitter -->
@@ -55,10 +64,20 @@
     
     <!-- Preload critical scripts -->
     <link rel="preload" href="assets/js/utils.js" as="script">
-    <link rel="preload" href="assets/js/checkout.js" as="script">
     <link rel="preload" href="assets/js/cart.js" as="script">
+    <link rel="preload" href="assets/js/checkout.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
+    
+    <!-- Schema.org para checkout -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CheckoutPage",
+      "name": "Proceso de Compra - Arreglos Victoria Florería",
+      "description": "Finaliza tu compra en Arreglos Victoria Florería. Proceso de pago seguro y entrega a domicilio en Recoleta."
+    }
+    </script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
