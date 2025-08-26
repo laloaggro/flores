@@ -758,6 +758,17 @@ body[data-theme="dark"] .testimonials {
     background-color: transparent !important;
 }
 
+.user-menu {
+    position: relative !important;
+    z-index: 999999999 !important;
+    pointer-events: auto !important;
+    /* Asegurar que el menú no tenga fondo verde */
+    background-color: transparent !important;
+    background-image: none !important;
+    /* Asegurar que el contenedor del menú tenga un contexto de apilamiento adecuado */
+    isolation: isolate !important;
+}
+
 .user-dropdown {
     background-color: var(--white) !important;
     /* Asegurar que el fondo sea blanco sólido */
@@ -2197,6 +2208,17 @@ body[data-theme="dark"] .footer-section h4 {
 
 .wishlist-header h1 {
     color: var(--primary);
+}
+
+/* Asegurar que el header tenga un z-index adecuado */
+header {
+    z-index: 1000 !important;
+}
+
+/* Asegurar que la sección hero no interfiera con el menú desplegable */
+.hero {
+    position: relative;
+    z-index: 1;
 }
 
 .wishlist-empty {
