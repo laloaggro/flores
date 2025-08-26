@@ -139,6 +139,12 @@ class UserMenu {
                 newUserMenuButton.setAttribute('aria-expanded', !isExpanded);
                 userDropdown.style.display = isExpanded ? 'none' : 'block';
                 
+                // Asegurar que el dropdown esté completamente visible
+                if (!isExpanded) {
+                    userDropdown.style.position = 'absolute';
+                    userDropdown.style.zIndex = '999999999';
+                }
+                
                 console.log('Menú de usuario', isExpanded ? 'oculto' : 'mostrado');
             });
             
@@ -156,6 +162,11 @@ class UserMenu {
                     newUserMenuButton.setAttribute('aria-expanded', 'false');
                     userDropdown.style.display = 'none';
                 }
+            });
+            
+            // Prevenir que el evento de clic se propague al documento
+            userDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
             });
         }
     }

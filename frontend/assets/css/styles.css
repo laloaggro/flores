@@ -603,6 +603,8 @@ body[data-theme="dark"] .testimonials {
     contain: layout style;
     /* Asegurar que el menú no se oculte detrás de otros elementos */
     isolation: isolate;
+    /* Asegurar que el menú sea completamente interactuable */
+    pointer-events: auto;
 }
 
 .user-dropdown.show {
@@ -618,6 +620,8 @@ body[data-theme="dark"] .testimonials {
 
 .user-dropdown li {
     list-style: none;
+    /* Asegurar que los elementos de la lista no interfieran con la interacción */
+    pointer-events: none;
 }
 
 .user-dropdown a {
@@ -632,6 +636,8 @@ body[data-theme="dark"] .testimonials {
     pointer-events: auto;
     position: relative;
     z-index: 999999999;
+    /* Asegurar que los enlaces estén por encima de cualquier otro elemento */
+    isolation: isolate;
 }
 
 .user-dropdown a:hover {
@@ -667,6 +673,16 @@ body[data-theme="dark"] .testimonials {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.user-menu {
+    position: relative;
+    /* Asegurar que el menú tenga un contexto de apilamiento adecuado */
+    z-index: 999999999;
+    /* Asegurar que el contenedor del menú tenga pointer-events auto */
+    pointer-events: auto;
+}
+
     width: 40px;
     height: 40px;
     border-radius: 50%;
