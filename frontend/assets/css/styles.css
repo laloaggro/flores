@@ -520,7 +520,7 @@ body[data-theme="dark"] .testimonials {
 .user-menu {
     position: relative;
     /* Asegurar que el menú tenga un contexto de apilamiento adecuado */
-    z-index: 999999999;
+    z-index: 999999;
 }
 
 .user-info {
@@ -589,7 +589,7 @@ body[data-theme="dark"] .testimonials {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
     min-width: 200px;
-    z-index: 999999999; /* Aumentar aún más el z-index para asegurar que esté por encima de todos los elementos */
+    z-index: 999999; /* Aumentar significativamente el z-index para asegurar que esté por encima de todos los elementos */
     display: none;
     /* Optimizar animaciones */
     will-change: transform, opacity;
@@ -601,8 +601,6 @@ body[data-theme="dark"] .testimonials {
     overflow: visible;
     /* Asegurar que el menú esté por encima de todos los elementos */
     contain: layout style;
-    /* Asegurar que el menú no se oculte detrás de otros elementos */
-    isolation: isolate;
 }
 
 .user-dropdown.show {
@@ -1871,6 +1869,23 @@ body[data-theme="dark"] .footer-section h4 {
     width: 13px;
     height: 13px;
     border-radius: 50%;
+}
+
+/* Google Sign-In button styles */
+.google-login {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.google-login #googleSignInButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40px;
+    min-width: 200px;
+}
+
     background: var(--primary);
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }

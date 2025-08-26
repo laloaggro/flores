@@ -1,5 +1,5 @@
 import { API_BASE_URL, showNotification } from './utils.js';
-import { initializeGoogleSignIn, handleGoogleLoginResponse } from './googleAuth.js';
+import { initializeGoogleSignIn } from './googleAuth.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('DOM cargado en login.js');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             showNotification('Error al cargar la autenticación con Google', 'error');
         }
     }
-    
+
     if (loginForm) {
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
