@@ -137,13 +137,21 @@ class UserMenu {
                 // Alternar estado del menú actual
                 const isExpanded = newUserMenuButton.getAttribute('aria-expanded') === 'true';
                 newUserMenuButton.setAttribute('aria-expanded', !isExpanded);
-                userDropdown.style.display = isExpanded ? 'none' : 'block';
                 
-                // Asegurar que el dropdown esté completamente visible
-                if (!isExpanded) {
-                    userDropdown.style.position = 'absolute';
-                    userDropdown.style.zIndex = '999999999';
-                }
+                // Forzar visibilidad del dropdown
+                userDropdown.style.display = isExpanded ? 'none' : 'block';
+                userDropdown.style.visibility = isExpanded ? 'hidden' : 'visible';
+                userDropdown.style.opacity = isExpanded ? '0' : '1';
+                
+                // Asegurar posicionamiento y z-index
+                userDropdown.style.position = 'absolute';
+                userDropdown.style.zIndex = '999999999';
+                userDropdown.style.right = '0';
+                userDropdown.style.top = 'calc(100% + 10px)';
+                
+                // Asegurar que el dropdown tenga un contexto de apilamiento
+                userDropdown.style.isolation = 'isolate';
+                userDropdown.style.pointerEvents = 'auto';
                 
                 console.log('Menú de usuario', isExpanded ? 'oculto' : 'mostrado');
             });
@@ -153,6 +161,8 @@ class UserMenu {
                 if (!newUserMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
                     newUserMenuButton.setAttribute('aria-expanded', 'false');
                     userDropdown.style.display = 'none';
+                    userDropdown.style.visibility = 'hidden';
+                    userDropdown.style.opacity = '0';
                 }
             });
             
@@ -161,6 +171,8 @@ class UserMenu {
                 if (e.key === 'Escape') {
                     newUserMenuButton.setAttribute('aria-expanded', 'false');
                     userDropdown.style.display = 'none';
+                    userDropdown.style.visibility = 'hidden';
+                    userDropdown.style.opacity = '0';
                 }
             });
             

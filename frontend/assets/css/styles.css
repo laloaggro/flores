@@ -518,9 +518,9 @@ body[data-theme="dark"] .testimonials {
 }
 
 .user-menu {
-    position: relative;
-    /* Asegurar que el menú tenga un contexto de apilamiento adecuado */
-    z-index: 999999999;
+    position: relative !important;
+    z-index: 999999999 !important;
+    pointer-events: auto !important;
 }
 
 .user-info {
@@ -529,6 +529,8 @@ body[data-theme="dark"] .testimonials {
     gap: 8px;
     background: var(--light);
     border: 1px solid var(--gray);
+}
+
     border-radius: 25px;
     padding: 8px 15px;
     cursor: pointer;
@@ -666,6 +668,27 @@ body[data-theme="dark"] .testimonials {
     transform: translateY(-2px);
 }
 
+/* Estilos específicos para evitar conflictos con otros elementos */
+.user-menu,
+.user-dropdown,
+.user-dropdown *,
+.user-info {
+    /* Asegurar que no haya interferencia con fondos verdes */
+    background-image: none !important;
+    background-color: transparent !important;
+}
+
+.user-dropdown {
+    background-color: var(--white) !important;
+}
+
+/* Asegurar que el menú esté siempre visible */
+.user-dropdown.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
 /* Cart icon styles */
 .cart-icon {
     position: relative;
@@ -673,16 +696,6 @@ body[data-theme="dark"] .testimonials {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.user-menu {
-    position: relative;
-    /* Asegurar que el menú tenga un contexto de apilamiento adecuado */
-    z-index: 999999999;
-    /* Asegurar que el contenedor del menú tenga pointer-events auto */
-    pointer-events: auto;
-}
-
     width: 40px;
     height: 40px;
     border-radius: 50%;
