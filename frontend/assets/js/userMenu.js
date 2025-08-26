@@ -120,51 +120,18 @@ class UserMenu {
                 e.preventDefault();
                 console.log('Click en menú de usuario...');
                 
-                // Cerrar todos los dropdowns primero
-                document.querySelectorAll('.user-dropdown').forEach(dropdown => {
-                    if (dropdown !== userDropdown) {
-                        dropdown.style.display = 'none';
-                    }
-                });
-                
-                // Actualizar todos los botones (excepto el actual)
-                document.querySelectorAll('.user-info').forEach(button => {
-                    if (button !== newUserMenuButton) {
-                        button.setAttribute('aria-expanded', 'false');
-                    }
-                });
-                
                 // Alternar estado del menú actual
                 const isExpanded = newUserMenuButton.getAttribute('aria-expanded') === 'true';
                 newUserMenuButton.setAttribute('aria-expanded', !isExpanded);
                 
-                // Forzar visibilidad del dropdown
-                userDropdown.style.display = isExpanded ? 'none' : 'block';
-                
-                // Añadir un pequeño retraso para asegurar que los estilos se apliquen correctamente
-                setTimeout(() => {
-                    // Solo actualizar estilos si el dropdown está visible
-                    if (!isExpanded) {
-                        // Asegurar posicionamiento y z-index
-                        userDropdown.style.position = 'absolute';
-                        userDropdown.style.zIndex = '999999999';
-                        userDropdown.style.right = '0';
-                        userDropdown.style.top = 'calc(100% + 10px)';
-                        
-                        // Asegurar que el dropdown tenga un contexto de apilamiento
-                        userDropdown.style.isolation = 'isolate';
-                        userDropdown.style.pointerEvents = 'auto';
-                        
-                        // Hacer visible con transición
-                        userDropdown.style.visibility = 'visible';
-                        userDropdown.style.opacity = '1';
-                    } else {
-                        // Si está ocultando, solo actualizar la visibilidad y opacidad
-                        userDropdown.style.visibility = 'hidden';
-                        userDropdown.style.opacity = '0';
-                        userDropdown.style.display = 'none';
-                    }
-                }, 10);
+                // Mostrar u ocultar el dropdown
+                if (!isExpanded) {
+                    userDropdown.classList.add('show');
+                    userDropdown.classList.remove('hide');
+                } else {
+                    userDropdown.classList.add('hide');
+                    userDropdown.classList.remove('show');
+                }
                 
                 console.log('Menú de usuario', isExpanded ? 'oculto' : 'mostrado');
             });
@@ -173,9 +140,8 @@ class UserMenu {
             document.addEventListener('click', function(e) {
                 if (!newUserMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
                     newUserMenuButton.setAttribute('aria-expanded', 'false');
-                    userDropdown.style.display = 'none';
-                    userDropdown.style.visibility = 'hidden';
-                    userDropdown.style.opacity = '0';
+                    userDropdown.classList.add('hide');
+                    userDropdown.classList.remove('show');
                 }
             });
             
@@ -183,15 +149,9 @@ class UserMenu {
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     newUserMenuButton.setAttribute('aria-expanded', 'false');
-                    userDropdown.style.display = 'none';
-                    userDropdown.style.visibility = 'hidden';
-                    userDropdown.style.opacity = '0';
+                    userDropdown.classList.add('hide');
+                    userDropdown.classList.remove('show');
                 }
-            });
-            
-            // Prevenir que el evento de clic se propague al documento
-            userDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
             });
         }
     }
