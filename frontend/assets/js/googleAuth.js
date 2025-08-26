@@ -66,7 +66,9 @@ function initializeGoogleClient() {
                 }
             );
             
-            // Configurar el prompt de Google One Tap con manejo adecuado de FedCM
+            // No mostrar el prompt de Google One Tap para evitar errores de FedCM
+            // El usuario puede hacer clic en el botón de forma explícita
+            /*
             google.accounts.id.prompt((notification) => {
                 console.log('Google Sign-In prompt notification:', notification);
                 
@@ -81,6 +83,7 @@ function initializeGoogleClient() {
                     console.log('Google One Tap se muestra correctamente');
                 }
             });
+            */
             
             console.log('Botón de Google Sign-In mostrado');
             googleClientInitialized = true;

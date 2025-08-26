@@ -188,7 +188,7 @@ const getUserInfoFromToken = () => {
     const payload = JSON.parse(atob(token.split('.')[1]));
     console.log('Información del usuario obtenida del token:', payload);
     return {
-      id: payload.userId,
+      id: payload.id,  // Cambiado de payload.userId a payload.id
       name: payload.name,
       email: payload.email,
       role: payload.role
