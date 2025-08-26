@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Pedidos - Arreglos Victoria Florería</title>
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+    
+    <!-- Cargar estilos CSS optimizados -->
+    <link rel="stylesheet" href="assets/css/preflight.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="assets/css/profile.css">
+    
+    <meta name="description" content="Tus pedidos en Arreglos Victoria Florería. Revisa el estado de tus compras y detalles de envío.">
+    <meta name="keywords" content="pedidos, compras, historial, estado de pedido, florería">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/orders.html">
+    <meta property="og:title" content="Mis Pedidos - Arreglos Victoria Florería">
+    <meta property="og:description" content="Tus pedidos en Arreglos Victoria Florería.">
+    <meta property="og:image" content="./assets/images/profile-hero.jpg">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/orders.html">
+    <meta property="twitter:title" content="Mis Pedidos - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Tus pedidos en Arreglos Victoria Florería.">
+    <meta property="twitter:image" content="./assets/images/profile-hero.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Preload critical scripts -->
+    <link rel="preload" href="assets/js/utils.js" as="script">
+    <link rel="preload" href="assets/js/orders.js" as="script">
+    <link rel="preload" href="assets/js/userMenu.js" as="script">
+    <link rel="preload" href="assets/js/header.js" as="script">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <!-- Header -->
+    <site-header></site-header>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero-profile">
+            <div class="hero-content">
+                <h1>Mis Pedidos</h1>
+                <p>Consulta el estado de tus compras</p>
+            </div>
+        </section>
+
+        <!-- Pedidos de usuario -->
+        <section class="profile-section">
+            <div class="container">
+                <div class="profile-container">
+                    <div class="profile-content full-width">
+                        <!-- Mis Pedidos -->
+                        <div class="profile-tab active" id="orders-tab">
+                            <h2>Mis Pedidos</h2>
+                            <div class="orders-content">
+                                <table class="orders-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID Pedido</th>
+                                            <th>Fecha</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ordersList">
+                                        <tr>
+                                            <td colspan="5" class="text-center">Cargando pedidos...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <site-footer></site-footer>
+
+    <!-- Scripts -->
+    <script type="module" src="components/Header.js"></script>
+    <script type="module" src="components/Footer.js"></script>
+    <script type="module" src="assets/js/utils.js"></script>
+    <script type="module" src="assets/js/cart.js"></script>
+    <script type="module" src="assets/js/orders.js"></script>
+    <script type="module" src="assets/js/accessibility.js"></script>
+    <script type="module" src="assets/js/userMenu.js"></script>
+    <script type="module" src="assets/js/header.js"></script>
+</body>
+</html>

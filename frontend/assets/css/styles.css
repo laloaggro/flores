@@ -585,7 +585,7 @@ body[data-theme="dark"] .testimonials {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
     min-width: 200px;
-    z-index: 10000; /* Aumentar significativamente el z-index para asegurar que esté por encima de todos los elementos */
+    z-index: 999999; /* Aumentar significativamente el z-index para asegurar que esté por encima de todos los elementos */
     display: none;
     /* Optimizar animaciones */
     will-change: transform, opacity;
