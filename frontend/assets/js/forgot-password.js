@@ -1,5 +1,4 @@
-import { showNotification } from './utils.js';
-import { API_BASE_URL } from './config.js';
+import { showNotification, API_BASE_URL } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM cargado en forgot-password.js');

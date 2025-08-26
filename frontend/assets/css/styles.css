@@ -525,38 +525,43 @@ body[data-theme="dark"] .testimonials {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: var(--white);
-    border: 1px solid var(--light-gray);
+    background: var(--light);
+    border: 1px solid var(--gray);
     border-radius: 25px;
     padding: 8px 15px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 0.95rem;
-    position: relative;
     /* Optimizar animaciones */
-    will-change: background-color, color, border-color;
+    will-change: background-color, border-color;
     color: var(--dark);
 }
 
 .user-info:hover {
     background: var(--primary);
-    color: var(--white);
     border-color: var(--primary);
+    color: var(--white);
 }
 
-/* Estilos para la imagen de perfil del usuario */
 .user-avatar {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--gray);
+}
+
+.user-name {
+    font-weight: 500;
+    max-width: 120px;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-dropdown-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--light-gray);
-    flex-shrink: 0;
-    /* Optimizar el renderizado */
-    contain: layout style;
 }
 
 .user-profile-image {

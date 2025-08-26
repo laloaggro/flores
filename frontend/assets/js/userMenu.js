@@ -18,6 +18,7 @@ class UserMenu {
         const logoutLink = document.getElementById('logoutLink');
         const userDropdown = document.querySelector('.user-dropdown');
         const userMenuButton = document.querySelector('.user-info');
+        const userProfileImage = document.getElementById('userProfileImage');
         
         // Si no existen los elementos necesarios, salir de la función
         if (!loginLink && !userMenu) {
@@ -51,6 +52,23 @@ class UserMenu {
             const displayName = user ? user.name : userLocalStorage.name;
             if (userNameDisplay && displayName) {
                 userNameDisplay.textContent = displayName;
+            }
+            
+            // Mostrar avatar de usuario
+            if (userProfileImage) {
+                if (user && user.picture) {
+                    // Avatar de Google
+                    userProfileImage.src = user.picture;
+                    userProfileImage.alt = `Avatar de ${displayName}`;
+                } else if (userLocalStorage && userLocalStorage.picture) {
+                    // Avatar de Google desde localStorage
+                    userProfileImage.src = userLocalStorage.picture;
+                    userProfileImage.alt = `Avatar de ${displayName}`;
+                } else {
+                    // Avatar por defecto
+                    userProfileImage.src = './assets/images/default-avatar.png';
+                    userProfileImage.alt = 'Avatar por defecto';
+                }
             }
             
             console.log('Usuario autenticado:', user || userLocalStorage);
@@ -130,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     UserMenu.init();
 });
 
-// También inicializar cuando la ventana se cargue por completo
+// Inicializar el menú de usuario cuando la ventana se cargue completamente
 window.addEventListener('load', () => {
     console.log('Ventana cargada, reinitializando menú de usuario...');
     UserMenu.init();
