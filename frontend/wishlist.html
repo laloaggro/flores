@@ -26,11 +26,18 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="assets/css/conflict-fixes.css">
     
     <meta name="description" content="Tu lista de deseos en Arreglos Victoria Florería. Guarda tus arreglos florales favoritos para comprarlos más tarde.">
     <meta name="keywords" content="lista de deseos, favoritos, productos guardados, arreglo floral, florería">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -38,6 +45,8 @@
     <meta property="og:title" content="Lista de Deseos - Arreglos Victoria Florería">
     <meta property="og:description" content="Tu lista de deseos en Arreglos Victoria Florería.">
     <meta property="og:image" content="./assets/images/wishlist-hero.jpg">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
     <meta property="og:site_name" content="Arreglos Victoria Florería">
     
     <!-- Twitter -->
@@ -60,135 +69,57 @@
     <link rel="preload" href="assets/js/header.js" as="script">
 </head>
 <body>
-    <a href="#main-content" id="skip-link" class="skip-link" tabindex="0" aria-label="Saltar al contenido principal">Saltar al contenido principal</a>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
-    <header id="main-header" role="banner">
-        <div class="container">
-            <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
-                
-                <button class="hamburger" aria-label="Menú" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                
-                <ul class="nav-links">
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="products.html">Productos</a></li>
-                    <li><a href="index.html#about">Nosotros</a></li>
-                    <li><a href="index.html#contacto">Contacto</a></li>
-                    <li class="user-nav-item">
-                        <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
-                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                            <span>Iniciar sesión</span>
-                        </a>
-                        <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
-                            <button class="user-info" aria-haspopup="true" aria-expanded="false">
-                                <span id="userNameDisplay"></span>
-                                <i class="fas fa-user" aria-hidden="true"></i>
-                                <i class="fas fa-caret-down" aria-hidden="true"></i>
-                            </button>
-                            <ul class="user-dropdown" role="menu">
-                                <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
-                                <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="cart-nav-item">
-                        <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
-                            <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                            <span class="cart-count" id="cartCount">0</span>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <!-- Header -->
+    <site-header></site-header>
 
     <main id="main-content">
-        <section class="products-header">
-            <h1>Tu Lista de Deseos</h1>
-            <p>Guarda tus productos favoritos para comprarlos más tarde.</p>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Tu Lista de Deseos</h1>
+                <p>Guarda tus productos favoritos para comprarlos más tarde</p>
+            </div>
         </section>
 
-        <div class="container">
-            <div class="wishlist-container" id="wishlistContainer">
-                <p>Cargando lista de deseos...</p>
+        <!-- Wishlist Section -->
+        <section class="wishlist-section">
+            <div class="container">
+                <div class="wishlist-container" id="wishlistContainer">
+                    <p>Cargando lista de deseos...</p>
+                </div>
             </div>
-        </div>
+        </section>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</h3>
-                    <p>Más de 10 años creando hermosos arreglos florales para todas las ocasiones. Flores frescas y de calidad entregadas directamente en tu hogar.</p>
-                    <div class="social-links">
-                        <a href="https://www.facebook.com/arreglosvictoria/" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Enlaces Rápidos</h4>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="products.html">Productos</a></li>
-                        <li><a href="index.html#about">Nosotros</a></li>
-                        <li><a href="index.html#contacto">Contacto</a></li>
-                        <li><a href="sitemap.html">Mapa del Sitio</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Información de Contacto</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i> +569 6360 3177</li>
-                        <li><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer -->
+    <site-footer></site-footer>
 
     <!-- Scripts -->
+    <script type="module" src="components/Header.js"></script>
+    <script type="module" src="components/Footer.js"></script>
     <script type="module" src="./assets/js/utils.js"></script>
     <script type="module" src="./assets/js/auth.js"></script>
     <script type="module" src="./assets/js/accessibility.js"></script>
     <script type="module" src="./assets/js/lazyLoad.js"></script>
     <script type="module" src="./assets/js/imageOptimizer.js"></script>
     <script type="module" src="./assets/js/register-sw.js"></script>
-
-    <!-- Añadimos script para mejorar la accesibilidad del salto al contenido -->
+    <script type="module" src="./assets/js/userMenu.js"></script>
+    <script type="module" src="./assets/js/header.js"></script>
+    <script type="module" src="assets/js/wishlist.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
     <script>
+        // Si theme.js no establece el tema, usamos un script de respaldo
         document.addEventListener('DOMContentLoaded', function() {
-            const skipLink = document.getElementById('skip-link');
-            const mainContent = document.getElementById('main-content');
-            
-            if (skipLink && mainContent) {
-                skipLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    mainContent.setAttribute('tabindex', '-1');
-                    mainContent.focus();
-                    window.location.hash = '#main-content';
-                });
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
             }
-        });
-    </script>
-
-    <script src="assets/js/mobile-menu.js" type="module"></script>
-    <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/auth.js" type="module"></script>
-    <script src="assets/js/wishlist.js" type="module"></script>
-    <script>
-        // Inicializar la lista de deseos cuando la página cargue
-        document.addEventListener('DOMContentLoaded', function() {
-            displayWishlist();
         });
     </script>
 </body>
