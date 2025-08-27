@@ -140,6 +140,25 @@ const isAuthenticated = () => {
   }
 };
 
+// Función para obtener información del usuario desde el token
+const getUserInfoFromToken = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return {
+      id: payload.userId,
+      name: payload.name,
+      email: payload.email,
+      role: payload.role
+    };
+  } catch (e) {
+    console.error('Error al decodificar el token:', e);
+    return null;
+  }
+};
+
 // Función para formatear fechas
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -253,12 +272,28 @@ const updateCartQuantity = (productId, quantity) => {
   }
 };
 
+// Función para cerrar sesión
+const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = 'index.html';
+};
+
+// Función para verificar si el usuario es administrador
+const isAdmin = () => {
+  const user = getUserInfoFromToken();
+  return user && user.role === 'admin';
+};
+
 // Exportar funciones
 export {
   API_BASE_URL,
   checkBackendConnectivity,
   showNotification,
   isAuthenticated,
+  getUserInfoFromToken,
+  logout,
+  isAdmin,
   formatDate,
   isValidEmail,
   isValidPassword,

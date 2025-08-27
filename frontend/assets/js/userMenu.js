@@ -1,4 +1,4 @@
-import { isAuthenticated, getUserInfoFromToken as getUser, logout, isAdmin } from './utils.js';
+import { isAuthenticated, getUserInfoFromToken as getUser, logout, isAdmin, showNotification } from './utils.js';
 
 /**
  * Clase para manejar el menú de usuario
@@ -88,33 +88,24 @@ class UserMenu {
             console.log('Usuario no autenticado');
         }
         
-        // Configurar evento de cierre de sesión
+        // Configurar evento de logout
         if (logoutLink) {
-            // Eliminar event listeners previos para evitar duplicados
-            const newLogoutLink = logoutLink.cloneNode(true);
-            logoutLink.parentNode.replaceChild(newLogoutLink, logoutLink);
-            
-            newLogoutLink.addEventListener('click', (e) => {
+            logoutLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 logout();
-                window.location.reload();
             });
         }
         
-        // Configurar evento para mostrar/ocultar menú desplegable
+        // Configurar menú desplegable del usuario
         if (userMenuButton && userDropdown) {
-            // Eliminar event listeners previos para evitar duplicados
-            const newUserMenuButton = userMenuButton.cloneNode(true);
-            userMenuButton.parentNode.replaceChild(newUserMenuButton, userMenuButton);
-            
-            newUserMenuButton.addEventListener('click', (e) => {
+            userMenuButton.addEventListener('click', (e) => {
                 e.stopPropagation();
                 userDropdown.classList.toggle('show');
             });
             
             // Cerrar menú al hacer clic fuera
             document.addEventListener('click', (e) => {
-                if (!newUserMenuButton.contains(e.target) && userDropdown.classList.contains('show')) {
+                if (userDropdown && !userMenuButton.contains(e.target)) {
                     userDropdown.classList.remove('show');
                 }
             });
@@ -124,13 +115,6 @@ class UserMenu {
 
 // Inicializar el menú de usuario cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Inicializando menú de usuario...');
-    UserMenu.init();
-});
-
-// Inicializar el menú de usuario cuando la ventana se cargue completamente
-window.addEventListener('load', () => {
-    console.log('Ventana cargada, reinitializando menú de usuario...');
     UserMenu.init();
 });
 
