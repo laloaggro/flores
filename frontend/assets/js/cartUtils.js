@@ -86,6 +86,9 @@ const CartUtils = {
         // Guardar carrito y actualizar contador
         saveCartToLocalStorage(this.cartItems);
         this.updateCartCount();
+        
+        // Disparar evento de actualización del carrito
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
     },
 
     // Eliminar un producto del carrito
@@ -98,6 +101,9 @@ const CartUtils = {
             this.renderCart();
             showNotification('Producto eliminado del carrito', 'info');
             console.log(`Producto ${productId} eliminado del carrito`);
+            
+            // Disparar evento de actualización del carrito
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
         }
     },
 
@@ -110,6 +116,9 @@ const CartUtils = {
             this.updateCartCount();
             this.renderCart();
             console.log(`Cantidad actualizada para ${item.name}. Nueva cantidad: ${newQuantity}`);
+            
+            // Disparar evento de actualización del carrito
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
         } else if (item && newQuantity <= 0) {
             this.removeFromCart(productId);
         }
@@ -127,6 +136,9 @@ const CartUtils = {
             this.renderCart();
             showNotification(`${item.name} guardado para más tarde`, 'success');
             console.log(`Producto ${item.name} guardado para más tarde`);
+            
+            // Disparar evento de actualización del carrito
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
         }
     },
 
@@ -142,6 +154,9 @@ const CartUtils = {
             this.renderCart();
             showNotification(`${item.name} movido al carrito`, 'success');
             console.log(`Producto ${item.name} movido al carrito`);
+            
+            // Disparar evento de actualización del carrito
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
         }
     },
 
@@ -170,16 +185,6 @@ const CartUtils = {
         return this.savedForLater;
     },
 
-    // Vaciar el carrito
-    clearCart() {
-        this.cartItems = [];
-        saveCartToLocalStorage(this.cartItems);
-        this.updateCartCount();
-        this.renderCart();
-        showNotification('Carrito vaciado', 'info');
-        console.log('Carrito vaciado');
-    },
-
     // Eliminar items guardados para más tarde
     removeFromSaved(productId) {
         const itemIndex = this.savedForLater.findIndex(item => item.id == productId);
@@ -189,7 +194,23 @@ const CartUtils = {
             this.renderCart();
             showNotification('Producto eliminado de guardados para más tarde', 'info');
             console.log(`Producto ${productId} eliminado de guardados para más tarde`);
+            
+            // Disparar evento de actualización del carrito
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
         }
+    },
+
+    // Vaciar el carrito
+    clearCart() {
+        this.cartItems = [];
+        saveCartToLocalStorage(this.cartItems);
+        this.updateCartCount();
+        this.renderCart();
+        showNotification('Carrito vaciado', 'info');
+        console.log('Carrito vaciado');
+        
+        // Disparar evento de actualización del carrito
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
     },
 
     // Actualizar contador del carrito
