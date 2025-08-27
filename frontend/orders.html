@@ -54,12 +54,6 @@
     <meta property="twitter:description" content="Tus pedidos en Arreglos Victoria Florería.">
     <meta property="twitter:image" content="./assets/images/profile-hero.jpg">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
-    
     <!-- Preload critical scripts -->
     <link rel="preload" href="assets/js/utils.js" as="script">
     <link rel="preload" href="assets/js/orders.js" as="script">
@@ -74,10 +68,10 @@
 
     <main id="main-content">
         <!-- Hero Section -->
-        <section class="hero-profile">
+        <section class="hero">
             <div class="hero-content">
                 <h1>Mis Pedidos</h1>
-                <p>Consulta el estado de tus compras</p>
+                <p>Revisa el estado de tus compras y detalles de envío</p>
             </div>
         </section>
 
@@ -126,5 +120,19 @@
     <script type="module" src="assets/js/accessibility.js"></script>
     <script type="module" src="assets/js/userMenu.js"></script>
     <script type="module" src="assets/js/header.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
+    <script>
+        // Si theme.js no establece el tema, usamos un script de respaldo
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            }
+        });
+    </script>
 </body>
 </html>

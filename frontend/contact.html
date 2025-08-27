@@ -113,61 +113,46 @@
     <main id="main-content">
         <section class="contact-page">
             <div class="container">
-                <div class="contact-header">
-                    <h1>Contacto</h1>
-                    <p>Estamos aquí para ayudarte. ¡Contáctanos!</p>
-                </div>
+                <!-- Hero Section -->
+                <section class="hero">
+                    <div class="hero-content">
+                        <h1>Contáctanos</h1>
+                        <p>Estamos aquí para ayudarte con cualquier consulta o pedido especial</p>
+                    </div>
+                </section>
                 
                 <div class="contact-content">
                     <div class="contact-info">
                         <h2>Información de Contacto</h2>
                         
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Dirección</h4>
-                                <p>Av. Valdivieso 593, Recoleta<br>Región Metropolitana, Chile</p>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h3>Dirección</h3>
+                                <p>Av. Valdivieso 593, Recoleta, Región Metropolitana</p>
                             </div>
                         </div>
                         
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Teléfono</h4>
-                                <p>+569 6360 3177</p>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h3>Teléfono</h3>
+                                <p>+56 9 6360 3177</p>
                             </div>
                         </div>
                         
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fab fa-whatsapp"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>WhatsApp</h4>
-                                <p>+569 6360 3177</p>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Email</h4>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h3>Email</h3>
                                 <p>arreglosfloralesvictoria@gmail.com</p>
                             </div>
                         </div>
                         
-                        <div class="contact-detail">
-                            <div class="contact-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Horario</h4>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h3>Horario</h3>
                                 <p>Lunes a Sábado: 9:00 AM - 7:00 PM</p>
                             </div>
                         </div>
@@ -220,5 +205,19 @@
     <script type="module" src="./assets/js/register-sw.js"></script>
     <script type="module" src="./assets/js/userMenu.js"></script>
     <script type="module" src="./assets/js/header.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
+    <script>
+        // Si theme.js no establece el tema, usamos un script de respaldo
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            }
+        });
+    </script>
 </body>
 </html>

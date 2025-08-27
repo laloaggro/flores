@@ -28,11 +28,6 @@
     <link rel="stylesheet" href="assets/css/visibility-fix.css">
     <link rel="stylesheet" href="assets/css/conflict-fixes.css">
     
-    <meta name="description" content="Inicia sesión en Arreglos Victoria Florería para acceder a tu cuenta y realizar compras.">
-    <meta name="keywords" content="inicio de sesión, cuenta, login, acceso, usuario">
-    <meta name="author" content="Arreglos Victoria Florería">
-    <meta name="robots" content="noindex, nofollow">
-    
     <!-- Mejoras de seguridad -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -79,7 +74,7 @@
     }
     </script>
 </head>
-<body data-theme="light" class="login-page">
+<body>
     <!-- Skip link para navegación por teclado -->
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
@@ -90,8 +85,8 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <h1>Bienvenido de nuevo</h1>
-                <p>Ingresa a tu cuenta para continuar</p>
+                <h1>Iniciar Sesión</h1>
+                <p>Accede a tu cuenta para continuar con tus compras</p>
             </div>
         </section>
 
@@ -153,5 +148,18 @@
     <script type="module" src="assets/js/userMenu.js"></script>
     <script type="module" src="assets/js/header.js"></script>
     <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
+    <script>
+        // Si theme.js no establece el tema, usamos un script de respaldo
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            }
+        });
+    </script>
 </body>
 </html>

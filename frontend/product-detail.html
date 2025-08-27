@@ -53,101 +53,126 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/product-detail.html">
     <meta property="twitter:title" content="Detalle del Producto - Arreglos Victoria Florería">
-    <meta property="twitter:description" content="Detalles del producto de arreglo floral.">
-    <meta property="twitter:image" content="./assets/images/product-detail-hero.jpg">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
-    
-    <!-- Preload critical scripts -->
-    <link rel="preload" href="assets/js/utils.js" as="script">
-    <link rel="preload" href="assets/js/cart.js" as="script">
-    <link rel="preload" href="assets/js/product-detail.js" as="script">
-    <link rel="preload" href="assets/js/userMenu.js" as="script">
-    <link rel="preload" href="assets/js/header.js" as="script">
-    
-    <!-- Schema.org para producto individual -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Arreglo Floral",
-      "image": "https://arreglos-victoria-backend.onrender.com/assets/images/product-detail-hero.jpg",
-      "description": "Detalles del producto de arreglo floral. Información completa, fotos, precio y disponibilidad.",
-      "offers": {
-        "@type": "Offer",
-        "priceCurrency": "CLP",
-        "price": "0",
-        "availability": "InStock"
-      }
-    }
-    </script>
+    <meta property="twitter:description" content="Detalles del producto de arreglo floral. Información completa, fotos, precio y disponibilidad.">
+    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
 </head>
 <body>
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Saltar al contenido principal</a>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
     <!-- Header -->
     <site-header></site-header>
 
     <main id="main-content">
-        <div class="container">
-            <div class="product-detail-container">
-                <div class="product-detail-image">
-                    <img id="productImage" src="" alt="">
-                </div>
-                
-                <div class="product-detail-info">
-                    <h1 id="productName"></h1>
-                    <div class="product-rating" id="productRating">
-                        <!-- Las estrellas se cargarán aquí -->
-                    </div>
-                    <p class="product-price" id="productPrice"></p>
-                    <p class="product-description" id="productDescription"></p>
-                    <p class="product-category" id="productCategory"></p>
-                    
-                    <div class="product-actions">
-                        <button class="btn btn-primary add-to-cart-btn">
-                            <i class="fas fa-shopping-cart"></i> Agregar al carrito
-                        </button>
-                    </div>
-                </div>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Detalle del Producto</h1>
+                <p>Información completa sobre nuestro hermoso arreglo floral</p>
             </div>
-            
-            <div class="product-reviews-section">
-                <h2>Reseñas del producto</h2>
-                <div id="productReviews">
-                    <p>Cargando reseñas...</p>
-                </div>
-                
-                <div class="add-review-section">
-                    <h3>Agregar tu reseña</h3>
-                    <form id="reviewForm">
-                        <div class="form-group">
-                            <label for="reviewRating">Calificación:</label>
-                            <div class="rating-input">
-                                <input type="radio" id="star5" name="rating" value="5">
-                                <label for="star5"><i class="fas fa-star"></i></label>
-                                <input type="radio" id="star4" name="rating" value="4">
-                                <label for="star4"><i class="fas fa-star"></i></label>
-                                <input type="radio" id="star3" name="rating" value="3">
-                                <label for="star3"><i class="fas fa-star"></i></label>
-                                <input type="radio" id="star2" name="rating" value="2">
-                                <label for="star2"><i class="fas fa-star"></i></label>
-                                <input type="radio" id="star1" name="rating" value="1">
-                                <label for="star1"><i class="fas fa-star"></i></label>
+        </section>
+
+        <!-- Product Detail -->
+        <div class="product-detail-section">
+            <div class="container">
+                <div class="product-detail-content">
+                    <div class="product-detail-images">
+                        <div class="product-main-image">
+                            <img id="productImage" src="./assets/images/placeholder.svg" alt="Arreglo Floral Especial" loading="lazy">
+                        </div>
+                        <div class="product-thumbnails">
+                            <img src="./assets/images/placeholder.svg" alt="Arreglo Floral Especial" loading="lazy">
+                            <img src="./assets/images/placeholder.svg" alt="Arreglo Floral Especial" loading="lazy">
+                            <img src="./assets/images/placeholder.svg" alt="Arreglo Floral Especial" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="product-detail-info">
+                        <h1 id="productName">Arreglo Floral Especial</h1>
+                        <div id="productRating" class="product-rating">
+                            <!-- Las estrellas se cargarán dinámicamente -->
+                        </div>
+                        <div class="product-price">
+                            <span id="productPrice">$15.990</span>
+                        </div>
+                        <p id="productDescription" class="product-description">
+                            Hermoso arreglo floral con rosas, claveles y follaje fresco, ideal para ocasiones especiales.
+                        </p>
+                        <div class="product-meta">
+                            <p><strong>Categoría:</strong> <span id="productCategory">Arreglos Florales</span></p>
+                            <p><strong>Disponibilidad:</strong> <span class="in-stock">En Stock</span></p>
+                        </div>
+                        <div class="product-actions">
+                            <div class="quantity-selector">
+                                <button class="quantity-btn" id="decreaseQuantity">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="10">
+                                <button class="quantity-btn" id="increaseQuantity">+</button>
+                            </div>
+                            <button class="btn btn-primary btn-lg" id="addToCart">
+                                <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                            </button>
+                        </div>
+                        <div class="product-share">
+                            <p>Compartir:</p>
+                            <div class="social-share">
+                                <a href="#" class="share-btn facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="share-btn twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="share-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+                                <a href="#" class="share-btn pinterest"><i class="fab fa-pinterest"></i></a>
                             </div>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="reviewComment">Comentario:</label>
-                            <textarea id="reviewComment" name="comment" rows="4" required></textarea>
+                    </div>
+                </div>
+                
+                <div class="product-detail-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="description">Descripción</button>
+                        <button class="tab-btn" data-tab="reviews">Reseñas (0)</button>
+                        <button class="tab-btn" data-tab="shipping">Envío</button>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="description-tab">
+                            <h3>Descripción del Producto</h3>
+                            <p>Este hermoso arreglo floral combina una selección exquisita de rosas, claveles y follaje fresco para crear una presentación elegante y duradera. Perfecto para cumpleaños, aniversarios, celebraciones o simplemente para alegrar el hogar.</p>
+                            <h4>Características:</h4>
+                            <ul>
+                                <li>Flores frescas cortadas recientemente</li>
+                                <li>Diseño artístico elaborado por floristas expertos</li>
+                                <li>Incluye arreglo en jarrón de vidrio o caja decorativa</li>
+                                <li>Duración estimada de 7-10 días con el cuidado adecuado</li>
+                                <li>Entrega a domicilio en toda la comuna de Recoleta</li>
+                            </ul>
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary">Enviar reseña</button>
-                    </form>
+                        <div class="tab-pane" id="reviews-tab">
+                            <h3>Reseñas del Producto</h3>
+                            <div class="reviews-summary">
+                                <div class="average-rating">
+                                    <span class="rating-value">0.0</span>
+                                    <div class="stars">
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="review-count">Basado en 0 reseñas</span>
+                                </div>
+                                <button class="btn btn-secondary" id="writeReview">Escribir Reseña</button>
+                            </div>
+                            <div class="reviews-list">
+                                <p class="no-reviews">No hay reseñas aún. ¡Sé el primero en calificar este producto!</p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="shipping-tab">
+                            <h3>Información de Envío</h3>
+                            <p>Ofrecemos entrega a domicilio en toda la comuna de Recoleta con las siguientes opciones:</p>
+                            <ul>
+                                <li><strong>Entrega Express:</strong> Recíbelo en 2-3 horas hábiles ($3.500)</li>
+                                <li><strong>Entrega Programada:</strong> Programa la entrega para un día y horario específico ($2.500)</li>
+                                <li><strong>Retiro en Tienda:</strong> Sin costo adicional</li>
+                            </ul>
+                            <p><strong>Horario de Entrega:</strong> Lunes a Domingo de 9:00 AM a 8:00 PM</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -162,7 +187,22 @@
     <script src="assets/js/utils.js" type="module"></script>
     <script src="assets/js/auth.js" type="module"></script>
     <script src="assets/js/productManager.js" type="module"></script>
+    <script type="module" src="assets/js/userMenu.js"></script>
+    <script type="module" src="assets/js/header.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
     <script>
+        // Si theme.js no establece el tema, usamos un script de respaldo
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            }
+        });
+        
         // Código para cargar y mostrar el producto
         document.addEventListener('DOMContentLoaded', function() {
             // Obtener el ID del producto de la URL

@@ -83,8 +83,7 @@
     }
     </script>
 </head>
-<body data-theme="light">
-    <!-- Skip link para navegación por teclado -->
+<body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
     <!-- Header -->
@@ -92,38 +91,38 @@
 
     <main id="main-content">
         <!-- Hero Section -->
-        <section class="hero-products">
+        <section class="hero">
             <div class="hero-content">
                 <h1>Nuestros Productos</h1>
                 <p>Descubre nuestra amplia variedad de arreglos florales, ramos, plantas y accesorios</p>
             </div>
         </section>
 
-        <!-- Filtros y búsqueda -->
-        <section class="product-filters">
+        <!-- Productos Header -->
+        <section class="products-header">
             <div class="container">
-                <div class="filters-container">
+                <div class="products-header-content">
                     <div class="search-container">
-                        <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input">
-                        <button id="searchButton" class="search-button">
-                            <i class="fas fa-search"></i>
-                        </button>
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar productos...">
                     </div>
-                    <div class="filter-dropdown">
-                        <select id="categoryFilter">
-                            <option value="">Todas las categorías</option>
-                            <option value="arreglos">Arreglos Florales</option>
-                            <option value="ramos">Ramos</option>
-                            <option value="plantas">Plantas</option>
-                            <option value="accesorios">Accesorios</option>
-                        </select>
-                    </div>
-                    <div class="sort-dropdown">
-                        <select id="sortOrder">
-                            <option value="name">Ordenar por nombre</option>
-                            <option value="price-low">Precio: Menor a Mayor</option>
-                            <option value="price-high">Precio: Mayor a Menor</option>
-                        </select>
+                    <div class="filter-sort">
+                        <div class="filter-dropdown">
+                            <select id="categoryFilter">
+                                <option value="">Todas las categorías</option>
+                                <option value="arreglos">Arreglos Florales</option>
+                                <option value="ramos">Ramos</option>
+                                <option value="plantas">Plantas</option>
+                                <option value="accesorios">Accesorios</option>
+                            </select>
+                        </div>
+                        <div class="sort-dropdown">
+                            <select id="sortOrder">
+                                <option value="name">Ordenar por nombre</option>
+                                <option value="price-low">Precio: Menor a Mayor</option>
+                                <option value="price-high">Precio: Mayor a Menor</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,5 +157,19 @@
     <script type="module" src="assets/js/products.js"></script>
     <script type="module" src="assets/js/userMenu.js"></script>
     <script type="module" src="assets/js/header.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
+    <script>
+        // Si theme.js no establece el tema, usamos un script de respaldo
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            }
+        });
+    </script>
 </body>
 </html>
