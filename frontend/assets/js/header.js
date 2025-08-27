@@ -1,8 +1,8 @@
-import { isAuthenticated, getUserInfoFromToken as getUser, isAdmin, updateCartCount } from './utils.js';
-import Cart, { showCart } from '../../components/Cart.js';
+import HeaderComponent from '../../components/Header.js';
+import { isAuthenticated, getUserInfoFromToken as getUser, showCart } from './utils.js';
 
 /**
- * Header Component - Maneja la funcionalidad del header en todas las páginas
+ * Clase para manejar la funcionalidad del header
  */
 class Header {
     /**
@@ -11,36 +11,40 @@ class Header {
     static init() {
         console.log('Inicializando header...');
         
-        // Inicializar el contador del carrito
-        try {
-            updateCartCount();
-        } catch (error) {
-            console.error('Error al actualizar el contador del carrito:', error);
+        // Verificar si ya existe un header en la página
+        const existingHeader = document.querySelector('site-header');
+        if (existingHeader) {
+            console.log('Header ya existe en la página');
+            this.checkAuthStatus();
+            this.setupCartEvents();
+            this.setupHeaderEffects();
+            return;
         }
         
-        // Configurar eventos del carrito
-        this.setupCartEvents();
+        // Crear y añadir el header si no existe
+        const header = new HeaderComponent();
+        document.body.insertBefore(header, document.body.firstChild);
         
-        // Verificar estado de autenticación
-        this.checkAuthStatus();
-        
-        // Configurar efectos del header
-        this.setupHeaderEffects();
+        // Configurar eventos después de un breve retraso para asegurar que el DOM se haya actualizado
+        setTimeout(() => {
+            this.checkAuthStatus();
+            this.setupCartEvents();
+            this.setupHeaderEffects();
+        }, 100);
     }
     
     /**
      * Configura los eventos del carrito
      */
     static setupCartEvents() {
-        const cartIcon = document.querySelector('.cart-icon');
-        
-        if (cartIcon) {
-            cartIcon.addEventListener('click', function(e) {
+        // Usar delegación de eventos para manejar clics en el ícono del carrito
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.cart-icon')) {
                 e.preventDefault();
                 console.log('Mostrando carrito...');
                 showCart();
-            });
-        }
+            }
+        });
     }
     
     /**
@@ -55,7 +59,7 @@ class Header {
         const userNameDisplay = document.getElementById('userNameDisplay');
         
         if (isAuthenticated() && user) {
-            console.log('Usuario autenticado');
+            console.log('Usuario autenticado', user);
             
             // Ocultar enlace de login y mostrar menú de usuario
             if (loginLink) loginLink.style.display = 'none';
@@ -76,7 +80,7 @@ class Header {
      * Actualiza la información del usuario en el menú
      */
     static updateUserInfo(user) {
-        console.log('Actualizando información del usuario');
+        console.log('Actualizando información del usuario', user);
         
         const userNameDisplay = document.getElementById('userNameDisplay');
         if (userNameDisplay && user) {

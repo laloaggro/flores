@@ -148,7 +148,7 @@ const getUserInfoFromToken = () => {
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     return {
-      id: payload.userId,
+      id: payload.userId || payload.id, // Manejar ambos posibles nombres de propiedad
       name: payload.name,
       email: payload.email,
       role: payload.role
