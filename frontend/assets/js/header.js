@@ -1,4 +1,3 @@
-import HeaderComponent from '../../components/Header.js';
 import { isAuthenticated, getUserInfoFromToken as getUser, showCart } from './utils.js';
 
 /**
@@ -22,7 +21,7 @@ class Header {
         }
         
         // Crear y añadir el header si no existe
-        const header = new HeaderComponent();
+        const header = document.createElement('site-header');
         document.body.insertBefore(header, document.body.firstChild);
         
         // Configurar eventos después de un breve retraso para asegurar que el DOM se haya actualizado

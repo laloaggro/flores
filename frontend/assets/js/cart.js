@@ -221,15 +221,21 @@ function showCart() {
     let cartModal = document.getElementById('cartModal');
     if (!cartModal) {
         const cartHTML = showCartComponent(cart, savedForLater);
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = cartHTML.trim(); // Eliminar espacios en blanco
-        
-        // Verificar que haya contenido antes de intentar adjuntar
-        if (tempDiv.firstElementChild) {
-            document.body.appendChild(tempDiv.firstElementChild);
-            cartModal = document.getElementById('cartModal');
+        // Verificar que cartHTML no sea undefined
+        if (cartHTML && typeof cartHTML === 'string') {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = cartHTML.trim(); // Eliminar espacios en blanco
+            
+            // Verificar que haya contenido antes de intentar adjuntar
+            if (tempDiv.firstElementChild) {
+                document.body.appendChild(tempDiv.firstElementChild);
+                cartModal = document.getElementById('cartModal');
+            } else {
+                console.error('No se pudo crear el carrito: HTML inválido');
+                return;
+            }
         } else {
-            console.error('No se pudo crear el carrito: HTML inválido');
+            console.error('No se pudo crear el carrito: componente no válido');
             return;
         }
     }
