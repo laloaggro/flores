@@ -408,6 +408,5 @@ function Cart(cartItems = [], savedForLater = []) {
   `;
 }
 
-// Exportar componente y función
+// Exportar componente
 export default Cart;
-export { showCart };
