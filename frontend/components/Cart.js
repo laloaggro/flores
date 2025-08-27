@@ -115,7 +115,7 @@ function Cart(cartItems = [], savedForLater = []) {
   const cartTotal = calculateCartTotal(cartItems);
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  // Devolver el HTML inicial
+  // Generar HTML del carrito
   return `
     <div class="cart-modal" id="cartModal">
       <div class="cart-content">
@@ -130,14 +130,14 @@ function Cart(cartItems = [], savedForLater = []) {
           <div class="cart-items-section">
             <h3>Tus Productos (${itemCount} ${itemCount === 1 ? 'item' : 'items'})</h3>
             <div class="cart-items">
-              ${renderCartItems(cart)}
+              ${renderCartItems(cartItems)}
             </div>
           </div>
           
           <div class="saved-for-later-section">
             <h3>Guardados para más tarde</h3>
             <div class="saved-items">
-              ${renderSavedItems(savedItems)}
+              ${renderSavedItems(savedForLater)}
             </div>
           </div>
         </div>
@@ -151,7 +151,7 @@ function Cart(cartItems = [], savedForLater = []) {
           </div>
           <div class="cart-actions">
             <button class="btn btn-secondary clear-cart">Vaciar carrito</button>
-            <button class="btn btn-primary checkout-button" ${cart.length === 0 ? 'disabled' : ''}>
+            <button class="btn btn-primary checkout-button" ${cartItems.length === 0 ? 'disabled' : ''}>
               Proceder al pedido
             </button>
           </div>
