@@ -7,23 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const savedTheme = localStorage.getItem('theme');
     console.log('Tema guardado:', savedTheme);
     
-    // Aplicar el tema guardado o el tema del sistema
+    // Aplicar el tema guardado o el modo claro por defecto
     if (savedTheme === 'dark') {
         document.body.setAttribute('data-theme', 'dark');
         console.log('Modo oscuro activado desde localStorage');
-    } else if (savedTheme === 'light') {
-        document.body.removeAttribute('data-theme');
-        console.log('Modo claro activado desde localStorage');
     } else {
-        // Usar la preferencia del sistema si no hay tema guardado
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDarkScheme) {
-            document.body.setAttribute('data-theme', 'dark');
-            console.log('Modo oscuro activado por preferencia del sistema');
-        } else {
-            document.body.removeAttribute('data-theme');
-            console.log('Modo claro activado por preferencia del sistema');
-        }
+        // Siempre usar modo claro por defecto, ignorando la preferencia del sistema
+        document.body.removeAttribute('data-theme');
+        console.log('Modo claro activado por defecto');
     }
     
     // Crear botón de cambio de tema si no existe
