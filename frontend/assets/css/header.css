@@ -2,12 +2,12 @@
 
 /* Header Styles */
 header {
-    background-color: #ffffff; /* Fondo blanco para mejor visibilidad */
+    background-color: #ffffff;
     box-shadow: var(--shadow);
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 999999999; /* Aumentar z-index para asegurar que esté por encima de todo el contenido */
+    z-index: 999999999;
     transition: all 0.3s ease;
     color: var(--dark);
     padding: 0;
@@ -15,15 +15,13 @@ header {
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--gray);
-    /* Asegurarse de que no haya fondo verde */
     background-image: none;
-    background: #ffffff; /* Fondo blanco explícito */
-    /* Asegurar contexto de apilamiento */
+    background: #ffffff;
     isolation: isolate;
 }
 
 body[data-theme="dark"] header {
-    background-color: var(--dark-card-bg); /* Usar variable CSS para fondo oscuro */
+    background-color: var(--dark-card-bg);
     border-color: var(--dark-border);
     color: var(--dark-text);
     background-image: none;
@@ -40,9 +38,8 @@ body[data-theme="dark"] header {
     max-width: 1400px;
     width: 100%;
     margin: 0 auto;
-    /* Asegurarse de que el navbar no tenga fondo verde */
     background-image: none;
-    background: transparent; /* Asegurar que el navbar no tenga fondo */
+    background: transparent;
 }
 
 .logo {

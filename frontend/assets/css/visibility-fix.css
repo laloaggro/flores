@@ -383,11 +383,13 @@ pre {
 /* Asegurar visibilidad de texto en banners */
 .banner {
   color: #ffffff;
+  background-color: #2e7d32; /* Fondo verde oscuro */
 }
 
 /* Asegurar visibilidad de texto en hero sections */
 .hero {
   color: #ffffff;
+  background-color: #2e7d32; /* Fondo verde oscuro */
 }
 
 .hero h1 {
