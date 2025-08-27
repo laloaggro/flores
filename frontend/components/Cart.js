@@ -59,11 +59,11 @@ function Cart(cartItems = [], savedForLater = []) {
           <p class="item-price">${formatPrice(item.price)}</p>
         </div>
         <div class="item-quantity">
-          <button class="quantity-btn decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
+          <button class="decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
             <i class="fas fa-minus"></i>
           </button>
           <span class="quantity">${item.quantity}</span>
-          <button class="quantity-btn increase" data-id="${item.id}" aria-label="Aumentar cantidad">
+          <button class="increase" data-id="${item.id}" aria-label="Aumentar cantidad">
             <i class="fas fa-plus"></i>
           </button>
         </div>
