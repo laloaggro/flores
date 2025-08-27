@@ -99,6 +99,7 @@ function displayProducts(products) {
     
     if (productList.length === 0) {
         container.innerHTML = '<p class="no-products">No se encontraron productos.</p>';
+        updateProductCount(0, allProducts.length);
         return;
     }
 
@@ -126,6 +127,9 @@ function displayProducts(products) {
             addToCart(productId);
         });
     });
+    
+    // Actualizar contador de productos
+    updateProductCount(productList.length, allProducts.length);
 }
 
 // Función para obtener el nombre de la categoría
@@ -141,8 +145,53 @@ function getCategoryName(categoryKey) {
 
 // Función para agregar producto al carrito
 function addToCart(productId) {
-    // Esta función se implementará completamente en una actualización futura
-    showNotification('Producto agregado al carrito', 'success');
+    // Obtener producto por ID
+    const product = allProducts.find(p => p.id == productId);
+    if (!product) {
+        showNotification('Producto no encontrado', 'error');
+        return;
+    }
+    
+    // Obtener carrito actual del localStorage
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // Verificar si el producto ya está en el carrito
+    const existingItem = cart.find(item => item.id == productId);
+    
+    if (existingItem) {
+        // Incrementar cantidad si ya existe
+        existingItem.quantity += 1;
+    } else {
+        // Agregar nuevo producto al carrito
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image_url || product.image,
+            quantity: 1
+        });
+    }
+    
+    // Guardar carrito actualizado en localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Mostrar notificación de éxito
+    showNotification(`"${product.name}" agregado al carrito`, 'success');
+    
+    // Actualizar contador del carrito en el header
+    updateCartCount();
+}
+
+// Función para actualizar el contador del carrito
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    
+    // Actualizar contador en el header
+    const cartCountElement = document.getElementById('cartCount');
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+    }
 }
 
 // Función para filtrar productos por categoría
@@ -159,19 +208,24 @@ function filterProducts(category) {
         }
     });
     
-    updateProductCount(visibleCount);
+    updateProductCount(visibleCount, allProducts.length);
 }
 
 // Función para actualizar el contador de productos
-function updateProductCount(count) {
-    // No hay contador en el HTML actual, pero mantenemos la función por si se agrega en el futuro
+function updateProductCount(visibleCount, totalCount) {
+    const visibleCountElement = document.getElementById('visibleCount');
+    const totalCountElement = document.getElementById('totalCount');
+    
+    if (visibleCountElement && totalCountElement) {
+        visibleCountElement.textContent = visibleCount;
+        totalCountElement.textContent = totalCount || allProducts.length;
+    }
 }
 
 // Función para buscar productos
 function searchProducts(query) {
     if (!query) {
         displayProducts(allProducts);
-        updateProductCount(allProducts.length);
         return;
     }
     
@@ -182,7 +236,6 @@ function searchProducts(query) {
     );
     
     displayProducts(filteredProducts);
-    updateProductCount(filteredProducts.length);
 }
 
 // Función para ordenar productos
@@ -239,6 +292,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             displayProducts(sortedProducts);
         });
     }
+    
+    // Actualizar contador del carrito al cargar la página
+    updateCartCount();
 });
 
 // Inicializar menú de usuario cuando el DOM esté cargado
