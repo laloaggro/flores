@@ -59,11 +59,11 @@ function Cart(cartItems = [], savedForLater = []) {
           <p class="item-price">${formatPrice(item.price)}</p>
         </div>
         <div class="item-quantity">
-          <button class="decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
+          <button class="btn btn-quantity decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
             <i class="fas fa-minus"></i>
           </button>
           <span class="quantity">${item.quantity}</span>
-          <button class="increase" data-id="${item.id}" aria-label="Aumentar cantidad">
+          <button class="btn btn-quantity increase" data-id="${item.id}" aria-label="Aumentar cantidad">
             <i class="fas fa-plus"></i>
           </button>
         </div>
@@ -71,10 +71,10 @@ function Cart(cartItems = [], savedForLater = []) {
           <span>${formatPrice(item.price * item.quantity)}</span>
         </div>
         <div class="item-actions">
-          <button class="save-for-later" data-id="${item.id}" aria-label="Guardar para más tarde">
+          <button class="btn btn-icon save-for-later" data-id="${item.id}" aria-label="Guardar para más tarde">
             <i class="fas fa-save"></i>
           </button>
-          <button class="remove-item" data-id="${item.id}" aria-label="Eliminar del carrito">
+          <button class="btn btn-icon remove-item" data-id="${item.id}" aria-label="Eliminar del carrito">
             <i class="fas fa-trash"></i>
           </button>
         </div>
@@ -99,12 +99,12 @@ function Cart(cartItems = [], savedForLater = []) {
           <h4>${item.name}</h4>
           <p class="item-price">${formatPrice(item.price)}</p>
         </div>
-        <div class="saved-item-actions">
-          <button class="move-to-cart" data-id="${item.id}" aria-label="Mover al carrito">
+        <div class="item-actions">
+          <button class="btn btn-secondary move-to-cart" data-id="${item.id}">
             <i class="fas fa-shopping-cart"></i> Mover al carrito
           </button>
-          <button class="remove-saved-item" data-id="${item.id}" aria-label="Eliminar">
-            <i class="fas fa-trash"></i>
+          <button class="btn btn-danger remove-saved-item" data-id="${item.id}">
+            <i class="fas fa-trash"></i> Eliminar
           </button>
         </div>
       </div>
@@ -121,7 +121,7 @@ function Cart(cartItems = [], savedForLater = []) {
       <div class="cart-content">
         <div class="cart-header">
           <h2>Carrito de Compras</h2>
-          <button class="cart-close" aria-label="Cerrar carrito">
+          <button class="btn btn-icon cart-close" aria-label="Cerrar carrito">
             <i class="fas fa-times"></i>
           </button>
         </div>
@@ -159,6 +159,139 @@ function Cart(cartItems = [], savedForLater = []) {
       </div>
     </div>
   `;
+}
+
+// Función para adjuntar event listeners al carrito
+Cart.attachEventListeners = function() {
+  // Asegurarse de que el carrito exista
+  const cartModal = document.getElementById('cartModal');
+  if (!cartModal) return;
+
+  // Botón de cerrar carrito
+  const closeCartButton = cartModal.querySelector('.cart-close');
+  if (closeCartButton) {
+    closeCartButton.removeEventListener('click', handleCloseCart);
+    closeCartButton.addEventListener('click', handleCloseCart);
+  }
+
+  // Botones de aumentar cantidad
+  cartModal.querySelectorAll('.increase').forEach(button => {
+    button.removeEventListener('click', handleIncreaseQuantity);
+    button.addEventListener('click', handleIncreaseQuantity);
+  });
+
+  // Botones de disminuir cantidad
+  cartModal.querySelectorAll('.decrease').forEach(button => {
+    button.removeEventListener('click', handleDecreaseQuantity);
+    button.addEventListener('click', handleDecreaseQuantity);
+  });
+
+  // Botones de eliminar item
+  cartModal.querySelectorAll('.remove-item').forEach(button => {
+    button.removeEventListener('click', handleRemoveItem);
+    button.addEventListener('click', handleRemoveItem);
+  });
+
+  // Botones de guardar para más tarde
+  cartModal.querySelectorAll('.save-for-later').forEach(button => {
+    button.removeEventListener('click', handleSaveForLater);
+    button.addEventListener('click', handleSaveForLater);
+  });
+
+  // Botones de mover al carrito (desde guardados para más tarde)
+  cartModal.querySelectorAll('.move-to-cart').forEach(button => {
+    button.removeEventListener('click', handleMoveToCart);
+    button.addEventListener('click', handleMoveToCart);
+  });
+
+  // Botones de eliminar de guardados para más tarde
+  cartModal.querySelectorAll('.remove-saved-item').forEach(button => {
+    button.removeEventListener('click', handleRemoveSavedItem);
+    button.addEventListener('click', handleRemoveSavedItem);
+  });
+
+  // Botón de vaciar carrito
+  const clearCartButton = cartModal.querySelector('.clear-cart');
+  if (clearCartButton) {
+    clearCartButton.removeEventListener('click', handleClearCart);
+    clearCartButton.addEventListener('click', handleClearCart);
+  }
+
+  // Botón de checkout
+  const checkoutButton = cartModal.querySelector('.checkout-button');
+  if (checkoutButton) {
+    checkoutButton.removeEventListener('click', handleCheckout);
+    checkoutButton.addEventListener('click', handleCheckout);
+  }
+
+  console.log('Event listeners del carrito adjuntados');
+};
+
+// Funciones controladoras para los eventos
+function handleCloseCart() {
+  const cartModal = document.getElementById('cartModal');
+  if (cartModal) {
+    cartModal.style.display = 'none';
+  }
+}
+
+function handleIncreaseQuantity(e) {
+  e.preventDefault();
+  const productId = parseInt(e.currentTarget.getAttribute('data-id'));
+  const cartItems = CartUtils.getCartItems();
+  const item = cartItems.find(item => item.id == productId);
+  if (item) {
+    CartUtils.updateQuantity(productId, item.quantity + 1);
+  }
+}
+
+function handleDecreaseQuantity(e) {
+  e.preventDefault();
+  const productId = parseInt(e.currentTarget.getAttribute('data-id'));
+  const cartItems = CartUtils.getCartItems();
+  const item = cartItems.find(item => item.id == productId);
+  if (item) {
+    if (item.quantity > 1) {
+      CartUtils.updateQuantity(productId, item.quantity - 1);
+    } else {
+      CartUtils.removeFromCart(productId);
+    }
+  }
+}
+
+function handleRemoveItem(e) {
+  const productId = parseInt(e.currentTarget.getAttribute('data-id'));
+  CartUtils.removeFromCart(productId);
+}
+
+function handleSaveForLater(e) {
+  const productId = parseInt(e.currentTarget.getAttribute('data-id'));
+  CartUtils.saveForLater(productId);
+}
+
+function handleMoveToCart(e) {
+  const productId = parseInt(e.currentTarget.getAttribute('data-id'));
+  CartUtils.moveToCart(productId);
+}
+
+function handleRemoveSavedItem(e) {
+  const productId = parseInt(e.currentTarget.getAttribute('data-id'));
+  CartUtils.removeFromSaved(productId);
+}
+
+function handleClearCart() {
+  if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+    CartUtils.clearCart();
+  }
+}
+
+function handleCheckout() {
+  const cartModal = document.getElementById('cartModal');
+  if (cartModal) {
+    cartModal.style.display = 'none';
+    // Aquí podrías redirigir a la página de checkout
+    window.location.href = 'checkout.html';
+  }
 }
 
 // Exportar componente

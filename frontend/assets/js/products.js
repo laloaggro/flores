@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Cargar productos desde la API
 async function loadProducts() {
-    const productsGrid = document.querySelector('.products-grid');
+    const productsGrid = document.getElementById('productGrid');
     const loadingMessage = document.createElement('div');
     loadingMessage.className = 'loading-message';
     loadingMessage.innerHTML = '<p>Cargando productos...</p>';
@@ -33,11 +33,12 @@ async function loadProducts() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const products = await response.json();
-        allProducts = products;
-        displayProducts(products);
+        const data = await response.json();
+        allProducts = data.products;
+        displayProducts(data.products);
     } catch (error) {
         console.error('Error al cargar productos:', error);
+        const productsGrid = document.getElementById('productGrid');
         productsGrid.innerHTML = '<p class="error-message">Error al cargar productos. Por favor, intenta nuevamente más tarde.</p>';
         showNotification('Error al cargar productos', 'error');
     }
@@ -45,7 +46,7 @@ async function loadProducts() {
 
 // Mostrar productos en la cuadrícula
 function displayProducts(products) {
-    const productsGrid = document.querySelector('.products-grid');
+    const productsGrid = document.getElementById('productGrid');
     productsGrid.innerHTML = ''; // Limpiar contenido existente
     
     if (products.length === 0) {
@@ -69,7 +70,7 @@ function createProductCard(product) {
                  alt="${product.name}" 
                  onerror="this.src='./assets/images/placeholder.svg'">
             <div class="product-overlay">
-                <button class="btn-view-details" data-id="${product.id}">Ver Detalles</button>
+                <button class="btn btn-secondary btn-view-details" data-id="${product.id}">Ver Detalles</button>
             </div>
         </div>
         <div class="product-info">
@@ -77,7 +78,7 @@ function createProductCard(product) {
             <p class="product-description">${product.description || 'Descripción no disponible'}</p>
             <div class="product-price">${formatPrice(product.price)}</div>
             <div class="product-actions">
-                <button class="btn-add-to-cart" data-id="${product.id}">
+                <button class="btn btn-primary btn-add-to-cart" data-id="${product.id}">
                     <i class="fas fa-shopping-cart"></i> Agregar al Carrito
                 </button>
             </div>
@@ -195,10 +196,3 @@ function initUserMenu() {
     // Esta función se maneja en userMenu.js
 }
 
-// Función para formatear precios
-function formatPrice(price) {
-    return new Intl.NumberFormat('es-CL', {
-        style: 'currency',
-        currency: 'CLP'
-    }).format(price);
-}

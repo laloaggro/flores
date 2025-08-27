@@ -114,7 +114,9 @@ const CartUtils = {
             item.quantity = newQuantity;
             saveCartToLocalStorage(this.cartItems);
             this.updateCartCount();
-            this.renderCart();
+            this.renderCart(() => {
+                Cart.attachEventListeners();
+            });
             console.log(`Cantidad actualizada para ${item.name}. Nueva cantidad: ${newQuantity}`);
             
             // Disparar evento de actualización del carrito
@@ -225,8 +227,24 @@ const CartUtils = {
     },
 
     // Renderizar carrito
-    renderCart() {
+    renderCart(callback = null) {
         // Esta función será implementada en cart.js
+        import('../../components/Cart.js').then((module) => {
+            const Cart = module.default;
+            const cartModal = document.getElementById('cartModal');
+            if (cartModal) {
+                cartModal.innerHTML = Cart(this.cartItems, this.savedForLater);
+                // Adjuntar event listeners después de renderizar
+                setTimeout(() => {
+                    Cart.attachEventListeners();
+                    if (callback && typeof callback === 'function') {
+                        callback();
+                    }
+                }, 0);
+            }
+        }).catch((error) => {
+            console.error('Error al cargar el componente Cart:', error);
+        });
     }
 };
 

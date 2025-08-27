@@ -65,8 +65,9 @@ function formatPrice(price) {
     }).format(price);
 }
 
-// Función para renderizar los items del carrito en el modal
+// Función para renderizar los items del carrito
 function renderCartItems() {
+    const cart = loadCartFromLocalStorage();
     const cartItemsContainer = document.querySelector('.cart-items');
     const cartTotalElement = document.querySelector('.total-amount');
     const checkoutButton = document.querySelector('.checkout-button');
@@ -110,15 +111,15 @@ function renderCartItems() {
                     <h4>${item.name}</h4>
                     <div class="item-price">${formatPrice(item.price)}</div>
                     <div class="item-quantity">
-                        <button class="quantity-btn decrease-quantity" data-id="${item.id}">-</button>
+                        <button class="btn btn-quantity decrease-quantity" data-id="${item.id}">-</button>
                         <span>${item.quantity}</span>
-                        <button class="quantity-btn increase-quantity" data-id="${item.id}">+</button>
+                        <button class="btn btn-quantity increase-quantity" data-id="${item.id}">+</button>
                     </div>
                 </div>
                 <div class="item-total">
                     ${formatPrice(item.price * item.quantity)}
                 </div>
-                <button class="remove-item" data-id="${item.id}">
+                <button class="btn btn-icon remove-item" data-id="${item.id}">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -131,15 +132,22 @@ function renderCartItems() {
     
     // Añadir event listeners a los botones de cantidad y eliminar
     document.querySelectorAll('.decrease-quantity').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
             const id = parseInt(this.getAttribute('data-id'));
             console.log('Disminuyendo cantidad para item ID:', id);
-            updateQuantity(id, -1);
+            const currentQuantity = cart.find(item => item.id === id).quantity;
+            if (currentQuantity > 1) {
+                updateQuantity(id, -1);
+            } else {
+                removeFromCart(id);
+            }
         });
     });
     
     document.querySelectorAll('.increase-quantity').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
             const id = parseInt(this.getAttribute('data-id'));
             console.log('Aumentando cantidad para item ID:', id);
             updateQuantity(id, 1);
@@ -147,7 +155,8 @@ function renderCartItems() {
     });
     
     document.querySelectorAll('.remove-item').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
             const id = parseInt(this.getAttribute('data-id'));
             console.log('Eliminando item ID:', id);
             removeFromCart(id);
