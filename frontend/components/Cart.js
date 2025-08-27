@@ -59,11 +59,11 @@ function Cart(cartItems = [], savedForLater = []) {
           <p class="item-price">${formatPrice(item.price)}</p>
         </div>
         <div class="item-quantity">
-          <button class="quantity-btn decrease" aria-label="Disminuir cantidad">
+          <button class="quantity-btn decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
             <i class="fas fa-minus"></i>
           </button>
           <span class="quantity">${item.quantity}</span>
-          <button class="quantity-btn increase" aria-label="Aumentar cantidad">
+          <button class="quantity-btn increase" data-id="${item.id}" aria-label="Aumentar cantidad">
             <i class="fas fa-plus"></i>
           </button>
         </div>
@@ -71,10 +71,10 @@ function Cart(cartItems = [], savedForLater = []) {
           <span>${formatPrice(item.price * item.quantity)}</span>
         </div>
         <div class="item-actions">
-          <button class="save-for-later" aria-label="Guardar para más tarde">
+          <button class="save-for-later" data-id="${item.id}" aria-label="Guardar para más tarde">
             <i class="fas fa-save"></i>
           </button>
-          <button class="remove-item" aria-label="Eliminar del carrito">
+          <button class="remove-item" data-id="${item.id}" aria-label="Eliminar del carrito">
             <i class="fas fa-trash"></i>
           </button>
         </div>
@@ -100,10 +100,10 @@ function Cart(cartItems = [], savedForLater = []) {
           <p class="item-price">${formatPrice(item.price)}</p>
         </div>
         <div class="saved-item-actions">
-          <button class="move-to-cart" aria-label="Mover al carrito">
+          <button class="move-to-cart" data-id="${item.id}" aria-label="Mover al carrito">
             <i class="fas fa-shopping-cart"></i> Mover al carrito
           </button>
-          <button class="remove-saved-item" aria-label="Eliminar">
+          <button class="remove-saved-item" data-id="${item.id}" aria-label="Eliminar">
             <i class="fas fa-trash"></i>
           </button>
         </div>
