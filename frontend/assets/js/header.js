@@ -1,4 +1,5 @@
-import { isAuthenticated, getUserInfoFromToken as getUser, showCart } from './utils.js';
+import { isAuthenticated, getUserInfoFromToken as getUser } from './utils.js';
+import { showCart } from './cart.js';
 
 /**
  * Clase para manejar la funcionalidad del header

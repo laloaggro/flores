@@ -1,6 +1,6 @@
 // cart.js - Funcionalidad del carrito de compras
 import CartUtils from './cartUtils.js';
-import Cart, { showCart as showCartComponent } from '../../components/Cart.js';
+import Cart from '../../components/Cart.js';
 import { isAuthenticated, showNotification } from './utils.js';
 
 // Funcionalidad del carrito de compras
@@ -220,22 +220,29 @@ function showCart() {
     // Crear el elemento del carrito si no existe
     let cartModal = document.getElementById('cartModal');
     if (!cartModal) {
-        const cartHTML = showCartComponent(cart, savedForLater);
-        // Verificar que cartHTML no sea undefined
-        if (cartHTML && typeof cartHTML === 'string') {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = cartHTML.trim(); // Eliminar espacios en blanco
+        try {
+            // Generar HTML del carrito usando el componente
+            const cartHTML = Cart(cart, savedForLater);
             
-            // Verificar que haya contenido antes de intentar adjuntar
-            if (tempDiv.firstElementChild) {
-                document.body.appendChild(tempDiv.firstElementChild);
-                cartModal = document.getElementById('cartModal');
+            // Verificar que cartHTML no sea undefined
+            if (cartHTML && typeof cartHTML === 'string') {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = cartHTML.trim(); // Eliminar espacios en blanco
+                
+                // Verificar que haya contenido antes de intentar adjuntar
+                if (tempDiv.firstElementChild) {
+                    document.body.appendChild(tempDiv.firstElementChild);
+                    cartModal = document.getElementById('cartModal');
+                } else {
+                    console.error('No se pudo crear el carrito: HTML inválido');
+                    return;
+                }
             } else {
-                console.error('No se pudo crear el carrito: HTML inválido');
+                console.error('No se pudo crear el carrito: componente no válido');
                 return;
             }
-        } else {
-            console.error('No se pudo crear el carrito: componente no válido');
+        } catch (error) {
+            console.error('Error al crear el carrito:', error);
             return;
         }
     }
