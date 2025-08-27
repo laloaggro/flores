@@ -121,10 +121,10 @@ function showCart() {
         // Adjuntar event listeners después de mostrar el carrito
         setTimeout(() => {
             // Re-adjuntar event listeners para los nuevos elementos
-            document.querySelectorAll('.decrease').forEach(button => {
+            document.querySelectorAll('.quantity-btn.decrease').forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const productId = parseInt(e.target.closest('.decrease').dataset.id);
+                    const productId = parseInt(e.target.closest('.quantity-btn.decrease').dataset.id);
                     const item = CartUtils.getCartItems().find(item => item.id === productId);
                     if (item && item.quantity > 1) {
                         CartUtils.updateQuantity(productId, item.quantity - 1);
@@ -136,10 +136,10 @@ function showCart() {
                 });
             });
             
-            document.querySelectorAll('.increase').forEach(button => {
+            document.querySelectorAll('.quantity-btn.increase').forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const productId = parseInt(e.target.closest('.increase').dataset.id);
+                    const productId = parseInt(e.target.closest('.quantity-btn.increase').dataset.id);
                     const item = CartUtils.getCartItems().find(item => item.id === productId);
                     if (item) {
                         CartUtils.updateQuantity(productId, item.quantity + 1);
