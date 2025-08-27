@@ -1,4 +1,4 @@
-import { showNotification, updateCartCount, formatPrice, getUser, isAuthenticated } from './utils.js';
+import { showNotification, updateCartCount, formatPrice, getUserInfoFromToken as getUser, isAuthenticated, API_BASE_URL } from './utils.js';
 import { initUserMenu } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const orderItems = document.querySelector('.order-items');
   const totalAmount = document.querySelector('.total-amount');
   const paymentForm = document.getElementById('paymentForm');
+  const checkoutButton = document.querySelector('.checkout-button');
   
   // Verificar autenticación
   if (!isAuthenticated()) {
@@ -23,39 +24,48 @@ document.addEventListener('DOMContentLoaded', function() {
   loadOrderSummary();
   
   // Manejar envío del formulario de pago
-  paymentForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Obtener datos del formulario
-    const cardNumber = document.getElementById('cardNumber').value;
-    const expiryDate = document.getElementById('expiryDate').value;
-    const cvv = document.getElementById('cvv').value;
-    const cardName = document.getElementById('cardName').value;
-    const billingAddress = document.getElementById('billingAddress').value;
-    
-    // Validaciones básicas (en un entorno real, estas validaciones serían más robustas)
-    if (!cardNumber || !expiryDate || !cvv || !cardName || !billingAddress) {
-      showNotification('Por favor completa todos los campos', 'error');
-      return;
-    }
-    
-    // Procesar pago (simulado)
-    processPayment({
-      cardNumber,
-      expiryDate,
-      cvv,
-      cardName,
-      billingAddress
+  if (paymentForm) {
+    paymentForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Obtener datos del formulario
+      const cardNumber = document.getElementById('cardNumber').value;
+      const expiryDate = document.getElementById('expiryDate').value;
+      const cvv = document.getElementById('cvv').value;
+      const cardName = document.getElementById('cardName').value;
+      const billingAddress = document.getElementById('billingAddress').value;
+      
+      // Validaciones básicas (en un entorno real, estas validaciones serían más robustas)
+      if (!cardNumber || !expiryDate || !cvv || !cardName || !billingAddress) {
+        showNotification('Por favor completa todos los campos', 'error');
+        return;
+      }
+      
+      // Procesar pago (simulado)
+      processPayment({
+        cardNumber,
+        expiryDate,
+        cvv,
+        cardName,
+        billingAddress
+      });
     });
-  });
+  }
   
   // Cargar resumen del pedido
   function loadOrderSummary() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     
     if (cart.length === 0) {
-      orderItems.innerHTML = '<p class="empty-order-message">No hay productos en tu pedido</p>';
-      totalAmount.textContent = '$0.00';
+      if (orderItems) {
+        orderItems.innerHTML = '<p class="empty-order-message">No hay productos en tu pedido</p>';
+      }
+      if (totalAmount) {
+        totalAmount.textContent = '$0';
+      }
+      if (checkoutButton) {
+        checkoutButton.disabled = true;
+      }
       return;
     }
     
@@ -63,27 +73,42 @@ document.addEventListener('DOMContentLoaded', function() {
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
     // Renderizar items del pedido
-    orderItems.innerHTML = cart.map(item => `
-      <div class="order-item">
-        <div class="order-item-image">
-          <img src="${item.image}" alt="${item.name}">
+    if (orderItems) {
+      orderItems.innerHTML = cart.map(item => `
+        <div class="order-item">
+          <div class="order-item-image">
+            <img src="${item.image || './assets/images/placeholder.svg'}" alt="${item.name}" onerror="this.src='./assets/images/placeholder.svg'">
+          </div>
+          <div class="order-item-details">
+            <h4>${item.name}</h4>
+            <p>${item.quantity} x ${formatPrice(item.price)}</p>
+          </div>
+          <div class="order-item-total">
+            ${formatPrice(item.price * item.quantity)}
+          </div>
         </div>
-        <div class="order-item-details">
-          <h4>${item.name}</h4>
-          <p>${item.quantity} x ${formatPrice(item.price)}</p>
-        </div>
-        <div class="order-item-total">
-          ${formatPrice(item.price * item.quantity)}
-        </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
     
     // Actualizar total
-    totalAmount.textContent = formatPrice(total);
+    if (totalAmount) {
+      totalAmount.textContent = formatPrice(total);
+    }
+    
+    // Habilitar botón de checkout
+    if (checkoutButton) {
+      checkoutButton.disabled = false;
+    }
   }
   
   // Función para mostrar indicador de carga
   function showLoading(message = 'Procesando...') {
+    // Eliminar cualquier indicador de carga existente
+    const existingLoading = document.getElementById('checkout-loading');
+    if (existingLoading) {
+      existingLoading.remove();
+    }
+    
     const loadingElement = document.createElement('div');
     loadingElement.id = 'checkout-loading';
     loadingElement.className = 'loading-overlay';
@@ -106,6 +131,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Función para mostrar mensaje de error
   function showError(message) {
+    // Eliminar cualquier mensaje de error existente
+    const existingError = document.querySelector('.error-message');
+    if (existingError) {
+      existingError.remove();
+    }
+    
     const errorElement = document.createElement('div');
     errorElement.className = 'error-message';
     errorElement.innerHTML = `
@@ -122,32 +153,93 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 5000);
   }
+  
+  // Función para mostrar confirmación de pedido
+  function showConfirmation(orderId) {
+    // Ocultar formulario de pago
+    const paymentSection = document.querySelector('.payment-section');
+    if (paymentSection) {
+      paymentSection.style.display = 'none';
+    }
+    
+    // Mostrar confirmación
+    const confirmationSection = document.querySelector('.confirmation-section');
+    if (confirmationSection) {
+      confirmationSection.style.display = 'block';
+      const orderIdElement = confirmationSection.querySelector('.order-id');
+      if (orderIdElement) {
+        orderIdElement.textContent = orderId;
+      }
+    }
+    
+    // Limpiar carrito
+    localStorage.removeItem('cart');
+    updateCartCount();
+  }
+
+  // Función para obtener datos de pago
+  function getPaymentData() {
+    return {
+      cardNumber: document.getElementById('cardNumber')?.value || '',
+      expiryDate: document.getElementById('expiryDate')?.value || '',
+      cvv: document.getElementById('cvv')?.value || '',
+      cardName: document.getElementById('cardName')?.value || '',
+      billingAddress: document.getElementById('billingAddress')?.value || ''
+    };
+  }
 
   // Función para procesar el pago con manejo de errores
-  async function processPayment() {
+  async function processPayment(paymentData) {
     showLoading('Procesando pago...');
     
     try {
-        // Simular proceso de pago
-        const response = await fetch('/api/checkout/process', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(getPaymentData())
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Error en el proceso de pago: ${response.status} ${response.statusText}`);
-        }
-        
-        const result = await response.json();
-        showConfirmation(result.orderId);
+      // Obtener token de autenticación
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No estás autenticado');
+      }
+      
+      // Preparar datos del pedido
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      if (cart.length === 0) {
+        throw new Error('El carrito está vacío');
+      }
+      
+      const orderData = {
+        items: cart.map(item => ({
+          productId: item.id,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        paymentInfo: paymentData,
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+      };
+      
+      // Enviar pedido al servidor
+      const response = await fetch(`${API_BASE_URL}/api/checkout/process`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(orderData)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Error en el proceso de pago: ${response.status} ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      showConfirmation(result.orderId);
+      
+      // Mostrar notificación de éxito
+      showNotification('¡Pedido procesado con éxito!', 'success');
     } catch (error) {
-        console.error('Error al procesar el pago:', error);
-        showError('No se pudo procesar el pago. Por favor, verifica tus datos e inténtalo de nuevo.');
+      console.error('Error al procesar el pago:', error);
+      showError(error.message || 'No se pudo procesar el pago. Por favor, verifica tus datos e inténtalo de nuevo.');
     } finally {
-        hideLoading();
+      hideLoading();
     }
   }
   

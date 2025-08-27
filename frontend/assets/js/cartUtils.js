@@ -66,7 +66,7 @@ const CartUtils = {
                 id: product.id,
                 name: product.name,
                 price: parseFloat(product.price),
-                image: product.image,
+                image: product.image_url || product.image || './assets/images/placeholder.svg',
                 quantity: 1
             };
             this.cartItems.push(newItem);
@@ -178,6 +178,18 @@ const CartUtils = {
         this.renderCart();
         showNotification('Carrito vaciado', 'info');
         console.log('Carrito vaciado');
+    },
+
+    // Eliminar items guardados para más tarde
+    removeFromSaved(productId) {
+        const itemIndex = this.savedForLater.findIndex(item => item.id == productId);
+        if (itemIndex !== -1) {
+            this.savedForLater.splice(itemIndex, 1);
+            this.saveSavedItems();
+            this.renderCart();
+            showNotification('Producto eliminado de guardados para más tarde', 'info');
+            console.log(`Producto ${productId} eliminado de guardados para más tarde`);
+        }
     },
 
     // Actualizar contador del carrito

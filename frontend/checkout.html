@@ -64,11 +64,14 @@
     
     <!-- Preload critical scripts -->
     <link rel="preload" href="assets/js/utils.js" as="script">
-    <link rel="preload" href="assets/js/cart.js" as="script">
     <link rel="preload" href="assets/js/checkout.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
+    <link rel="preload" href="assets/js/theme.js" as="script">
     
+    <!-- Preload critical images -->
+    <link rel="preload" as="image" href="./assets/images/checkout-hero.jpg">
+
     <!-- Schema.org para checkout -->
     <script type="application/ld+json">
     {
@@ -79,7 +82,7 @@
     }
     </script>
 </head>
-<body>
+<body data-theme="light">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
     <!-- Header -->
@@ -90,188 +93,72 @@
         <section class="hero">
             <div class="hero-content">
                 <h1>Finalizar Compra</h1>
-                <p>Completa tu pedido y elige tu método de entrega</p>
+                <p>Revisa tu pedido y completa el proceso de pago</p>
             </div>
         </section>
 
-        <!-- Checkout Section -->
+        <!-- Checkout Content -->
         <section class="checkout-section">
             <div class="container">
                 <div class="checkout-content">
-                    <div class="checkout-steps">
-                        <div class="step active" data-step="shipping">
-                            <div class="step-number">1</div>
-                            <div class="step-info">
-                                <h3>Información de Envío</h3>
-                                <p>Ingresa tus datos de entrega</p>
-                            </div>
+                    <!-- Resumen del Pedido -->
+                    <div class="order-summary">
+                        <h2>Resumen del Pedido</h2>
+                        <div class="order-items">
+                            <!-- Los items del pedido se cargarán aquí dinámicamente -->
                         </div>
-                        <div class="step" data-step="payment">
-                            <div class="step-number">2</div>
-                            <div class="step-info">
-                                <h3>Método de Pago</h3>
-                                <p>Selecciona tu forma de pago</p>
-                            </div>
-                        </div>
-                        <div class="step" data-step="confirmation">
-                            <div class="step-number">3</div>
-                            <div class="step-info">
-                                <h3>Confirmación</h3>
-                                <p>Revisa y confirma tu pedido</p>
+                        <div class="order-total">
+                            <div class="total-row">
+                                <span>Total:</span>
+                                <span class="total-amount">$0</span>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="checkout-forms">
-                        <!-- Shipping Information Step -->
-                        <div id="shipping-step" class="checkout-step active">
-                            <h2>Información de Envío</h2>
-                            <form id="shippingForm">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="firstName">Nombre</label>
-                                        <input type="text" id="firstName" name="firstName" class="form-input" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lastName">Apellido</label>
-                                        <input type="text" id="lastName" name="lastName" class="form-input" required>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" class="form-input" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="phone">Teléfono</label>
-                                    <input type="tel" id="phone" name="phone" class="form-input" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="address">Dirección</label>
-                                    <input type="text" id="address" name="address" class="form-input" required>
-                                </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="city">Ciudad</label>
-                                        <input type="text" id="city" name="city" class="form-input" value="Recoleta" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="postalCode">Código Postal</label>
-                                        <input type="text" id="postalCode" name="postalCode" class="form-input" value="8320000" readonly>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="deliveryInstructions">Instrucciones de Entrega (Opcional)</label>
-                                    <textarea id="deliveryInstructions" name="deliveryInstructions" class="form-input" rows="3" placeholder="Ej: Dejar en recepción, tercer piso, etc."></textarea>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="deliveryDate">Fecha de Entrega Preferida</label>
-                                    <input type="date" id="deliveryDate" name="deliveryDate" class="form-input" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="deliveryTime">Hora de Entrega Preferida</label>
-                                    <select id="deliveryTime" name="deliveryTime" class="form-input" required>
-                                        <option value="">Selecciona una hora</option>
-                                        <option value="09:00-11:00">09:00 - 11:00</option>
-                                        <option value="11:00-13:00">11:00 - 13:00</option>
-                                        <option value="13:00-15:00">13:00 - 15:00</option>
-                                        <option value="15:00-17:00">15:00 - 17:00</option>
-                                        <option value="17:00-19:00">17:00 - 19:00</option>
-                                        <option value="19:00-21:00">19:00 - 21:00</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-buttons">
-                                    <button type="button" class="btn btn-secondary" id="backToCart">Volver al Carrito</button>
-                                    <button type="submit" class="btn btn-primary">Continuar al Pago</button>
-                                </div>
-                            </form>
-                        </div>
-                        
-                        <!-- Payment Information Step -->
-                        <div id="payment-step" class="checkout-step">
-                            <h2>Método de Pago</h2>
-                            <form id="paymentForm">
-                                <div class="form-group">
-                                    <label for="cardName">Nombre en la Tarjeta</label>
-                                    <input type="text" id="cardName" name="cardName" class="form-input" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="cardNumber">Número de Tarjeta</label>
-                                    <input type="text" id="cardNumber" name="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" required>
-                                </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="cardExpiry">Fecha de Expiración</label>
-                                        <input type="text" id="cardExpiry" name="cardExpiry" class="form-input" placeholder="MM/AA" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cardCVV">CVV</label>
-                                        <input type="text" id="cardCVV" name="cardCVV" class="form-input" placeholder="123" required>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="saveCardInfo">
-                                        <span class="checkmark"></span>
-                                        Guardar información de tarjeta para futuras compras
-                                    </label>
-                                </div>
-                                
-                                <div class="order-summary">
-                                    <h3>Resumen del Pedido</h3>
-                                    <div id="orderItems"></div>
-                                    <div class="summary-item subtotal">
-                                        <span>Subtotal:</span>
-                                        <span id="subtotalAmount">$0</span>
-                                    </div>
-                                    <div class="summary-item shipping">
-                                        <span>Envío:</span>
-                                        <span id="shippingAmount">$0</span>
-                                    </div>
-                                    <div class="summary-item total">
-                                        <span>Total:</span>
-                                        <span id="totalAmount">$0</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-buttons">
-                                    <button type="button" class="btn btn-secondary" id="backToShipping">Volver a Envío</button>
-                                    <button type="submit" class="btn btn-primary">Realizar Pago</button>
-                                </div>
-                            </form>
-                        </div>
-                        
-                        <!-- Order Confirmation Step -->
-                        <div id="confirmation-step" class="checkout-step">
-                            <div class="confirmation-content">
-                                <div class="confirmation-icon">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <h2>¡Pedido Confirmado!</h2>
-                                <p>Tu pedido ha sido procesado exitosamente.</p>
-                                <p id="orderNumber">Número de pedido: <strong>#000000</strong></p>
-                                
-                                <div class="order-summary">
-                                    <h3>Resumen del Pedido</h3>
-                                    <div id="orderItems"></div>
-                                    <div class="summary-item total">
-                                        <span>Total Pagado:</span>
-                                        <span id="paidAmount">$0</span>
-                                    </div>
-                                </div>
-                                
-                                <button id="continueShopping" class="btn btn-primary">Continuar Comprando</button>
+
+                    <!-- Información de Pago -->
+                    <div class="payment-section">
+                        <h2>Información de Pago</h2>
+                        <form id="paymentForm" class="payment-form">
+                            <div class="form-group">
+                                <label for="cardName">Nombre en la Tarjeta</label>
+                                <input type="text" id="cardName" name="cardName" required placeholder="Nombre completo">
                             </div>
+                            
+                            <div class="form-group">
+                                <label for="cardNumber">Número de Tarjeta</label>
+                                <input type="text" id="cardNumber" name="cardNumber" required placeholder="1234 5678 9012 3456">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiryDate">Fecha de Expiración</label>
+                                    <input type="text" id="expiryDate" name="expiryDate" required placeholder="MM/AA">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" name="cvv" required placeholder="123">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="billingAddress">Dirección de Facturación</label>
+                                <textarea id="billingAddress" name="billingAddress" required placeholder="Dirección completa"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary checkout-button">Procesar Pago</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Confirmación de Pedido -->
+                    <div class="confirmation-section" style="display: none;">
+                        <div class="confirmation-content">
+                            <i class="fas fa-check-circle confirmation-icon"></i>
+                            <h2>¡Pedido Confirmado!</h2>
+                            <p>Tu pedido ha sido procesado exitosamente.</p>
+                            <p>Número de pedido: <strong class="order-id"></strong></p>
+                            <p>Recibirás un correo de confirmación con los detalles de tu pedido.</p>
+                            <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
                         </div>
                     </div>
                 </div>
@@ -282,17 +169,28 @@
     <!-- Footer -->
     <site-footer></site-footer>
 
-    <!-- Scripts -->
+    <!-- Scripts optimizados -->
     <script type="module" src="components/Header.js"></script>
     <script type="module" src="components/Footer.js"></script>
-    <script type="module" src="./assets/js/utils.js"></script>
-    <script type="module" src="./assets/js/auth.js"></script>
-    <script type="module" src="./assets/js/checkout.js"></script>
-    <script type="module" src="./assets/js/cart.js"></script>
-    <script type="module" src="./assets/js/accessibility.js"></script>
-    <script type="module" src="./assets/js/lazyLoad.js"></script>
-    <script type="module" src="./assets/js/imageOptimizer.js"></script>
-    <script type="module" src="./assets/js/register-sw.js"></script>
+    <script type="module" src="assets/js/utils.js"></script>
+    <script type="module" src="assets/js/cart.js"></script>
+    <script type="module" src="assets/js/checkout.js"></script>
+    <script type="module" src="assets/js/userMenu.js"></script>
+    <script type="module" src="assets/js/header.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
+    <script>
+        // Si theme.js no establece el tema, usamos un script de respaldo
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            }
+        });
+    </script>
 
 </body>
 </html>
