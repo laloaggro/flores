@@ -8,17 +8,43 @@ const ProductCard = (product) => {
   const avifSrc = product.image_url ? product.image_url.replace(/\.(jpg|jpeg|png)/i, '.avif') : '';
   
   // Imagen por defecto si no hay imagen válida
-  const defaultImage = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\' viewBox=\'0 0 300 200\'%3E%3Crect width=\'300\' height=\'200\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'Arial\' font-size=\'20\' fill=\'%23999\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EImagen%3C/text%3E%3Ctext x=\'50%25\' y=\'65%25\' font-family=\'Arial\' font-size=\'16\' fill=\'%23999\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3ENo disponible%3C/text%3E%3C/svg%3E';
-  const imageUrl = product.image_url || defaultImage;
+  const defaultImage = './assets/images/placeholder.svg';
+  let imageUrl = product.image_url || product.image || defaultImage;
+  
+  // Asegurarse de que la ruta de la imagen sea correcta
+  if (imageUrl.startsWith('/assets/images/')) {
+    imageUrl = `.${imageUrl}`;
+  } else if (imageUrl.startsWith('assets/images/')) {
+    imageUrl = `./${imageUrl}`;
+  } else if (!imageUrl.startsWith('./assets/images/') && !imageUrl.startsWith('http')) {
+    // Si la imagen no es una URL completa ni una ruta relativa correcta, usar el placeholder
+    imageUrl = './assets/images/placeholder.svg';
+  }
   
   // Crear srcset para imágenes responsivas
   const srcset = product.image_url 
     ? `${product.image_url}?w=300 300w, ${product.image_url}?w=600 600w, ${product.image_url}?w=900 900w`
     : '';
   
+  // Traducir categoría si es necesario
+  const translateCategory = (category) => {
+    const categories = {
+      'ramos': 'Ramos',
+      'arreglos': 'Arreglos',
+      'coronas': 'Coronas',
+      'insumos': 'Insumos',
+      'accesorios': 'Accesorios',
+      'condolencias': 'Condolencias',
+      'jardinería': 'Jardinería'
+    };
+    return categories[category.toLowerCase()] || category;
+  };
+  
+  const categoryName = translateCategory(product.category || 'Sin categoría');
+
   return `
     <article class="product-card" itemscope itemtype="http://schema.org/Product" tabindex="0" role="article" aria-labelledby="product-name-${product.id}">
-      <div class="product-image">
+      <div class="product-image" style="padding: 1rem;">
         <picture>
           ${avifSrc ? `<source srcset="${avifSrc}" type="image/avif">` : ''}
           ${webpSrc ? `<source srcset="${webpSrc}" type="image/webp">` : ''}
@@ -29,17 +55,18 @@ const ProductCard = (product) => {
                loading="lazy" 
                itemprop="image"
                width="300"
-               height="200"
+               height="300"
                decoding="async"
                fetchpriority="auto"
-               onerror="this.onerror=null;this.src='${defaultImage}';this.setAttribute('aria-label', 'Imagen no disponible');">
+               onerror="this.onerror=null;this.src='${defaultImage}';"
+               style="width: 100%; height: 100%; object-fit: cover;">
         </picture>
       </div>
       <div class="product-info">
         <h3 id="product-name-${product.id}" itemprop="name">${product.name || 'Producto sin nombre'}</h3>
         <p itemprop="description">${product.description || 'Sin descripción disponible'}</p>
         <div class="product-details">
-          <span class="detail-item" itemprop="category"><i class="fas fa-tag" aria-hidden="true"></i> ${product.category || 'Sin categoría'}</span>
+          <span class="detail-item" itemprop="category"><i class="fas fa-tag" aria-hidden="true"></i> ${categoryName}</span>
           <span class="detail-item"><i class="fas fa-calendar-alt" aria-hidden="true"></i> ${product.created_at ? new Date(product.created_at).toLocaleDateString('es-CL') : 'Fecha no disponible'}</span>
         </div>
         <span class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">

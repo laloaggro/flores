@@ -164,6 +164,53 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="admin-logs-section">
+                        <h3>Logs del Sitio</h3>
+                        <div class="logs-container">
+                            <div class="logs-controls">
+                                <select id="logLevelFilter">
+                                    <option value="all">Todos los niveles</option>
+                                    <option value="info">Información</option>
+                                    <option value="warning">Advertencias</option>
+                                    <option value="error">Errores</option>
+                                </select>
+                                <button class="btn btn-secondary" id="refreshLogsBtn">
+                                    <i class="fas fa-sync-alt"></i> Actualizar
+                                </button>
+                                <button class="btn btn-secondary" id="clearLogsBtn">
+                                    <i class="fas fa-trash"></i> Limpiar Logs
+                                </button>
+                            </div>
+                            <div class="logs-list" id="logsList">
+                                <div class="log-item info">
+                                    <span class="log-time">2025-08-28 10:30:15</span>
+                                    <span class="log-level">INFO</span>
+                                    <span class="log-message">Usuario admin@floreria.com inició sesión</span>
+                                </div>
+                                <div class="log-item warning">
+                                    <span class="log-time">2025-08-28 10:25:42</span>
+                                    <span class="log-level">WARNING</span>
+                                    <span class="log-message">Intento fallido de inicio de sesión para usuario test@test.com</span>
+                                </div>
+                                <div class="log-item error">
+                                    <span class="log-time">2025-08-28 09:15:33</span>
+                                    <span class="log-level">ERROR</span>
+                                    <span class="log-message">Error al procesar pedido #12344: Producto no disponible</span>
+                                </div>
+                                <div class="log-item info">
+                                    <span class="log-time">2025-08-28 08:45:21</span>
+                                    <span class="log-level">INFO</span>
+                                    <span class="log-message">Nuevo producto "Ramo Elegante de Rosas Blancas" creado</span>
+                                </div>
+                                <div class="log-item info">
+                                    <span class="log-time">2025-08-28 08:30:10</span>
+                                    <span class="log-level">INFO</span>
+                                    <span class="log-message">Pedido #12343 marcado como entregado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

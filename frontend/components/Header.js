@@ -30,14 +30,14 @@ class Header extends HTMLElement {
                     <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
                         <button class="user-info" aria-haspopup="true" aria-expanded="false">
                             <img id="userProfileImage" class="user-avatar" src="./assets/images/default-avatar.svg" alt="Avatar de usuario">
-                            <span id="userNameDisplay" class="user-name"></span>
+                            <span id="userNameDisplay" class="user-name">Usuario</span>
                             <i class="fas fa-caret-down" aria-hidden="true"></i>
                         </button>
                         <ul class="user-dropdown" role="menu">
                             <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
                             <li><a href="orders.html" role="menuitem"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Mis Pedidos</a></li>
                             <li><a href="wishlist.html" role="menuitem"><i class="fas fa-heart" aria-hidden="true"></i> Lista de Deseos</a></li>
-                            <li id="adminMenuItem" style="display: none;"><a href="admin.html" role="menuitem"><i class="fas fa-cog" aria-hidden="true"></i> Panel de Administración</a></li>
+                            <li id="adminMenuItem"><a href="admin.html" role="menuitem"><i class="fas fa-cog" aria-hidden="true"></i> Panel de Administración</a></li>
                             <li id="sitemapMenuItem" style="display: none;"><a href="sitemap.html" role="menuitem"><i class="fas fa-sitemap" aria-hidden="true"></i> Mapa del Sitio</a></li>
                             <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
                         </ul>

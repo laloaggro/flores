@@ -39,6 +39,18 @@ a:hover {
     border: 1px solid #e0e0e0;
 }
 
+/* Mejoras para la visualización de imágenes de productos */
+.product-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa; /* Fondo claro para mejor contraste */
+}
+
+body[data-theme="dark"] .product-image {
+    background-color: #343a40; /* Fondo oscuro en modo oscuro */
+}
+
 /* Ajustes para elementos de formulario */
 input, textarea, select {
     color: #333333;

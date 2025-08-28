@@ -1,74 +1,68 @@
-import { updateCartCount, getUserInfoFromToken as getUser, isAuthenticated, logout, isAdmin, API_BASE_URL, showNotification } from './utils.js';
+import { updateCartCount, getUserInfoFromToken as getUser, isAuthenticated, logout as utilsLogout, isAdmin, API_BASE_URL, showNotification } from './utils.js';
 
-// Función para inicializar el menú de usuario
+// auth.js - Manejo de autenticación y menú de usuario
+
+// Inicializar el menú de usuario
 export function initUserMenu() {
-    // Forzar limpieza adicional
-    if (!isAuthenticated()) {
-        localStorage.removeItem('user');
-    }
-    
-    const user = getUser();
+    const token = getAuthToken();
     const userMenu = document.getElementById('userMenu');
     const loginLink = document.getElementById('loginLink');
-    const userNameElement = document.getElementById('userNameDisplay');
-    const logoutLink = document.getElementById('logoutLink');
-    const adminMenuItem = document.getElementById('adminMenuItem');
-    const sitemapMenuItem = document.getElementById('sitemapMenuItem');
-    const userDropdown = document.querySelector('.user-dropdown');
-    const userMenuButton = document.querySelector('.user-info');
     
-    // Ocultar el enlace de login en la página de login
-    if (window.location.pathname.includes('login.html')) {
-        if (loginLink) {
-            loginLink.style.display = 'none';
-        }
-    } else {
-        // Mostrar/ocultar elementos según el estado de autenticación
-        if (isAuthenticated() && user) {
-            // Usuario autenticado
-            if (loginLink) loginLink.style.display = 'none';
-            if (userMenu) userMenu.style.display = 'block';
-            if (userNameElement) userNameElement.textContent = user.name;
-            
-            // Mostrar elementos de administración y sitemap si el usuario es admin
-            if (adminMenuItem) {
-                adminMenuItem.style.display = user.role === 'admin' ? 'block' : 'none';
-            }
-            if (sitemapMenuItem) {
-                sitemapMenuItem.style.display = user.role === 'admin' ? 'block' : 'none';
-            }
-        } else {
-            // Usuario no autenticado
-            if (loginLink) loginLink.style.display = 'block';
-            if (userMenu) userMenu.style.display = 'none';
-            // Asegurar que los elementos de administración y sitemap estén ocultos para usuarios no autenticados
-            if (adminMenuItem) adminMenuItem.style.display = 'none';
-            if (sitemapMenuItem) sitemapMenuItem.style.display = 'none';
-        }
-    }
-    
-    // Configurar evento de logout
-    if (logoutLink) {
-        logoutLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            logout();
-        });
-    }
-    
-    // Configurar menú desplegable del usuario
-    if (userMenuButton && userDropdown) {
-        userMenuButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            userDropdown.classList.toggle('show');
-        });
+    if (token && userMenu) {
+        // Usuario autenticado
+        loginLink.style.display = 'none';
+        userMenu.style.display = 'block';
         
-        // Cerrar menú al hacer clic fuera
-        document.addEventListener('click', (e) => {
-            if (!userMenuButton.contains(e.target)) {
-                userDropdown.classList.remove('show');
-            }
-        });
+        // Mostrar nombre de usuario si está disponible
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        if (userNameDisplay && userData.name) {
+            userNameDisplay.textContent = userData.name.split(' ')[0]; // Solo el primer nombre
+        }
+        
+        // Mostrar el botón de administración si el usuario es admin
+        const adminMenuItem = document.getElementById('adminMenuItem');
+        if (adminMenuItem && isAdmin()) {
+            adminMenuItem.style.display = 'block';
+        }
+        
+        // Mostrar el mapa del sitio para todos los usuarios autenticados
+        const sitemapMenuItem = document.getElementById('sitemapMenuItem');
+        if (sitemapMenuItem) {
+            sitemapMenuItem.style.display = 'block';
+        }
+        
+        // Configurar el toggle del menú de usuario
+        const userInfoButton = userMenu.querySelector('.user-info');
+        const userDropdown = userMenu.querySelector('.user-dropdown');
+        
+        if (userInfoButton && userDropdown) {
+            userInfoButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('show');
+                this.setAttribute('aria-expanded', userDropdown.classList.contains('show'));
+            });
+            
+            // Cerrar el menú al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!userMenu.contains(e.target)) {
+                    userDropdown.classList.remove('show');
+                    userInfoButton.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    } else if (loginLink) {
+        // Usuario no autenticado
+        loginLink.style.display = 'flex';
+        if (userMenu) {
+            userMenu.style.display = 'none';
+        }
     }
+}
+
+// 使用utils.js中的logout函数
+export function logout() {
+    utilsLogout();
 }
 
 // Función para manejar el inicio de sesión
@@ -86,8 +80,8 @@ export async function handleLogin(email, password) {
         
         if (response.ok) {
             // Guardar token y usuario en localStorage
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify({
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('userData', JSON.stringify({
                 id: data.user.id,
                 name: data.user.name,
                 email: data.user.email,

@@ -60,13 +60,44 @@ const productManager = {
             return;
         }
         
-        productGrid.innerHTML = products.map(product => `
+        productGrid.innerHTML = products.map(product => {
+            // Asegurarse de que la ruta de la imagen sea correcta
+            let imageUrl = product.image || product.image_url || './assets/images/placeholder.svg';
+            
+            // Asegurarse de que la ruta de la imagen sea correcta
+            if (imageUrl.startsWith('/assets/images/')) {
+                imageUrl = `.${imageUrl}`;
+            } else if (imageUrl.startsWith('assets/images/')) {
+                imageUrl = `./${imageUrl}`;
+            } else if (!imageUrl.startsWith('./assets/images/') && !imageUrl.startsWith('http')) {
+                // Si la imagen no es una URL completa ni una ruta relativa correcta, usar el placeholder
+                imageUrl = './assets/images/placeholder.svg';
+            }
+            
+            // Traducir categoría si es necesario
+            const translateCategory = (category) => {
+                const categories = {
+                    'ramos': 'Ramos',
+                    'arreglos': 'Arreglos',
+                    'coronas': 'Coronas',
+                    'insumos': 'Insumos',
+                    'accesorios': 'Accesorios',
+                    'condolencias': 'Condolencias',
+                    'jardinería': 'Jardinería'
+                };
+                return categories[category.toLowerCase()] || category;
+            };
+            
+            const categoryName = translateCategory(product.category || 'Sin categoría');
+            
+            return `
             <div class="product-card">
-                <div class="product-image">
-                    <img src="${product.image || './assets/images/placeholder.svg'}" 
+                <div class="product-image" style="padding: 1rem;">
+                    <img src="${imageUrl}" 
                          alt="${product.name || 'Producto sin nombre'}"
                          loading="lazy"
-                         onerror="this.src='./assets/images/placeholder.svg'">
+                         onerror="this.src='./assets/images/placeholder.svg'"
+                         style="width: 100%; height: 100%; object-fit: cover;">
                     <button class="add-to-cart" data-product-id="${product.id}">
                         <i class="fas fa-shopping-cart"></i> Agregar al carrito
                     </button>
@@ -74,10 +105,11 @@ const productManager = {
                 <div class="product-info">
                     <h3>${product.name || 'Producto sin nombre'}</h3>
                     <p class="product-description">${product.description || 'Sin descripción disponible'}</p>
+                    <div class="product-category">${categoryName}</div>
                     <div class="product-price">$${(product.price || 0).toLocaleString()}</div>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
         
         // Añadir event listeners a los botones de agregar al carrito
         this.initCartEventListeners();

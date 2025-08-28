@@ -98,8 +98,8 @@
                     <!-- Sidebar de navegación -->
                     <div class="profile-sidebar">
                         <div class="user-info">
-                            <div class="user-avatar">
-                                <i class="fas fa-user"></i>
+                            <div class="user-avatar-container">
+                                <img id="profileImage" class="user-avatar" src="./assets/images/default-avatar.svg" alt="Avatar de usuario">
                             </div>
                             <h3 id="userName">Usuario</h3>
                             <p id="userEmail">usuario@ejemplo.com</p>
@@ -215,26 +215,29 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="toggle-label">
-                                        <span>Notificaciones por Email</span>
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" id="emailNotifications" checked>
-                                            <span class="toggle-slider"></span>
-                                        </label>
+                                    <label for="theme">Tema</label>
+                                    <select id="theme" name="theme">
+                                        <option value="light">Claro</option>
+                                        <option value="dark">Oscuro</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" id="newsletter" name="newsletter">
+                                        Recibir notificaciones por email
                                     </label>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="toggle-label">
-                                        <span>Boletín Informativo</span>
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" id="newsletter" checked>
-                                            <span class="toggle-slider"></span>
-                                        </label>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Guardar Configuración</button>
-                                </form>
-                            </div>
+                                    <label>
+                                        <input type="checkbox" id="promotions" name="promotions">
+                                        Recibir ofertas y promociones
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Guardar Preferencias</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -248,8 +251,8 @@
     <!-- Scripts -->
     <script type="module" src="components/Header.js"></script>
     <script type="module" src="components/Footer.js"></script>
+    <script type="module" src="assets/js/mobile-menu.js"></script>
     <script type="module" src="assets/js/utils.js"></script>
-    <script type="module" src="assets/js/cart.js"></script>
     <script type="module" src="assets/js/profile.js"></script>
     <script type="module" src="assets/js/accessibility.js"></script>
     <script type="module" src="assets/js/userMenu.js"></script>

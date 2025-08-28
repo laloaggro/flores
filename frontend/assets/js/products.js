@@ -39,6 +39,7 @@ async function initializeApp() {
         loadProducts();
         setupCategoryFilter();
         setupSearch();
+        setupSort();
         initUserMenu();
         
         // Inicializar CartUtils
@@ -88,6 +89,54 @@ async function loadProducts() {
     }
 }
 
+// Cargar productos por categoría desde la API
+async function loadProductsByCategory(category) {
+    const productsGrid = document.getElementById('productGrid');
+    if (!productsGrid) {
+        console.error('No se encontró el elemento productGrid');
+        return;
+    }
+    
+    // Mostrar mensaje de carga
+    productsGrid.innerHTML = '<p class="loading-message">Cargando productos...</p>';
+    
+    try {
+        console.log(`Cargando productos de la categoría ${category} desde: http://localhost:5000/api/products?category=${category}`);
+        
+        // Obtener todos los productos de la categoría (sin límite)
+        const response = await fetch(`http://localhost:5000/api/products?category=${encodeURIComponent(category)}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        let categoryProducts = data.products;
+        
+        // Si hay más páginas, cargar todas
+        if (data.pagination && data.pagination.totalPages > 1) {
+            for (let page = 2; page <= data.pagination.totalPages; page++) {
+                const nextPageResponse = await fetch(`http://localhost:5000/api/products?category=${encodeURIComponent(category)}&page=${page}`);
+                if (nextPageResponse.ok) {
+                    const nextPageData = await nextPageResponse.json();
+                    categoryProducts = categoryProducts.concat(nextPageData.products);
+                }
+            }
+        }
+        
+        // Precargar imágenes
+        preloadImages(categoryProducts);
+        
+        displayProducts(categoryProducts);
+    } catch (error) {
+        console.error('Error al cargar productos por categoría:', error);
+        const productsGrid = document.getElementById('productGrid');
+        if (productsGrid) {
+            productsGrid.innerHTML = '<p class="error-message">Error al cargar productos. Por favor, intenta nuevamente más tarde.</p>';
+            showNotification('Error al cargar productos', 'error');
+        }
+    }
+}
+
 // Precargar imágenes de productos
 function preloadImages(products) {
     products.forEach(product => {
@@ -97,6 +146,11 @@ function preloadImages(products) {
         let correctImageUrl = imageUrl;
         if (imageUrl.startsWith('/assets/images/')) {
             correctImageUrl = `.${imageUrl}`;
+        } else if (imageUrl.startsWith('assets/images/')) {
+            correctImageUrl = `./${imageUrl}`;
+        } else if (!imageUrl.startsWith('./assets/images/') && !imageUrl.startsWith('http')) {
+            // Si la imagen no es una URL completa ni una ruta relativa correcta, usar el placeholder
+            correctImageUrl = './assets/images/placeholder.svg';
         }
         
         // Crear una imagen para precargar
@@ -132,18 +186,16 @@ function createProductCard(product) {
     // Asegurarse de que la ruta de la imagen sea correcta
     if (imageUrl.startsWith('/assets/images/')) {
         imageUrl = `.${imageUrl}`;
-    }
-    
-    // Si la imagen es relativa al directorio frontend
-    if (imageUrl.startsWith('./assets/images/')) {
-        // La ruta es correcta
     } else if (imageUrl.startsWith('assets/images/')) {
         imageUrl = `./${imageUrl}`;
+    } else if (!imageUrl.startsWith('./assets/images/') && !imageUrl.startsWith('http')) {
+        // Si la imagen no es una URL completa ni una ruta relativa correcta, usar el placeholder
+        imageUrl = './assets/images/placeholder.svg';
     }
     
     card.innerHTML = `
-        <div class="product-image">
-            <img src="${imageUrl}" alt="${product.name}" onerror="this.src='./assets/images/placeholder.svg'">
+        <div class="product-image" style="padding: 1rem;">
+            <img src="${imageUrl}" alt="${product.name}" onerror="this.src='./assets/images/placeholder.svg'" style="width: 100%; height: 100%; object-fit: cover;">
             <div class="product-overlay">
                 <button class="btn btn-secondary btn-view-details" data-id="${product.id}">Ver Detalles</button>
             </div>
@@ -205,32 +257,55 @@ function viewProductDetails(productId) {
 
 // Configurar filtro de categoría
 function setupCategoryFilter() {
-    const categoryLinks = document.querySelectorAll('.category-filter a');
-    categoryLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const category = this.dataset.category;
-            
-            // Actualizar clase activa
-            document.querySelectorAll('.category-filter a').forEach(a => a.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Filtrar productos
-            filterProducts(category);
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', function() {
+            const category = this.value;
+            filterProductsByCategory(category);
         });
-    });
+    }
+}
+
+// Configurar ordenamiento
+function setupSort() {
+    const sortOrder = document.getElementById('sortOrder');
+    if (sortOrder) {
+        sortOrder.addEventListener('change', function() {
+            sortProducts(this.value);
+        });
+    }
 }
 
 // Filtrar productos por categoría
-function filterProducts(category) {
+function filterProductsByCategory(category) {
     currentCategory = category;
-    let filteredProducts = allProducts;
     
-    if (category !== 'all') {
-        filteredProducts = allProducts.filter(product => product.category === category);
+    if (category && category !== '') {
+        // Cargar productos específicos de la categoría desde la API
+        loadProductsByCategory(category);
+    } else {
+        // Mostrar todos los productos
+        displayProducts(allProducts);
+    }
+}
+
+// Ordenar productos
+function sortProducts(sortType, products = null) {
+    let productsToSort = products || [...allProducts];
+    
+    switch(sortType) {
+        case 'name':
+            productsToSort.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'price-low':
+            productsToSort.sort((a, b) => a.price - b.price);
+            break;
+        case 'price-high':
+            productsToSort.sort((a, b) => b.price - a.price);
+            break;
     }
     
-    displayProducts(filteredProducts);
+    displayProducts(productsToSort);
 }
 
 // Configurar búsqueda
@@ -243,7 +318,7 @@ function setupSearch() {
                 searchProducts(searchTerm);
             } else if (searchTerm.length === 0) {
                 // Si el campo de búsqueda está vacío, mostrar productos de la categoría actual
-                filterProducts(currentCategory);
+                filterProductsByCategory(currentCategory);
             }
         });
     }
@@ -251,10 +326,19 @@ function setupSearch() {
 
 // Buscar productos
 function searchProducts(term) {
-    const filteredProducts = allProducts.filter(product => 
+    let filteredProducts = [...allProducts];
+    
+    // Aplicar filtro de categoría si existe
+    if (currentCategory && currentCategory !== '') {
+        filteredProducts = filteredProducts.filter(product => 
+            product.category && product.category.toLowerCase() === currentCategory.toLowerCase());
+    }
+    
+    // Aplicar búsqueda
+    filteredProducts = filteredProducts.filter(product => 
         product.name.toLowerCase().includes(term) || 
-        (product.description && product.description.toLowerCase().includes(term))
-    );
+        (product.description && product.description.toLowerCase().includes(term)));
+    
     displayProducts(filteredProducts);
 }
 
@@ -266,7 +350,9 @@ function translateCategory(categoryKey) {
         'arreglos': 'Arreglos',
         'coronas': 'Coronas',
         'insumos': 'Insumos',
-        'accesorios': 'Accesorios'
+        'accesorios': 'Accesorios',
+        'condolencias': 'Condolencias',
+        'jardinería': 'Jardinería'
     };
     return categories[categoryKey] || categoryKey;
 }
@@ -282,4 +368,3 @@ function initUserMenu() {
     console.log('Menú de usuario inicializado en products.js');
     // Esta función se maneja en userMenu.js
 }
-

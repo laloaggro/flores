@@ -36,24 +36,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (manageProductsBtn) {
         manageProductsBtn.addEventListener('click', function() {
-            showNotification('Funcionalidad en desarrollo', 'info');
+            window.location.href = 'products.html';
         });
     }
     
     if (manageOrdersBtn) {
         manageOrdersBtn.addEventListener('click', function() {
+            // Asumiendo que habrá una página de pedidos en el futuro
             showNotification('Funcionalidad en desarrollo', 'info');
         });
     }
     
     if (manageUsersBtn) {
         manageUsersBtn.addEventListener('click', function() {
+            // Asumiendo que habrá una página de gestión de usuarios en el futuro
             showNotification('Funcionalidad en desarrollo', 'info');
         });
     }
     
     if (viewStatsBtn) {
         viewStatsBtn.addEventListener('click', function() {
+            // Asumiendo que habrá una página de estadísticas en el futuro
             showNotification('Funcionalidad en desarrollo', 'info');
         });
     }
@@ -102,228 +105,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
     // No need to keep the rest of the code as it's already replaced
-                    <div class="form-group">
-                        <label for="productPrice">Precio:</label>
-                        <input type="number" id="productPrice" class="form-input" min="0" step="100" required aria-required="true">
-                        <div class="form-error" id="productPriceError">El precio debe ser mayor o igual a 0</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="productImage">URL de Imagen:</label>
-                        <input type="text" id="productImage" class="form-input">
-                        <div class="form-error" id="productImageError">Ingrese una URL válida de imagen</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="productImageFile">Subir Imagen:</label>
-                        <input type="file" id="productImageFile" class="form-input" accept="image/*">
-                        <div class="form-error" id="productImageFileError">Seleccione un archivo de imagen válido</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="productDescription">Descripción:</label>
-                        <textarea id="productDescription" class="form-input" rows="3"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary" id="submitProductBtn">
-                            <span id="submitBtnText">Agregar Producto</span>
-                            <span class="loading-spinner" id="submitBtnSpinner" style="display: none;"></span>
-                        </button>
-                        <button type="button" class="btn btn-secondary" id="resetProductBtn">Limpiar Formulario</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    `;
-    
-    // Añadir modal al documento
-    document.body.appendChild(modal);
-    
-    // Configurar eventos del modal
-    const closeBtn = modal.querySelector('.close');
-    closeBtn.addEventListener('click', function() {
-        modal.remove();
-    });
-    
-    // Añadir atributos de accesibilidad al botón de cierre
-    closeBtn.setAttribute('aria-label', 'Cerrar modal');
-    
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            modal.remove();
-        }
-    });
-    
-    // Manejar la tecla Escape para cerrar el modal
-    window.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && modal.parentNode) {
-            modal.remove();
-        }
-    });
-    
-    // Configurar envío del formulario
-    const form = document.getElementById('addProductForm');
-    const submitBtn = document.getElementById('submitProductBtn');
-    const resetBtn = document.getElementById('resetProductBtn');
-    
-    // Validación en tiempo real
-    setupFormValidation(form);
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Validar form
-        if (!validateForm(form)) {
-            showMessage('Por favor corrija los errores en el formulario', 'error');
-            return;
-        }
-        
-        // Deshabilitar botón y mostrar estado de carga
-        submitBtn.disabled = true;
-        document.getElementById('submitBtnText').style.display = 'none';
-        document.getElementById('submitBtnSpinner').style.display = 'inline-block';
-        
-        // Agregar producto
-        addProduct()
-            .catch(error => {
-                showMessage(error.message || 'Error al agregar producto', 'error');
-            })
-            .finally(() => {
-                // Restablecer botón
-                submitBtn.disabled = false;
-                document.getElementById('submitBtnText').style.display = 'inline-block';
-                document.getElementById('submitBtnSpinner').style.display = 'none';
-            });
-    });
-    
-    // Configurar botón de limpiar formulario
-    resetBtn.addEventListener('click', function() {
-        if (confirm('¿Está seguro de que desea limpiar el formulario?')) {
-            form.reset();
-            // Restablecer clases de error
-            form.querySelectorAll('.form-group').forEach(group => {
-                group.classList.remove('has-error');
-            });
-            // Ocultar mensajes de error
-            form.querySelectorAll('.form-error').forEach(error => {
-                error.style.display = 'none';
-            });
-            // Restablecer imagen de vista previa
-            const imagePreview = document.getElementById('imagePreview');
-            if (imagePreview) {
-                imagePreview.innerHTML = '';
-            }
-            // Enfocar el primer campo
-            const firstInput = modal.querySelector('input, textarea, select');
-            if (firstInput) {
-                firstInput.focus();
-            }
-        }
-    });
-    
-    // Configurar vista previa de imagen
-    setupImagePreview();
-    
-    // Mostrar modal
-    modal.style.display = 'block';
-    
-    // Enfocar el primer campo del formulario
-    const firstInput = modal.querySelector('input, textarea, select');
-    if (firstInput) {
-        firstInput.focus();
-    }
-}
-
-/**
- * Configura validación en tiempo real para el formulario
- * @param {HTMLFormElement} form - El formulario a validar
- */
-function setupFormValidation(form) {
-    if (!form) return;
-    
-    // Validación en tiempo real para campos individuales
-    form.productName.addEventListener('input', () => validateField('name', form.productName, form.productNameError));
-    form.productCategory.addEventListener('change', () => validateField('category', form.productCategory, form.productCategoryError));
-    form.productPrice.addEventListener('input', () => validateField('price', form.productPrice, form.productPriceError));
-    form.productImage.addEventListener('input', () => validateField('imageUrl', form.productImage, form.productImageError));
-    form.productImageFile.addEventListener('change', () => validateField('imageFile', form.productImageFile, form.productImageFileError));
-}
-
-/**
- * Valida el formulario completo
- * @param {HTMLFormElement} form - El formulario a validar
- * @returns {boolean} - true si el formulario es válido
- */
-function validateForm(form) {
-    let isValid = true;
-    
-    // Validar cada campo
-    isValid &= validateField('name', form.productName, form.productNameError);
-    isValid &= validateField('category', form.productCategory, form.productCategoryError);
-    isValid &= validateField('price', form.productPrice, form.productPriceError);
-    
-    // Validar al menos una fuente de imagen
-    const imageUrl = form.productImage.value.trim();
-    const imageFile = form.productImageFile.files[0];
-    
-    if (!imageUrl && !imageFile) {
-        form.productImageFileError.style.display = 'block';
-        form.productImageFile.parentElement.classList.add('has-error');
-        isValid = false;
-    } else {
-        form.productImageFileError.style.display = 'none';
-        form.productImageFile.parentElement.classList.remove('has-error');
-    }
-    
-    return isValid;
-}
-
-/**
- * Valida un campo específico del formulario
- * @param {string} fieldType - Tipo de campo ('name', 'category', 'price', 'imageUrl', 'imageFile')
- * @param {HTMLElement} fieldElement - Elemento del campo a validar
- * @param {HTMLElement} errorElement - Elemento donde mostrar el error
- * @returns {boolean} - true si el campo es válido
- */
-function validateField(fieldType, fieldElement, errorElement) {
-    const value = fieldElement.value.trim();
-    let isValid = true;
-    let errorMessage = '';
-    
-    switch(fieldType) {
-        case 'name':
-            isValid = value.length >= 3 && value.length <= 100;
-            errorMessage = 'El nombre debe tener entre 3 y 100 caracteres';
-            break;
-            
-        case 'category':
-            isValid = value !== '';
-            errorMessage = 'Seleccione una categoría';
-            break;
-            
-        case 'price':
-            isValid = !isNaN(parseFloat(value)) && parseFloat(value) >= 0;
-            errorMessage = 'El precio debe ser un número mayor o igual a 0';
-            break;
-            
-        case 'imageUrl':
-            isValid = value === '' || /^(ftp|http|https):\/\/[^ "]+$/.test(value);
-            errorMessage = 'Ingrese una URL válida';
-            break;
-            
-        case 'imageFile':
-            isValid = !value || (fieldElement.files[0] && fieldElement.files[0].type.startsWith('image/'));
-            errorMessage = 'Seleccione un archivo de imagen válido';
-            break;
-    }
-    
-    if (!isValid) {
-        errorElement.style.display = 'block';
-        fieldElement.parentElement.classList.add('has-error');
-    } else {
-        errorElement.style.display = 'none';
-        fieldElement.parentElement.classList.remove('has-error');
-    }
-    
-    return isValid;
-}
 
 // Agregar producto
 async function addProduct() {
@@ -1467,4 +1248,55 @@ function translateCategory(category) {
         'accesorios': 'Accesorios'
     };
     return categories[category] || category;
+}
+
+// Función para configurar la funcionalidad de logs
+function setupLogsFunctionality() {
+    const refreshLogsBtn = document.getElementById('refreshLogsBtn');
+    const clearLogsBtn = document.getElementById('clearLogsBtn');
+    const logLevelFilter = document.getElementById('logLevelFilter');
+    const logsList = document.getElementById('logsList');
+    
+    if (refreshLogsBtn) {
+        refreshLogsBtn.addEventListener('click', function() {
+            refreshLogs();
+        });
+    }
+    
+    if (clearLogsBtn) {
+        clearLogsBtn.addEventListener('click', function() {
+            if (confirm('¿Estás seguro de que deseas limpiar todos los logs?')) {
+                clearLogs();
+            }
+        });
+    }
+    
+    if (logLevelFilter) {
+        logLevelFilter.addEventListener('change', function() {
+            filterLogs(this.value);
+        });
+    }
+}
+
+// Función para refrescar los logs
+function refreshLogs() {
+    showNotification('Logs actualizados', 'info');
+    // En una implementación real, esto cargaría los logs desde la API
+    console.log('Refrescando logs...');
+}
+
+// Función para limpiar los logs
+function clearLogs() {
+    const logsList = document.getElementById('logsList');
+    if (logsList) {
+        logsList.innerHTML = '<p class="no-logs">No hay logs para mostrar.</p>';
+        showNotification('Logs limpiados correctamente', 'success');
+    }
+}
+
+// Función para filtrar los logs por nivel
+function filterLogs(level) {
+    showNotification(`Filtrando logs por nivel: ${level}`, 'info');
+    // En una implementación real, esto filtraría los logs existentes
+    console.log(`Filtrando logs por nivel: ${level}`);
 }

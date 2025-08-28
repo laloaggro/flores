@@ -230,7 +230,6 @@ const CartUtils = {
         this.cartItems = [];
         saveCartToLocalStorage(this.cartItems);
         this.updateCartCount();
-        this.renderCart();
         showNotification('Carrito vaciado', 'info');
         console.log('Carrito vaciado');
         

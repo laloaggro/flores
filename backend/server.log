@@ -12664,3 +12664,6 @@ Error: listen EADDRINUSE: address already in use :::5000
 [2024-08-27T21:39:52.578Z] Error en la configuración del transporte de correo: Error: certificate is not yet valid
 [2025-08-27T21:44:11.411Z] Servidor de correo configurado correctamente
 [2025-08-27T21:45:59.307Z] Servidor de correo configurado correctamente
+[2025-08-28T15:16:42.815Z] Servidor de correo configurado correctamente
+[2025-08-28T16:29:25.636Z] Servidor de correo configurado correctamente
+[2025-08-28T16:33:06.824Z] Servidor de correo configurado correctamente

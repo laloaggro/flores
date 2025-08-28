@@ -366,6 +366,7 @@ function updateCartUI() {
 window.renderCartItems = renderCartItems;
 window.renderSavedItems = renderSavedItems;
 window.updateCartUI = updateCartUI;
+window.updateCartUI = updateCartUI;
 
 function handleCheckout(e) {
   e.preventDefault();

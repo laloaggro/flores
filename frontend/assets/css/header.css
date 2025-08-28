@@ -249,6 +249,7 @@ body[data-theme="dark"] nav ul li a.active {
     font-weight: 500;
     z-index: 999999999;
     position: relative;
+    min-width: 120px; /* Ancho mínimo para evitar que se vea muy pequeño */
 }
 
 .user-info:hover {
@@ -257,6 +258,20 @@ body[data-theme="dark"] nav ul li a.active {
     color: white;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-name {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .user-info i.fa-user {
@@ -294,7 +309,7 @@ body[data-theme="dark"] nav ul li a.active {
 .user-dropdown a {
     /* Existing styles */
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     text-decoration: none;
     color: var(--dark);
     transition: background-color 0.3s ease;
@@ -305,6 +320,8 @@ body[data-theme="dark"] nav ul li a.active {
     /* Asegurar que no haya fondo verde */
     background-color: transparent;
     background-image: none;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
 }
 
 .user-dropdown a:hover {
