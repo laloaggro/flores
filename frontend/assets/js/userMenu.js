@@ -16,9 +16,10 @@ class UserMenu {
         const userMenu = document.getElementById('userMenu');
         const userNameDisplay = document.getElementById('userNameDisplay');
         const logoutLink = document.getElementById('logoutLink');
-        const userDropdown = document.querySelector('.user-dropdown');
-        const userMenuButton = document.querySelector('.user-info');
         const userProfileImage = document.getElementById('userProfileImage');
+        const adminMenuItem = document.getElementById('adminMenuItem');
+        const adminOrdersMenuItem = document.getElementById('adminOrdersMenuItem');
+        const sitemapMenuItem = document.getElementById('sitemapMenuItem');
         
         // Si no existen los elementos necesarios, salir de la función
         if (!loginLink && !userMenu) {
@@ -75,6 +76,23 @@ class UserMenu {
                 }
             }
             
+            // Mostrar u ocultar elementos de administrador según el rol del usuario
+            if (isAdmin()) {
+                if (adminMenuItem) {
+                    adminMenuItem.style.display = 'block';
+                }
+                if (adminOrdersMenuItem) {
+                    adminOrdersMenuItem.style.display = 'block';
+                }
+            } else {
+                if (adminMenuItem) {
+                    adminMenuItem.style.display = 'none';
+                }
+                if (adminOrdersMenuItem) {
+                    adminOrdersMenuItem.style.display = 'none';
+                }
+            }
+            
             console.log('Usuario autenticado:', user || userLocalStorage);
         } else {
             // Usuario no autenticado - mostrar enlace de login
@@ -96,20 +114,6 @@ class UserMenu {
             });
         }
         
-        // Configurar menú desplegable del usuario
-        if (userMenuButton && userDropdown) {
-            userMenuButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                userDropdown.classList.toggle('show');
-            });
-            
-            // Cerrar menú al hacer clic fuera
-            document.addEventListener('click', (e) => {
-                if (userDropdown && !userMenuButton.contains(e.target)) {
-                    userDropdown.classList.remove('show');
-                }
-            });
-        }
     }
 }
 

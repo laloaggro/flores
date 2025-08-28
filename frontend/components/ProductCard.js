@@ -4,23 +4,10 @@ import CartUtils from '../../assets/js/cartUtils.js';
 // Componente para una tarjeta de producto individual
 const ProductCard = (product) => {
   // Generar URLs para diferentes formatos de imagen
-  const webpSrc = product.image_url ? product.image_url.replace(/\.(jpg|jpeg|png)/i, '.webp') : '';
-  const avifSrc = product.image_url ? product.image_url.replace(/\.(jpg|jpeg|png)/i, '.avif') : '';
-  
-  // Imagen por defecto si no hay imagen válida
-  const defaultImage = './assets/images/placeholder.svg';
-  let imageUrl = product.image_url || product.image || defaultImage;
-  
-  // Asegurarse de que la ruta de la imagen sea correcta
-  if (imageUrl.startsWith('/assets/images/')) {
-    imageUrl = `.${imageUrl}`;
-  } else if (imageUrl.startsWith('assets/images/')) {
-    imageUrl = `./${imageUrl}`;
-  } else if (!imageUrl.startsWith('./assets/images/') && !imageUrl.startsWith('http')) {
-    // Si la imagen no es una URL completa ni una ruta relativa correcta, usar el placeholder
-    imageUrl = './assets/images/placeholder.svg';
-  }
-  
+  const webpSrc = './assets/images/products/1.png'; // Reemplazar por la ruta local
+  const avifSrc = './assets/images/products/1.png'; // Reemplazar por la ruta local
+  let imageUrl = './assets/images/products/1.png'; // Reemplazar por la ruta local
+
   // Crear srcset para imágenes responsivas
   const srcset = product.image_url 
     ? `${product.image_url}?w=300 300w, ${product.image_url}?w=600 600w, ${product.image_url}?w=900 900w`

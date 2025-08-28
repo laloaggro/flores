@@ -54,22 +54,28 @@ export { addCSRFTokenToForms, handleFormSubmission };
 // Importar funciones de utilidad
 import { handleFormSubmission, addCSRFTokenToForms } from './utils.js';
 
+// Importar UserMenu
+import UserMenu from './userMenu.js';
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Añadir token CSRF a los formularios
-  addCSRFTokenToForms();
-  
-  // Obtener elementos del DOM
-  const contactForm = document.getElementById('contactForm');
-  const formMessage = document.getElementById('formMessage');
-  
-  // Verificar que el formulario exista en la página
-  if (!contactForm) {
-    console.log('Formulario de contacto no encontrado en esta página');
-    return;
-  }
-  
-  // Manejar el envío del formulario con protección CSRF
-  handleFormSubmission(contactForm, submitContactForm);
+    // Inicializar UserMenu
+    UserMenu.init();
+    
+    // Añadir token CSRF a los formularios
+    addCSRFTokenToForms();
+    
+    // Obtener elementos del DOM
+    const contactForm = document.getElementById('contactForm');
+    const formMessage = document.getElementById('formMessage');
+    
+    // Verificar que el formulario exista en la página
+    if (!contactForm) {
+        console.log('Formulario de contacto no encontrado en esta página');
+        return;
+    }
+    
+    // Manejar el envío del formulario con protección CSRF
+    handleFormSubmission(contactForm, submitContactForm);
 });
 
 // Función para enviar el formulario de contacto

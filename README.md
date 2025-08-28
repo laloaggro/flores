@@ -1,5 +1,108 @@
 # Arreglos Florales Victoria 🌹
 
+Tienda online de arreglos florales.
+
+## Descripción
+
+Este proyecto es una tienda en línea para la venta de arreglos florales. Incluye funcionalidades como catálogo de productos, carrito de compras, gestión de usuarios, panel de administración y más.
+
+## Estructura del Proyecto
+
+```
+arreglos-victoria/
+├── backend/          # Servidor y API
+├── frontend/         # Cliente web
+│   ├── assets/       # Recursos estáticos
+│   ├── components/   # Componentes web reutilizables
+│   └── ...           # Páginas HTML
+├── build-simple.js   # Script de construcción
+└── package.json      # Configuración del proyecto
+```
+
+## Instalación
+
+1. Clonar el repositorio:
+   ```
+   git clone <repositorio-url>
+   ```
+
+2. Instalar dependencias:
+   ```
+   npm install
+   ```
+
+## Desarrollo
+
+### Iniciar servidor de desarrollo:
+```
+npm run dev
+```
+
+### Construir para producción:
+```
+npm run build
+```
+
+Esto generará archivos optimizados en el directorio `frontend/dist/`.
+
+## Estructura de Archivos Frontend
+
+- `assets/css/` - Hojas de estilo
+- `assets/js/` - Scripts JavaScript
+- `components/` - Componentes web reutilizables
+- `dist/` - Archivos construidos para producción
+
+## Arquitectura del Frontend
+
+Para información detallada sobre la arquitectura del frontend, consulte [FRONTEND_ARCHITECTURE.md](FRONTEND_ARCHITECTURE.md).
+
+## Convenciones de Código
+
+- Usar indentación de 4 espacios
+- Seguir el estilo de código definido en `.eslintrc.json`
+- Mantener funciones y variables con nombres descriptivos en inglés
+- Comentar código cuando sea necesario para entender la lógica compleja
+
+## Despliegue
+
+1. Construir el proyecto:
+   ```
+   npm run build
+   ```
+
+2. Subir los archivos del directorio `frontend/` al servidor de producción.
+
+## Mantenimiento
+
+### Actualizar dependencias:
+```
+npm update
+```
+
+### Verificar problemas de código:
+```
+npx eslint frontend/assets/js/
+```
+
+## Contribución
+
+1. Crear una rama para la nueva funcionalidad:
+   ```
+   git checkout -b feature/nueva-funcionalidad
+   ```
+
+2. Hacer commits descriptivos:
+   ```
+   git commit -m "Añadir: nueva funcionalidad para ..."
+   ```
+
+3. Hacer push de la rama y crear un Pull Request
+
+## Licencia
+
+MIT
+# Arreglos Florales Victoria 🌹
+
 ¡Bienvenido a Arreglos Florales Victoria! Somos una florería familiar con más de 10 años de experiencia en Recoleta, Región Metropolitana, especializados en crear hermosos arreglos florales para todas las ocasiones.
 
 ## Características del Sitio Web

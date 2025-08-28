@@ -33,7 +33,7 @@
     <meta name="author" content="Arreglos Victoria">
     
     <!-- Mejoras de seguridad -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/; frame-src 'self' https://www.google.com;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
@@ -52,20 +52,19 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/">
     <meta property="og:title" content="Arreglos Victoria Florería - Inicio">
-    <meta property="og:description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana.">
+    <meta property="og:description" content="Compra flores frescas, arreglos únicos y recibe entrega a domicilio en Recoleta. Más de 10 años de experiencia en el mercado.">
     <meta property="og:image" content="./assets/images/hero-image.jpg">
     <meta property="og:image:width" content="1920">
-    <meta property="og:image:height" content="1080">
+    <meta property="og:image:height" content="1280">
     <meta property="og:site_name" content="Arreglos Victoria Florería">
-
+    
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/">
     <meta property="twitter:title" content="Arreglos Victoria Florería - Inicio">
-    <meta property="twitter:description" content="Arreglos Florales Victoria - Flores frescas, arreglos únicos y entrega a domicilio en Recoleta, Región Metropolitana.">
+    <meta property="twitter:description" content="Compra flores frescas, arreglos únicos y recibe entrega a domicilio en Recoleta. Más de 10 años de experiencia en el mercado.">
     <meta property="twitter:image" content="./assets/images/hero-image.jpg">
-
-    <!-- Favicon -->
+    
     <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
@@ -78,43 +77,8 @@
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
     <link rel="preload" href="assets/js/theme.js" as="script">
-    
-    <!-- Schema.org para SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Florist",
-      "name": "Arreglos Victoria Florería",
-      "image": "https://arreglos-victoria-backend.onrender.com/assets/images/hero-image.jpg",
-      "telephone": "+569 6360 3177",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Av. Valdivieso 593",
-        "addressLocality": "Recoleta",
-        "addressRegion": "Región Metropolitana",
-        "postalCode": "8420000",
-        "addressCountry": "CL"
-      },
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-          ],
-          "opens": "09:00",
-          "closes": "19:00"
-        }
-      ]
-    }
-    </script>
 </head>
-<body data-theme="light">
-    <!-- Skip link para navegación por teclado -->
+<body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
     <!-- Header -->
@@ -124,17 +88,11 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <h1>Arreglos Victoria</h1>
-                <p>Flores frescas y hermosos arreglos florales para alegrar tus momentos especiales. Entrega a domicilio en Recoleta y alrededores.</p>
+                <h1>Arreglos Florales Victoria</h1>
+                <p>Flores frescas y hermosos diseños para alegrar tus momentos especiales</p>
                 <div class="hero-buttons">
-                    <a href="products.html" class="btn btn-primary btn-lg">
-                        <i class="fas fa-shopping-cart"></i> 
-                        Ver Productos
-                    </a>
-                    <a href="contact.html" class="btn btn-secondary btn-lg">
-                        <i class="fas fa-phone-alt"></i> 
-                        Contáctanos
-                    </a>
+                    <a href="products.html" class="btn btn-primary">Ver Productos</a>
+                    <a href="#about" class="btn btn-secondary">Sobre Nosotros</a>
                 </div>
             </div>
         </section>
@@ -143,50 +101,34 @@
         <section class="categories">
             <div class="container">
                 <div class="section-title">
-                    <h2>Categorías</h2>
-                    <p>Explora nuestras categorías de arreglos florales</p>
+                    <h2>Nuestras Categorías</h2>
+                    <p>Explora nuestra amplia variedad de productos</p>
                 </div>
                 <div class="category-grid">
-                    <div class="category-card">
-                        <div class="category-image">
-                            <img src="./assets/images/categories/arrangements.jpg" alt="Arreglos Florales" loading="lazy" width="400" height="300" onerror="this.src='./assets/images/placeholder.svg'">
-                        </div>
-                        <div class="category-info">
+                    <a href="products.html?category=arreglos" class="category-card">
+                        <img src="./assets/images/categories/arrangements.jpg" alt="Arreglos Florales" loading="lazy">
+                        <div class="category-overlay">
                             <h3>Arreglos Florales</h3>
-                            <p>Hermosos arreglos para todas las ocasiones</p>
-                            <a href="products.html?category=arreglos" class="btn btn-primary">Ver Más</a>
                         </div>
-                    </div>
-                    <div class="category-card">
-                        <div class="category-image">
-                            <img src="./assets/images/categories/bouquets.jpg" alt="Ramos" loading="lazy" width="400" height="300" onerror="this.src='./assets/images/placeholder.svg'">
-                        </div>
-                        <div class="category-info">
+                    </a>
+                    <a href="products.html?category=ramos" class="category-card">
+                        <img src="./assets/images/categories/bouquets.jpg" alt="Ramos" loading="lazy">
+                        <div class="category-overlay">
                             <h3>Ramos</h3>
-                            <p>Ramos elegantes y frescos</p>
-                            <a href="products.html?category=ramos" class="btn btn-primary">Ver Más</a>
                         </div>
-                    </div>
-                    <div class="category-card">
-                        <div class="category-image">
-                            <img src="./assets/images/categories/plants.jpg" alt="Plantas" loading="lazy" width="400" height="300" onerror="this.src='./assets/images/placeholder.svg'">
-                        </div>
-                        <div class="category-info">
+                    </a>
+                    <a href="products.html?category=plantas" class="category-card">
+                        <img src="./assets/images/categories/plants.jpg" alt="Plantas" loading="lazy">
+                        <div class="category-overlay">
                             <h3>Plantas</h3>
-                            <p>Plantas de interior y exterior</p>
-                            <a href="products.html?category=plantas" class="btn btn-primary">Ver Más</a>
                         </div>
-                    </div>
-                    <div class="category-card">
-                        <div class="category-image">
-                            <img src="./assets/images/categories/accessories.jpg" alt="Accesorios" loading="lazy" width="400" height="300" onerror="this.src='./assets/images/placeholder.svg'">
-                        </div>
-                        <div class="category-info">
+                    </a>
+                    <a href="products.html?category=accesorios" class="category-card">
+                        <img src="./assets/images/categories/accessories.jpg" alt="Accesorios" loading="lazy">
+                        <div class="category-overlay">
                             <h3>Accesorios</h3>
-                            <p>Complementos para tus arreglos florales</p>
-                            <a href="products.html?category=accesorios" class="btn btn-primary">Ver Más</a>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -196,8 +138,7 @@
             <div class="container">
                 <div class="about-content">
                     <div class="about-image">
-                        <img src="./assets/images/about-florist.jpg" alt="Floristería Arreglos Victoria" loading="lazy" width="600" height="400" onerror="this.src='./assets/images/placeholder.svg'">
-                        <div class="image-overlay"></div>
+                        <img src="./assets/images/about-florist.jpg" alt="Nuestra florería" loading="lazy">
                     </div>
                     <div class="about-text">
                         <h2>Sobre Nosotros</h2>
@@ -305,25 +246,28 @@
                                 <p>Lunes a Domingo: 9:00 - 21:00</p>
                             </div>
                         </div>
+                        <div class="contact-map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.457824395449!2d-70.6447356847544!3d-33.43877198077852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a5b8c5b5b5%3A0x9d2f5b5b5b5b5b5b!2sAv.%20Valdivieso%20593%2C%20Recoleta%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1628789456789!5m2!1ses!2scl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
                     </div>
                     <div class="contact-form">
                         <h3>Envíanos un mensaje</h3>
                         <form id="contactForm">
                             <div class="form-group">
                                 <label for="contactName">Nombre</label>
-                                <input type="text" id="contactName" name="name" required>
+                                <input type="text" id="contactName" name="name" required autocomplete="name">
                             </div>
                             <div class="form-group">
                                 <label for="contactEmail">Email</label>
-                                <input type="email" id="contactEmail" name="email" required>
+                                <input type="email" id="contactEmail" name="email" required autocomplete="email">
                             </div>
                             <div class="form-group">
                                 <label for="contactSubject">Asunto</label>
-                                <input type="text" id="contactSubject" name="subject">
+                                <input type="text" id="contactSubject" name="subject" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label for="contactMessage">Mensaje</label>
-                                <textarea id="contactMessage" name="message" rows="5" required></textarea>
+                                <textarea id="contactMessage" name="message" rows="5" required autocomplete="off"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                         </form>

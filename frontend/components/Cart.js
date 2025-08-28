@@ -120,9 +120,7 @@ function renderCartItems(items) {
   return items.map(item => `
     <div class="cart-item" data-id="${item.id}">
       <div class="item-image">
-        <img src="${item.image || './assets/images/placeholder.svg'}" 
-             alt="${item.name}" 
-             onerror="this.src='./assets/images/placeholder.svg'">
+        <img src="./assets/images/products/1.png" alt="${item.name}"> // Reemplazar por la ruta local
       </div>
       <div class="item-info">
         <h4>${item.name}</h4>

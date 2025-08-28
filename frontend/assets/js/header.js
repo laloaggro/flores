@@ -18,6 +18,7 @@ class Header {
             this.checkAuthStatus();
             this.setupCartEvents();
             this.setupHeaderEffects();
+            this.setupUserMenuEvents();
             return;
         }
         
@@ -30,6 +31,7 @@ class Header {
             this.checkAuthStatus();
             this.setupCartEvents();
             this.setupHeaderEffects();
+            this.setupUserMenuEvents();
         }, 100);
     }
     
@@ -87,6 +89,34 @@ class Header {
             userNameDisplay.textContent = user.name || 'Usuario';
             console.log('Información del usuario actualizada:', user.name);
         }
+    }
+    
+    /**
+     * Configura los eventos del menú de usuario
+     */
+    static setupUserMenuEvents() {
+        // Obtener elementos del menú de usuario
+        const userMenuButton = document.querySelector('.user-info');
+        const userDropdown = document.querySelector('.user-dropdown');
+        
+        // Si no existen los elementos necesarios, salir de la función
+        if (!userMenuButton || !userDropdown) {
+            console.log('No se encontraron elementos de menú de usuario para configurar eventos');
+            return;
+        }
+        
+        // Configurar evento para abrir/cerrar el menú de usuario
+        userMenuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('show');
+        });
+        
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (userDropdown && !userMenuButton.contains(e.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
     }
     
     /**

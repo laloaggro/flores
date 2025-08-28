@@ -1,9 +1,11 @@
 import { showNotification, formatPrice } from './utils.js';
 import CartUtils from './cartUtils.js';
+import UserMenu from './userMenu.js';
 
 // Variables globales
 let allProducts = [];
 let currentCategory = 'all';
+let API_BASE_URL = 'http://localhost:5000'; // Añadimos la URL base de la API
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
@@ -40,7 +42,9 @@ async function initializeApp() {
         setupCategoryFilter();
         setupSearch();
         setupSort();
-        initUserMenu();
+        
+        // Eliminamos la llamada a initUserMenu() ya que se maneja en userMenu.js
+        UserMenu.init();
         
         // Inicializar CartUtils
         CartUtils.init();
@@ -51,25 +55,57 @@ async function initializeApp() {
     }
 }
 
-// Cargar productos desde la API
-async function loadProducts() {
-    const productsGrid = document.getElementById('productGrid');
-    if (!productsGrid) {
-        console.error('No se encontró el elemento productGrid');
-        return;
-    }
-    
-    const loadingMessage = document.createElement('div');
-    loadingMessage.className = 'loading-message';
-    loadingMessage.innerHTML = '<p>Cargando productos...</p>';
-    productsGrid.appendChild(loadingMessage);
-    
+/**
+ * Cargar productos desde la API
+ * @param {Object} filters - Filtros para la búsqueda de productos
+ */
+async function loadProducts(filters = {}) {
     try {
-        console.log('Cargando productos desde: http://localhost:5000/api/products');
+        console.log('Cargando productos con filtros:', filters);
         
-        const response = await fetch('http://localhost:5000/api/products');
+        const productsGrid = document.getElementById('productGrid');
+        if (!productsGrid) {
+            console.error('No se encontró el elemento productGrid');
+            return;
+        }
+        
+        // Mostrar indicador de carga
+        productsGrid.innerHTML = '<p class="loading-message">Cargando productos...</p>';
+        
+        // Construir URL con parámetros de búsqueda
+        const params = new URLSearchParams();
+        
+        if (filters.search) {
+            params.append('search', filters.search);
+        }
+        
+        if (filters.category) {
+            params.append('category', filters.category);
+        }
+        
+        if (filters.minPrice !== undefined) {
+            params.append('minPrice', filters.minPrice);
+        }
+        
+        if (filters.maxPrice !== undefined) {
+            params.append('maxPrice', filters.maxPrice);
+        }
+        
+        if (filters.sortBy) {
+            params.append('sortBy', filters.sortBy);
+        }
+        
+        if (filters.order) {
+            params.append('order', filters.order);
+        }
+        
+        const url = `${API_BASE_URL}/api/products?${params.toString()}`;
+        console.log('URL de solicitud:', url);
+        
+        const response = await fetch(url);
+        
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
         }
         
         const data = await response.json();
@@ -83,30 +119,50 @@ async function loadProducts() {
         console.error('Error al cargar productos:', error);
         const productsGrid = document.getElementById('productGrid');
         if (productsGrid) {
-            productsGrid.innerHTML = '<p class="error-message">Error al cargar productos. Por favor, intenta nuevamente más tarde.</p>';
-            showNotification('Error al cargar productos', 'error');
+            productsGrid.innerHTML = `
+                <div class="error-message">
+                    <p>Error al cargar productos. Por favor, inténtelo de nuevo.</p>
+                    <p>${error.message}</p>
+                    <button onclick="location.reload()" class="btn btn-primary">Reintentar</button>
+                </div>
+            `;
         }
+        showNotification('Error al cargar productos. Por favor, inténtelo de nuevo.', 'error');
     }
 }
 
-// Cargar productos por categoría desde la API
+/**
+ * Cargar productos por categoría desde la API
+ * @param {string} category - Categoría de productos a cargar
+ */
 async function loadProductsByCategory(category) {
-    const productsGrid = document.getElementById('productGrid');
-    if (!productsGrid) {
-        console.error('No se encontró el elemento productGrid');
-        return;
-    }
-    
-    // Mostrar mensaje de carga
-    productsGrid.innerHTML = '<p class="loading-message">Cargando productos...</p>';
-    
     try {
-        console.log(`Cargando productos de la categoría ${category} desde: http://localhost:5000/api/products?category=${category}`);
+        console.log(`Cargando productos de la categoría ${category}`);
         
-        // Obtener todos los productos de la categoría (sin límite)
-        const response = await fetch(`http://localhost:5000/api/products?category=${encodeURIComponent(category)}`);
+        const productsGrid = document.getElementById('productGrid');
+        if (!productsGrid) {
+            console.error('No se encontró el elemento productGrid');
+            return;
+        }
+        
+        // Mostrar indicador de carga
+        productsGrid.innerHTML = '<p class="loading-message">Cargando productos...</p>';
+        
+        // Construir URL con parámetros
+        const params = new URLSearchParams();
+        params.append('category', category);
+        
+        const url = `${API_BASE_URL}/api/products?${params.toString()}`;
+        console.log('URL de solicitud:', url);
+        
+        const response = await fetch(url);
+        
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            if (response.status === 404) {
+                throw new Error('No se encontraron productos en esta categoría');
+            } else {
+                throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
+            }
         }
         
         const data = await response.json();
@@ -115,7 +171,7 @@ async function loadProductsByCategory(category) {
         // Si hay más páginas, cargar todas
         if (data.pagination && data.pagination.totalPages > 1) {
             for (let page = 2; page <= data.pagination.totalPages; page++) {
-                const nextPageResponse = await fetch(`http://localhost:5000/api/products?category=${encodeURIComponent(category)}&page=${page}`);
+                const nextPageResponse = await fetch(`${API_BASE_URL}/api/products?category=${encodeURIComponent(category)}&page=${page}`);
                 if (nextPageResponse.ok) {
                     const nextPageData = await nextPageResponse.json();
                     categoryProducts = categoryProducts.concat(nextPageData.products);
@@ -131,9 +187,14 @@ async function loadProductsByCategory(category) {
         console.error('Error al cargar productos por categoría:', error);
         const productsGrid = document.getElementById('productGrid');
         if (productsGrid) {
-            productsGrid.innerHTML = '<p class="error-message">Error al cargar productos. Por favor, intenta nuevamente más tarde.</p>';
-            showNotification('Error al cargar productos', 'error');
+            productsGrid.innerHTML = `
+                <div class="error-message">
+                    <p>${error.message}</p>
+                    <button onclick="location.reload()" class="btn btn-primary">Reintentar</button>
+                </div>
+            `;
         }
+        showNotification(error.message, 'error');
     }
 }
 
@@ -324,22 +385,32 @@ function setupSearch() {
     }
 }
 
-// Buscar productos
+/**
+ * Buscar productos
+ * @param {string} term - Término de búsqueda
+ */
 function searchProducts(term) {
-    let filteredProducts = [...allProducts];
-    
-    // Aplicar filtro de categoría si existe
-    if (currentCategory && currentCategory !== '') {
+    try {
+        console.log('Buscando productos con el término:', term);
+        
+        let filteredProducts = [...allProducts];
+        
+        // Aplicar filtro de categoría si existe
+        if (currentCategory && currentCategory !== '') {
+            filteredProducts = filteredProducts.filter(product => 
+                product.category && product.category.toLowerCase() === currentCategory.toLowerCase());
+        }
+        
+        // Aplicar búsqueda
         filteredProducts = filteredProducts.filter(product => 
-            product.category && product.category.toLowerCase() === currentCategory.toLowerCase());
+            product.name.toLowerCase().includes(term) || 
+            (product.description && product.description.toLowerCase().includes(term)));
+        
+        displayProducts(filteredProducts);
+    } catch (error) {
+        console.error('Error al buscar productos:', error);
+        showNotification('Error al realizar la búsqueda', 'error');
     }
-    
-    // Aplicar búsqueda
-    filteredProducts = filteredProducts.filter(product => 
-        product.name.toLowerCase().includes(term) || 
-        (product.description && product.description.toLowerCase().includes(term)));
-    
-    displayProducts(filteredProducts);
 }
 
 // Función para traducir categorías
@@ -367,4 +438,14 @@ function updateCartCount() {
 function initUserMenu() {
     console.log('Menú de usuario inicializado en products.js');
     // Esta función se maneja en userMenu.js
+}
+
+function displayProductImage(product) {
+    const imgElement = document.createElement('img');
+    imgElement.src = './assets/images/products/1.png'; // Reemplazar por la ruta local
+    imgElement.alt = product.name;
+    imgElement.style.width = '100%';
+    imgElement.style.height = '100%';
+    imgElement.style.objectFit = 'cover';
+    return imgElement;
 }

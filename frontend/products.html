@@ -34,7 +34,7 @@
     <meta name="robots" content="index, follow">
     
     <!-- Mejoras de seguridad -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/; frame-src 'self' https://www.google.com;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
@@ -49,17 +49,16 @@
     <meta property="og:description" content="Descubre nuestra amplia variedad de arreglos florales, ramos, plantas y accesorios. Flores frescas y hermosos diseños para todas las ocasiones.">
     <meta property="og:image" content="./assets/images/hero-image.jpg">
     <meta property="og:image:width" content="1920">
-    <meta property="og:image:height" content="1080">
+    <meta property="og:image:height" content="1280">
     <meta property="og:site_name" content="Arreglos Victoria Florería">
-
+    
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/products.html">
     <meta property="twitter:title" content="Productos - Arreglos Victoria Florería">
     <meta property="twitter:description" content="Descubre nuestra amplia variedad de arreglos florales, ramos, plantas y accesorios. Flores frescas y hermosos diseños para todas las ocasiones.">
     <meta property="twitter:image" content="./assets/images/hero-image.jpg">
-
-    <!-- Favicon -->
+    
     <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
@@ -68,19 +67,10 @@
     <!-- Preload critical scripts -->
     <link rel="preload" href="assets/js/utils.js" as="script">
     <link rel="preload" href="assets/js/products.js" as="script">
+    <link rel="preload" href="assets/js/cart.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
     <link rel="preload" href="assets/js/theme.js" as="script">
-    
-    <!-- Schema.org para productos -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Productos de Arreglos Victoria Florería",
-      "itemListElement": []
-    }
-    </script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -90,59 +80,53 @@
 
     <main id="main-content">
         <!-- Hero Section -->
-        <section class="hero half-height">
+        <section class="hero products-hero">
             <div class="hero-content">
                 <h1>Nuestros Productos</h1>
-                <p>Descubre nuestra increíble selección de arreglos florales</p>
+                <p>Descubre nuestra amplia variedad de arreglos florales, ramos, plantas y accesorios</p>
             </div>
         </section>
 
-        <!-- Productos Header -->
-        <section class="products-header">
+        <!-- Filtros y búsqueda -->
+        <section class="products-filters">
             <div class="container">
-                <div class="products-header-content">
+                <div class="filters-content">
                     <div class="search-container">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar productos...">
+                        <input type="text" id="productSearch" placeholder="Buscar productos..." class="form-control">
                     </div>
-                    <div class="filter-sort">
-                        <div class="filter-dropdown">
-                            <select id="categoryFilter">
-                                <option value="">Todas las categorías</option>
-                                <option value="Arreglos">Arreglos</option>
-                                <option value="Ramos">Ramos</option>
-                                <option value="Coronas">Coronas</option>
-                                <option value="Insumos">Insumos</option>
-                                <option value="Accesorios">Accesorios</option>
-                                <option value="Condolencias">Condolencias</option>
-                                <option value="Jardinería">Jardinería</option>
-                            </select>
-                        </div>
-                        <div class="sort-dropdown">
-                            <select id="sortOrder">
-                                <option value="name">Ordenar por nombre</option>
-                                <option value="price-low">Precio: Menor a Mayor</option>
-                                <option value="price-high">Precio: Mayor a Menor</option>
-                            </select>
-                        </div>
+                    <div class="category-filter">
+                        <select id="categoryFilter" class="form-control">
+                            <option value="all">Todas las categorías</option>
+                            <option value="arreglos">Arreglos Florales</option>
+                            <option value="ramos">Ramos</option>
+                            <option value="plantas">Plantas</option>
+                            <option value="accesorios">Accesorios</option>
+                        </select>
+                    </div>
+                    <div class="sort-filter">
+                        <select id="sortFilter" class="form-control">
+                            <option value="name-asc">Nombre (A-Z)</option>
+                            <option value="name-desc">Nombre (Z-A)</option>
+                            <option value="price-asc">Precio (Menor a Mayor)</option>
+                            <option value="price-desc">Precio (Mayor a Menor)</option>
+                        </select>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Productos -->
-        <section class="products-section">
+        <section class="products">
             <div class="container">
-                <div id="productGrid" class="product-grid">
+                <div class="section-title">
+                    <h2>Catálogo de Productos</h2>
+                    <p>Explora nuestra selección de productos</p>
+                </div>
+                <div class="products-grid" id="productGrid">
                     <!-- Los productos se cargarán aquí dinámicamente -->
                 </div>
-                <div id="loading" class="loading" style="display: none;">
-                    <i class="fas fa-spinner fa-spin"></i> Cargando productos...
-                </div>
-                <div id="noProducts" class="no-products" style="display: none;">
-                    <i class="fas fa-flower"></i>
-                    <h3>No se encontraron productos</h3>
-                    <p>Intenta con otros criterios de búsqueda</p>
+                <div class="pagination-container" id="paginationContainer">
+                    <!-- La paginación se generará aquí -->
                 </div>
             </div>
         </section>
@@ -151,27 +135,15 @@
     <!-- Footer -->
     <site-footer></site-footer>
 
-    <!-- Scripts optimizados -->
+    <!-- Scripts -->
     <script type="module" src="components/Header.js"></script>
     <script type="module" src="components/Footer.js"></script>
+    <script type="module" src="components/ProductCard.js"></script>
     <script type="module" src="assets/js/utils.js"></script>
-    <script type="module" src="assets/js/cart.js"></script>
     <script type="module" src="assets/js/products.js"></script>
+    <script type="module" src="assets/js/cart.js"></script>
     <script type="module" src="assets/js/userMenu.js"></script>
     <script type="module" src="assets/js/header.js"></script>
     <script type="module" src="assets/js/theme.js"></script>
-    
-    <!-- Asegurar que el tema se aplique correctamente -->
-    <script>
-        // Si theme.js no establece el tema, usamos un script de respaldo
-        document.addEventListener('DOMContentLoaded', function() {
-            const html = document.documentElement;
-            const theme = localStorage.getItem('theme') || 'light';
-            html.setAttribute('data-theme', theme);
-            if (theme === 'dark') {
-                html.classList.add('dark');
-            }
-        });
-    </script>
 </body>
 </html>

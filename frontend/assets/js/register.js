@@ -1,9 +1,13 @@
 import { API_BASE_URL, showNotification } from './utils.js';
 import { initializeGoogleSignIn, handleGoogleLoginResponse } from './googleAuth.js';
+import UserMenu from './userMenu.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('DOM cargado en register.js');
     console.log('Iniciando inicialización del registro');
+    
+    // Inicializar menú de usuario
+    UserMenu.init();
     
     const registerForm = document.getElementById('registerForm');
     const googleSignInButton = document.getElementById('googleSignInButton');

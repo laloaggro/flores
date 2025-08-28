@@ -1,69 +1,6 @@
 // Simulación del carrito de compras
-let cart = [];
-let cartCount = 0;
-
-// Función para cargar el carrito desde localStorage
-function loadCartFromLocalStorage() {
-    try {
-        const savedCart = localStorage.getItem('arreglosVictoriaCart');
-        if (savedCart) {
-            cart = JSON.parse(savedCart);
-            cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-            console.log('Carrito cargado desde localStorage:', cart);
-        }
-    } catch (error) {
-        console.error('Error al cargar el carrito desde localStorage:', error);
-        cart = [];
-        cartCount = 0;
-    }
-}
-
-// Función para guardar el carrito en localStorage
-function saveCartToLocalStorage() {
-    try {
-        localStorage.setItem('arreglosVictoriaCart', JSON.stringify(cart));
-        console.log('Carrito guardado en localStorage:', cart);
-    } catch (error) {
-        console.error('Error al guardar el carrito en localStorage:', error);
-    }
-}
-
-// Función para actualizar el contador del carrito
-function updateCartCount() {
-    const cartCountElement = document.querySelector('.cart-count');
-    const cartCountElementById = document.getElementById('cartCount');
-    if (cartCountElement) {
-        cartCountElement.textContent = cartCount;
-        console.log('Contador del carrito actualizado:', cartCount);
-    } else if (cartCountElementById) {
-        cartCountElementById.textContent = cartCount;
-        console.log('Contador del carrito actualizado:', cartCount);
-    } else {
-        // Si no se encuentra ningún elemento, buscar por clase o ID
-        const fallbackElements = document.querySelectorAll('.cart-count, #cartCount');
-        fallbackElements.forEach(element => {
-            element.textContent = cartCount;
-        });
-        if (fallbackElements.length > 0) {
-            console.log('Contador del carrito actualizado (fallback):', cartCount);
-        }
-    }
-}
-
-// Función para calcular el total del carrito
-function calculateCartTotal() {
-    const total = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-    console.log('Total del carrito calculado:', total);
-    return total;
-}
-
-// Función para formatear precios
-function formatPrice(price) {
-    return new Intl.NumberFormat('es-CL', {
-        style: 'currency',
-        currency: 'CLP'
-    }).format(price);
-}
+import { cart, cartCount, loadCartFromLocalStorage, saveCartToLocalStorage, updateCartCount, calculateCartTotal } from './cart.js';
+import { formatPrice } from './utils.js';
 
 // Función para renderizar los items del carrito
 function renderCartItems() {
@@ -294,51 +231,7 @@ function showProductAddedNotification(productName) {
     }, 5000);
 }
 
-// Función para mostrar notificaciones generales
-function showNotification(message, type = 'info') {
-    // Crear elemento de notificación
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-        <span>${message}</span>
-    `;
-    
-    // Añadir estilos
-    notification.style.position = 'fixed';
-    notification.style.top = '20px';
-    notification.style.right = '20px';
-    notification.style.backgroundColor = type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--danger)' : 'var(--primary)';
-    notification.style.color = 'white';
-    notification.style.padding = '15px 20px';
-    notification.style.borderRadius = '5px';
-    notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-    notification.style.zIndex = '1000';
-    notification.style.display = 'flex';
-    notification.style.alignItems = 'center';
-    notification.style.gap = '10px';
-    notification.style.opacity = '0';
-    notification.style.transition = 'opacity 0.3s ease';
-    notification.style.maxWidth = '300px';
-    
-    // Añadir al documento
-    document.body.appendChild(notification);
-    
-    // Animar entrada
-    setTimeout(() => {
-        notification.style.opacity = '1';
-    }, 10);
-    
-    // Eliminar después de 3 segundos
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
-}
+import { showNotification } from './utils.js';
 
 // Función para mostrar mensajes en el formulario de contacto
 function showFormMessage(type, message) {
@@ -579,19 +472,27 @@ function checkAndAttachFormListener() {
     }
 }
 
-// Función para cargar y mostrar productos dinámicamente
+// Función para cargar productos dinámicamente
 async function loadProducts() {
     const productGrid = document.querySelector('.product-grid');
-    if (!productGrid) return;
+    const featuredProductsContainer = document.getElementById('featuredProductsContainer');
+    
+    if (!productGrid && !featuredProductsContainer) return;
     
     console.log('Cargando productos...');
     
     // Mostrar mensaje de carga
-    productGrid.innerHTML = '<div class="loading-message">Cargando productos...</div>';
+    if (productGrid) {
+        productGrid.innerHTML = '<div class="loading-message">Cargando productos...</div>';
+    }
+    
+    if (featuredProductsContainer) {
+        featuredProductsContainer.innerHTML = '<div class="loading-message">Cargando productos...</div>';
+    }
     
     try {
         // Solicitar productos al backend
-        const response = await fetch('/api/products');
+        const response = await fetch(`${API_BASE_URL}/products`);
         
         if (!response.ok) {
             throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
@@ -600,75 +501,28 @@ async function loadProducts() {
         const data = await response.json();
         const products = data.products || data;
         
-        console.log('Productos cargados exitosamente:', products.length);
-        
-        // Generar HTML de los productos
-        if (products.length > 0) {
-            const productsHTML = products.map(product => ProductCard(product)).join('');
-            
-            productGrid.innerHTML = productsHTML;
-            
-            // Volver a adjuntar los event listeners para los botones de agregar al carrito
-            attachCartEventListeners();
-        } else {
-            productGrid.innerHTML = '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
+        // Mostrar productos
+        if (productGrid) {
+            displayProducts(products, productGrid);
         }
+        
+        if (featuredProductsContainer) {
+            displayProducts(products.filter(product => product.featured), featuredProductsContainer);
+        }
+        
     } catch (error) {
         console.error('Error al cargar productos:', error);
-        showNotification(`Error al cargar productos: ${error.message}`, 'error');
         if (productGrid) {
-            productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>';
+            productGrid.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo de nuevo más tarde.</div>';
+        }
+        if (featuredProductsContainer) {
+            featuredProductsContainer.innerHTML = '<div class="error-message">Error al cargar productos. Por favor, inténtelo de nuevo más tarde.</div>';
         }
     }
-}
-
-// Función para adjuntar event listeners a los botones de agregar al carrito
-function attachCartEventListeners() {
-    // Agregar event listeners a los botones de "Agregar al carrito"
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const product = {
-                id: this.dataset.id,
-                name: this.dataset.name,
-                price: parseFloat(this.dataset.price),
-                image: this.dataset.image,
-                quantity: 1
-            };
-            
-            window.productManager.addToCart(product);
-        });
-    });
-    
-    console.log('Event listeners de carrito adjuntados');
-}
-
-// Función para agregar productos al carrito
-function addToCart(product) {
-    // Verificar si el producto ya está en el carrito
-    const existingProductIndex = cart.findIndex(item => item.id == product.id);
-    
-    if (existingProductIndex !== -1) {
-        // Si el producto ya existe, aumentar la cantidad
-        cart[existingProductIndex].quantity += 1;
-        console.log('Cantidad actualizada para producto existente:', product.name);
-    } else {
-        // Si es un producto nuevo, agregarlo al carrito
-        cart.push(product);
-        console.log('Producto agregado al carrito:', product.name);
-    }
-    
-    // Actualizar contador del carrito
-    cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-    updateCartCount();
-    
-    // Guardar carrito en localStorage
-    saveCartToLocalStorage();
-    
-    // Mostrar notificación
-    showNotification(`${product.name} agregado al carrito`, 'success');
 }
 
 // Función para mostrar notificaciones
+/*
 function showNotification(message, type) {
     // Crear elemento de notificación
     const notification = document.createElement('div');
@@ -684,22 +538,22 @@ function showNotification(message, type) {
         border-radius: 5px;
         color: white;
         font-weight: 500;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         z-index: 10000;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         transform: translateX(100%);
         transition: transform 0.3s ease-in-out;
     `;
     
-    // Colores según el tipo
+    // Establecer color de fondo según el tipo
     if (type === 'success') {
-        notification.style.backgroundColor = '#48bb78';
+        notification.style.backgroundColor = '#28a745';
     } else if (type === 'error') {
-        notification.style.backgroundColor = '#e53e3e';
+        notification.style.backgroundColor = '#dc3545';
     } else {
-        notification.style.backgroundColor = '#3182ce';
+        notification.style.backgroundColor = '#007bff';
     }
     
-    // Agregar notificación al cuerpo
+    // Añadir al documento
     document.body.appendChild(notification);
     
     // Animar entrada
@@ -707,7 +561,7 @@ function showNotification(message, type) {
         notification.style.transform = 'translateX(0)';
     }, 10);
     
-    // Eliminar notificación después de 3 segundos
+    // Eliminar después de 3 segundos
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => {
@@ -716,9 +570,8 @@ function showNotification(message, type) {
             }
         }, 300);
     }, 3000);
-    
-    console.log('Notificación mostrada:', message, type);
 }
+*/
 
 // Función para manejar la navegación y carga de secciones
 function handleNavigation() {
@@ -751,113 +604,6 @@ function handleNavigation() {
 // Agregar esta línea cerca de la parte superior del archivo, después de las variables globales
 const API_BASE_URL = '/api';
 
-// Función para cargar productos destacados
-async function loadProducts() {
-    const productGrid = document.querySelector('.product-grid');
-    const featuredProductsContainer = document.getElementById('featuredProductsContainer');
-    
-    if (!productGrid && !featuredProductsContainer) return;
-    
-    console.log('Cargando productos...');
-    
-    // Mostrar mensaje de carga
-    if (productGrid) {
-        productGrid.innerHTML = '<div class="loading-message">Cargando productos...</div>';
-    }
-    
-    if (featuredProductsContainer) {
-        featuredProductsContainer.innerHTML = '<div class="loading-message">Cargando productos...</div>';
-    }
-    
-    try {
-        // Solicitar productos al backend
-        const response = await fetch(`${API_BASE_URL}/products?limit=4`);
-        
-        if (!response.ok) {
-            throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        const products = data.products || data;
-        
-        console.log('Productos cargados exitosamente:', products.length);
-        
-        // Generar HTML de los productos
-        if (products.length > 0) {
-            const productsHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="${product.image || './assets/images/placeholder.svg'}" 
-                             alt="${product.name || 'Producto sin nombre'}"
-                             loading="lazy"
-                             itemprop="image"
-                             width="300"
-                             height="200"
-                             decoding="async"
-                             fetchpriority="auto"
-                             onerror="this.src='./assets/images/placeholder.svg'">
-
-                    </div>
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <p class="product-description">${product.description || 'Descripción no disponible'}</p>
-                        <p class="product-price">${formatPrice(product.price)}</p>
-                        <button class="btn btn-primary add-to-cart" 
-                                data-id="${product.id}"
-                                data-name="${product.name}"
-                                data-price="${product.price}"
-                                data-image="${product.image || ''}">
-                            <i class="fas fa-shopping-cart"></i> Agregar al carrito
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            
-            if (productGrid) {
-                productGrid.innerHTML = productsHTML;
-                // Volver a adjuntar los event listeners para los botones de agregar al carrito
-                attachCartEventListeners();
-            }
-            
-            if (featuredProductsContainer) {
-                featuredProductsContainer.innerHTML = productsHTML;
-                // Adjuntar event listeners a los botones de agregar al carrito
-                const addToCartButtons = featuredProductsContainer.querySelectorAll('.add-to-cart');
-                addToCartButtons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        const id = this.getAttribute('data-id');
-                        const name = this.getAttribute('data-name');
-                        const price = parseFloat(this.getAttribute('data-price'));
-                        const image = this.getAttribute('data-image');
-                        
-                        addToCart(parseInt(id), name, price, image);
-                    });
-                });
-            }
-        } else {
-            if (productGrid) {
-                productGrid.innerHTML = '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
-            }
-            
-            if (featuredProductsContainer) {
-                featuredProductsContainer.innerHTML = '<div class="no-products-message">No hay productos disponibles en este momento.</div>';
-            }
-        }
-    } catch (error) {
-        console.error('Error al cargar productos:', error);
-        showNotification(`Error al cargar productos: ${error.message}`, 'error');
-        
-        const errorMessage = '<div class="error-message">Error al cargar productos. Por favor, inténtelo más tarde.</div>';
-        
-        if (productGrid) {
-            productGrid.innerHTML = errorMessage;
-        }
-        
-        if (featuredProductsContainer) {
-            featuredProductsContainer.innerHTML = errorMessage;
-        }
-    }
-}
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {

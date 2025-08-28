@@ -227,10 +227,7 @@ body[data-theme="dark"] nav ul li a.active {
 /* User Menu */
 .user-menu {
     position: relative;
-    z-index: 999999999;
-    /* Asegurar que el menú no tenga fondo verde */
-    background-color: transparent;
-    background-image: none;
+    z-index: 110;
     /* Asegurar contexto de apilamiento */
     isolation: isolate;
 }
@@ -238,8 +235,8 @@ body[data-theme="dark"] nav ul li a.active {
 .user-info {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background-color: #ffffff;
+    gap: 0.75rem;
+    background-color: var(--light);
     color: var(--dark);
     padding: 0.6rem 1.2rem;
     border-radius: 50px;
@@ -247,9 +244,10 @@ body[data-theme="dark"] nav ul li a.active {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
-    z-index: 999999999;
+    z-index: 110;
     position: relative;
-    min-width: 120px; /* Ancho mínimo para evitar que se vea muy pequeño */
+    min-width: 140px; /* Aumentar ancho mínimo */
+    font-size: 0.95rem;
 }
 
 .user-info:hover {
@@ -261,17 +259,19 @@ body[data-theme="dark"] nav ul li a.active {
 }
 
 .user-avatar {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
+    border: 1px solid var(--gray);
 }
 
 .user-name {
-    max-width: 120px;
+    max-width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-weight: 600;
 }
 
 .user-info i.fa-user {
@@ -279,84 +279,63 @@ body[data-theme="dark"] nav ul li a.active {
 }
 
 .user-dropdown {
-    /* Existing styles */
     position: absolute;
-    background-color: #ffffff;
-    box-shadow: var(--shadow);
-    padding: 1rem;
-    border-radius: var(--border-radius);
-    min-width: 200px;
-    /* Increase z-index to bring the dropdown above other elements */
-    z-index: 999999999;
-    /* Ensure it's higher than other elements */
-    /* Asegurar que no haya fondo verde */
-    background-color: #ffffff;
-    background-image: none;
-    top: calc(100% + 10px);
+    top: 100%;
     right: 0;
-    border: 1px solid var(--light-gray);
-    overflow: visible;
+    background-color: var(--bg-color);
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 0.5rem 0;
+    z-index: 1000;
+    display: none;
+    border: 1px solid var(--border-color);
     /* Asegurar contexto de apilamiento */
     isolation: isolate;
-    display: none;
+    /* Mejorar sombra */
+    box-shadow: var(--shadow-lg);
 }
 
 .user-dropdown.show {
     display: block;
-}
-
-/* User Menu Options */
-.user-dropdown a {
-    /* Existing styles */
-    display: block;
-    padding: 0.75rem 1rem;
-    text-decoration: none;
-    color: var(--dark);
-    transition: background-color 0.3s ease;
-    /* Ensure options are also above other elements */
-    position: relative;
-    z-index: 999999999;
-    /* Slightly higher than the dropdown container */
-    /* Asegurar que no haya fondo verde */
-    background-color: transparent;
-    background-image: none;
-    border-radius: 4px;
-    margin-bottom: 0.25rem;
-}
-
-.user-dropdown a:hover {
-    background-color: var(--light);
-    color: var(--primary);
-    /* Asegurar que no haya fondo verde en hover */
-    background-color: var(--light);
-    background-image: none;
-}
-
-.user-dropdown a i {
-    color: var(--primary);
-    margin-right: 0.5rem;
-    width: 20px;
-    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
 .user-dropdown li {
     list-style: none;
-    margin: 0;
     padding: 0;
-    /* Asegurar que no haya fondo verde */
-    background-color: transparent;
-    background-image: none;
+    margin: 0;
 }
 
-/* Añadir estilos para el texto específico del menú */
-.user-dropdown a span,
 .user-dropdown a {
-    color: var(--dark) !important;
-    font-weight: 500 !important;
-    background-color: transparent !important;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: var(--transition);
+    font-size: 0.9rem;
+    border-radius: var(--border-radius-sm);
+    margin: 0.25rem 0;
 }
 
-/* Dark mode styles for user menu */
+.user-dropdown a:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary);
+}
+
+.user-dropdown a i {
+    margin-right: 0.75rem;
+    width: 20px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.user-dropdown a:hover i {
+    transform: scale(1.1);
+}
+
+/* Modo oscuro para el menú de usuario */
 body[data-theme="dark"] .user-info {
     background-color: var(--dark-card-bg);
     border-color: var(--dark-border);
@@ -372,24 +351,21 @@ body[data-theme="dark"] .user-info:hover {
 body[data-theme="dark"] .user-dropdown {
     background-color: var(--dark-card-bg);
     border-color: var(--dark-border);
+    color: var(--dark-text);
 }
 
 body[data-theme="dark"] .user-dropdown a {
-    color: var(--dark-text) !important;
-    background-color: var(--dark-card-bg) !important;
+    color: var(--dark-text);
+    background-color: var(--dark-card-bg);
 }
 
 body[data-theme="dark"] .user-dropdown a:hover {
-    background-color: var(--dark-hover-bg) !important;
-    color: white !important;
+    background-color: var(--dark-hover-bg);
+    color: var(--primary);
 }
 
 body[data-theme="dark"] .user-dropdown a i {
-    color: var(--primary) !important; /* Asegurar color del icono en modo oscuro */
-}
-
-body[data-theme="dark"] .user-dropdown a span {
-    color: var(--dark-text) !important;
+    color: var(--primary);
 }
 
 /* Cart Icon */

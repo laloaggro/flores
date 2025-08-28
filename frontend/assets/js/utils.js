@@ -129,32 +129,37 @@ const showNotification = (message, type = 'info') => {
 
 // Función para verificar si el usuario está autenticado
 const isAuthenticated = () => {
-  const token = localStorage.getItem('token');
-  if (!token) return false;
-  
   try {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+    
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.exp > Date.now() / 1000;
   } catch (e) {
+    // Si hay un error al parsear el token, eliminarlo
+    localStorage.removeItem('token');
     return false;
   }
 };
 
 // Función para obtener información del usuario desde el token
 const getUserInfoFromToken = () => {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-  
   try {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    
     const payload = JSON.parse(atob(token.split('.')[1]));
     return {
       id: payload.userId || payload.id, // Manejar ambos posibles nombres de propiedad
-      name: payload.name,
-      email: payload.email,
-      role: payload.role
+      name: payload.name || payload.username || 'Usuario',
+      email: payload.email || '',
+      role: payload.role || 'user',
+      picture: payload.picture || null
     };
   } catch (e) {
-    console.error('Error al decodificar el token:', e);
+    // Si hay un error al parsear el token, eliminarlo
+    console.error('Error al parsear el token:', e);
+    localStorage.removeItem('token');
     return null;
   }
 };
@@ -279,6 +284,11 @@ const logout = () => {
   window.location.href = 'index.html';
 };
 
+// Función para obtener el token de autenticación
+const getAuthToken = () => {
+    return localStorage.getItem('authToken');
+};
+
 // Función para verificar si el usuario es administrador
 const isAdmin = () => {
   const user = getUserInfoFromToken();
@@ -292,6 +302,7 @@ export {
   showNotification,
   isAuthenticated,
   getUserInfoFromToken,
+  getAuthToken,
   logout,
   isAdmin,
   formatDate,

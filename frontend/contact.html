@@ -34,7 +34,7 @@
     <meta name="robots" content="index, follow">
     
     <!-- Mejoras de seguridad -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/; frame-src 'self' https://www.google.com;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
@@ -56,7 +56,6 @@
     <meta property="twitter:description" content="Contáctanos para consultas, pedidos especiales o información sobre nuestros servicios de arreglos florales.">
     <meta property="twitter:image" content="./assets/images/contact-hero.jpg">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
@@ -64,45 +63,11 @@
     
     <!-- Preload critical scripts -->
     <link rel="preload" href="assets/js/utils.js" as="script">
-    <link rel="preload" href="assets/js/cart.js" as="script">
+    <link rel="preload" href="assets/js/auth.js" as="script">
     <link rel="preload" href="assets/js/contact.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
-    
-    <!-- Schema.org para contacto -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Arreglos Victoria Florería",
-      "image": "https://arreglos-victoria-backend.onrender.com/assets/images/contact-hero.jpg",
-      "telephone": "+569 6360 3177",
-      "email": "arreglosfloralesvictoria@gmail.com",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Av. Valdivieso 593",
-        "addressLocality": "Recoleta",
-        "addressRegion": "Región Metropolitana",
-        "postalCode": "8420000",
-        "addressCountry": "CL"
-      },
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-          ],
-          "opens": "09:00",
-          "closes": "19:00"
-        }
-      ]
-    }
-    </script>
+    <link rel="preload" href="assets/js/theme.js" as="script">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -111,44 +76,46 @@
     <site-header></site-header>
 
     <main id="main-content">
-        <section class="contact-page">
+        <!-- Hero Section -->
+        <section class="hero contact-hero">
+            <div class="hero-content">
+                <h1>Contáctanos</h1>
+                <p>Estamos aquí para ayudarte con cualquier consulta o pedido especial</p>
+            </div>
+        </section>
+
+        <!-- Contacto -->
+        <section class="contact">
             <div class="container">
-                <!-- Hero Section -->
-                <section class="hero half-height">
-                    <div class="hero-content">
-                        <h1>Contacto</h1>
-                        <p>Estamos aquí para ayudarte</p>
-                    </div>
-                </section>
-                
+                <div class="section-title">
+                    <h2>Información de Contacto</h2>
+                    <p>Estamos disponibles para atenderte</p>
+                </div>
                 <div class="contact-content">
                     <div class="contact-info">
-                        <h2>Información de Contacto</h2>
-                        
+                        <h3>Detalles de Contacto</h3>
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
                                 <h3>Dirección</h3>
-                                <p>Av. Valdivieso 593, Recoleta, Región Metropolitana</p>
+                                <p>Av. Valdivieso 593, Recoleta</p>
+                                <p>Región Metropolitana, Chile</p>
                             </div>
                         </div>
-                        
                         <div class="contact-item">
                             <i class="fas fa-phone"></i>
                             <div>
                                 <h3>Teléfono</h3>
-                                <p>+56 9 6360 3177</p>
+                                <p>+56 9 1234 5678</p>
                             </div>
                         </div>
-                        
                         <div class="contact-item">
                             <i class="fas fa-envelope"></i>
                             <div>
                                 <h3>Email</h3>
-                                <p>arreglosfloralesvictoria@gmail.com</p>
+                                <p>contacto@arreglosvictoria.com</p>
                             </div>
                         </div>
-                        
                         <div class="contact-item">
                             <i class="fas fa-clock"></i>
                             <div>
@@ -158,7 +125,7 @@
                         </div>
                         
                         <div class="contact-map">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.457824395449!2d-70.6447356847544!3d-33.43877198077852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a5b8c5b5b5%3A0x9d2f5b5b5b5b5b5b!2sAv.%20Valdivieso%20593%2C%20Recoleta%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1628789456789!5m2!1ses!2scl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.457824395449!2d-70.6447356847544!3d-33.43877198077852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a5b8c5b5b5%3A0x9d2f5b5b5b5b5b5b!2sAv.%20Valdivieso%20593%2C%20Recoleta%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1628789456789!5m2!1ses!2scl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                     </div>
                     
@@ -167,19 +134,19 @@
                         <form id="contactForm">
                             <div class="form-group">
                                 <label for="contactName">Nombre</label>
-                                <input type="text" id="contactName" name="name" required class="form-input" aria-required="true">
+                                <input type="text" id="contactName" name="name" required class="form-input" aria-required="true" autocomplete="name">
                             </div>
                             <div class="form-group">
                                 <label for="contactEmail">Email</label>
-                                <input type="email" id="contactEmail" name="email" required class="form-input" aria-required="true">
+                                <input type="email" id="contactEmail" name="email" required class="form-input" aria-required="true" autocomplete="email">
                             </div>
                             <div class="form-group">
                                 <label for="contactSubject">Asunto</label>
-                                <input type="text" id="contactSubject" name="subject" required class="form-input" aria-required="true">
+                                <input type="text" id="contactSubject" name="subject" required class="form-input" aria-required="true" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label for="contactMessageText">Mensaje</label>
-                                <textarea id="contactMessageText" name="message" required class="form-input" aria-required="true"></textarea>
+                                <textarea id="contactMessageText" name="message" required class="form-input" aria-required="true" autocomplete="off"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
                         </form>
@@ -199,25 +166,8 @@
     <script type="module" src="./assets/js/utils.js"></script>
     <script type="module" src="./assets/js/auth.js"></script>
     <script type="module" src="./assets/js/contact.js"></script>
-    <script type="module" src="./assets/js/accessibility.js"></script>
-    <script type="module" src="./assets/js/lazyLoad.js"></script>
-    <script type="module" src="./assets/js/imageOptimizer.js"></script>
-    <script type="module" src="./assets/js/register-sw.js"></script>
     <script type="module" src="./assets/js/userMenu.js"></script>
     <script type="module" src="./assets/js/header.js"></script>
-    <script type="module" src="assets/js/theme.js"></script>
-    
-    <!-- Asegurar que el tema se aplique correctamente -->
-    <script>
-        // Si theme.js no establece el tema, usamos un script de respaldo
-        document.addEventListener('DOMContentLoaded', function() {
-            const html = document.documentElement;
-            const theme = localStorage.getItem('theme') || 'light';
-            html.setAttribute('data-theme', theme);
-            if (theme === 'dark') {
-                html.classList.add('dark');
-            }
-        });
-    </script>
+    <script type="module" src="./assets/js/theme.js"></script>
 </body>
 </html>

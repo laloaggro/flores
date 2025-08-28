@@ -1,10 +1,10 @@
 // profile.js - Manejo de la página de perfil de usuario
-import { initUserMenu } from './auth.js';
+import UserMenu from './userMenu.js';
 import { formatPrice, getUserInfoFromToken as getUser } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar menú de usuario
-    initUserMenu();
+    UserMenu.init();
     
     // Verificar si el usuario está logueado
     const token = localStorage.getItem('token');

@@ -1,138 +1,97 @@
-import { updateCartCount, getUserInfoFromToken as getUser, isAuthenticated, logout as utilsLogout, isAdmin, API_BASE_URL, showNotification } from './utils.js';
+import UserMenu from './userMenu.js';
+import { updateCartCount, getUserInfoFromToken as getUser, isAuthenticated, logout as utilsLogout, isAdmin, API_BASE_URL, showNotification, getAuthToken } from './utils.js';
 
 // auth.js - Manejo de autenticación y menú de usuario
 
 // Inicializar el menú de usuario
 export function initUserMenu() {
-    const token = getAuthToken();
-    const userMenu = document.getElementById('userMenu');
-    const loginLink = document.getElementById('loginLink');
-    
-    if (token && userMenu) {
-        // Usuario autenticado
-        loginLink.style.display = 'none';
-        userMenu.style.display = 'block';
-        
-        // Mostrar nombre de usuario si está disponible
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        const userNameDisplay = document.getElementById('userNameDisplay');
-        if (userNameDisplay && userData.name) {
-            userNameDisplay.textContent = userData.name.split(' ')[0]; // Solo el primer nombre
-        }
-        
-        // Mostrar el botón de administración si el usuario es admin
-        const adminMenuItem = document.getElementById('adminMenuItem');
-        if (adminMenuItem && isAdmin()) {
-            adminMenuItem.style.display = 'block';
-        }
-        
-        // Mostrar el mapa del sitio para todos los usuarios autenticados
-        const sitemapMenuItem = document.getElementById('sitemapMenuItem');
-        if (sitemapMenuItem) {
-            sitemapMenuItem.style.display = 'block';
-        }
-        
-        // Configurar el toggle del menú de usuario
-        const userInfoButton = userMenu.querySelector('.user-info');
-        const userDropdown = userMenu.querySelector('.user-dropdown');
-        
-        if (userInfoButton && userDropdown) {
-            userInfoButton.addEventListener('click', function(e) {
-                e.stopPropagation();
-                userDropdown.classList.toggle('show');
-                this.setAttribute('aria-expanded', userDropdown.classList.contains('show'));
-            });
-            
-            // Cerrar el menú al hacer clic fuera
-            document.addEventListener('click', function(e) {
-                if (!userMenu.contains(e.target)) {
-                    userDropdown.classList.remove('show');
-                    userInfoButton.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-    } else if (loginLink) {
-        // Usuario no autenticado
-        loginLink.style.display = 'flex';
-        if (userMenu) {
-            userMenu.style.display = 'none';
-        }
-    }
+    UserMenu.init();
 }
 
-// 使用utils.js中的logout函数
+// Usar utils.js中的logout función
 export function logout() {
     utilsLogout();
 }
 
-// Función para manejar el inicio de sesión
-export async function handleLogin(email, password) {
+/**
+ * Iniciar sesión
+ * @param {string} email - Correo electrónico del usuario
+ * @param {string} password - Contraseña del usuario
+ * @returns {Promise<Object>} - Resultado de la autenticación
+ */
+export async function login(email, password) {
     try {
+        console.log('Iniciando sesión con:', { email });
+        
         const response = await fetch(`${API_BASE_URL}/api/users/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password }),
         });
         
         const data = await response.json();
+        console.log('Respuesta del servidor:', data);
         
-        if (response.ok) {
-            // Guardar token y usuario en localStorage
-            localStorage.setItem('authToken', data.token);
-            localStorage.setItem('userData', JSON.stringify({
-                id: data.user.id,
-                name: data.user.name,
-                email: data.user.email,
-                role: data.user.role
-            }));
+        if (response.ok && data.token) {
+            // Guardar token y datos del usuario
+            localStorage.setItem('token', data.token);
             
-            // Mostrar notificación de éxito
-            showNotification('Inicio de sesión exitoso', 'success');
+            // Extraer información del usuario del token
+            const user = getUserInfoFromToken();
+            if (user) {
+                localStorage.setItem('user', JSON.stringify(user));
+            }
             
-            // Redirigir a la página principal después de un breve retraso
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1500);
+            showNotification('¡Inicio de sesión exitoso!', 'success');
+            return { success: true, user: data.user || user };
         } else {
-            // Mostrar error
-            showNotification(data.error || 'Error al iniciar sesión', 'error');
+            // Manejar errores específicos
+            const errorMessage = data.message || 'Error desconocido al iniciar sesión';
+            showNotification(errorMessage, 'error');
+            return { success: false, message: errorMessage };
         }
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         showNotification('Error de conexión. Por favor, inténtelo de nuevo.', 'error');
+        return { success: false, message: 'Error de conexión' };
     }
 }
 
-// Función para manejar el registro
-export async function handleRegister(name, email, password, phone) {
+/**
+ * Registrar un nuevo usuario
+ * @param {Object} userData - Datos del usuario a registrar
+ * @returns {Promise<Object>} - Resultado del registro
+ */
+export async function register(userData) {
     try {
+        console.log('Registrando usuario:', userData);
+        
         const response = await fetch(`${API_BASE_URL}/api/users/register`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, email, password, phone })
+            body: JSON.stringify(userData),
         });
         
         const data = await response.json();
+        console.log('Respuesta del servidor:', data);
         
         if (response.ok) {
-            // Mostrar notificación de éxito
-            showNotification('Registro exitoso. Por favor, inicie sesión.', 'success');
-            
-            // Redirigir a la página de login después de un breve retraso
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1500);
+            showNotification('¡Registro exitoso! Ahora puede iniciar sesión.', 'success');
+            return { success: true, user: data.user };
         } else {
-            // Mostrar error
-            showNotification(data.error || 'Error al registrarse', 'error');
+            // Manejar errores específicos
+            const errorMessage = data.message || 'Error desconocido al registrar usuario';
+            showNotification(errorMessage, 'error');
+            return { success: false, message: errorMessage };
         }
     } catch (error) {
-        console.error('Error al registrarse:', error);
+        console.error('Error al registrar usuario:', error);
         showNotification('Error de conexión. Por favor, inténtelo de nuevo.', 'error');
+        return { success: false, message: 'Error de conexión' };
     }
 }
 

@@ -1,6 +1,6 @@
 // admin.js - Funcionalidad del panel de administración
-import { API_BASE_URL, isAuthenticated, isAdmin, getAuthToken, logout, showNotification } from './utils.js';
-import { initUserMenu } from './auth.js';
+import { API_BASE_URL, isAuthenticated, isAdmin, logout, showNotification, getAuthToken } from './utils.js';
+import UserMenu from './userMenu.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar autenticación
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Inicializar el menú de usuario
-    initUserMenu();
+    UserMenu.init();
     
     // Configurar el evento de logout
     const logoutLink = document.getElementById('logoutLink');
@@ -29,287 +29,186 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Configurar botones de navegación
-    const manageProductsBtn = document.getElementById('manageProductsBtn');
-    const manageOrdersBtn = document.getElementById('manageOrdersBtn');
-    const manageUsersBtn = document.getElementById('manageUsersBtn');
-    const viewStatsBtn = document.getElementById('viewStatsBtn');
+    setupNavigationButtons();
     
+    // Configurar funcionalidad de logs
+    setupLogsFunctionality();
+    
+    // Configurar funcionalidad de actividad reciente
+    setupActivityFunctionality();
+    
+    // Cargar datos del dashboard
+    loadDashboardData();
+});
+
+// Función para configurar todos los botones de navegación
+function setupNavigationButtons() {
+    // Botones de gestión de productos
+    const manageProductsBtn = document.getElementById('manageProductsBtn');
+    const addProductBtn = document.getElementById('addProductBtn');
+    
+    // Botones de gestión de pedidos
+    const manageOrdersBtn = document.getElementById('manageOrdersBtn');
+    const viewPendingOrdersBtn = document.getElementById('viewPendingOrdersBtn');
+    
+    // Botones de gestión de usuarios
+    const manageUsersBtn = document.getElementById('manageUsersBtn');
+    const addUserBtn = document.getElementById('addUserBtn');
+    
+    // Botones de estadísticas
+    const viewStatsBtn = document.getElementById('viewStatsBtn');
+    const generateReportBtn = document.getElementById('generateReportBtn');
+
+    // Botones de configuración
+    const manageSettingsBtn = document.getElementById('manageSettingsBtn');
+    const manageConfigurationBtn = document.getElementById('manageConfigurationBtn');
+    
+    // Configurar eventos para productos
     if (manageProductsBtn) {
         manageProductsBtn.addEventListener('click', function() {
             window.location.href = 'products.html';
         });
     }
     
+    if (addProductBtn) {
+        addProductBtn.addEventListener('click', function() {
+            showAddProductModal();
+        });
+    }
+    
+    // Configurar eventos para pedidos
     if (manageOrdersBtn) {
         manageOrdersBtn.addEventListener('click', function() {
-            // Asumiendo que habrá una página de pedidos en el futuro
-            showNotification('Funcionalidad en desarrollo', 'info');
+            window.location.href = 'admin-orders.html';
         });
     }
     
+    if (viewPendingOrdersBtn) {
+        viewPendingOrdersBtn.addEventListener('click', function() {
+            window.location.href = 'admin-orders.html#pending';
+        });
+    }
+
+    // Configurar eventos para usuarios
     if (manageUsersBtn) {
         manageUsersBtn.addEventListener('click', function() {
-            // Asumiendo que habrá una página de gestión de usuarios en el futuro
-            showNotification('Funcionalidad en desarrollo', 'info');
+            window.location.href = 'profile.html';
         });
     }
     
+    if (addUserBtn) {
+        addUserBtn.addEventListener('click', function() {
+            showNotification('Funcionalidad para agregar nuevo usuario en desarrollo', 'info');
+        });
+    }
+    
+    // Configurar eventos para estadísticas
     if (viewStatsBtn) {
         viewStatsBtn.addEventListener('click', function() {
-            // Asumiendo que habrá una página de estadísticas en el futuro
-            showNotification('Funcionalidad en desarrollo', 'info');
+            showStatistics();
         });
     }
     
-    // Función para cargar datos del dashboard
-    function loadDashboardData() {
-        // Esta función se implementará completamente cuando se conecte con la API
-        console.log('Cargando datos del dashboard...');
+    if (generateReportBtn) {
+        generateReportBtn.addEventListener('click', function() {
+            showNotification('Funcionalidad para generar informes en desarrollo', 'info');
+        });
     }
-    
-    // Función para cargar todos los productos
-    function loadAllProducts() {
-        // Esta función se implementará completamente cuando se conecte con la API
-        console.log('Cargando productos...');
-    }
-    
-    // Función para cargar pedidos
-    function loadOrders() {
-        // Esta función se implementará completamente cuando se conecte con la API
-        console.log('Cargando pedidos...');
-    }
-    
-    // Función para cargar usuarios
-    function loadUsers() {
-        // Esta función se implementará completamente cuando se conecte con la API
-        console.log('Cargando usuarios...');
-    }
-    
-    // Función para configurar eventos de usuario
-    function setupUserEvents() {
-        // Esta función se implementará completamente cuando se conecte con la API
-        console.log('Configurando eventos de usuario...');
-    }
-    
-    // Función para cargar reseñas
-    function loadReviews() {
-        // Esta función se implementará completamente cuando se conecte con la API
-        console.log('Cargando reseñas...');
-    }
-    
-    // Función para inicializar configuraciones
-    function initSettings() {
-        // Esta función se implementará completamente cuando se conecte con la API
-        console.log('Inicializando configuraciones...');
-    }
-});
 
-    // No need to keep the rest of the code as it's already replaced
+    // Configurar eventos para configuración
+    if (manageSettingsBtn) {
+        manageSettingsBtn.addEventListener('click', function() {
+            window.location.href = 'settings.html';
+        });
+    }
 
-// Agregar producto
-async function addProduct() {
-    const form = document.getElementById('addProductForm');
-    if (!form) return;
-    
+    if (manageConfigurationBtn) {
+        manageConfigurationBtn.addEventListener('click', function() {
+            window.location.href = 'configuration.html';
+        });
+    }
+}
+
+// Función para cargar datos del dashboard
+async function loadDashboardData() {
     try {
-        const formData = new FormData(form);
-        const imageFile = document.getElementById('productImageFile').files[0];
-        let imageUrl = formData.get('productImage');
-        
-        // Si se seleccionó un archivo, subirlo
-        if (imageFile) {
-            imageUrl = await uploadImage(imageFile);
-        }
-        
-        const productData = {
-            name: formData.get('productName'),
-            price: parseFloat(formData.get('productPrice')),
-            category: formData.get('productCategory'),
-            image: imageUrl,
-            description: formData.get('productDescription')
-        };
-        
-        // Validar campos requeridos
-        if (!productData.name || !productData.price || !productData.category || productData.price <= 0) {
-            showMessage('Por favor complete todos los campos obligatorios', 'error');
-            return;
-        }
-        
-        // Si no hay imagen, usar una por defecto
-        if (!productData.image) {
-            productData.image = '/assets/images/default-avatar.svg';
-        }
-        
         const token = getAuthToken();
-        const response = await fetch(`${API_BASE_URL}/api/products`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(productData)
-        });
+        // En una implementación real, esto cargaría datos reales desde la API
+        console.log('Cargando datos del dashboard...');
         
-        const result = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(result.error || 'Error al agregar producto');
-        }
-        
-        // Cerrar modal
-        const modal = document.getElementById('addProductModal');
-        if (modal) {
-            modal.remove();
-        }
-        
-        // Mostrar mensaje de éxito
-        showMessage('Producto agregado correctamente', 'success');
-        
-        // Recargar lista de productos
-        loadAllProducts();
-        loadDashboardData();
+        // Simular carga de datos
+        setTimeout(() => {
+            console.log('Datos del dashboard cargados');
+        }, 1000);
     } catch (error) {
-        console.error('Error al agregar producto:', error);
-        showMessage(error.message || 'Error al agregar producto', 'error');
+        console.error('Error al cargar datos del dashboard:', error);
+        showNotification('Error al cargar datos del dashboard', 'error');
     }
 }
 
-// Cargar todos los productos
-async function loadAllProducts() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/products`);
-        if (!response.ok) {
-            throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        const products = data.products || data;
-        const tbody = document.getElementById('allProductsTableBody');
-        
-        if (tbody) {
-            if (products && products.length > 0) {
-                tbody.innerHTML = products.map(product => `
-                    <tr>
-                        <td>${product.id}</td>
-                        <td>${product.name}</td>
-                        <td>${product.description || ''}</td>
-                        <td>$${parseFloat(product.price).toLocaleString('es-CL')}</td>
-                        <td>${translateCategory(product.category)}</td>
-                        <td>
-                            ${product.image ? 
-                                `<img src="${product.image}" alt="${product.name}" width="50" loading="lazy" onerror="this.src='/assets/images/placeholder.svg'">` : 
-                                'Sin imagen'}
-                        </td>
-                        <td>
-                            <button class="btn-icon edit-product" data-id="${product.id}" aria-label="Editar ${product.name}" title="Editar">
-                                <i class="fas fa-edit" aria-hidden="true"></i>
-                            </button>
-                            <button class="btn-icon delete-product" data-id="${product.id}" aria-label="Eliminar ${product.name}" title="Eliminar">
-                                <i class="fas fa-trash" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                
-                // Añadir eventos a los botones de editar y eliminar
-                document.querySelectorAll('.edit-product').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const productId = this.getAttribute('data-id');
-                        editProduct(productId);
-                    });
-                    
-                    // Añadir atributos de accesibilidad
-                    button.setAttribute('role', 'button');
-                });
-                
-                document.querySelectorAll('.delete-product').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const productId = this.getAttribute('data-id');
-                        deleteProduct(productId);
-                    });
-                    
-                    // Añadir atributos de accesibilidad
-                    button.setAttribute('role', 'button');
-                });
-            } else {
-                tbody.innerHTML = '<tr><td colspan="7">No hay productos disponibles</td></tr>';
-            }
-        }
-    } catch (error) {
-        console.error('Error al cargar productos:', error);
-        const tbody = document.getElementById('allProductsTableBody');
-        if (tbody) {
-            tbody.innerHTML = `<tr><td colspan="7">Error al cargar productos: ${error.message}</td></tr>`;
-        }
-        showMessage(`Error al cargar productos: ${error.message}`, 'error');
-    }
-}
-
-// Editar producto
-function editProduct(productId) {
-    // Obtener los datos del producto
-    fetch(`${API_BASE_URL}/api/products/${productId}`)
-        .then(response => response.json())
-        .then(product => {
-            // Mostrar formulario para editar producto
-            showEditProductForm(product);
-        })
-        .catch(error => {
-            console.error('Error al obtener producto:', error);
-            showMessage('Error al obtener datos del producto', 'error');
-        });
-}
-
-// Mostrar formulario para editar producto
-function showEditProductForm(product) {
-    // Crear modal para editar producto
+// Función para mostrar estadísticas en un modal
+function showStatistics() {
+    // Crear modal para mostrar estadísticas
     const modal = document.createElement('div');
     modal.className = 'modal';
-    modal.id = 'editProductModal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-labelledby', 'editProductModalTitle');
-    modal.setAttribute('aria-modal', 'true');
+    modal.id = 'statisticsModal';
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="editProductModalTitle">Editar Producto</h3>
-                <button class="close" aria-label="Cerrar">&times;</button>
+                <h2>Estadísticas del Sitio</h2>
+                <span class="close">&times;</span>
             </div>
             <div class="modal-body">
-                <form id="editProductForm">
-                    <input type="hidden" id="productId" value="${product.id}">
-                    <div class="form-group">
-                        <label for="editProductName">Nombre:</label>
-                        <input type="text" id="editProductName" class="form-input" value="${product.name}" required aria-required="true">
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>Ventas Totales</h3>
+                        <p class="stat-value">$125,430</p>
+                        <p class="stat-description">Ingresos generados este mes</p>
                     </div>
-                    <div class="form-group">
-                        <label for="editProductCategory">Categoría:</label>
-                        <select id="editProductCategory" class="form-input" required aria-required="true">
-                            <option value="">Seleccione una categoría</option>
-                            <option value="arreglos" ${product.category === 'arreglos' ? 'selected' : ''}>Arreglos Florales</option>
-                            <option value="ramos" ${product.category === 'ramos' ? 'selected' : ''}>Ramos</option>
-                            <option value="plantas" ${product.category === 'plantas' ? 'selected' : ''}>Plantas</option>
-                            <option value="accesorios" ${product.category === 'accesorios' ? 'selected' : ''}>Accesorios</option>
-                        </select>
+                    <div class="stat-card">
+                        <h3>Pedidos</h3>
+                        <p class="stat-value">1,243</p>
+                        <p class="stat-description">Pedidos procesados</p>
                     </div>
-                    <div class="form-group">
-                        <label for="editProductPrice">Precio:</label>
-                        <input type="number" id="editProductPrice" class="form-input" min="0" step="100" value="${product.price}" required aria-required="true">
+                    <div class="stat-card">
+                        <h3>Productos</h3>
+                        <p class="stat-value">86</p>
+                        <p class="stat-description">Productos en catálogo</p>
                     </div>
-                    <div class="form-group">
-                        <label for="editProductImage">URL de Imagen:</label>
-                        <input type="text" id="editProductImage" class="form-input" value="${product.image || ''}">
+                    <div class="stat-card">
+                        <h3>Usuarios</h3>
+                        <p class="stat-value">2,189</p>
+                        <p class="stat-description">Usuarios registrados</p>
                     </div>
-                    <div class="form-group">
-                        <label for="editProductImageFile">Subir Imagen:</label>
-                        <input type="file" id="editProductImageFile" class="form-input" accept="image/*">
+                </div>
+                <div class="chart-container">
+                    <h3>Ventas por Categoría</h3>
+                    <div class="chart-placeholder">
+                        <p>Gráfico de ventas por categoría</p>
+                        <div class="chart-bars">
+                            <div class="chart-bar" style="height: 80%;">
+                                <span>Arreglos</span>
+                            </div>
+                            <div class="chart-bar" style="height: 65%;">
+                                <span>Ramos</span>
+                            </div>
+                            <div class="chart-bar" style="height: 45%;">
+                                <span>Plantas</span>
+                            </div>
+                            <div class="chart-bar" style="height: 30%;">
+                                <span>Accesorios</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="editProductDescription">Descripción:</label>
-                        <textarea id="editProductDescription" class="form-input" rows="3">${product.description || ''}</textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Actualizar Producto</button>
-                </form>
+                </div>
+                <div class="stats-actions">
+                    <button class="btn btn-primary" id="exportStatsBtn">
+                        <i class="fas fa-download"></i> Exportar Estadísticas
+                    </button>
+                    <button class="btn btn-secondary" id="refreshStatsBtn">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
             </div>
         </div>
     `;
@@ -323,8 +222,21 @@ function showEditProductForm(product) {
         modal.remove();
     });
     
-    // Añadir atributos de accesibilidad al botón de cierre
-    closeBtn.setAttribute('aria-label', 'Cerrar modal');
+    // Configurar botón de exportar estadísticas
+    const exportStatsBtn = modal.querySelector('#exportStatsBtn');
+    if (exportStatsBtn) {
+        exportStatsBtn.addEventListener('click', function() {
+            showNotification('Funcionalidad de exportación en desarrollo', 'info');
+        });
+    }
+    
+    // Configurar botón de actualizar estadísticas
+    const refreshStatsBtn = modal.querySelector('#refreshStatsBtn');
+    if (refreshStatsBtn) {
+        refreshStatsBtn.addEventListener('click', function() {
+            showNotification('Estadísticas actualizadas', 'success');
+        });
+    }
     
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
@@ -332,75 +244,176 @@ function showEditProductForm(product) {
         }
     });
     
-    // Manejar la tecla Escape para cerrar el modal
-    window.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && modal.parentNode) {
-            modal.remove();
+    // Mostrar modal
+    modal.style.display = 'block';
+}
+
+// Función para mostrar el modal de agregar producto
+function showAddProductModal() {
+    // Verificar si el modal ya existe
+    const existingModal = document.getElementById('addProductModal');
+    if (existingModal) {
+        existingModal.style.display = 'block';
+        const firstInput = existingModal.querySelector('input, select, textarea');
+        if (firstInput) {
+            firstInput.focus();
+        }
+        return;
+    }
+    
+    // Crear modal para agregar producto
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'addProductModal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Agregar Nuevo Producto</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label for="productName">Nombre del Producto:</label>
+                        <input type="text" id="productName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productPrice">Precio:</label>
+                        <input type="number" id="productPrice" class="form-control" min="0" step="100" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productCategory">Categoría:</label>
+                        <select id="productCategory" class="form-control" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="arreglos">Arreglos Florales</option>
+                            <option value="ramos">Ramos</option>
+                            <option value="plantas">Plantas</option>
+                            <option value="accesorios">Accesorios</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productImage">URL de la Imagen:</label>
+                        <input type="text" id="productImage" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productDescription">Descripción:</label>
+                        <textarea id="productDescription" class="form-control" rows="3" placeholder="Descripción del producto"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelAddProduct">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Agregar Producto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    
+    // Añadir modal al documento
+    document.body.appendChild(modal);
+    
+    // Configurar eventos del modal
+    const closeBtn = modal.querySelector('.close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    }
+    
+    // Configurar botón de cancelar
+    const cancelBtn = document.getElementById('cancelAddProduct');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    }
+    
+    // Configurar formulario de agregar producto
+    const addProductForm = document.getElementById('addProductForm');
+    if (addProductForm) {
+        addProductForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            addProduct();
+        });
+    }
+    
+    // Cerrar modal al hacer clic fuera del contenido
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
         }
     });
     
-    // Configurar envío del formulario
-    const form = document.getElementById('editProductForm');
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        updateProduct(product.id);
-    });
+    // Cerrar modal con la tecla Escape
+    const closeOnEscape = function(event) {
+        if (event.key === 'Escape') {
+            modal.style.display = 'none';
+            document.removeEventListener('keydown', closeOnEscape);
+        }
+    };
+    
+    document.addEventListener('keydown', closeOnEscape);
     
     // Mostrar modal
     modal.style.display = 'block';
     
-    // Enfocar el primer campo del formulario
-    const firstInput = modal.querySelector('input, textarea, select');
+    // Prevenir scroll del body cuando el modal está abierto
+    document.body.style.overflow = 'hidden';
+    
+    // Enfocar el primer campo
+    const firstInput = modal.querySelector('input, select, textarea');
     if (firstInput) {
         firstInput.focus();
     }
 }
 
-// Actualizar producto
-async function updateProduct(productId) {
-    const form = document.getElementById('editProductForm');
-    if (!form) return;
-    
+// Función para agregar un producto
+async function addProduct() {
     try {
-        // Mostrar indicador de carga
-        const submitButton = form.querySelector('button[type="submit"]');
-        const originalText = submitButton.textContent;
-        submitButton.textContent = 'Actualizando...';
-        submitButton.disabled = true;
+        const form = document.getElementById('addProductForm');
+        if (!form) return;
         
-        const formData = new FormData(form);
-        const imageFile = document.getElementById('editProductImageFile').files[0];
-        let imageUrl = formData.get('editProductImage');
-        
-        // Si se seleccionó un archivo, subirlo
-        if (imageFile) {
-            imageUrl = await uploadImage(imageFile);
-        }
-        
-        const productData = {
-            name: formData.get('editProductName'),
-            price: parseFloat(formData.get('editProductPrice')),
-            category: formData.get('editProductCategory'),
-            image: imageUrl,
-            description: formData.get('editProductDescription')
-        };
+        const productName = document.getElementById('productName').value;
+        const productPrice = parseFloat(document.getElementById('productPrice').value);
+        const productCategory = document.getElementById('productCategory').value;
+        const productImage = document.getElementById('productImage').value;
+        const productDescription = document.getElementById('productDescription').value;
         
         // Validar campos requeridos
-        if (!productData.name || !productData.price || !productData.category || productData.price <= 0) {
-            showMessage('Por favor complete todos los campos obligatorios', 'error');
-            submitButton.textContent = originalText;
-            submitButton.disabled = false;
+        if (!productName || !productPrice || !productCategory) {
+            showNotification('Por favor complete todos los campos obligatorios', 'error');
             return;
         }
         
-        // Si no hay imagen, usar una por defecto
-        if (!productData.image) {
-            productData.image = '/assets/images/placeholder.svg';
+        // Validar precio
+        if (productPrice <= 0) {
+            showNotification('El precio debe ser mayor que cero', 'error');
+            return;
         }
         
+        // Preparar datos para enviar
+        const productData = {
+            name: productName,
+            price: productPrice,
+            category: productCategory,
+            description: productDescription || ''
+        };
+        
+        // Agregar imagen si se proporcionó
+        if (productImage) {
+            productData.image = productImage;
+        }
+        
+        // Obtener token de autenticación
         const token = getAuthToken();
-        const response = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
-            method: 'PUT',
+        
+        // Enviar solicitud a la API
+        const response = await fetch(`${API_BASE_URL}/api/products`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -410,844 +423,26 @@ async function updateProduct(productId) {
         
         const result = await response.json();
         
-        if (!response.ok) {
-            throw new Error(result.error || 'Error al actualizar producto');
-        }
-        
-        // Cerrar modal
-        const modal = document.getElementById('editProductModal');
-        if (modal) {
-            modal.remove();
-        }
-        
-        // Mostrar mensaje de éxito
-        showMessage('Producto actualizado correctamente', 'success');
-        
-        // Recargar lista de productos
-        loadAllProducts();
-        loadDashboardData();
-    } catch (error) {
-        console.error('Error al actualizar producto:', error);
-        showMessage(`Error al actualizar producto: ${error.message}`, 'error');
-    } finally {
-        // Restaurar botón de envío
-        const submitButton = form.querySelector('button[type="submit"]');
-        if (submitButton) {
-            submitButton.textContent = 'Actualizar Producto';
-            submitButton.disabled = false;
-        }
-    }
-}
-
-// Eliminar producto
-function deleteProduct(productId) {
-    if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-        // Lógica para eliminar el producto
-        removeProduct(productId);
-    }
-}
-
-// Eliminar producto de la base de datos
-async function removeProduct(productId) {
-    try {
-        const token = getAuthToken();
-        const response = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
+        if (response.ok) {
+            showNotification('Producto agregado exitosamente', 'success');
+            const modal = document.getElementById('addProductModal');
+            if (modal) {
+                modal.style.display = 'none';
+                // Restaurar scroll del body
+                document.body.style.overflow = '';
             }
-        });
-        
-        if (!response.ok) {
-            throw new Error('Error al eliminar producto');
-        }
-        
-        // Mostrar mensaje de éxito
-        showMessage('Producto eliminado correctamente', 'success');
-        
-        // Recargar lista de productos
-        loadAllProducts();
-        loadDashboardData();
-    } catch (error) {
-        console.error('Error al eliminar producto:', error);
-        showMessage('Error al eliminar producto', 'error');
-    }
-}
-
-// Cargar pedidos
-async function loadOrders() {
-    try {
-        // Mostrar mensaje de carga
-        const tbody = document.getElementById('ordersTableBody');
-        if (!tbody) return;
-        
-        tbody.innerHTML = '<tr><td colspan="6">Cargando pedidos...</td></tr>';
-        
-        // Obtener pedidos del backend
-        const response = await fetch('http://localhost:5000/api/orders');
-        
-        if (!response.ok) {
-            throw new Error('Error al cargar los pedidos');
-        }
-        
-        const orders = await response.json();
-        
-        if (orders.length > 0) {
-            tbody.innerHTML = orders.map(order => `
-                <tr>
-                    <td>${order.id}</td>
-                    <td>${order.customerName}</td>
-                    <td>${new Date(order.date).toLocaleDateString('es-CL')}</td>
-                    <td>$${order.total.toLocaleString('es-CL')}</td>
-                    <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
-                    <td>
-                        <button class="btn-icon view-order" data-id="${order.id}" aria-label="Ver pedido ${order.id}" title="Ver">
-                            <i class="fas fa-eye" aria-hidden="true"></i>
-                        </button>
-                        <button class="btn-icon edit-order" data-id="${order.id}" aria-label="Editar pedido ${order.id}" title="Editar">
-                            <i class="fas fa-edit" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-            
-            // Añadir eventos a los botones
-            document.querySelectorAll('.view-order').forEach(button => {
-                button.addEventListener('click', function() {
-                    const orderId = this.getAttribute('data-id');
-                    viewOrder(orderId);
-                });
-            });
-            
-            document.querySelectorAll('.edit-order').forEach(button => {
-                button.addEventListener('click', function() {
-                    const orderId = this.getAttribute('data-id');
-                    editOrder(orderId);
-                });
-            });
+            // Recargar la página de productos si estamos ahí
+            if (window.location.pathname.includes('products.html')) {
+                window.location.reload();
+            }
         } else {
-            tbody.innerHTML = '<tr><td colspan="6">No hay pedidos disponibles</td></tr>';
+            showNotification(`Error al agregar el producto: ${result.message || 'Error desconocido'}`, 'error');
         }
+        
     } catch (error) {
-        console.error('Error al cargar pedidos:', error);
-        const tbody = document.getElementById('ordersTableBody');
-        if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="6">Error al cargar pedidos</td></tr>';
-        }
+        console.error('Error al agregar producto:', error);
+        showNotification(`Error al agregar el producto: ${error.message}`, 'error');
     }
-}
-
-// Configurar filtro de pedidos
-function setupOrderFilter() {
-    const filterSelect = document.getElementById('orderStatusFilter');
-    if (filterSelect) {
-        filterSelect.addEventListener('change', function() {
-            const status = this.value;
-            filterOrders(status);
-        });
-    }
-}
-
-// Filtrar pedidos por estado
-function filterOrders(status) {
-    // En una implementación real, esto haría una llamada a la API con el filtro
-    showMessage(`Filtrando pedidos por estado: ${status === '' ? 'Todos' : status}`, 'info');
-}
-
-// Ver detalles de un pedido
-function viewOrder(orderId) {
-    showMessage(`Función para ver detalles del pedido ${orderId}. En una implementación completa, aquí se mostrarían los detalles del pedido.`, 'info');
-}
-
-// Editar un pedido
-function editOrder(orderId) {
-    showMessage(`Función para editar el pedido ${orderId}. En una implementación completa, aquí se podría cambiar el estado del pedido.`, 'info');
-}
-
-// Configurar eventos de usuarios
-function setupUserEvents() {
-    // Botón para agregar usuario
-    const addUserBtn = document.getElementById('addUserBtn');
-    if (addUserBtn) {
-        addUserBtn.addEventListener('click', () => {
-            showUserModal();
-        });
-    }
-    
-    // Formulario de usuario
-    const userForm = document.getElementById('userForm');
-    if (userForm) {
-        userForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await saveUser();
-        });
-    }
-    
-    // Cerrar modal al hacer clic en la X
-    const closeModal = document.querySelector('#userModal .close');
-    if (closeModal) {
-        closeModal.addEventListener('click', () => {
-            document.getElementById('userModal').style.display = 'none';
-        });
-    }
-    
-    // Cerrar modal al hacer clic fuera del contenido
-    const userModal = document.getElementById('userModal');
-    if (userModal) {
-        userModal.addEventListener('click', (e) => {
-            if (e.target === userModal) {
-                userModal.style.display = 'none';
-            }
-        });
-    }
-}
-
-// Mostrar modal de usuario (crear o editar)
-function showUserModal(user = null) {
-    const modal = document.getElementById('userModal');
-    const title = document.getElementById('userModalTitle');
-    
-    // Verificar que los elementos existen antes de usarlos
-    if (!modal || !title) {
-        console.error('No se encontraron los elementos necesarios para mostrar el modal de usuario');
-        return;
-    }
-    
-    const userId = document.getElementById('userId');
-    const userName = document.getElementById('userName');
-    const userEmail = document.getElementById('userEmail');
-    const userPhone = document.getElementById('userPhone');
-    const userPassword = document.getElementById('userPassword');
-    const userRole = document.getElementById('userRole');
-    const passwordHelp = document.getElementById('passwordHelp');
-    
-    if (user) {
-        // Editar usuario existente
-        title.textContent = 'Editar Usuario';
-        if (userId) userId.value = user.id;
-        if (userName) userName.value = user.name;
-        if (userEmail) userEmail.value = user.email;
-        if (userPhone) userPhone.value = user.phone || '';
-        if (userRole) userRole.value = user.role || 'user';
-        if (userPassword) userPassword.value = '';
-        if (passwordHelp) passwordHelp.style.display = 'block';
-        if (userPassword) userPassword.removeAttribute('required');
-    } else {
-        // Crear nuevo usuario
-        title.textContent = 'Agregar Usuario';
-        if (userId) userId.value = '';
-        if (userName) userName.value = '';
-        if (userEmail) userEmail.value = '';
-        if (userPhone) userPhone.value = '';
-        if (userRole) userRole.value = 'user';
-        if (userPassword) userPassword.value = '';
-        if (passwordHelp) passwordHelp.style.display = 'block';
-        if (userPassword) userPassword.setAttribute('required', 'required');
-    }
-    
-    modal.style.display = 'block';
-}
-
-// Guardar usuario (crear o actualizar)
-async function saveUser() {
-    const userId = document.getElementById('userId').value;
-    const name = document.getElementById('userName').value;
-    const email = document.getElementById('userEmail').value;
-    const phone = document.getElementById('userPhone').value;
-    const password = document.getElementById('userPassword').value;
-    const role = document.getElementById('userRole').value;
-    
-    // Validaciones básicas
-    if (!name || !email || !phone || (!userId && !password)) {
-        showMessage('Por favor complete todos los campos obligatorios', 'error');
-        return;
-    }
-    
-    // Si es edición y no se ingresó contraseña, remover el campo
-    const userData = { name, email, phone, role };
-    if (password) {
-        userData.password = password;
-    }
-    
-    try {
-        const token = getAuthToken();
-        let response;
-        
-        if (userId) {
-            // Actualizar usuario existente
-            response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(userData)
-            });
-        } else {
-            // Crear nuevo usuario
-            if (!password) {
-                showMessage('La contraseña es obligatoria para nuevos usuarios', 'error');
-                return;
-            }
-            
-            response = await fetch(`${API_BASE_URL}/api/users`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(userData)
-            });
-        }
-        
-        const result = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(result.error || 'Error al guardar usuario');
-        }
-        
-        // Cerrar modal
-        document.getElementById('userModal').style.display = 'none';
-        
-        // Mostrar mensaje de éxito
-        showMessage(userId ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente', 'success');
-        
-        // Recargar lista de usuarios
-        loadUsers();
-    } catch (error) {
-        console.error('Error al guardar usuario:', error);
-        showMessage(error.message || 'Error al guardar usuario', 'error');
-    }
-}
-
-// Cargar usuarios
-async function loadUsers() {
-    try {
-        const token = getAuthToken();
-        const response = await fetch(`${API_BASE_URL}/api/users`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error('Error al cargar usuarios');
-        }
-        
-        const data = await response.json();
-        const users = data.users || [];
-        const tbody = document.getElementById('usersTableBody');
-        
-        if (tbody) {
-            if (users && users.length > 0) {
-                tbody.innerHTML = users.map(user => `
-                    <tr>
-                        <td>${user.id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td>${user.phone || ''}</td>
-                        <td>${user.role || 'user'}</td>
-                        <td>${user.lastLogin || 'Nunca'}</td>
-                        <td>
-                            <button class="btn-icon edit-user" data-id="${user.id}" aria-label="Editar ${user.name}" title="Editar">
-                                <i class="fas fa-edit" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                
-                // Añadir eventos a los botones de editar
-                document.querySelectorAll('.edit-user').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const userId = this.getAttribute('data-id');
-                        editUser(userId);
-                    });
-                });
-            } else {
-                tbody.innerHTML = '<tr><td colspan="7">No hay usuarios disponibles</td></tr>';
-            }
-        }
-    } catch (error) {
-        console.error('Error al cargar usuarios:', error);
-        const tbody = document.getElementById('usersTableBody');
-        if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="7">Error al cargar usuarios</td></tr>';
-        }
-    }
-}
-
-// Cargar analíticas
-function loadAnalytics() {
-    // En una implementación real, esto haría llamadas a la API para obtener datos
-    initCharts();
-    loadSummaryStats();
-}
-
-// Inicializar gráficos
-function initCharts() {
-    // Gráfico de ventas por mes
-    const salesCtx = document.getElementById('salesChart');
-    if (salesCtx) {
-        new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago'],
-                datasets: [{
-                    label: 'Ventas',
-                    data: [12000, 19000, 15000, 18000, 22000, 19500, 23000, 25000],
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-    }
-    
-    // Gráfico de productos más vendidos
-    const topProductsCtx = document.getElementById('topProductsChart');
-    if (topProductsCtx) {
-        new Chart(topProductsCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Ramo Rosas', 'Arreglo Especial', 'Planta Interior', 'Caja Sorpresa', 'Centro de Mesa'],
-                datasets: [{
-                    label: 'Unidades vendidas',
-                    data: [45, 32, 28, 25, 22],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-    }
-    
-    // Gráfico de categorías populares
-    const categoriesCtx = document.getElementById('categoriesChart');
-    if (categoriesCtx) {
-        new Chart(categoriesCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Ramos', 'Arreglos', 'Especiales', 'Plantas'],
-                datasets: [{
-                    data: [35, 30, 20, 15],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 205, 86, 1)',
-                        'rgba(75, 192, 192, 1)'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
-    }
-}
-
-// Cargar estadísticas resumidas
-function loadSummaryStats() {
-    // En una implementación real, esto haría llamadas a la API
-    document.getElementById('todaySales').textContent = '$12,500';
-    document.getElementById('weekSales').textContent = '$85,300';
-    document.getElementById('monthSales').textContent = '$325,600';
-}
-
-// Inicializar configuración
-function initSettings() {
-    // Cargar configuración guardada
-    loadSettings();
-    
-    // Configurar formularios
-    const storeInfoForm = document.getElementById('storeInfoForm');
-    const customizationForm = document.getElementById('customizationForm');
-    const shippingForm = document.getElementById('shippingForm');
-    
-    if (storeInfoForm) {
-        storeInfoForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            saveStoreInfo();
-        });
-    }
-    
-    if (customizationForm) {
-        customizationForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            saveCustomization();
-        });
-    }
-    
-    if (shippingForm) {
-        shippingForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            saveShippingSettings();
-        });
-    }
-}
-
-// Cargar configuración
-function loadSettings() {
-    console.log('Cargando configuración...');
-    
-    // Cargar información de la tienda
-    const storeInfo = JSON.parse(localStorage.getItem('storeInfo')) || {};
-    const storeName = document.getElementById('storeName');
-    const storeEmail = document.getElementById('storeEmail');
-    const storePhone = document.getElementById('storePhone');
-    const storeAddress = document.getElementById('storeAddress');
-    
-    if (storeName) storeName.value = storeInfo.name || '';
-    if (storeEmail) storeEmail.value = storeInfo.email || '';
-    if (storePhone) storePhone.value = storeInfo.phone || '';
-    if (storeAddress) storeAddress.value = storeInfo.address || '';
-    
-    // Cargar personalización
-    const customization = JSON.parse(localStorage.getItem('customization')) || {};
-    const primaryColor = document.getElementById('primaryColor');
-    const secondaryColor = document.getElementById('secondaryColor');
-    
-    if (primaryColor) primaryColor.value = customization.primaryColor || '#4a7c59';
-    if (secondaryColor) secondaryColor.value = customization.secondaryColor || '#3a6c49';
-    
-    // Cargar configuración de envíos
-    const shipping = JSON.parse(localStorage.getItem('shippingSettings')) || {};
-    const shippingCost = document.getElementById('shippingCost');
-    
-    if (shippingCost) shippingCost.value = shipping.cost || '';
-}
-
-// Guardar información de la tienda
-function saveStoreInfo() {
-    const storeInfo = {
-        name: document.getElementById('storeName').value,
-        email: document.getElementById('storeEmail').value,
-        phone: document.getElementById('storePhone').value,
-        address: document.getElementById('storeAddress').value,
-        hours: document.getElementById('storeHours').value
-    };
-    
-    localStorage.setItem('storeInfo', JSON.stringify(storeInfo));
-    showMessage('Información de la tienda guardada correctamente', 'success');
-}
-
-// Guardar personalización
-function saveCustomization() {
-    const customization = {
-        primaryColor: document.getElementById('primaryColor').value,
-        secondaryColor: document.getElementById('secondaryColor').value
-    };
-    
-    localStorage.setItem('customization', JSON.stringify(customization));
-    showMessage('Personalización guardada correctamente', 'success');
-    
-    // Aplicar colores inmediatamente
-    applyCustomColors(customization.primaryColor, customization.secondaryColor);
-}
-
-// Guardar configuración de envíos
-function saveShippingSettings() {
-    const shipping = {
-        cost: document.getElementById('shippingCost').value,
-        freeThreshold: document.getElementById('freeShippingThreshold').value,
-        deliveryTime: document.getElementById('deliveryTime').value
-    };
-    
-    localStorage.setItem('shippingSettings', JSON.stringify(shipping));
-    showMessage('Configuración de envíos guardada correctamente', 'success');
-}
-
-// Aplicar colores personalizados
-function applyCustomColors(primaryColor, secondaryColor) {
-    const style = document.createElement('style');
-    style.textContent = `
-        :root {
-            --primary: ${primaryColor};
-            --secondary: ${secondaryColor};
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-// Editar usuario
-async function editUser(userId) {
-    try {
-        const token = getAuthToken();
-        const response = await fetch(`${API_BASE_URL}/api/users/profile`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error('Error al obtener datos del usuario');
-        }
-        
-        const user = await response.json();
-        showUserModal(user);
-    } catch (error) {
-        console.error('Error al obtener usuario:', error);
-        showMessage('Error al obtener datos del usuario', 'error');
-    }
-}
-
-// Configurar navegación del menú
-function setupMenuNavigation() {
-    // Esperar a que el DOM esté completamente cargado
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMenuNavigation);
-    } else {
-        // DOM ya está cargado
-        initMenuNavigation();
-    }
-}
-
-function initMenuNavigation() {
-    const menuLinks = document.querySelectorAll('.admin-menu a[data-section]');
-    
-    menuLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remover clase activa de todos los elementos del menú
-            document.querySelectorAll('.admin-menu li').forEach(li => {
-                li.classList.remove('active');
-            });
-            
-            // Agregar clase activa al elemento seleccionado
-            this.parentElement.classList.add('active');
-            
-            // Ocultar todas las secciones de contenido
-            document.querySelectorAll('.admin-content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Mostrar la sección seleccionada
-            const targetSection = this.getAttribute('data-section');
-            const sectionElement = document.getElementById(targetSection);
-            if (sectionElement) {
-                sectionElement.classList.add('active');
-            }
-        });
-    });
-}
-
-// Mostrar mensaje al usuario
-function showMessage(message, type = 'info') {
-    // Crear contenedor de mensajes si no existe
-    let messageContainer = document.getElementById('admin-message-container');
-    if (!messageContainer) {
-        messageContainer = document.createElement('div');
-        messageContainer.id = 'admin-message-container';
-        messageContainer.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            width: 300px;
-        `;
-        document.body.appendChild(messageContainer);
-    }
-    
-    // Crear mensaje
-    const messageElement = document.createElement('div');
-    messageElement.style.cssText = `
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        color: white;
-        font-weight: 500;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
-    `;
-    
-    // Establecer estilo según el tipo de mensaje
-    switch(type) {
-        case 'success':
-            messageElement.style.backgroundColor = '#28a745';
-            break;
-        case 'error':
-            messageElement.style.backgroundColor = '#dc3545';
-            break;
-        case 'warning':
-            messageElement.style.backgroundColor = '#ffc107';
-            messageElement.style.color = '#212529';
-            break;
-        default:
-            messageElement.style.backgroundColor = '#17a2b8';
-    }
-    
-    messageElement.textContent = message;
-    
-    // Añadir mensaje al contenedor
-    messageContainer.appendChild(messageElement);
-    
-    // Eliminar mensaje después de 3 segundos
-    setTimeout(() => {
-        if (messageElement.parentNode) {
-            messageElement.parentNode.removeChild(messageElement);
-        }
-    }, 3000);
-}
-
-// Función para subir imágenes
-async function uploadImage(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            try {
-                // Convertir a base64
-                const base64Image = e.target.result;
-                
-                // Enviar al servidor
-                const token = getAuthToken();
-                const response = await fetch(`${API_BASE_URL}/api/products/upload`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ 
-                        image: base64Image,
-                        filename: file.name,
-                        contentType: file.type
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(result.error || 'Error al subir imagen');
-                }
-                
-                resolve(result.imageUrl);
-            } catch (error) {
-                reject(error);
-            }
-        };
-        reader.onerror = function() {
-            reject(new Error('Error al leer el archivo'));
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
-// Función para mostrar vista previa de imagen
-function setupImagePreview() {
-    // Vista previa para agregar producto
-    const imageFileInput = document.getElementById('productImageFile');
-    const imagePreview = document.getElementById('imagePreview');
-    
-    if (imageFileInput && imagePreview) {
-        imageFileInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                // Validar que es una imagen
-                if (!file.type.startsWith('image/')) {
-                    showMessage('Por favor seleccione un archivo de imagen válido', 'error');
-                    this.value = '';
-                    return;
-                }
-                
-                // Mostrar vista previa
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Crear o actualizar imagen de vista previa
-                    let previewImg = imagePreview.querySelector('img');
-                    if (!previewImg) {
-                        previewImg = document.createElement('img');
-                        previewImg.className = 'preview-image';
-                        imagePreview.appendChild(previewImg);
-                    }
-                    previewImg.src = e.target.result;
-                    previewImg.style.display = 'block';
-                    
-                    // Mostrar tamaño de la imagen
-                    const sizeInfo = document.createElement('div');
-                    sizeInfo.className = 'image-size-info';
-                    sizeInfo.textContent = `Tamaño: ${(file.size / 1024).toFixed(2)} KB`;
-                    imagePreview.appendChild(sizeInfo);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-    
-    // Vista previa para editar producto
-    const editImageFileInput = document.getElementById('editProductImageFile');
-    const editImagePreview = document.getElementById('editImagePreview');
-    
-    if (editImageFileInput && editImagePreview) {
-        editImageFileInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                // Validar que es una imagen
-                if (!file.type.startsWith('image/')) {
-                    showMessage('Por favor seleccione un archivo de imagen válido', 'error');
-                    this.value = '';
-                    return;
-                }
-                
-                // Mostrar vista previa
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Crear o actualizar imagen de vista previa
-                    let previewImg = editImagePreview.querySelector('img');
-                    if (!previewImg) {
-                        previewImg = document.createElement('img');
-                        previewImg.className = 'preview-image';
-                        editImagePreview.appendChild(previewImg);
-                    }
-                    previewImg.src = e.target.result;
-                    previewImg.style.display = 'block';
-                    
-                    // Mostrar tamaño de la imagen
-                    const sizeInfo = document.createElement('div');
-                    sizeInfo.className = 'image-size-info';
-                    sizeInfo.textContent = `Tamaño: ${(file.size / 1024).toFixed(2)} KB`;
-                    editImagePreview.appendChild(sizeInfo);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-}
-
-// Función para traducir categorías
-function translateCategory(category) {
-    const categories = {
-        'arreglos': 'Arreglos Florales',
-        'ramos': 'Ramos',
-        'plantas': 'Plantas',
-        'accesorios': 'Accesorios'
-    };
-    return categories[category] || category;
 }
 
 // Función para configurar la funcionalidad de logs
@@ -1299,4 +494,29 @@ function filterLogs(level) {
     showNotification(`Filtrando logs por nivel: ${level}`, 'info');
     // En una implementación real, esto filtraría los logs existentes
     console.log(`Filtrando logs por nivel: ${level}`);
+}
+
+// Función para configurar la funcionalidad de actividad reciente
+function setupActivityFunctionality() {
+    const refreshActivityBtn = document.getElementById('refreshActivityBtn');
+    const viewAllActivityBtn = document.getElementById('viewAllActivityBtn');
+    
+    if (refreshActivityBtn) {
+        refreshActivityBtn.addEventListener('click', function() {
+            refreshActivity();
+        });
+    }
+    
+    if (viewAllActivityBtn) {
+        viewAllActivityBtn.addEventListener('click', function() {
+            showNotification('Funcionalidad para ver todo el historial en desarrollo', 'info');
+        });
+    }
+}
+
+// Función para refrescar la actividad reciente
+function refreshActivity() {
+    showNotification('Actividad actualizada', 'info');
+    // En una implementación real, esto cargaría la actividad reciente desde la API
+    console.log('Refrescando actividad reciente...');
 }

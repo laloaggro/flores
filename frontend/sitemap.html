@@ -241,16 +241,14 @@
             }
             
             // Verificar si el usuario es administrador
-            import('./assets/js/auth.js').then(authModule => {
-                // Esperar un poco para que se cargue el estado de autenticación
-                setTimeout(() => {
-                    if (!authModule.isAuthenticated() || !authModule.isAdmin()) {
-                        // Si no está autenticado o no es admin, redirigir a la página de inicio
-                        window.location.href = 'index.html';
-                    }
-                }, 100);
+            import('./assets/js/utils.js').then(utilsModule => {
+                // Verificar autenticación y rol de administrador
+                if (!utilsModule.isAuthenticated() || !utilsModule.isAdmin()) {
+                    // Si no está autenticado o no es admin, redirigir a la página de inicio
+                    window.location.href = 'index.html';
+                }
             }).catch(err => {
-                console.error('Error al cargar auth.js:', err);
+                console.error('Error al cargar utils.js:', err);
                 // En caso de error, redirigir a la página de inicio
                 window.location.href = 'index.html';
             });

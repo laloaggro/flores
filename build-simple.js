@@ -34,8 +34,12 @@ if (!fs.existsSync(DIST_JS)) {
 function minifyCSS(css) {
     return css
         .replace(/\/\*(?:(?!\*\/)[\s\S])*\*\//g, '') // Eliminar comentarios
+        .replace(/\/\/.*$/gm, '') // Eliminar comentarios de línea
         .replace(/\s+/g, ' ') // Eliminar espacios múltiples
         .replace(/\s*([{}:;,])\s*/g, '$1') // Eliminar espacios alrededor de caracteres
+        .replace(/\s*>\s*/g, '>') // Eliminar espacios alrededor de >
+        .replace(/\s*\+\s*/g, '+') // Eliminar espacios alrededor de +
+        .replace(/\s*~\s*/g, '~') // Eliminar espacios alrededor de ~
         .trim();
 }
 
@@ -48,6 +52,8 @@ function minifyJS(js) {
         .replace(/\/\/.*$/gm, '') // Eliminar comentarios de línea
         .replace(/\s+/g, ' ') // Eliminar espacios múltiples
         .replace(/\s*([{}();,:])\s*/g, '$1') // Eliminar espacios alrededor de caracteres
+        .replace(/\s*=>\s*/g, '=>') // Eliminar espacios alrededor de =>
+        .replace(/\s*=\s*/g, '=') // Eliminar espacios alrededor de =
         .trim();
 }
 
@@ -57,33 +63,37 @@ function minifyJS(js) {
 function buildCSS() {
     console.log('Building CSS...');
     
-    // Archivos CSS a combinar
+    // Archivos CSS a combinar en orden específico
     const cssFiles = [
-        'tailwind.css',
-        'base.css',
-        'components.css',
-        'utilities.css',
-        'styles.css'
+        'preflight.css',
+        'theme.css',
+        'styles.css',
+        'header.css',
+        'visibility-fix.css',
+        'conflict-fixes.css',
+        'admin.css',
+        'index.css'
     ];
     
     let combinedCSS = '';
     
-    // Leer y combinar archivos CSS
     cssFiles.forEach(file => {
         const filePath = path.join(CSS_DIR, file);
         if (fs.existsSync(filePath)) {
-            console.log(`Adding ${file}`);
-            combinedCSS += fs.readFileSync(filePath, 'utf8') + '\n';
+            console.log(`Adding ${file}...`);
+            const cssContent = fs.readFileSync(filePath, 'utf8');
+            combinedCSS += `/* ${file} */\n${cssContent}\n\n`;
+        } else {
+            console.warn(`Warning: ${file} not found`);
         }
     });
     
-    // Minificar CSS
+    // Minificar CSS combinado
     const minifiedCSS = minifyCSS(combinedCSS);
     
-    // Guardar CSS minificado
-    const outputFile = path.join(DIST_CSS, 'styles.min.css');
-    fs.writeFileSync(outputFile, minifiedCSS);
-    console.log(`CSS built: ${outputFile}`);
+    // Guardar CSS combinado y minificado
+    fs.writeFileSync(path.join(DIST_CSS, 'styles.min.css'), minifiedCSS);
+    console.log('CSS build completed');
 }
 
 /**
@@ -92,93 +102,100 @@ function buildCSS() {
 function buildJS() {
     console.log('Building JS...');
     
-    // Archivos JS a combinar
+    // Archivos JS principales a combinar
     const jsFiles = [
         'utils.js',
-        'auth.js',
-        'cartUtils.js',
-        'productManager.js',
-        'homeProducts.js',
-        'products.js',
+        'userMenu.js',
         'cart.js',
-        'checkout.js',
-        'profile.js',
+        'cartUtils.js',
+        'products.js',
+        'header.js',
+        'theme.js',
         'admin.js',
+        'admin-orders.js',
+        'auth.js',
+        'profile.js',
         'contact.js',
-        'login.js',
-        'home.js',
-        'app.js'
+        'productManager.js'
     ];
     
     let combinedJS = '';
     
-    // Leer y combinar archivos JS
     jsFiles.forEach(file => {
         const filePath = path.join(JS_DIR, file);
         if (fs.existsSync(filePath)) {
-            console.log(`Adding ${file}`);
-            combinedJS += fs.readFileSync(filePath, 'utf8') + '\n';
+            console.log(`Adding ${file}...`);
+            const jsContent = fs.readFileSync(filePath, 'utf8');
+            combinedJS += `// ${file}\n${jsContent}\n\n`;
+        } else {
+            console.warn(`Warning: ${file} not found`);
         }
     });
     
-    // Minificar JS
+    // Minificar JS combinado
     const minifiedJS = minifyJS(combinedJS);
     
-    // Guardar JS minificado
-    const outputFile = path.join(DIST_JS, 'app.min.js');
-    fs.writeFileSync(outputFile, minifiedJS);
-    console.log(`JS built: ${outputFile}`);
+    // Guardar JS combinado y minificado
+    fs.writeFileSync(path.join(DIST_JS, 'scripts.min.js'), minifiedJS);
+    console.log('JS build completed');
 }
 
 /**
- * Copiar componentes necesarios
+ * Copiar componentes web
  */
 function copyComponents() {
     console.log('Copying components...');
     
     const components = [
-        'Cart.js',
+        'Header.js',
+        'Footer.js',
         'ProductCard.js',
-        'Products.js',
-        'ProductFilters.js',
-        'Pagination.js'
+        'Cart.js'
     ];
     
     components.forEach(component => {
-        const srcPath = path.join(COMponents_DIR, component);
-        const destPath = path.join(DIST_JS, component);
+        const srcPath = path.join(COMPONENTS_DIR, component);
+        const destPath = path.join(DIST_DIR, 'components', component);
+        
+        // Crear directorio si no existe
+        const destDir = path.dirname(destPath);
+        if (!fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir, { recursive: true });
+        }
         
         if (fs.existsSync(srcPath)) {
             fs.copyFileSync(srcPath, destPath);
             console.log(`Copied ${component}`);
+        } else {
+            console.warn(`Warning: ${component} not found`);
         }
     });
 }
 
 /**
- * Copiar imágenes y otros assets
+ * Copiar assets (imágenes, fuentes, etc.)
  */
 function copyAssets() {
     console.log('Copying assets...');
     
-    // Crear directorio de imágenes si no existe
-    const distImages = path.join(DIST_DIR, 'images');
-    if (!fs.existsSync(distImages)) {
-        fs.mkdirSync(distImages, { recursive: true });
-    }
+    const assetDirs = ['images'];
     
-    // Copiar imágenes
-    const imageFiles = [
-        'placeholder.svg'
-    ];
-    
-    imageFiles.forEach(image => {
-        const srcPath = path.join(ASSETS_DIR, 'images', image);
-        const destPath = path.join(distImages, image);
+    assetDirs.forEach(dir => {
+        const srcDir = path.join(ASSETS_DIR, dir);
+        const destDir = path.join(DIST_DIR, 'assets', dir);
         
-        if (fs.existsSync(srcPath)) {
-            fs.copyFileSync(srcPath, destPath);
-            console.log(`Copied ${image}`);
+        if (!fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir, { recursive: true });
+        }
+        
+        if (fs.existsSync(srcDir)) {
+            const files = fs.readdirSync(srcDir);
+            files.forEach(file => {
+                const srcPath = path.join(srcDir, file);
+                const destPath = path.join(destDir, file);
+                fs.copyFileSync(srcPath, destPath);
+                console.log(`Copied ${file}`);
+            });
         }
     });
 }
