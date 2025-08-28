@@ -37,6 +37,8 @@ class Header extends HTMLElement {
                             <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
                             <li><a href="orders.html" role="menuitem"><i class="fas fa-shopping-bag" aria-hidden="true"></i> Mis Pedidos</a></li>
                             <li><a href="wishlist.html" role="menuitem"><i class="fas fa-heart" aria-hidden="true"></i> Lista de Deseos</a></li>
+                            <li id="adminMenuItem" style="display: none;"><a href="admin.html" role="menuitem"><i class="fas fa-cog" aria-hidden="true"></i> Panel de Administración</a></li>
+                            <li id="sitemapMenuItem" style="display: none;"><a href="sitemap.html" role="menuitem"><i class="fas fa-sitemap" aria-hidden="true"></i> Mapa del Sitio</a></li>
                             <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
                         </ul>
                     </div>

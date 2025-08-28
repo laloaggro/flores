@@ -73,6 +73,10 @@ async function loadProducts() {
         
         const data = await response.json();
         allProducts = data.products;
+        
+        // Precargar imágenes
+        preloadImages(data.products);
+        
         displayProducts(data.products);
     } catch (error) {
         console.error('Error al cargar productos:', error);
@@ -82,6 +86,23 @@ async function loadProducts() {
             showNotification('Error al cargar productos', 'error');
         }
     }
+}
+
+// Precargar imágenes de productos
+function preloadImages(products) {
+    products.forEach(product => {
+        const imageUrl = product.image_url || product.image || './assets/images/placeholder.svg';
+        
+        // Asegurarse de que la ruta de la imagen sea correcta
+        let correctImageUrl = imageUrl;
+        if (imageUrl.startsWith('/assets/images/')) {
+            correctImageUrl = `.${imageUrl}`;
+        }
+        
+        // Crear una imagen para precargar
+        const img = new Image();
+        img.src = correctImageUrl;
+    });
 }
 
 // Mostrar productos en la cuadrícula
@@ -104,11 +125,25 @@ function displayProducts(products) {
 function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
+    
+    // Verificar si la imagen es AVIF y proporcionar fallback
+    let imageUrl = product.image_url || product.image || './assets/images/placeholder.svg';
+    
+    // Asegurarse de que la ruta de la imagen sea correcta
+    if (imageUrl.startsWith('/assets/images/')) {
+        imageUrl = `.${imageUrl}`;
+    }
+    
+    // Si la imagen es relativa al directorio frontend
+    if (imageUrl.startsWith('./assets/images/')) {
+        // La ruta es correcta
+    } else if (imageUrl.startsWith('assets/images/')) {
+        imageUrl = `./${imageUrl}`;
+    }
+    
     card.innerHTML = `
         <div class="product-image">
-            <img src="${product.image_url || product.image || './assets/images/placeholder.svg'}" 
-                 alt="${product.name}" 
-                 onerror="this.src='./assets/images/placeholder.svg'">
+            <img src="${imageUrl}" alt="${product.name}" onerror="this.src='./assets/images/placeholder.svg'">
             <div class="product-overlay">
                 <button class="btn btn-secondary btn-view-details" data-id="${product.id}">Ver Detalles</button>
             </div>
@@ -130,10 +165,22 @@ function createProductCard(product) {
     
     // Agregar event listeners
     const addToCartButton = card.querySelector('.btn-add-to-cart');
-    addToCartButton.addEventListener('click', () => addToCart(product.id));
+    if (addToCartButton) {
+        addToCartButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            addToCart(product.id);
+        });
+    }
     
     const viewDetailsButton = card.querySelector('.btn-view-details');
-    viewDetailsButton.addEventListener('click', () => viewProductDetails(product.id));
+    if (viewDetailsButton) {
+        viewDetailsButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            viewProductDetails(product.id);
+        });
+    }
     
     return card;
 }

@@ -1,28 +1,43 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa del Sitio - Arreglos Victoria Florería</title>
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
     
-    <!-- Cargar estilos CSS en el orden correcto -->
+    <!-- Cargar estilos CSS optimizados -->
     <link rel="stylesheet" href="assets/css/preflight.css">
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/index.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="assets/css/conflict-fixes.css">
     
     <meta name="description" content="Mapa del sitio de Arreglos Victoria Florería. Encuentra fácilmente todas las páginas y secciones de nuestro sitio web.">
     <meta name="keywords" content="mapa del sitio, sitemap, navegación, florería, arreglos florales, Recoleta">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="noindex, follow">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -30,6 +45,9 @@
     <meta property="og:title" content="Mapa del Sitio - Arreglos Victoria Florería">
     <meta property="og:description" content="Mapa del sitio web de Arreglos Florales Victoria. Navega fácilmente por todas las secciones y páginas de nuestro sitio web.">
     <meta property="og:image" content="./assets/images/hero-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -37,59 +55,41 @@
     <meta property="twitter:title" content="Mapa del Sitio - Arreglos Victoria Florería">
     <meta property="twitter:description" content="Mapa del sitio web de Arreglos Florales Victoria. Navega fácilmente por todas las secciones y páginas de nuestro sitio web.">
     <meta property="twitter:image" content="./assets/images/hero-image.jpg">
-
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Preload critical scripts -->
+    <link rel="preload" href="components/Header.js" as="script">
+    <link rel="preload" href="components/Footer.js" as="script">
+    <link rel="preload" href="assets/js/utils.js" as="script">
+    <link rel="preload" href="assets/js/auth.js" as="script">
+    <link rel="preload" href="assets/js/userMenu.js" as="script">
+    <link rel="preload" href="assets/js/header.js" as="script">
+    <link rel="preload" href="assets/js/theme.js" as="script">
 </head>
-<body>
+<body data-theme="light">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
-    <header>
-        <div class="container">
-            <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
-                
-                <button class="hamburger" aria-label="Menú" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                
-                <ul class="nav-links">
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="products.html">Productos</a></li>
-                    <li><a href="index.html#about">Nosotros</a></li>
-                    <li><a href="index.html#contacto">Contacto</a></li>
-                </ul>
-                <div class="user-actions">
-                    <a href="login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
-                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                        <span>Iniciar sesión</span>
-                    </a>
-                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
-                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
-                            <span id="userNameDisplay"></span>
-                            <i class="fas fa-user" aria-hidden="true"></i>
-                            <i class="fas fa-caret-down" aria-hidden="true"></i>
-                        </button>
-                        <ul class="user-dropdown" role="menu">
-                            <li><a href="profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
-                            <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
-                        </ul>
-                    </div>
-                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
-                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                        <span class="cart-count" id="cartCount">0</span>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header -->
+    <site-header></site-header>
 
     <main id="main-content">
+        <section class="hero half-height">
+            <div class="hero-content">
+                <h1>Mapa del Sitio</h1>
+                <p>Navega fácilmente por todas las secciones de nuestro sitio web</p>
+            </div>
+        </section>
+        
         <section class="sitemap-section">
             <div class="container">
-                <div class="page-header">
-                    <h1>Mapa del Sitio</h1>
-                    <p>Navega fácilmente por todas las secciones de nuestro sitio web</p>
+                <div class="section-title">
+                    <h2>Mapa del Sitio</h2>
+                    <p>Explora todas las secciones de nuestro sitio web</p>
                 </div>
                 
                 <div class="sitemap-intro">
@@ -142,6 +142,10 @@
                                 <a href="profile.html">Perfil</a>
                                 <p>Gestiona tu información personal</p>
                             </li>
+                            <li>
+                                <a href="admin.html">Panel de Administración</a>
+                                <p>Área exclusiva para administradores</p>
+                            </li>
                         </ul>
                     </div>
                     
@@ -149,8 +153,20 @@
                         <h3><i class="fas fa-shopping-cart"></i> Compras</h3>
                         <ul>
                             <li>
+                                <a href="wishlist.html">Lista de Deseos</a>
+                                <p>Tus productos favoritos</p>
+                            </li>
+                            <li>
+                                <a href="cart.html">Carrito de Compras</a>
+                                <p>Revisa los productos seleccionados</p>
+                            </li>
+                            <li>
                                 <a href="checkout.html">Proceso de Compra</a>
                                 <p>Finaliza tu pedido</p>
+                            </li>
+                            <li>
+                                <a href="orders.html">Mis Pedidos</a>
+                                <p>Consulta tu historial de pedidos</p>
                             </li>
                         </ul>
                     </div>
@@ -158,6 +174,26 @@
                     <div class="sitemap-category">
                         <h3><i class="fas fa-info-circle"></i> Información Adicional</h3>
                         <ul>
+                            <li>
+                                <a href="contact.html">Contacto</a>
+                                <p>Formulario de contacto y datos de la empresa</p>
+                            </li>
+                            <li>
+                                <a href="privacy.html">Política de Privacidad</a>
+                                <p>Información sobre protección de datos</p>
+                            </li>
+                            <li>
+                                <a href="terms.html">Términos y Condiciones</a>
+                                <p>Condiciones de uso del sitio web</p>
+                            </li>
+                            <li>
+                                <a href="shipping.html">Envíos y Devoluciones</a>
+                                <p>Información sobre entregas y devoluciones</p>
+                            </li>
+                            <li>
+                                <a href="faq.html">Preguntas Frecuentes</a>
+                                <p>Respuestas a las dudas más comunes</p>
+                            </li>
                             <li>
                                 <a href="sitemap.html">Mapa del Sitio</a>
                                 <p>Esta página</p>
@@ -181,62 +217,43 @@
         </section>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Arreglos Florales Victoria</h3>
-                    <p>Flores frescas y arreglos florales únicos para las ocasiones más especiales.</p>
-                    <div class="social-links">
-                        <a href="https://www.facebook.com/profile.php?id=61578999845743" aria-label="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/arreglosvictoria/" aria-label="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://wa.me/56963603177" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Enlaces Rápidos</h4>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="products.html">Productos</a></li>
-                        <li><a href="index.html#about">Nosotros</a></li>
-                        <li><a href="index.html#contacto">Contacto</a></li>
-                        <li><a href="sitemap.html">Mapa del Sitio</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Información de Contacto</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</li>
-                        <li><i class="fas fa-phone" aria-hidden="true"></i> +569 6360 3177</li>
-                        <li><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 AM - 7:00 PM</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer -->
+    <site-footer></site-footer>
 
-    <script src="assets/js/mobile-menu.js" type="module"></script>
-    <script src="assets/js/utils.js" type="module"></script>
-    <script src="assets/js/auth.js" type="module"></script>
+    <!-- Scripts optimizados -->
+    <script type="module" src="components/Header.js"></script>
+    <script type="module" src="components/Footer.js"></script>
+    <script type="module" src="assets/js/utils.js"></script>
+    <script type="module" src="assets/js/auth.js"></script>
+    <script type="module" src="assets/js/userMenu.js"></script>
+    <script type="module" src="assets/js/header.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
     <script>
-        // Inicializar menú de usuario
+        // Si theme.js no establece el tema, usamos un script de respaldo
         document.addEventListener('DOMContentLoaded', function() {
-            import('./assets/js/auth.js').then(module => {
-                module.initUserMenu();
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            }
+            
+            // Verificar si el usuario es administrador
+            import('./assets/js/auth.js').then(authModule => {
+                // Esperar un poco para que se cargue el estado de autenticación
+                setTimeout(() => {
+                    if (!authModule.isAuthenticated() || !authModule.isAdmin()) {
+                        // Si no está autenticado o no es admin, redirigir a la página de inicio
+                        window.location.href = 'index.html';
+                    }
+                }, 100);
             }).catch(err => {
                 console.error('Error al cargar auth.js:', err);
+                // En caso de error, redirigir a la página de inicio
+                window.location.href = 'index.html';
             });
-        });
-        
-        // Fallback para cargar estilos en caso de que el preload falle
-        window.addEventListener('load', function() {
-            var stylesLink = document.querySelector('link[href="assets/css/styles.css"]');
-            if (stylesLink && (!stylesLink.rel || stylesLink.rel !== 'stylesheet')) {
-                stylesLink.rel = 'stylesheet';
-            }
         });
     </script>
 </body>

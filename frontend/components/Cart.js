@@ -1,4 +1,5 @@
-// components/Cart.js
+import CartUtils from '../assets/js/cartUtils.js';
+import { showNotification, formatPrice } from '../assets/js/utils.js';
 
 /**
  * Cart - Componente para el carrito de compras
@@ -68,16 +69,6 @@ function Cart(cartItems = [], savedForLater = []) {
   `;
 }
 
-// Función para formatear precios
-function formatPrice(price) {
-  // Formatear como moneda chilena sin decimales
-  return new Intl.NumberFormat('es-CL', {
-    style: 'currency',
-    currency: 'CLP',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(price);
-}
 
 // Función para calcular el total del carrito
 function calculateCartTotal(items) {
@@ -245,6 +236,9 @@ function handleIncreaseQuantity(e) {
   if (item) {
     // Llamar a la utilidad para actualizar la cantidad
     CartUtils.updateQuantity(productId, item.quantity + 1);
+    
+    // Actualizar la UI
+    updateCartUI();
   }
 }
 
@@ -263,6 +257,9 @@ function handleDecreaseQuantity(e) {
       // Eliminar el item del carrito
       CartUtils.removeFromCart(productId);
     }
+    
+    // Actualizar la UI
+    updateCartUI();
   }
 }
 
@@ -271,6 +268,9 @@ function handleRemoveItem(e) {
   e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   CartUtils.removeFromCart(productId);
+  
+  // Actualizar la UI
+  updateCartUI();
 }
 
 function handleSaveForLater(e) {
@@ -278,6 +278,9 @@ function handleSaveForLater(e) {
   e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   CartUtils.saveForLater(productId);
+  
+  // Actualizar la UI
+  updateCartUI();
 }
 
 function handleMoveToCart(e) {
@@ -285,6 +288,9 @@ function handleMoveToCart(e) {
   e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   CartUtils.moveToCart(productId);
+  
+  // Actualizar la UI
+  updateCartUI();
 }
 
 function handleRemoveSavedItem(e) {
@@ -292,17 +298,86 @@ function handleRemoveSavedItem(e) {
   e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   CartUtils.removeFromSaved(productId);
+  
+  // Actualizar la UI
+  updateCartUI();
 }
 
-function handleClearCart() {
+function handleClearCart(e) {
+  e.preventDefault();
+  e.stopPropagation();
   if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
     CartUtils.clearCart();
+    // Actualizar la UI para mostrar el carrito vacío
+    updateCartUI();
   }
 }
+
+// Función para actualizar solo la UI del carrito sin recrearlo
+function updateCartUI() {
+  const cart = CartUtils.getCartItems();
+  const savedForLater = CartUtils.getSavedItems();
+  
+  const cartModal = document.getElementById('cartModal');
+  if (!cartModal) return;
+  
+  // Asegurarse de que el carrito permanezca visible
+  cartModal.style.display = 'block';
+  
+  // Actualizar sección de items del carrito
+  const cartItemsSection = cartModal.querySelector('.cart-items');
+  if (cartItemsSection) {
+    cartItemsSection.innerHTML = renderCartItems(cart);
+  }
+  
+  // Actualizar contador de items
+  const itemsHeader = cartModal.querySelector('.cart-items-section h3');
+  if (itemsHeader) {
+    itemsHeader.textContent = `Tus Productos (${cart.length} ${cart.length === 1 ? 'item' : 'items'})`;
+  }
+  
+  // Actualizar items guardados para más tarde
+  const savedItemsSection = cartModal.querySelector('.saved-items');
+  if (savedItemsSection) {
+    savedItemsSection.innerHTML = renderSavedItems(savedForLater);
+  }
+  
+  // Actualizar total
+  const totalAmount = cartModal.querySelector('.total-amount');
+  if (totalAmount) {
+    totalAmount.textContent = formatPrice(calculateCartTotal(cart));
+  }
+  
+  // Actualizar estado del botón de checkout
+  const checkoutButton = cartModal.querySelector('.checkout-button');
+  if (checkoutButton) {
+    if (cart.length === 0) {
+      checkoutButton.setAttribute('disabled', 'disabled');
+    } else {
+      checkoutButton.removeAttribute('disabled');
+    }
+  }
+  
+  // Volver a adjuntar event listeners
+  Cart.attachEventListeners();
+}
+
+// Asegurar que estas funciones estén disponibles globalmente
+window.renderCartItems = renderCartItems;
+window.renderSavedItems = renderSavedItems;
+window.updateCartUI = updateCartUI;
 
 function handleCheckout(e) {
   e.preventDefault();
   e.stopPropagation();
+  const cart = CartUtils.getCartItems();
+  
+  if (cart.length === 0) {
+    // Mostrar notificación de que el carrito está vacío
+    showNotification('Tu carrito está vacío', 'error');
+    return;
+  }
+  
   const cartModal = document.getElementById('cartModal');
   if (cartModal) {
     cartModal.style.display = 'none';

@@ -12,6 +12,8 @@ export function initUserMenu() {
     const loginLink = document.getElementById('loginLink');
     const userNameElement = document.getElementById('userNameDisplay');
     const logoutLink = document.getElementById('logoutLink');
+    const adminMenuItem = document.getElementById('adminMenuItem');
+    const sitemapMenuItem = document.getElementById('sitemapMenuItem');
     const userDropdown = document.querySelector('.user-dropdown');
     const userMenuButton = document.querySelector('.user-info');
     
@@ -27,10 +29,21 @@ export function initUserMenu() {
             if (loginLink) loginLink.style.display = 'none';
             if (userMenu) userMenu.style.display = 'block';
             if (userNameElement) userNameElement.textContent = user.name;
+            
+            // Mostrar elementos de administración y sitemap si el usuario es admin
+            if (adminMenuItem) {
+                adminMenuItem.style.display = user.role === 'admin' ? 'block' : 'none';
+            }
+            if (sitemapMenuItem) {
+                sitemapMenuItem.style.display = user.role === 'admin' ? 'block' : 'none';
+            }
         } else {
             // Usuario no autenticado
             if (loginLink) loginLink.style.display = 'block';
             if (userMenu) userMenu.style.display = 'none';
+            // Asegurar que los elementos de administración y sitemap estén ocultos para usuarios no autenticados
+            if (adminMenuItem) adminMenuItem.style.display = 'none';
+            if (sitemapMenuItem) sitemapMenuItem.style.display = 'none';
         }
     }
     

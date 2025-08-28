@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,10 +26,11 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="assets/css/conflict-fixes.css">
     <link rel="stylesheet" href="assets/css/profile.css">
     
-    <meta name="description" content="Tu perfil de usuario en Arreglos Victoria Florería. Gestiona tu información personal, pedidos y lista de deseos.">
-    <meta name="keywords" content="perfil, usuario, cuenta, pedidos, lista de deseos, información personal">
+    <meta name="description" content="Gestiona tu perfil de usuario en Arreglos Victoria Florería. Actualiza tus datos personales, dirección de envío y preferencias.">
+    <meta name="keywords" content="perfil, usuario, cuenta, datos personales, dirección, preferencias, florería">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="noindex, nofollow">
     
@@ -43,16 +44,18 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/profile.html">
     <meta property="og:title" content="Perfil de Usuario - Arreglos Victoria Florería">
-    <meta property="og:description" content="Tu perfil de usuario en Arreglos Victoria Florería.">
-    <meta property="og:image" content="./assets/images/profile-hero.jpg">
+    <meta property="og:description" content="Gestiona tu perfil de usuario en Arreglos Victoria Florería.">
+    <meta property="og:image" content="./assets/images/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="Arreglos Victoria Florería">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/profile.html">
     <meta property="twitter:title" content="Perfil de Usuario - Arreglos Victoria Florería">
-    <meta property="twitter:description" content="Tu perfil de usuario en Arreglos Victoria Florería.">
-    <meta property="twitter:image" content="./assets/images/profile-hero.jpg">
+    <meta property="twitter:description" content="Gestiona tu perfil de usuario en Arreglos Victoria Florería.">
+    <meta property="twitter:image" content="./assets/images/logo.png">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
@@ -61,142 +64,169 @@
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
     
     <!-- Preload critical scripts -->
+    <link rel="preload" href="components/Header.js" as="script">
+    <link rel="preload" href="components/Footer.js" as="script">
     <link rel="preload" href="assets/js/utils.js" as="script">
     <link rel="preload" href="assets/js/profile.js" as="script">
+    <link rel="preload" href="assets/js/accessibility.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
     <link rel="preload" href="assets/js/header.js" as="script">
+    <link rel="preload" href="assets/js/theme.js" as="script">
 </head>
-<body>
-    <!-- Skip link para navegación por teclado -->
+<body data-theme="light">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
     <!-- Header -->
     <site-header></site-header>
 
     <main id="main-content">
-        <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero half-height">
             <div class="hero-content">
                 <h1>Mi Perfil</h1>
                 <p>Gestiona tu información personal, pedidos y lista de deseos</p>
             </div>
         </section>
-
-        <!-- Perfil de usuario -->
-        <section class="profile-section">
+        
+        <section class="profile-page">
             <div class="container">
-                <div class="profile-container">
+                <div class="section-title">
+                    <h1>Perfil de Usuario</h1>
+                    <p>Gestiona tu información personal y preferencias</p>
+                </div>
+                
+                <div class="profile-content">
+                    <!-- Sidebar de navegación -->
                     <div class="profile-sidebar">
-                        <div class="profile-header">
-                            <div class="profile-image">
-                                <img id="profileImage" src="./assets/images/default-avatar.svg" alt="Foto de perfil" class="profile-avatar">
-                                <button class="edit-profile-btn" id="editProfileBtn">
-                                    <i class="fas fa-camera"></i>
-                                </button>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
                             </div>
-                            <h2 id="profileName">Nombre del Usuario</h2>
-                            <p id="profileEmail">usuario@email.com</p>
+                            <h3 id="userName">Usuario</h3>
+                            <p id="userEmail">usuario@ejemplo.com</p>
                         </div>
                         
                         <nav class="profile-nav">
                             <ul>
-                                <li class="active" data-tab="profile-tab">
-                                    <a href="#"><i class="fas fa-user"></i> Información Personal</a>
-                                </li>
-                                <li data-tab="orders-tab">
-                                    <a href="orders.html"><i class="fas fa-shopping-bag"></i> Mis Pedidos</a>
-                                </li>
-                                <li data-tab="wishlist-tab">
-                                    <a href="#"><i class="fas fa-heart"></i> Lista de Deseos</a>
-                                </li>
-                                <li data-tab="settings-tab">
-                                    <a href="#"><i class="fas fa-cog"></i> Configuración</a>
-                                </li>
-                                <li>
-                                    <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
-                                </li>
+                                <li><a href="#profile-info" class="active" data-tab="profile-info"><i class="fas fa-user"></i> Información Personal</a></li>
+                                <li><a href="#shipping-address" data-tab="shipping-address"><i class="fas fa-map-marker-alt"></i> Dirección de Envío</a></li>
+                                <li><a href="#orders" data-tab="orders"><i class="fas fa-shopping-bag"></i> Mis Pedidos</a></li>
+                                <li><a href="#wishlist" data-tab="wishlist"><i class="fas fa-heart"></i> Lista de Deseos</a></li>
+                                <li><a href="#preferences" data-tab="preferences"><i class="fas fa-cog"></i> Preferencias</a></li>
+                                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
                             </ul>
                         </nav>
                     </div>
-
-                    <div class="profile-content">
+                    
+                    <!-- Contenido principal -->
+                    <div class="profile-main">
                         <!-- Información Personal -->
-                        <div class="profile-tab active" id="profile-tab">
+                        <div id="profile-info" class="profile-tab active">
                             <h2>Información Personal</h2>
-                            <form class="profile-form" id="profileForm">
+                            <form id="profileForm">
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="firstName">Nombre</label>
-                                        <input type="text" id="firstName" name="firstName" class="form-input" required>
+                                        <input type="text" id="firstName" name="firstName" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="lastName">Apellido</label>
-                                        <input type="text" id="lastName" name="lastName" class="form-input" required>
+                                        <input type="text" id="lastName" name="lastName" required>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" class="form-input" required>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="phone">Teléfono</label>
+                                    <input type="tel" id="phone" name="phone">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Actualizar Información</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Dirección de Envío -->
+                        <div id="shipping-address" class="profile-tab">
+                            <h2>Dirección de Envío</h2>
+                            <form id="addressForm">
+                                <div class="form-group">
+                                    <label for="address">Dirección</label>
+                                    <input type="text" id="address" name="address">
                                 </div>
                                 
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="phone">Teléfono</label>
-                                        <input type="tel" id="phone" name="phone" class="form-input">
+                                        <label for="city">Ciudad</label>
+                                        <input type="text" id="city" name="city" value="Recoleta" readonly>
                                     </div>
                                     <div class="form-group">
-                                        <label for="birthDate">Fecha de Nacimiento</label>
-                                        <input type="date" id="birthDate" name="birthDate" class="form-input">
+                                        <label for="postalCode">Código Postal</label>
+                                        <input type="text" id="postalCode" name="postalCode" value="8320000" readonly>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="address">Dirección</label>
-                                    <textarea id="address" name="address" class="form-input" rows="3"></textarea>
+                                    <label for="instructions">Instrucciones de Entrega (Opcional)</label>
+                                    <textarea id="instructions" name="instructions" rows="3" placeholder="Instrucciones especiales para el repartidor"></textarea>
                                 </div>
                                 
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                <button type="submit" class="btn btn-primary">Guardar Dirección</button>
                             </form>
                         </div>
-
-                        <!-- Lista de Deseos -->
-                        <div class="profile-tab" id="wishlist-tab">
-                            <h2>Lista de Deseos</h2>
-                            <div class="wishlist-content">
-                                <div id="wishlistItems" class="product-grid">
-                                    <!-- Los productos de la lista de deseos se cargarán aquí dinámicamente -->
-                                </div>
-                                <div id="emptyWishlist" class="empty-state" style="display: none;">
-                                    <i class="fas fa-heart"></i>
-                                    <h3>Tu lista de deseos está vacía</h3>
-                                    <p>¡Agrega productos que te gusten para encontrarlos fácilmente más tarde!</p>
-                                    <a href="products.html" class="btn btn-primary">Explorar Productos</a>
-                                </div>
+                        
+                        <!-- Mis Pedidos -->
+                        <div id="orders" class="profile-tab">
+                            <h2>Mis Pedidos</h2>
+                            <div class="orders-list">
+                                <p class="no-orders">No tienes pedidos aún.</p>
                             </div>
                         </div>
-
-                        <!-- Configuración -->
-                        <div class="profile-tab" id="settings-tab">
-                            <h2>Configuración</h2>
-                            <div class="settings-content">
-                                <form class="settings-form">
-                                    <div class="form-group">
-                                        <label for="notificationEmail" class="form-label">Notificaciones por Email</label>
+                        
+                        <!-- Lista de Deseos -->
+                        <div id="wishlist" class="profile-tab">
+                            <h2>Lista de Deseos</h2>
+                            <div class="wishlist-items">
+                                <p class="no-wishlist">Tu lista de deseos está vacía.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Preferencias -->
+                        <div id="preferences" class="profile-tab">
+                            <h2>Preferencias</h2>
+                            <form id="preferencesForm">
+                                <div class="form-group">
+                                    <label for="language">Idioma</label>
+                                    <select id="language" name="language">
+                                        <option value="es">Español</option>
+                                        <option value="en">English</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="currency">Moneda</label>
+                                    <select id="currency" name="currency">
+                                        <option value="clp">Peso Chileno (CLP)</option>
+                                        <option value="usd">Dólar Estadounidense (USD)</option>
+                                        <option value="eur">Euro (EUR)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="toggle-label">
+                                        <span>Notificaciones por Email</span>
                                         <label class="toggle-switch">
-                                            <input type="checkbox" id="notificationEmail" checked>
+                                            <input type="checkbox" id="emailNotifications" checked>
                                             <span class="toggle-slider"></span>
                                         </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="notificationSMS" class="form-label">Notificaciones por SMS</label>
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" id="notificationSMS">
-                                            <span class="toggle-slider"></span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="newsletter" class="form-label">Suscribirse al Newsletter</label>
+                                    </label>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="toggle-label">
+                                        <span>Boletín Informativo</span>
                                         <label class="toggle-switch">
                                             <input type="checkbox" id="newsletter" checked>
                                             <span class="toggle-slider"></span>

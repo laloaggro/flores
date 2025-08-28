@@ -1,23 +1,213 @@
-
-    <!-- Preload critical fonts -->
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Arreglos Victoria Florería</title>
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
     
-    <!-- Load local CSS in correct order -->
+    <!-- Cargar estilos CSS optimizados -->
     <link rel="stylesheet" href="assets/css/preflight.css">
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/index.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/header.css">
     
-    <!-- Scripts -->
-    <script type="module" src="./assets/js/utils.js"></script>
-    <script type="module" src="./assets/js/auth.js"></script>
-    <script type="module" src="./assets/js/admin.js"></script>
-    <script type="module" src="./assets/js/accessibility.js"></script>
-    <script type="module" src="./assets/js/lazyLoad.js"></script>
-    <script type="module" src="./assets/js/imageOptimizer.js"></script>
-    <script type="module" src="./assets/js/register-sw.js"></script>
+    <meta name="description" content="Panel de administración de Arreglos Victoria Florería. Gestiona productos, pedidos y usuarios.">
+    <meta name="keywords" content="administración, panel, florería, arreglos florales, Recoleta">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/admin.html">
+    <meta property="og:title" content="Panel de Administración - Arreglos Victoria Florería">
+    <meta property="og:description" content="Panel de administración de Arreglos Florales Victoria. Gestiona productos, pedidos y usuarios.">
+    <meta property="og:image" content="./assets/images/hero-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/admin.html">
+    <meta property="twitter:title" content="Panel de Administración - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Panel de administración de Arreglos Florales Victoria. Gestiona productos, pedidos y usuarios.">
+    <meta property="twitter:image" content="./assets/images/hero-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Preload critical scripts -->
+    <link rel="preload" href="components/Header.js" as="script">
+    <link rel="preload" href="components/Footer.js" as="script">
+    <link rel="preload" href="assets/js/utils.js" as="script">
+    <link rel="preload" href="assets/js/auth.js" as="script">
+    <link rel="preload" href="assets/js/admin.js" as="script">
+    <link rel="preload" href="assets/js/userMenu.js" as="script">
+    <link rel="preload" href="assets/js/header.js" as="script">
+    <link rel="preload" href="assets/js/theme.js" as="script">
+</head>
+<body data-theme="light">
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <!-- Header -->
+    <site-header></site-header>
+
+    <main id="main-content">
+        <section class="hero half-height">
+            <div class="hero-content">
+                <h1>Panel de Administración</h1>
+                <p>Gestiona productos, pedidos y usuarios</p>
+            </div>
+        </section>
+        
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Bienvenido al Panel de Administración</h2>
+                    <p>Selecciona una opción para comenzar a gestionar el sitio</p>
+                </div>
+                
+                <div class="admin-dashboard">
+                    <div class="admin-cards">
+                        <div class="admin-card">
+                            <div class="admin-card-icon">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <h3>Gestionar Productos</h3>
+                            <p>Añade, edita o elimina productos del catálogo</p>
+                            <button class="btn btn-primary" id="manageProductsBtn">Ir a Productos</button>
+                        </div>
+                        
+                        <div class="admin-card">
+                            <div class="admin-card-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3>Gestionar Pedidos</h3>
+                            <p>Revisa y actualiza el estado de los pedidos</p>
+                            <button class="btn btn-primary" id="manageOrdersBtn">Ir a Pedidos</button>
+                        </div>
+                        
+                        <div class="admin-card">
+                            <div class="admin-card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>Gestionar Usuarios</h3>
+                            <p>Administra cuentas de usuario y permisos</p>
+                            <button class="btn btn-primary" id="manageUsersBtn">Ir a Usuarios</button>
+                        </div>
+                        
+                        <div class="admin-card">
+                            <div class="admin-card-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Estadísticas</h3>
+                            <p>Consulta informes de ventas y rendimiento</p>
+                            <button class="btn btn-primary" id="viewStatsBtn">Ver Estadísticas</button>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-recent-activity">
+                        <h3>Actividad Reciente</h3>
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-plus-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p>Nuevo producto añadido: "Ramo Elegante de Rosas Blancas"</p>
+                                    <small>Hace 10 minutos</small>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p>Pedido #12345 actualizado a "Enviado"</p>
+                                    <small>Hace 1 hora</small>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p>Nuevo usuario registrado: María González</p>
+                                    <small>Hace 2 horas</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <site-footer></site-footer>
+
+    <!-- Scripts optimizados -->
+    <script type="module" src="components/Header.js"></script>
+    <script type="module" src="components/Footer.js"></script>
+    <script type="module" src="assets/js/utils.js"></script>
+    <script type="module" src="assets/js/auth.js"></script>
+    <script type="module" src="assets/js/admin.js"></script>
+    <script type="module" src="assets/js/userMenu.js"></script>
+    <script type="module" src="assets/js/header.js"></script>
+    <script type="module" src="assets/js/theme.js"></script>
+    
+    <!-- Asegurar que el tema se aplique correctamente -->
+    <script type="module">
+        // Si theme.js no establece el tema, usamos un script de respaldo
+        document.addEventListener('DOMContentLoaded', function() {
+            const html = document.documentElement;
+            const theme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            }
+            
+            // Verificar si el usuario es administrador
+            import('./assets/js/utils.js').then(authModule => {
+                // Esperar un poco para que se cargue el estado de autenticación
+                setTimeout(() => {
+                    if (!authModule.isAuthenticated() || !authModule.isAdmin()) {
+                        // Si no está autenticado o no es admin, redirigir a la página de inicio
+                        window.location.href = 'index.html';
+                    }
+                }, 100);
+            }).catch(err => {
+                console.error('Error al cargar auth.js:', err);
+                // En caso de error, redirigir a la página de inicio
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>
