@@ -8,18 +8,56 @@ let currentCategory = 'all';
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM cargado en products.js');
-    loadProducts();
-    setupCategoryFilter();
-    setupSearch();
-    initUserMenu();
-    
-    // Inicializar CartUtils
-    CartUtils.init();
+    initializeApp();
 });
+
+// Función para esperar a que los componentes personalizados se carguen
+function waitForComponents() {
+    return new Promise((resolve) => {
+        const checkComponents = () => {
+            const productGrid = document.getElementById('productGrid');
+            const header = document.querySelector('site-header');
+            const footer = document.querySelector('site-footer');
+            
+            if (productGrid) {
+                resolve();
+            } else {
+                // Si los componentes personalizados existen pero el productGrid no, 
+                // esperamos un poco más
+                setTimeout(checkComponents, 100);
+            }
+        };
+        
+        checkComponents();
+    });
+}
+
+// Inicializar la aplicación
+async function initializeApp() {
+    try {
+        await waitForComponents();
+        loadProducts();
+        setupCategoryFilter();
+        setupSearch();
+        initUserMenu();
+        
+        // Inicializar CartUtils
+        CartUtils.init();
+    } catch (error) {
+        console.error('Error al inicializar la aplicación:', error);
+        // Reintentar después de un breve retraso
+        setTimeout(initializeApp, 1000);
+    }
+}
 
 // Cargar productos desde la API
 async function loadProducts() {
     const productsGrid = document.getElementById('productGrid');
+    if (!productsGrid) {
+        console.error('No se encontró el elemento productGrid');
+        return;
+    }
+    
     const loadingMessage = document.createElement('div');
     loadingMessage.className = 'loading-message';
     loadingMessage.innerHTML = '<p>Cargando productos...</p>';
@@ -39,8 +77,10 @@ async function loadProducts() {
     } catch (error) {
         console.error('Error al cargar productos:', error);
         const productsGrid = document.getElementById('productGrid');
-        productsGrid.innerHTML = '<p class="error-message">Error al cargar productos. Por favor, intenta nuevamente más tarde.</p>';
-        showNotification('Error al cargar productos', 'error');
+        if (productsGrid) {
+            productsGrid.innerHTML = '<p class="error-message">Error al cargar productos. Por favor, intenta nuevamente más tarde.</p>';
+            showNotification('Error al cargar productos', 'error');
+        }
     }
 }
 

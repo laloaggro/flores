@@ -1,6 +1,6 @@
 // wishlist.js - Funcionalidad de lista de deseos
 
-import { showNotification } from './errorHandler.js';
+import { showNotification } from './utils.js';
 
 // Función para obtener la lista de deseos del localStorage
 function getWishlist() {

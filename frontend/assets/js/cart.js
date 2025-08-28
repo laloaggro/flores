@@ -82,50 +82,79 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Función para adjuntar eventos del carrito una sola vez
 function attachCartEvents() {
-    if (cartEventsAttached) {
-        return;
-    }
-    
     // Adjuntar event listeners para los botones de disminución
     document.querySelectorAll('.decrease').forEach(button => {
-        button.addEventListener('click', handleDecreaseQuantity);
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
+        clone.addEventListener('click', handleDecreaseQuantity);
     });
     
     // Adjuntar event listeners para los botones de aumento
     document.querySelectorAll('.increase').forEach(button => {
-        button.addEventListener('click', handleIncreaseQuantity);
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
+        clone.addEventListener('click', handleIncreaseQuantity);
     });
     
     // Botones de eliminar
     document.querySelectorAll('.remove-item').forEach(button => {
-        button.addEventListener('click', handleRemoveItem);
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
+        clone.addEventListener('click', handleRemoveItem);
     });
     
     // Botones de guardar para más tarde
     document.querySelectorAll('.save-for-later').forEach(button => {
-        button.addEventListener('click', handleSaveForLater);
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
+        clone.addEventListener('click', handleSaveForLater);
     });
     
     // Botones de mover al carrito (desde guardado para más tarde)
     document.querySelectorAll('.move-to-cart').forEach(button => {
-        button.addEventListener('click', handleMoveToCart);
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
+        clone.addEventListener('click', handleMoveToCart);
     });
     
     // Botones de eliminar de guardado para más tarde
     document.querySelectorAll('.remove-saved-item').forEach(button => {
-        button.addEventListener('click', handleRemoveSavedItem);
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
+        clone.addEventListener('click', handleRemoveSavedItem);
     });
     
     // Botón de cerrar carrito
     const cartClose = document.querySelector('.cart-close');
     if (cartClose) {
-        cartClose.addEventListener('click', handleCloseCart);
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = cartClose.cloneNode(true);
+        cartClose.parentNode.replaceChild(clone, cartClose);
+        clone.addEventListener('click', handleCloseCart);
     }
     
     // Botón para vaciar carrito
     const clearCartButton = document.querySelector('.clear-cart');
     if (clearCartButton) {
-        clearCartButton.addEventListener('click', handleClearCart);
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = clearCartButton.cloneNode(true);
+        clearCartButton.parentNode.replaceChild(clone, clearCartButton);
+        clone.addEventListener('click', handleClearCart);
+    }
+    
+    // Botón de checkout
+    const checkoutButton = document.querySelector('.checkout-button');
+    if (checkoutButton) {
+        // Remover event listener previo si existe para evitar duplicados
+        const clone = checkoutButton.cloneNode(true);
+        checkoutButton.parentNode.replaceChild(clone, checkoutButton);
+        clone.addEventListener('click', handleCheckout);
     }
     
     cartEventsAttached = true;
@@ -214,6 +243,34 @@ function handleClearCart(e) {
     }
 }
 
+// Manejador para checkout
+function handleCheckout(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const cart = CartUtils.getCartItems();
+    
+    if (cart.length === 0) {
+        showNotification('Tu carrito está vacío', 'error');
+        return;
+    }
+    
+    // Verificar si el usuario está logueado
+    if (!isAuthenticated()) {
+        showNotification('Debes iniciar sesión para continuar con el pedido', 'error');
+        // Mostrar información de depuración
+        console.log('Usuario no autenticado, redirigiendo a login');
+        
+        // Redirigir a la página de login/registro
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1500);
+        return;
+    }
+    
+    // Redirigir a la página de checkout
+    window.location.href = 'checkout.html';
+}
+
 // Función para mostrar el carrito (exportada para uso externo)
 function showCart() {
     // Asegurarse de que CartUtils esté inicializado
@@ -264,7 +321,7 @@ function showCart() {
         // Adjuntar event listeners después de mostrar el carrito
         setTimeout(() => {
             attachCartEvents();
-        }, 100);
+        }, 0);
     }
 }
 
@@ -275,10 +332,19 @@ document.addEventListener('showCart', function() {
 
 // Escuchar evento de actualización del carrito
 document.addEventListener('cartUpdated', function() {
-    // Si el carrito está abierto, actualizar su vista
+    // Si el carrito está abierto, actualizar su vista pero manteniendo su visibilidad
     const cartModal = document.getElementById('cartModal');
-    if (cartModal && cartModal.style.display === 'block') {
-        showCart();
+    const wasVisible = cartModal && cartModal.style.display === 'block';
+    
+    // Actualizar la vista del carrito
+    if (wasVisible) {
+        // Ya no es necesario volver a mostrar todo el carrito
+        // La actualización de la cantidad se hace directamente en la UI
+        // Solo aseguramos que el carrito permanezca visible
+        const updatedCartModal = document.getElementById('cartModal');
+        if (updatedCartModal) {
+            updatedCartModal.style.display = 'block';
+        }
     }
 });
 

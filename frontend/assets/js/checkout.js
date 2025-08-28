@@ -34,10 +34,29 @@ document.addEventListener('DOMContentLoaded', function() {
       const cvv = document.getElementById('cvv').value;
       const cardName = document.getElementById('cardName').value;
       const billingAddress = document.getElementById('billingAddress').value;
+      const notes = document.getElementById('notes').value;
       
       // Validaciones básicas (en un entorno real, estas validaciones serían más robustas)
       if (!cardNumber || !expiryDate || !cvv || !cardName || !billingAddress) {
-        showNotification('Por favor completa todos los campos', 'error');
+        showNotification('Por favor completa todos los campos obligatorios', 'error');
+        return;
+      }
+      
+      // Validar formato de tarjeta de crédito (simplificado)
+      if (!isValidCardNumber(cardNumber)) {
+        showNotification('Número de tarjeta inválido', 'error');
+        return;
+      }
+      
+      // Validar fecha de expiración
+      if (!isValidExpiryDate(expiryDate)) {
+        showNotification('Fecha de expiración inválida', 'error');
+        return;
+      }
+      
+      // Validar CVV
+      if (!isValidCVV(cvv)) {
+        showNotification('CVV inválido', 'error');
         return;
       }
       
@@ -47,7 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
         expiryDate,
         cvv,
         cardName,
-        billingAddress
+        billingAddress,
+        notes
       });
     });
   }
@@ -184,8 +204,48 @@ document.addEventListener('DOMContentLoaded', function() {
       expiryDate: document.getElementById('expiryDate')?.value || '',
       cvv: document.getElementById('cvv')?.value || '',
       cardName: document.getElementById('cardName')?.value || '',
-      billingAddress: document.getElementById('billingAddress')?.value || ''
+      billingAddress: document.getElementById('billingAddress')?.value || '',
+      notes: document.getElementById('notes')?.value || ''
     };
+  }
+
+  // Función para validar número de tarjeta (simplificada)
+  function isValidCardNumber(cardNumber) {
+    // Eliminar espacios
+    const cleaned = cardNumber.replace(/\s/g, '');
+    // Verificar que sean solo números y tengan longitud adecuada
+    return /^\d{16}$/.test(cleaned);
+  }
+
+  // Función para validar fecha de expiración
+  function isValidExpiryDate(expiryDate) {
+    // Formato MM/AA
+    const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+    const match = expiryDate.match(regex);
+    
+    if (!match) return false;
+    
+    const month = parseInt(match[1], 10);
+    const year = parseInt(match[2], 10);
+    
+    // Convertir a año completo (asumimos 20xx para años menores a 50)
+    const fullYear = year < 50 ? 2000 + year : 1900 + year;
+    
+    // Obtener fecha actual
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1; // getMonth() es 0-indexado
+    
+    // Verificar que la fecha no haya expirado
+    if (fullYear < currentYear) return false;
+    if (fullYear === currentYear && month < currentMonth) return false;
+    
+    return true;
+  }
+
+  // Función para validar CVV
+  function isValidCVV(cvv) {
+    return /^\d{3,4}$/.test(cvv);
   }
 
   // Función para procesar el pago con manejo de errores

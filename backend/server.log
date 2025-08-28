@@ -12645,3 +12645,22 @@ Error: listen EADDRINUSE: address already in use :::5000
 [2025-08-26T20:50:19.926Z] Servidor de correo configurado correctamente
 [2025-08-26T20:51:49.281Z] Servidor de correo configurado correctamente
 [2025-08-27T04:29:14.749Z] Servidor de correo configurado correctamente
+[2025-08-27T19:36:40.822Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-08-27T21:08:45.596Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-08-27T21:10:50.439Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-08-27T21:11:31.171Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-08-27T21:14:41.772Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-08-27T21:15:11.162Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-08-27T21:19:04.545Z] Servidor de correo configurado correctamente
+[2025-08-27T21:19:34.856Z] Servidor de correo configurado correctamente
+[2025-08-27T21:32:02.090Z] Servidor de correo configurado correctamente
+[2025-08-27T21:32:40.097Z] Iniciando procesamiento de formulario de contacto
+[2025-08-27T21:32:40.097Z] Datos recibidos - Nombre: Usuario de Prueba, Email: test@example.com, Asunto: Prueba de correo, Mensaje: Este es un mensaje de prueba para verificar el sistema de correo.
+[2025-08-27T21:32:42.915Z] Correo enviado correctamente: <5c76c474-232a-f278-8385-d69dd4a954a4@gmail.com>
+[2025-08-27T21:35:11.374Z] Iniciando procesamiento de formulario de contacto
+[2025-08-27T21:35:11.374Z] Datos recibidos - Nombre: Prueba Final, Email: test@example.com, Asunto: Confirmación del sistema de correo, Mensaje: Este mensaje confirma que el sistema de correo está funcionando correctamente.
+[2025-08-27T21:35:14.197Z] Correo enviado correctamente: <b8f95d8e-fe67-8b6c-31e4-723393dbfbfe@gmail.com>
+[2024-08-27T21:37:16.308Z] Error en la configuración del transporte de correo: Error: certificate is not yet valid
+[2024-08-27T21:39:52.578Z] Error en la configuración del transporte de correo: Error: certificate is not yet valid
+[2025-08-27T21:44:11.411Z] Servidor de correo configurado correctamente
+[2025-08-27T21:45:59.307Z] Servidor de correo configurado correctamente

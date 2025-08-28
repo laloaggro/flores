@@ -33,7 +33,18 @@ const CartUtils = {
     cartItems: [],
     savedForLater: [],
     
-    // Inicializar el carrito
+    // Función para formatear precios
+    formatPrice(price) {
+        // Formatear como moneda chilena sin decimales
+        return new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: 'CLP',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(price);
+    },
+
+    // Inicializar carrito
     init() {
         this.cartItems = loadCartFromLocalStorage();
         this.savedForLater = this.loadSavedItems();
@@ -114,9 +125,10 @@ const CartUtils = {
             item.quantity = newQuantity;
             saveCartToLocalStorage(this.cartItems);
             this.updateCartCount();
-            this.renderCart(() => {
-                Cart.attachEventListeners();
-            });
+            
+            // Actualizar solo la cantidad específica en la interfaz
+            this.updateQuantityInUI(productId, newQuantity);
+            
             console.log(`Cantidad actualizada para ${item.name}. Nueva cantidad: ${newQuantity}`);
             
             // Disparar evento de actualización del carrito
@@ -135,7 +147,11 @@ const CartUtils = {
             this.saveSavedItems();
             saveCartToLocalStorage(this.cartItems);
             this.updateCartCount();
-            this.renderCart();
+            
+            // Actualizar solo la interfaz sin recargar todo el carrito
+            this.updateSavedItemsInUI();
+            this.updateCartItemsInUI();
+            
             showNotification(`${item.name} guardado para más tarde`, 'success');
             console.log(`Producto ${item.name} guardado para más tarde`);
             
@@ -153,7 +169,11 @@ const CartUtils = {
             this.saveSavedItems();
             saveCartToLocalStorage(this.cartItems);
             this.updateCartCount();
-            this.renderCart();
+            
+            // Actualizar solo la interfaz sin recargar todo el carrito
+            this.updateSavedItemsInUI();
+            this.updateCartItemsInUI();
+            
             showNotification(`${item.name} movido al carrito`, 'success');
             console.log(`Producto ${item.name} movido al carrito`);
             
@@ -191,11 +211,14 @@ const CartUtils = {
     removeFromSaved(productId) {
         const itemIndex = this.savedForLater.findIndex(item => item.id == productId);
         if (itemIndex !== -1) {
-            this.savedForLater.splice(itemIndex, 1);
+            const item = this.savedForLater.splice(itemIndex, 1)[0];
             this.saveSavedItems();
-            this.renderCart();
-            showNotification('Producto eliminado de guardados para más tarde', 'info');
-            console.log(`Producto ${productId} eliminado de guardados para más tarde`);
+            
+            // Actualizar solo la interfaz sin recargar todo el carrito
+            this.updateSavedItemsInUI(() => {
+                showNotification(`${item.name} eliminado de guardados para más tarde`, 'info');
+                console.log(`Producto ${item.name} eliminado de guardados para más tarde`);
+            });
             
             // Disparar evento de actualización del carrito
             window.dispatchEvent(new CustomEvent('cartUpdated'));
@@ -245,7 +268,181 @@ const CartUtils = {
         }).catch((error) => {
             console.error('Error al cargar el componente Cart:', error);
         });
-    }
+    },
+
+    // Actualizar solo la cantidad específica en la interfaz
+    updateQuantityInUI(productId, newQuantity) {
+        // Buscar el elemento de cantidad específico en la interfaz
+        const quantityElements = document.querySelectorAll(`[data-id="${productId}"] .item-quantity .quantity`);
+        quantityElements.forEach(element => {
+            const itemElement = element.closest('[data-id]');
+            if (itemElement && parseInt(itemElement.getAttribute('data-id')) === productId) {
+                element.textContent = newQuantity;
+                console.log(`[updateQuantityInUI] Cantidad actualizada en UI para producto ID ${productId}: ${newQuantity}`);
+                
+                // Actualizar también el total del item
+                const item = this.cartItems.find(item => item.id == productId);
+                if (item) {
+                    const totalElement = itemElement.querySelector('.item-total span');
+                    const price = item.price * newQuantity;
+
+                    if (totalElement) {
+                        totalElement.textContent = this.formatPrice(price);
+                        console.log(`[updateQuantityInUI] Precio total actualizado en span para producto ID ${productId}`);
+                    } else {
+                        const directTotalElement = itemElement.querySelector('.item-total');
+                        if (directTotalElement) {
+                            directTotalElement.textContent = this.formatPrice(price);
+                            console.log(`[updateQuantityInUI] Precio total actualizado directamente para producto ID ${productId}`);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Solo actualizar el total general si hay cambios
+        if (this.cartItems.some(item => item.id == productId && item.quantity !== newQuantity)) {
+            this.updateCartTotal();
+        }
+    },
+    
+    // Actualizar el total general del carrito
+    updateCartTotal() {
+        const total = this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const formattedTotal = this.formatPrice(total);
+
+        const totalElement = document.querySelector('.cart-total-amount');
+        const totalAmountElement = document.querySelector('.total-amount');
+
+        // Actualizar total en el carrito (formato con clase .cart-total-amount)
+        if (totalElement) {
+            totalElement.textContent = formattedTotal;
+            console.log(`[updateCartTotal] Total del carrito actualizado en .cart-total-amount: ${formattedTotal}`);
+        }
+
+        // Actualizar total en el carrito (formato con clase .total-amount)
+        if (totalAmountElement) {
+            totalAmountElement.textContent = formattedTotal;
+            console.log(`[updateCartTotal] Total del carrito actualizado en .total-amount: ${formattedTotal}`);
+        }
+
+        // También actualizar en el contador del header
+        this.updateCartCount();
+    },
+
+    // Actualizar solo la interfaz de items guardados
+    updateSavedItemsInUI(callback = null) {
+        // Importar el componente Cart para usar su función de renderizado
+        import('../../components/Cart.js').then((module) => {
+            const Cart = module.default;
+            
+            // Actualizar solo la sección de items guardados
+            const savedItemsContainer = document.querySelector('.saved-items');
+            if (savedItemsContainer) {
+                savedItemsContainer.innerHTML = Cart.renderSavedItems ? 
+                    Cart.renderSavedItems(this.savedForLater) : 
+                    this.savedForLater.map(item => `
+                        <div class="saved-item" data-id="${item.id}">
+                            <div class="item-image">
+                                <img src="${item.image || './assets/images/placeholder.svg'}" 
+                                    alt="${item.name}" 
+                                    onerror="this.src='./assets/images/placeholder.svg'">
+                            </div>
+                            <div class="item-info">
+                                <h4>${item.name}</h4>
+                                <p class="item-price">${this.formatPrice(item.price)}</p>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-secondary move-to-cart" data-id="${item.id}">
+                                    <i class="fas fa-shopping-cart"></i> Mover al carrito
+                                </button>
+                                <button class="btn btn-danger remove-saved-item" data-id="${item.id}">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                
+                // Si no hay items guardados, mostrar mensaje
+                if (this.savedForLater.length === 0) {
+                    savedItemsContainer.innerHTML = '<p class="empty-saved">No hay productos guardados para más tarde</p>';
+                }
+            }
+            
+            // Ejecutar callback si está definido
+            if (callback && typeof callback === 'function') {
+                callback();
+            }
+        }).catch((error) => {
+            console.error('Error al actualizar items guardados:', error);
+        });
+    },
+    
+    // Actualizar solo la interfaz de items del carrito
+    updateCartItemsInUI() {
+        // Importar el componente Cart para usar su función de renderizado
+        import('../../components/Cart.js').then((module) => {
+            const Cart = module.default;
+            
+            // Actualizar solo la sección de items del carrito
+            const cartItemsContainer = document.querySelector('.cart-items');
+            if (cartItemsContainer) {
+                cartItemsContainer.innerHTML = Cart.renderCartItems ? 
+                    Cart.renderCartItems(this.cartItems) : 
+                    this.cartItems.map(item => `
+                        <div class="cart-item" data-id="${item.id}">
+                            <div class="item-image">
+                                <img src="${item.image || './assets/images/placeholder.svg'}" 
+                                    alt="${item.name}" 
+                                    onerror="this.src='./assets/images/placeholder.svg'">
+                            </div>
+                            <div class="item-info">
+                                <h4>${item.name}</h4>
+                                <p class="item-price">${this.formatPrice(item.price)}</p>
+                            </div>
+                            <div class="item-quantity">
+                                <button class="btn btn-quantity decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="quantity">${item.quantity}</span>
+                                <button class="btn btn-quantity increase" data-id="${item.id}" aria-label="Aumentar cantidad">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="item-total">
+                                <span>${this.formatPrice(item.price * item.quantity)}</span>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-icon save-for-later" data-id="${item.id}" aria-label="Guardar para más tarde">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button class="btn btn-icon remove-item" data-id="${item.id}" aria-label="Eliminar del carrito">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                
+                // Si no hay items en el carrito, mostrar mensaje
+                if (this.cartItems.length === 0) {
+                    cartItemsContainer.innerHTML = `
+                        <div class="empty-cart">
+                            <i class="fas fa-shopping-cart fa-3x"></i>
+                            <h3>Tu carrito está vacío</h3>
+                            <p>Agrega productos para comenzar</p>
+                            <a href="products.html" class="btn btn-primary">Ver productos</a>
+                        </div>
+                    `;
+                }
+                
+                // Actualizar el total del carrito
+                this.updateCartTotal();
+            }
+        }).catch((error) => {
+            console.error('Error al actualizar items del carrito:', error);
+        });
+    },
+
 };
 
 export default CartUtils;

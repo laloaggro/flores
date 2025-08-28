@@ -44,13 +44,24 @@ function displayUserInfo(user) {
     const profileEmail = document.getElementById('profileEmail');
     const profilePhone = document.getElementById('profilePhone');
     
+    // Campos del formulario
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const birthDate = document.getElementById('birthDate');
+    const address = document.getElementById('address');
+    
     if (userNameElement) userNameElement.textContent = user.name || 'Usuario';
     if (userEmailElement) userEmailElement.textContent = user.email || '';
     
     // Rellenar el formulario con los datos del usuario
-    if (profileName) profileName.value = user.name || '';
-    if (profileEmail) profileEmail.value = user.email || '';
-    if (profilePhone) profilePhone.value = user.phone || '';
+    if (firstName) firstName.value = user.firstName || '';
+    if (lastName) lastName.value = user.lastName || '';
+    if (email) email.value = user.email || '';
+    if (phone) phone.value = user.phone || '';
+    if (birthDate) birthDate.value = user.birthDate || '';
+    if (address) address.value = user.address || '';
 }
 
 // Configurar event listeners
@@ -94,13 +105,16 @@ function setupEventListeners() {
 
 // Actualizar perfil
 function updateProfile() {
-    const profileName = document.getElementById('profileName').value;
-    const profileEmail = document.getElementById('profileEmail').value;
-    const profilePhone = document.getElementById('profilePhone').value;
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const birthDate = document.getElementById('birthDate');
+    const address = document.getElementById('address');
     
     // Validación básica
-    if (!profileName) {
-        alert('Por favor complete los campos obligatorios (Nombre)');
+    if (!firstName.value || !lastName.value) {
+        alert('Por favor complete los campos obligatorios (Nombre y Apellido)');
         return;
     }
     
@@ -108,15 +122,21 @@ function updateProfile() {
     const user = getUser() || {};
     
     // Actualizar datos del usuario
-    user.name = profileName;
-    user.email = profileEmail;
-    user.phone = profilePhone;
+    user.firstName = firstName.value;
+    user.lastName = lastName.value;
+    user.email = email.value;
+    user.phone = phone.value;
+    user.birthDate = birthDate.value;
+    user.address = address.value;
+    
+    // Guardar usuario actualizado
+    // saveUser(user); // Esta función no está definida, usaremos localStorage directamente
     
     // Guardar en localStorage
     localStorage.setItem('user', JSON.stringify(user));
     
-    // Actualizar UI
-    displayUserInfo(user);
+    // Actualizar información en el header
+    // updateHeaderUserInfo(); // Esta función no está definida
     
     // Mostrar mensaje de éxito
     alert('Perfil actualizado correctamente');

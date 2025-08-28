@@ -18,99 +18,6 @@ function Cart(cartItems = [], savedForLater = []) {
     savedForLater = [];
   }
 
-  // Función para calcular el total del carrito
-  function calculateCartTotal(items) {
-    return items.reduce((total, item) => total + (item.price * item.quantity), 0);
-  }
-
-  // Función para formatear precios
-  function formatPrice(price) {
-    // Formatear como moneda chilena sin decimales
-    return new Intl.NumberFormat('es-CL', {
-      style: 'currency',
-      currency: 'CLP',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(price);
-  }
-
-  // Función para renderizar items del carrito
-  function renderCartItems(items) {
-    if (items.length === 0) {
-      return `
-        <div class="empty-cart">
-          <i class="fas fa-shopping-cart fa-3x"></i>
-          <h3>Tu carrito está vacío</h3>
-          <p>Agrega productos para comenzar</p>
-          <a href="products.html" class="btn btn-primary">Ver productos</a>
-        </div>
-      `;
-    }
-
-    return items.map(item => `
-      <div class="cart-item" data-id="${item.id}">
-        <div class="item-image">
-          <img src="${item.image || './assets/images/placeholder.svg'}" 
-               alt="${item.name}" 
-               onerror="this.src='./assets/images/placeholder.svg'">
-        </div>
-        <div class="item-info">
-          <h4>${item.name}</h4>
-          <p class="item-price">${formatPrice(item.price)}</p>
-        </div>
-        <div class="item-quantity">
-          <button class="btn btn-quantity decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
-            <i class="fas fa-minus"></i>
-          </button>
-          <span class="quantity">${item.quantity}</span>
-          <button class="btn btn-quantity increase" data-id="${item.id}" aria-label="Aumentar cantidad">
-            <i class="fas fa-plus"></i>
-          </button>
-        </div>
-        <div class="item-total">
-          <span>${formatPrice(item.price * item.quantity)}</span>
-        </div>
-        <div class="item-actions">
-          <button class="btn btn-icon save-for-later" data-id="${item.id}" aria-label="Guardar para más tarde">
-            <i class="fas fa-save"></i>
-          </button>
-          <button class="btn btn-icon remove-item" data-id="${item.id}" aria-label="Eliminar del carrito">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // Función para renderizar items guardados para más tarde
-  function renderSavedItems(items) {
-    if (items.length === 0) {
-      return '<p class="empty-saved">No hay productos guardados para más tarde</p>';
-    }
-
-    return items.map(item => `
-      <div class="saved-item" data-id="${item.id}">
-        <div class="item-image">
-          <img src="${item.image || './assets/images/placeholder.svg'}" 
-               alt="${item.name}" 
-               onerror="this.src='./assets/images/placeholder.svg'">
-        </div>
-        <div class="item-info">
-          <h4>${item.name}</h4>
-          <p class="item-price">${formatPrice(item.price)}</p>
-        </div>
-        <div class="item-actions">
-          <button class="btn btn-secondary move-to-cart" data-id="${item.id}">
-            <i class="fas fa-shopping-cart"></i> Mover al carrito
-          </button>
-          <button class="btn btn-danger remove-saved-item" data-id="${item.id}">
-            <i class="fas fa-trash"></i> Eliminar
-          </button>
-        </div>
-      </div>
-    `).join('');
-  }
-
   // Calcular totales
   const cartTotal = calculateCartTotal(cartItems);
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -159,6 +66,99 @@ function Cart(cartItems = [], savedForLater = []) {
       </div>
     </div>
   `;
+}
+
+// Función para formatear precios
+function formatPrice(price) {
+  // Formatear como moneda chilena sin decimales
+  return new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
+}
+
+// Función para calcular el total del carrito
+function calculateCartTotal(items) {
+  return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+}
+
+// Función para renderizar items guardados para más tarde
+function renderSavedItems(items) {
+  if (items.length === 0) {
+    return '<p class="empty-saved">No hay productos guardados para más tarde</p>';
+  }
+
+  return items.map(item => `
+    <div class="saved-item" data-id="${item.id}">
+      <div class="item-image">
+        <img src="${item.image || './assets/images/placeholder.svg'}" 
+             alt="${item.name}" 
+             onerror="this.src='./assets/images/placeholder.svg'">
+      </div>
+      <div class="item-info">
+        <h4>${item.name}</h4>
+        <p class="item-price">${formatPrice(item.price)}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-secondary move-to-cart" data-id="${item.id}">
+          <i class="fas fa-shopping-cart"></i> Mover al carrito
+        </button>
+        <button class="btn btn-danger remove-saved-item" data-id="${item.id}">
+          <i class="fas fa-trash"></i> Eliminar
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Función para renderizar items del carrito
+function renderCartItems(items) {
+  if (items.length === 0) {
+    return `
+      <div class="empty-cart">
+        <i class="fas fa-shopping-cart fa-3x"></i>
+        <h3>Tu carrito está vacío</h3>
+        <p>Agrega productos para comenzar</p>
+        <a href="products.html" class="btn btn-primary">Ver productos</a>
+      </div>
+    `;
+  }
+
+  return items.map(item => `
+    <div class="cart-item" data-id="${item.id}">
+      <div class="item-image">
+        <img src="${item.image || './assets/images/placeholder.svg'}" 
+             alt="${item.name}" 
+             onerror="this.src='./assets/images/placeholder.svg'">
+      </div>
+      <div class="item-info">
+        <h4>${item.name}</h4>
+        <p class="item-price">${formatPrice(item.price)}</p>
+      </div>
+      <div class="item-quantity">
+        <button class="btn btn-quantity decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
+          <i class="fas fa-minus"></i>
+        </button>
+        <span class="quantity">${item.quantity}</span>
+        <button class="btn btn-quantity increase" data-id="${item.id}" aria-label="Aumentar cantidad">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      <div class="item-total">
+        <span>${formatPrice(item.price * item.quantity)}</span>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-icon save-for-later" data-id="${item.id}" aria-label="Guardar para más tarde">
+          <i class="fas fa-save"></i>
+        </button>
+        <button class="btn btn-icon remove-item" data-id="${item.id}" aria-label="Eliminar del carrito">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  `).join('');
 }
 
 // Función para adjuntar event listeners al carrito
@@ -237,44 +237,59 @@ function handleCloseCart() {
 
 function handleIncreaseQuantity(e) {
   e.preventDefault();
+  e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   const cartItems = CartUtils.getCartItems();
   const item = cartItems.find(item => item.id == productId);
+  
   if (item) {
+    // Llamar a la utilidad para actualizar la cantidad
     CartUtils.updateQuantity(productId, item.quantity + 1);
   }
 }
 
 function handleDecreaseQuantity(e) {
   e.preventDefault();
+  e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   const cartItems = CartUtils.getCartItems();
   const item = cartItems.find(item => item.id == productId);
+  
   if (item) {
     if (item.quantity > 1) {
+      // Llamar a la utilidad para actualizar la cantidad
       CartUtils.updateQuantity(productId, item.quantity - 1);
     } else {
+      // Eliminar el item del carrito
       CartUtils.removeFromCart(productId);
     }
   }
 }
 
 function handleRemoveItem(e) {
+  e.preventDefault();
+  e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   CartUtils.removeFromCart(productId);
 }
 
 function handleSaveForLater(e) {
+  e.preventDefault();
+  e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   CartUtils.saveForLater(productId);
 }
 
 function handleMoveToCart(e) {
+  e.preventDefault();
+  e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   CartUtils.moveToCart(productId);
 }
 
 function handleRemoveSavedItem(e) {
+  e.preventDefault();
+  e.stopPropagation();
   const productId = parseInt(e.currentTarget.getAttribute('data-id'));
   CartUtils.removeFromSaved(productId);
 }
@@ -285,7 +300,9 @@ function handleClearCart() {
   }
 }
 
-function handleCheckout() {
+function handleCheckout(e) {
+  e.preventDefault();
+  e.stopPropagation();
   const cartModal = document.getElementById('cartModal');
   if (cartModal) {
     cartModal.style.display = 'none';
@@ -294,5 +311,6 @@ function handleCheckout() {
   }
 }
 
-// Exportar componente
+// Exportar componente y funciones
 export default Cart;
+export { renderCartItems, renderSavedItems };

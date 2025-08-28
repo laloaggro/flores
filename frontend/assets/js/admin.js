@@ -370,32 +370,49 @@ function showAddProductForm() {
                 <button class="close" aria-label="Cerrar">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="addProductForm">
+                <form id="addProductForm" novalidate>
                     <div class="form-group">
                         <label for="productName">Nombre:</label>
                         <input type="text" id="productName" class="form-input" required aria-required="true">
+                        <div class="form-error" id="productNameError">El nombre es requerido</div>
                     </div>
                     <div class="form-group">
                         <label for="productCategory">Categoría:</label>
-                        <input type="text" id="productCategory" class="form-input" required aria-required="true">
+                        <select id="productCategory" class="form-input" required aria-required="true">
+                            <option value="">Seleccione una categoría</option>
+                            <option value="arreglos">Arreglos Florales</option>
+                            <option value="ramos">Ramos</option>
+                            <option value="plantas">Plantas</option>
+                            <option value="accesorios">Accesorios</option>
+                        </select>
+                        <div class="form-error" id="productCategoryError">Seleccione una categoría</div>
                     </div>
                     <div class="form-group">
                         <label for="productPrice">Precio:</label>
                         <input type="number" id="productPrice" class="form-input" min="0" step="100" required aria-required="true">
+                        <div class="form-error" id="productPriceError">El precio debe ser mayor o igual a 0</div>
                     </div>
                     <div class="form-group">
                         <label for="productImage">URL de Imagen:</label>
                         <input type="text" id="productImage" class="form-input">
+                        <div class="form-error" id="productImageError">Ingrese una URL válida de imagen</div>
                     </div>
                     <div class="form-group">
                         <label for="productImageFile">Subir Imagen:</label>
-                        <input type="file" id="productImageFile" class="form-input">
+                        <input type="file" id="productImageFile" class="form-input" accept="image/*">
+                        <div class="form-error" id="productImageFileError">Seleccione un archivo de imagen válido</div>
                     </div>
                     <div class="form-group">
                         <label for="productDescription">Descripción:</label>
                         <textarea id="productDescription" class="form-input" rows="3"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Agregar Producto</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitProductBtn">
+                            <span id="submitBtnText">Agregar Producto</span>
+                            <span class="loading-spinner" id="submitBtnSpinner" style="display: none;"></span>
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="resetProductBtn">Limpiar Formulario</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -428,10 +445,66 @@ function showAddProductForm() {
     
     // Configurar envío del formulario
     const form = document.getElementById('addProductForm');
+    const submitBtn = document.getElementById('submitProductBtn');
+    const resetBtn = document.getElementById('resetProductBtn');
+    
+    // Validación en tiempo real
+    setupFormValidation(form);
+    
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        addProduct();
+        
+        // Validar form
+        if (!validateForm(form)) {
+            showMessage('Por favor corrija los errores en el formulario', 'error');
+            return;
+        }
+        
+        // Deshabilitar botón y mostrar estado de carga
+        submitBtn.disabled = true;
+        document.getElementById('submitBtnText').style.display = 'none';
+        document.getElementById('submitBtnSpinner').style.display = 'inline-block';
+        
+        // Agregar producto
+        addProduct()
+            .catch(error => {
+                showMessage(error.message || 'Error al agregar producto', 'error');
+            })
+            .finally(() => {
+                // Restablecer botón
+                submitBtn.disabled = false;
+                document.getElementById('submitBtnText').style.display = 'inline-block';
+                document.getElementById('submitBtnSpinner').style.display = 'none';
+            });
     });
+    
+    // Configurar botón de limpiar formulario
+    resetBtn.addEventListener('click', function() {
+        if (confirm('¿Está seguro de que desea limpiar el formulario?')) {
+            form.reset();
+            // Restablecer clases de error
+            form.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('has-error');
+            });
+            // Ocultar mensajes de error
+            form.querySelectorAll('.form-error').forEach(error => {
+                error.style.display = 'none';
+            });
+            // Restablecer imagen de vista previa
+            const imagePreview = document.getElementById('imagePreview');
+            if (imagePreview) {
+                imagePreview.innerHTML = '';
+            }
+            // Enfocar el primer campo
+            const firstInput = modal.querySelector('input, textarea, select');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        }
+    });
+    
+    // Configurar vista previa de imagen
+    setupImagePreview();
     
     // Mostrar modal
     modal.style.display = 'block';
@@ -441,6 +514,100 @@ function showAddProductForm() {
     if (firstInput) {
         firstInput.focus();
     }
+}
+
+/**
+ * Configura validación en tiempo real para el formulario
+ * @param {HTMLFormElement} form - El formulario a validar
+ */
+function setupFormValidation(form) {
+    if (!form) return;
+    
+    // Validación en tiempo real para campos individuales
+    form.productName.addEventListener('input', () => validateField('name', form.productName, form.productNameError));
+    form.productCategory.addEventListener('change', () => validateField('category', form.productCategory, form.productCategoryError));
+    form.productPrice.addEventListener('input', () => validateField('price', form.productPrice, form.productPriceError));
+    form.productImage.addEventListener('input', () => validateField('imageUrl', form.productImage, form.productImageError));
+    form.productImageFile.addEventListener('change', () => validateField('imageFile', form.productImageFile, form.productImageFileError));
+}
+
+/**
+ * Valida el formulario completo
+ * @param {HTMLFormElement} form - El formulario a validar
+ * @returns {boolean} - true si el formulario es válido
+ */
+function validateForm(form) {
+    let isValid = true;
+    
+    // Validar cada campo
+    isValid &= validateField('name', form.productName, form.productNameError);
+    isValid &= validateField('category', form.productCategory, form.productCategoryError);
+    isValid &= validateField('price', form.productPrice, form.productPriceError);
+    
+    // Validar al menos una fuente de imagen
+    const imageUrl = form.productImage.value.trim();
+    const imageFile = form.productImageFile.files[0];
+    
+    if (!imageUrl && !imageFile) {
+        form.productImageFileError.style.display = 'block';
+        form.productImageFile.parentElement.classList.add('has-error');
+        isValid = false;
+    } else {
+        form.productImageFileError.style.display = 'none';
+        form.productImageFile.parentElement.classList.remove('has-error');
+    }
+    
+    return isValid;
+}
+
+/**
+ * Valida un campo específico del formulario
+ * @param {string} fieldType - Tipo de campo ('name', 'category', 'price', 'imageUrl', 'imageFile')
+ * @param {HTMLElement} fieldElement - Elemento del campo a validar
+ * @param {HTMLElement} errorElement - Elemento donde mostrar el error
+ * @returns {boolean} - true si el campo es válido
+ */
+function validateField(fieldType, fieldElement, errorElement) {
+    const value = fieldElement.value.trim();
+    let isValid = true;
+    let errorMessage = '';
+    
+    switch(fieldType) {
+        case 'name':
+            isValid = value.length >= 3 && value.length <= 100;
+            errorMessage = 'El nombre debe tener entre 3 y 100 caracteres';
+            break;
+            
+        case 'category':
+            isValid = value !== '';
+            errorMessage = 'Seleccione una categoría';
+            break;
+            
+        case 'price':
+            isValid = !isNaN(parseFloat(value)) && parseFloat(value) >= 0;
+            errorMessage = 'El precio debe ser un número mayor o igual a 0';
+            break;
+            
+        case 'imageUrl':
+            isValid = value === '' || /^(ftp|http|https):\/\/[^ "]+$/.test(value);
+            errorMessage = 'Ingrese una URL válida';
+            break;
+            
+        case 'imageFile':
+            isValid = !value || (fieldElement.files[0] && fieldElement.files[0].type.startsWith('image/'));
+            errorMessage = 'Seleccione un archivo de imagen válido';
+            break;
+    }
+    
+    if (!isValid) {
+        errorElement.style.display = 'block';
+        fieldElement.parentElement.classList.add('has-error');
+    } else {
+        errorElement.style.display = 'none';
+        fieldElement.parentElement.classList.remove('has-error');
+    }
+    
+    return isValid;
 }
 
 // Agregar producto
@@ -516,7 +683,7 @@ async function loadAllProducts() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/products`);
         if (!response.ok) {
-            throw new Error('Error al cargar productos');
+            throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
         }
         
         const data = await response.json();
@@ -531,8 +698,12 @@ async function loadAllProducts() {
                         <td>${product.name}</td>
                         <td>${product.description || ''}</td>
                         <td>$${parseFloat(product.price).toLocaleString('es-CL')}</td>
-                        <td>${product.category}</td>
-                        <td><img src="${product.image || ''}" alt="${product.name}" width="50" loading="lazy"></td>
+                        <td>${translateCategory(product.category)}</td>
+                        <td>
+                            ${product.image ? 
+                                `<img src="${product.image}" alt="${product.name}" width="50" loading="lazy" onerror="this.src='/assets/images/placeholder.svg'">` : 
+                                'Sin imagen'}
+                        </td>
                         <td>
                             <button class="btn-icon edit-product" data-id="${product.id}" aria-label="Editar ${product.name}" title="Editar">
                                 <i class="fas fa-edit" aria-hidden="true"></i>
@@ -572,8 +743,9 @@ async function loadAllProducts() {
         console.error('Error al cargar productos:', error);
         const tbody = document.getElementById('allProductsTableBody');
         if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="7">Error al cargar productos</td></tr>';
+            tbody.innerHTML = `<tr><td colspan="7">Error al cargar productos: ${error.message}</td></tr>`;
         }
+        showMessage(`Error al cargar productos: ${error.message}`, 'error');
     }
 }
 
@@ -616,7 +788,13 @@ function showEditProductForm(product) {
                     </div>
                     <div class="form-group">
                         <label for="editProductCategory">Categoría:</label>
-                        <input type="text" id="editProductCategory" class="form-input" value="${product.category}" required aria-required="true">
+                        <select id="editProductCategory" class="form-input" required aria-required="true">
+                            <option value="">Seleccione una categoría</option>
+                            <option value="arreglos" ${product.category === 'arreglos' ? 'selected' : ''}>Arreglos Florales</option>
+                            <option value="ramos" ${product.category === 'ramos' ? 'selected' : ''}>Ramos</option>
+                            <option value="plantas" ${product.category === 'plantas' ? 'selected' : ''}>Plantas</option>
+                            <option value="accesorios" ${product.category === 'accesorios' ? 'selected' : ''}>Accesorios</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="editProductPrice">Precio:</label>
@@ -628,7 +806,7 @@ function showEditProductForm(product) {
                     </div>
                     <div class="form-group">
                         <label for="editProductImageFile">Subir Imagen:</label>
-                        <input type="file" id="editProductImageFile" class="form-input">
+                        <input type="file" id="editProductImageFile" class="form-input" accept="image/*">
                     </div>
                     <div class="form-group">
                         <label for="editProductDescription">Descripción:</label>
@@ -688,6 +866,12 @@ async function updateProduct(productId) {
     if (!form) return;
     
     try {
+        // Mostrar indicador de carga
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Actualizando...';
+        submitButton.disabled = true;
+        
         const formData = new FormData(form);
         const imageFile = document.getElementById('editProductImageFile').files[0];
         let imageUrl = formData.get('editProductImage');
@@ -708,12 +892,14 @@ async function updateProduct(productId) {
         // Validar campos requeridos
         if (!productData.name || !productData.price || !productData.category || productData.price <= 0) {
             showMessage('Por favor complete todos los campos obligatorios', 'error');
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
             return;
         }
         
         // Si no hay imagen, usar una por defecto
         if (!productData.image) {
-            productData.image = '/assets/images/default-avatar.svg';
+            productData.image = '/assets/images/placeholder.svg';
         }
         
         const token = getAuthToken();
@@ -746,7 +932,14 @@ async function updateProduct(productId) {
         loadDashboardData();
     } catch (error) {
         console.error('Error al actualizar producto:', error);
-        showMessage(error.message || 'Error al actualizar producto', 'error');
+        showMessage(`Error al actualizar producto: ${error.message}`, 'error');
+    } finally {
+        // Restaurar botón de envío
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton) {
+            submitButton.textContent = 'Actualizar Producto';
+            submitButton.disabled = false;
+        }
     }
 }
 
@@ -1444,7 +1637,11 @@ async function uploadImage(file) {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ image: base64Image })
+                    body: JSON.stringify({ 
+                        image: base64Image,
+                        filename: file.name,
+                        contentType: file.type
+                    })
                 });
                 
                 const result = await response.json();
@@ -1475,16 +1672,31 @@ function setupImagePreview() {
         imageFileInput.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
+                // Validar que es una imagen
+                if (!file.type.startsWith('image/')) {
+                    showMessage('Por favor seleccione un archivo de imagen válido', 'error');
+                    this.value = '';
+                    return;
+                }
+                
+                // Mostrar vista previa
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     // Crear o actualizar imagen de vista previa
                     let previewImg = imagePreview.querySelector('img');
                     if (!previewImg) {
                         previewImg = document.createElement('img');
+                        previewImg.className = 'preview-image';
                         imagePreview.appendChild(previewImg);
                     }
                     previewImg.src = e.target.result;
                     previewImg.style.display = 'block';
+                    
+                    // Mostrar tamaño de la imagen
+                    const sizeInfo = document.createElement('div');
+                    sizeInfo.className = 'image-size-info';
+                    sizeInfo.textContent = `Tamaño: ${(file.size / 1024).toFixed(2)} KB`;
+                    imagePreview.appendChild(sizeInfo);
                 };
                 reader.readAsDataURL(file);
             }
@@ -1499,19 +1711,45 @@ function setupImagePreview() {
         editImageFileInput.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
+                // Validar que es una imagen
+                if (!file.type.startsWith('image/')) {
+                    showMessage('Por favor seleccione un archivo de imagen válido', 'error');
+                    this.value = '';
+                    return;
+                }
+                
+                // Mostrar vista previa
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     // Crear o actualizar imagen de vista previa
                     let previewImg = editImagePreview.querySelector('img');
                     if (!previewImg) {
                         previewImg = document.createElement('img');
+                        previewImg.className = 'preview-image';
                         editImagePreview.appendChild(previewImg);
                     }
                     previewImg.src = e.target.result;
                     previewImg.style.display = 'block';
+                    
+                    // Mostrar tamaño de la imagen
+                    const sizeInfo = document.createElement('div');
+                    sizeInfo.className = 'image-size-info';
+                    sizeInfo.textContent = `Tamaño: ${(file.size / 1024).toFixed(2)} KB`;
+                    editImagePreview.appendChild(sizeInfo);
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
+}
+
+// Función para traducir categorías
+function translateCategory(category) {
+    const categories = {
+        'arreglos': 'Arreglos Florales',
+        'ramos': 'Ramos',
+        'plantas': 'Plantas',
+        'accesorios': 'Accesorios'
+    };
+    return categories[category] || category;
 }

@@ -103,7 +103,7 @@
                 <div class="checkout-content">
                     <!-- Resumen del Pedido -->
                     <div class="order-summary">
-                        <h2>Resumen del Pedido</h2>
+                        <h2><i class="fas fa-shopping-cart"></i> Resumen del Pedido</h2>
                         <div class="order-items">
                             <!-- Los items del pedido se cargarán aquí dinámicamente -->
                         </div>
@@ -113,11 +113,19 @@
                                 <span class="total-amount">$0</span>
                             </div>
                         </div>
+                        
+                        <!-- Información de Entrega -->
+                        <div class="delivery-info">
+                            <h3><i class="fas fa-truck"></i> Información de Entrega</h3>
+                            <p><i class="fas fa-map-marker-alt"></i> Entregas en toda la comuna de Recoleta</p>
+                            <p><i class="fas fa-clock"></i> Tiempo estimado de entrega: 24-48 horas</p>
+                            <p><i class="fas fa-shield-alt"></i> Flores frescas garantizadas</p>
+                        </div>
                     </div>
 
                     <!-- Información de Pago -->
                     <div class="payment-section">
-                        <h2>Información de Pago</h2>
+                        <h2><i class="fas fa-credit-card"></i> Información de Pago</h2>
                         <form id="paymentForm" class="payment-form">
                             <div class="form-group">
                                 <label for="cardName">Nombre en la Tarjeta</label>
@@ -146,7 +154,14 @@
                                 <textarea id="billingAddress" name="billingAddress" required placeholder="Dirección completa"></textarea>
                             </div>
                             
-                            <button type="submit" class="btn btn-primary checkout-button">Procesar Pago</button>
+                            <div class="form-group">
+                                <label for="notes">Notas adicionales (opcional)</label>
+                                <textarea id="notes" name="notes" placeholder="Instrucciones especiales para la entrega"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary checkout-button">
+                                <i class="fas fa-lock"></i> Procesar Pago
+                            </button>
                         </form>
                     </div>
                     
@@ -158,7 +173,10 @@
                             <p>Tu pedido ha sido procesado exitosamente.</p>
                             <p>Número de pedido: <strong class="order-id"></strong></p>
                             <p>Recibirás un correo de confirmación con los detalles de tu pedido.</p>
-                            <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
+                            <div class="confirmation-actions">
+                                <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
+                                <a href="products.html" class="btn btn-secondary">Seguir Comprando</a>
+                            </div>
                         </div>
                     </div>
                 </div>
