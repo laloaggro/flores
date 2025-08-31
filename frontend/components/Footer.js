@@ -27,8 +27,8 @@ class Footer extends HTMLElement {
               <h4>Contacto</h4>
               <address>
                 <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Recoleta 1234, Recoleta, Santiago</p>
-                <p><i class="fas fa-phone" aria-hidden="true"></i> +56 2 1234 5678</p>
-                <p><i class="fas fa-envelope" aria-hidden="true"></i> info@arreglosvictoria.cl</p>
+                <p><i class="fas fa-phone" aria-hidden="true"></i> +56 9 1234 5678</p>
+                <p><i class="fas fa-envelope" aria-hidden="true"></i> contacto@arreglosvictoria.cl</p>
               </address>
             </div>
             
