@@ -234,11 +234,11 @@ body[data-theme="dark"] .footer-section h4 {
 }
 
 .footer-links a {
-  color: var(--text-color) !important;
+  color: #4caf50 !important;
 }
 
 body[data-theme="dark"] .footer-links a {
-  color: var(--text-color) !important;
+  color: #4caf50 !important;
 }
 
 /* Corrección de estilos para botones del header */
