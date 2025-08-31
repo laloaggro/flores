@@ -10,9 +10,9 @@ header {
 }
 
 body[data-theme="dark"] header {
-  background-color: var(--bg-card) !important;
+  background-color: #1e293b !important;
   color: var(--text-color) !important;
-  border-color: var(--border-color) !important;
+  border-color: #475569 !important;
 }
 
 /* Asegurar visibilidad del logo */

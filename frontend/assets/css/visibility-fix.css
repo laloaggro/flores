@@ -77,7 +77,7 @@ section {
 /* Asegurar visibilidad de texto en el navbar */
 .navbar {
   color: var(--dark);
-  background-color: var(--white);
+  background-color: #1e293b;
 }
 
 /* Mejoras de visibilidad para la barra de navegación */

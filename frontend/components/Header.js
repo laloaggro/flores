@@ -9,7 +9,7 @@ class Header extends HTMLElement {
                 <div class="navbar">
                     <div class="logo">
                         <a href="index.html" aria-label="Arreglos Florales Victoria - Inicio">
-                            <img src="assets/images/logo.png" alt="Logo de Arreglos Florales Victoria" width="60" height="60">
+                            <img src="assets/images/logo.svg" alt="Logo de Arreglos Florales Victoria" width="80" height="80">
                         </a>
                     </div>
                     
