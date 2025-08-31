@@ -75,12 +75,18 @@ section {
 }
 
 /* Asegurar visibilidad de texto en el navbar */
+/* Navbar styles - modo claro por defecto */
 .navbar {
   color: var(--dark);
+  background-color: var(--white);
+}
+
+/* Navbar styles - modo oscuro */
+[data-theme="dark"] .navbar {
   background-color: #1e293b;
 }
 
-/* Mejoras de visibilidad para la barra de navegación */
+/* Estilos para enlaces del navbar en ambos modos */
 .navbar a {
   color: var(--dark);
 }
