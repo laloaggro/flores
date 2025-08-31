@@ -1,16 +1,7 @@
-/**
- * Componente de pie de página (Footer)
- * Muestra información de contacto, enlaces importantes y redes sociales
- * Incluye copyright y enlaces al mapa del sitio, privacidad y términos
- */
 class Footer extends HTMLElement {
-  /**
-   * Se ejecuta cuando el elemento se conecta al DOM
-   * Renderiza el contenido del pie de página
-   */
   connectedCallback() {
     this.innerHTML = `
-      <footer role="contentinfo">
+      <footer class="site-footer" role="contentinfo">
         <div class="container">
           <div class="footer-content">
             <div class="footer-section">
@@ -46,25 +37,16 @@ class Footer extends HTMLElement {
               <p><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Domingo: 9:00 - 21:00</p>
               <p><i class="fas fa-truck" aria-hidden="true"></i> Despacho: 10:00 - 19:00</p>
             </div>
-            
-            <div class="footer-section">
-              <h4>Enlaces Rápidos</h4>
-              <div class="footer-links">
-                <a href="privacy.html" aria-label="Política de privacidad"><i class="fas fa-user-secret" aria-hidden="true"></i> Privacidad</a>
-                <a href="terms.html" aria-label="Términos y condiciones"><i class="fas fa-file-contract" aria-hidden="true"></i> Términos</a>
-                <a href="sitemap.html" aria-label="Mapa del sitio"><i class="fas fa-sitemap" aria-hidden="true"></i> Mapa del Sitio</a>
-              </div>
-            </div>
           </div>
           
           <div class="footer-bottom">
             <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
-            <p>Diseñado con <i class="fas fa-heart" aria-label="amor"></i> en Santiago, Chile</p>
             <div class="footer-links">
               <a href="privacy.html" aria-label="Política de privacidad"><i class="fas fa-user-secret" aria-hidden="true"></i> Privacidad</a>
               <a href="terms.html" aria-label="Términos y condiciones"><i class="fas fa-file-contract" aria-hidden="true"></i> Términos</a>
               <a href="sitemap.html" aria-label="Mapa del sitio"><i class="fas fa-sitemap" aria-hidden="true"></i> Mapa del Sitio</a>
             </div>
+            <p>Diseñado con <i class="fas fa-heart" aria-label="amor"></i> en Santiago, Chile</p>
           </div>
         </div>
       </footer>
