@@ -23,14 +23,18 @@ class Header extends HTMLElement {
                     </nav>
                     
                     <div class="nav-icons">
-                        <button id="theme-toggle" class="nav-icon" aria-label="Cambiar tema">
+                        <button id="nav-toggle" class="nav-icon" aria-label="Menú" aria-expanded="false">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        
+                        <button id="theme-toggle" class="nav-icon" aria-label="Cambiar a modo oscuro">
                             <i class="fas fa-moon"></i>
                         </button>
                         
-                        <a href="cart.html" id="cart-icon" class="nav-icon" aria-label="Carrito de compras">
+                        <button id="cart-icon" class="nav-icon" aria-label="Carrito de compras">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-count">0</span>
-                        </a>
+                        </button>
                         
                         <div class="user-menu">
                             <button class="user-info nav-icon" aria-haspopup="true" aria-expanded="false">
@@ -63,6 +67,18 @@ class Header extends HTMLElement {
      * Configura la interactividad del header
      */
     setupInteractivity() {
+        // Toggle de navegación para móviles
+        const navToggle = this.querySelector('#nav-toggle');
+        const navLinks = this.querySelector('.nav-links');
+        
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => {
+                const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+                navToggle.setAttribute('aria-expanded', !isExpanded);
+                navLinks.classList.toggle('show');
+            });
+        }
+        
         // Toggle de tema
         const themeToggle = this.querySelector('#theme-toggle');
         if (themeToggle) {
@@ -73,11 +89,26 @@ class Header extends HTMLElement {
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 
-                // Cambiar el icono
+                // Cambiar el icono y el aria-label
                 const themeIcon = themeToggle.querySelector('i');
                 if (themeIcon) {
-                    themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                    if (newTheme === 'dark') {
+                        themeIcon.className = 'fas fa-sun';
+                        themeToggle.setAttribute('aria-label', 'Cambiar a modo claro');
+                    } else {
+                        themeIcon.className = 'fas fa-moon';
+                        themeToggle.setAttribute('aria-label', 'Cambiar a modo oscuro');
+                    }
                 }
+            });
+        }
+        
+        // Carrito de compras
+        const cartIcon = this.querySelector('#cart-icon');
+        if (cartIcon) {
+            cartIcon.addEventListener('click', () => {
+                // Emitir evento personalizado para mostrar el carrito
+                document.dispatchEvent(new CustomEvent('showCart'));
             });
         }
         

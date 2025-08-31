@@ -14,60 +14,52 @@ class Footer extends HTMLElement {
         <div class="container">
           <div class="footer-content">
             <div class="footer-section">
-              <h3 aria-label="Información de la empresa">Arreglos Victoria</h3>
-              <p>Flores frescas y hermosos arreglos florales para alegrar tus momentos especiales.</p>
-              
-              <!-- Redes sociales -->
-              <div class="social-links" aria-label="Redes sociales de Arreglos Victoria">
-                <a href="https://www.facebook.com/profile.php?id=61578999845743" 
-                   aria-label="Visite nuestra página de Facebook" 
-                   target="_blank" 
-                   rel="noopener noreferrer">
+              <h3>Arreglos Florales Victoria</h3>
+              <p>Creando hermosos momentos desde 2010 en el corazón de Recoleta.</p>
+              <div class="social-links">
+                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                   <i class="fab fa-facebook-f" aria-hidden="true"></i>
                 </a>
-                <a href="https://www.instagram.com/arreglosvictoria/" 
-                   aria-label="Síganos en Instagram" 
-                   target="_blank" 
-                   rel="noopener noreferrer">
+                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                   <i class="fab fa-instagram" aria-hidden="true"></i>
                 </a>
-                <a href="https://wa.me/56963603177" 
-                   aria-label="Contáctenos por WhatsApp" 
-                   target="_blank" 
-                   rel="noopener noreferrer">
-                  <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                  <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+                <a href="https://www.pinterest.com" target="_blank" rel="noopener noreferrer" aria-label="Pinterest">
+                  <i class="fab fa-pinterest" aria-hidden="true"></i>
                 </a>
               </div>
             </div>
             
             <div class="footer-section">
-              <h4 aria-label="Enlaces rápidos">Enlaces</h4>
-              <ul role="navigation" aria-label="Enlaces del pie de página">
-                <li><a href="index.html" aria-label="Ir a la página de inicio"><i class="fas fa-home" aria-hidden="true"></i> Inicio</a></li>
-                <li><a href="products.html" aria-label="Ver productos"><i class="fas fa-box" aria-hidden="true"></i> Productos</a></li>
-                <li><a href="contact.html" aria-label="Ir a la página de contacto"><i class="fas fa-envelope" aria-hidden="true"></i> Contacto</a></li>
-                <li><a href="about.html" aria-label="Conocer más sobre nosotros"><i class="fas fa-info-circle" aria-hidden="true"></i> Nosotros</a></li>
-              </ul>
-            </div>
-            
-            <div class="footer-section">
-              <h4 aria-label="Horario de atención">Horario</h4>
-              <p><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 - 19:00</p>
-              <p><i class="fas fa-clock" aria-hidden="true"></i> Domingo: 10:00 - 16:00</p>
-            </div>
-            
-            <div class="footer-section">
-              <h4 aria-label="Información de contacto">Contacto</h4>
+              <h4>Contacto</h4>
               <address>
-                <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</p>
-                <p><i class="fas fa-phone" aria-hidden="true"></i> Tel: +56 9 6360 3177</p>
-                <p><i class="fas fa-envelope" aria-hidden="true"></i> Email: contacto@arreglosvictoria.com</p>
+                <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Recoleta 1234, Recoleta, Santiago</p>
+                <p><i class="fas fa-phone" aria-hidden="true"></i> +56 2 1234 5678</p>
+                <p><i class="fas fa-envelope" aria-hidden="true"></i> info@arreglosvictoria.cl</p>
               </address>
+            </div>
+            
+            <div class="footer-section">
+              <h4>Horario</h4>
+              <p><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Domingo: 9:00 - 21:00</p>
+              <p><i class="fas fa-truck" aria-hidden="true"></i> Despacho: 10:00 - 19:00</p>
+            </div>
+            
+            <div class="footer-section">
+              <h4>Enlaces Rápidos</h4>
+              <div class="footer-links">
+                <a href="privacy.html" aria-label="Política de privacidad"><i class="fas fa-user-secret" aria-hidden="true"></i> Privacidad</a>
+                <a href="terms.html" aria-label="Términos y condiciones"><i class="fas fa-file-contract" aria-hidden="true"></i> Términos</a>
+                <a href="sitemap.html" aria-label="Mapa del sitio"><i class="fas fa-sitemap" aria-hidden="true"></i> Mapa del Sitio</a>
+              </div>
             </div>
           </div>
           
           <div class="footer-bottom">
-            <p>&copy; 2023 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+            <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+            <p>Diseñado con <i class="fas fa-heart" aria-label="amor"></i> en Santiago, Chile</p>
             <div class="footer-links">
               <a href="privacy.html" aria-label="Política de privacidad"><i class="fas fa-user-secret" aria-hidden="true"></i> Privacidad</a>
               <a href="terms.html" aria-label="Términos y condiciones"><i class="fas fa-file-contract" aria-hidden="true"></i> Términos</a>
@@ -82,3 +74,5 @@ class Footer extends HTMLElement {
 
 // Registramos el componente personalizado para que pueda ser usado en el HTML
 customElements.define('site-footer', Footer);
+
+export default Footer;

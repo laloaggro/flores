@@ -206,3 +206,6 @@ class UserMenu {
 
 // Inicializar el menú de usuario cuando el DOM esté listo
 UserMenu.init();
+
+// Exportar la clase para que pueda ser utilizada en otros archivos
+export default UserMenu;
