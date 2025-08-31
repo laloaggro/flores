@@ -1,4 +1,4 @@
-const PLACEHOLDER_IMAGE = 'assets/images/placeholder.svg';
+const PLACEHOLDER_IMAGE = './assets/images/placeholder.svg';
 
 class ProductCard extends HTMLElement {
     
@@ -9,9 +9,25 @@ class ProductCard extends HTMLElement {
      * @returns {string} HTML de la imagen
      */
     static renderImage(imageUrl, altText) {
+        // Asegurarse de que la ruta de la imagen sea correcta
+        let correctImageUrl = imageUrl;
+        if (imageUrl && imageUrl.startsWith('/assets/images/')) {
+            correctImageUrl = `.${imageUrl}`;
+        } else if (imageUrl && imageUrl.startsWith('assets/images/')) {
+            correctImageUrl = `./${imageUrl}`;
+        } else if (imageUrl && !imageUrl.startsWith('./assets/images/') && !imageUrl.startsWith('http')) {
+            // Si la imagen no es una URL completa ni una ruta relativa correcta, usar el placeholder
+            correctImageUrl = PLACEHOLDER_IMAGE;
+        }
+        
+        // Si no hay imagen, usar el placeholder
+        if (!correctImageUrl) {
+            correctImageUrl = PLACEHOLDER_IMAGE;
+        }
+        
         return `
             <img 
-                src="${imageUrl}" 
+                src="${correctImageUrl}" 
                 alt="${altText}" 
                 loading="lazy" 
                 width="300" 
@@ -60,7 +76,7 @@ class ProductCard extends HTMLElement {
             <div class="product-card">
                 <div class="product-image">
                     ${ProductCard.renderImage(
-                        product.image_url || product.image || PLACEHOLDER_IMAGE,
+                        product.image_url || product.image,
                         product.name
                     )}
                 </div>
@@ -71,9 +87,7 @@ class ProductCard extends HTMLElement {
                     <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">
                         <i class="fas fa-shopping-cart"></i> Agregar al carrito
                     </button>
-                    <button class="btn btn-secondary add-to-wishlist" data-product-id="${product.id}">
-                        <i class="far fa-heart"></i> Agregar a deseos
-                    </button>
+                    // Removido el botón de wishlist ya que no estaba en el diseño original y no se usaba
                 </div>
             </div>
         `;
