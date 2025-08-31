@@ -11,12 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar CartUtils
     CartUtils.init();
     
-    // Elementos del DOM
+    // Adjuntar event listeners principales
     const cartIcon = document.querySelector('.cart-icon');
-    const cartClose = document.querySelector('.cart-close');
-    const checkoutButton = document.querySelector('.checkout-button');
     
-    // Mostrar/ocultar carrito - solo si los elementos existen
+    // Mostrar carrito - solo si el elemento existe
     if (cartIcon) {
         cartIcon.addEventListener('click', function(e) {
             e.preventDefault();
@@ -25,92 +23,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    if (cartClose) {
-        cartClose.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            hideCart();
-        });
-    }
-    
     // Cerrar carrito al hacer clic fuera
     document.addEventListener('click', function(event) {
         const cartModal = document.getElementById('cartModal');
         if (cartModal && event.target === cartModal) {
-            hideCart();
+            handleCloseCart(event);
         }
     });
-    
-    // Agregar funcionalidad al botón 'Proceder al pedido'
-    if (checkoutButton) {
-        checkoutButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const cart = CartUtils.getCartItems();
-            
-            if (cart.length === 0) {
-                showNotification('Tu carrito está vacío', 'error');
-                return;
-            }
-            
-            // Verificar si el usuario está logueado
-            if (!isAuthenticated()) {
-                showNotification('Debes iniciar sesión para continuar con el pedido', 'error');
-                // Mostrar información de depuración
-                console.log('Usuario no autenticado, redirigiendo a login');
-                
-                // Redirigir a la página de login/registro
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 1500);
-                return;
-            }
-            
-            // Redirigir a la página de checkout
-            window.location.href = 'checkout.html';
-        });
-    }
-    
-    // Función para ocultar el carrito
-    function hideCart() {
-        const cartModal = document.getElementById('cartModal');
-        if (cartModal) {
-            cartModal.style.display = 'none';
-        }
-    }
 });
 
 // Función para adjuntar eventos del carrito una sola vez
-function attachCartEvents() {
-    // Adjuntar event listeners para los botones de disminución
-    document.querySelectorAll('.decrease').forEach(button => {
-        button.addEventListener('click', handleDecreaseQuantity);
-    });
-    
-    // Adjuntar event listeners para los botones de aumento
-    document.querySelectorAll('.increase').forEach(button => {
-        button.addEventListener('click', handleIncreaseQuantity);
-    });
-    
-    // Botones de eliminar
-    document.querySelectorAll('.remove-item').forEach(button => {
-        button.addEventListener('click', handleRemoveItem);
-    });
-    
-    // Botones de guardar para más tarde
-    document.querySelectorAll('.save-for-later').forEach(button => {
-        button.addEventListener('click', handleSaveForLater);
-    });
-    
-    // Botones de mover al carrito (desde guardado para más tarde)
-    document.querySelectorAll('.move-to-cart').forEach(button => {
-        button.addEventListener('click', handleMoveToCart);
-    });
-    
-    // Botones de eliminar de guardado para más tarde
-    document.querySelectorAll('.remove-saved-item').forEach(button => {
-        button.addEventListener('click', handleRemoveSavedItem);
-    });
+function attachCartEventListeners() {
+    // Evitar adjuntar eventos múltiples
+    if (cartEventsAttached) {
+        return;
+    }
     
     // Botón de cerrar carrito
     const cartClose = document.querySelector('.cart-close');
@@ -130,6 +57,29 @@ function attachCartEvents() {
         checkoutButton.addEventListener('click', handleCheckout);
     }
     
+    // Delegación de eventos para botones dinámicos
+    document.body.addEventListener('click', function(e) {
+        // Verificar si se hizo clic en un botón de cantidad o acción
+        if (e.target.closest('.decrease, .increase, .remove-item, .save-for-later, .move-to-cart, .remove-saved-item')) {
+            const button = e.target.closest('.decrease, .increase, .remove-item, .save-for-later, .move-to-cart, .remove-saved-item');
+            const productId = parseInt(button.dataset.id);
+            
+            if (button.classList.contains('decrease')) {
+                handleDecreaseQuantity({ target: button });
+            } else if (button.classList.contains('increase')) {
+                handleIncreaseQuantity({ target: button });
+            } else if (button.classList.contains('remove-item')) {
+                handleRemoveItem({ target: button });
+            } else if (button.classList.contains('save-for-later')) {
+                handleSaveForLater(e);
+            } else if (button.classList.contains('move-to-cart')) {
+                handleMoveToCart({ target: button });
+            } else if (button.classList.contains('remove-saved-item')) {
+                handleRemoveSavedItem({ target: button });
+            }
+        }
+    });
+    
     cartEventsAttached = true;
 }
 
@@ -137,63 +87,72 @@ function attachCartEvents() {
 function handleDecreaseQuantity(e) {
     e.preventDefault();
     e.stopPropagation();
-    const productId = parseInt(e.currentTarget.dataset.id);
-    const item = CartUtils.getCartItems().find(item => item.id === productId);
-    if (item && item.quantity > 1) {
-        CartUtils.updateQuantity(productId, item.quantity - 1);
-        updateCartUI(); // Actualizar solo la UI sin recrear todo el carrito
-    } else if (item) {
-        CartUtils.removeFromCart(productId);
-        updateCartUI(); // Actualizar solo la UI sin recrear todo el carrito
-    }
+    
+    const button = e.target.closest('.decrease');
+    const productId = parseInt(button.dataset.id);
+    
+    CartUtils.decreaseQuantity(productId);
+    updateCartUI();
 }
 
 // Manejador para aumentar cantidad
 function handleIncreaseQuantity(e) {
     e.preventDefault();
     e.stopPropagation();
-    const productId = parseInt(e.currentTarget.dataset.id);
-    const item = CartUtils.getCartItems().find(item => item.id === productId);
-    if (item) {
-        CartUtils.updateQuantity(productId, item.quantity + 1);
-        updateCartUI(); // Actualizar solo la UI sin recrear todo el carrito
-    }
+    
+    const button = e.target.closest('.increase');
+    const productId = parseInt(button.dataset.id);
+    
+    CartUtils.increaseQuantity(productId);
+    updateCartUI();
 }
 
 // Manejador para eliminar item
 function handleRemoveItem(e) {
     e.preventDefault();
     e.stopPropagation();
-    const productId = parseInt(e.currentTarget.dataset.id);
+    
+    const button = e.target.closest('.remove-item');
+    const productId = parseInt(button.dataset.id);
+    
     CartUtils.removeFromCart(productId);
-    showCart(); // Actualizar la vista del carrito
+    updateCartUI();
 }
 
 // Manejador para guardar para más tarde
 function handleSaveForLater(e) {
     e.preventDefault();
     e.stopPropagation();
-    const productId = parseInt(e.currentTarget.dataset.id);
+    
+    const button = e.target.closest('.save-for-later');
+    const productId = parseInt(button.dataset.id);
+    
     CartUtils.saveForLater(productId);
-    showCart(); // Actualizar la vista del carrito
+    updateCartUI();
 }
 
-// Manejador para mover al carrito
+// Manejador para mover al carrito (desde guardado para más tarde)
 function handleMoveToCart(e) {
     e.preventDefault();
     e.stopPropagation();
-    const productId = parseInt(e.currentTarget.dataset.id);
+    
+    const button = e.target.closest('.move-to-cart');
+    const productId = parseInt(button.dataset.id);
+    
     CartUtils.moveToCart(productId);
-    showCart(); // Actualizar la vista del carrito
+    updateCartUI();
 }
 
-// Manejador para eliminar item guardado
+// Manejador para eliminar de guardado para más tarde
 function handleRemoveSavedItem(e) {
     e.preventDefault();
     e.stopPropagation();
-    const productId = parseInt(e.currentTarget.dataset.id);
-    CartUtils.removeFromSaved(productId);
-    showCart(); // Actualizar la vista del carrito
+    
+    const button = e.target.closest('.remove-saved-item');
+    const productId = parseInt(button.dataset.id);
+    
+    CartUtils.removeSavedItem(productId);
+    updateCartUI();
 }
 
 // Manejador para cerrar carrito
@@ -257,7 +216,7 @@ function showCart() {
     console.log('Mostrando carrito con items:', cart);
     console.log('Items guardados para más tarde:', savedForLater);
     
-    // Crear el elemento del carrito si no existe o si existe pero no está visible
+    // Crear el elemento del carrito si no existe
     let cartModal = document.getElementById('cartModal');
     if (!cartModal) {
         try {
@@ -275,7 +234,7 @@ function showCart() {
                     cartModal = document.getElementById('cartModal');
                     
                     // Adjuntar event listeners
-                    Cart.attachEventListeners();
+                    attachCartEventListeners();
                 } else {
                     console.error('Cart component returned invalid HTML');
                     return;
@@ -309,14 +268,73 @@ function showCart() {
                     <div class="cart-items-section">
                         <h3>Tus Productos (${cart.length} ${cart.length === 1 ? 'item' : 'items'})</h3>
                         <div class="cart-items">
-                            ${renderCartItems(cart)}
+                            ${cart.length > 0 ? cart.map(item => `
+                                <div class="cart-item" data-id="${item.id}">
+                                    <div class="item-image">
+                                        <img src="${item.image || './assets/images/placeholder.svg'}" 
+                                             alt="${item.name}" 
+                                             onerror="this.src='./assets/images/placeholder.svg'">
+                                    </div>
+                                    <div class="item-info">
+                                        <h4>${item.name}</h4>
+                                        <p class="item-price">${formatPrice(item.price)}</p>
+                                    </div>
+                                    <div class="item-quantity">
+                                        <button class="btn btn-quantity decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <span class="quantity">${item.quantity}</span>
+                                        <button class="btn btn-quantity increase" data-id="${item.id}" aria-label="Aumentar cantidad">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="item-total">
+                                        <span>${formatPrice(item.price * item.quantity)}</span>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="btn btn-icon save-for-later" data-id="${item.id}" aria-label="Guardar para más tarde">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button class="btn btn-icon remove-item" data-id="${item.id}" aria-label="Eliminar del carrito">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('') : `
+                                <div class="empty-cart">
+                                    <i class="fas fa-shopping-cart fa-3x"></i>
+                                    <h3>Tu carrito está vacío</h3>
+                                    <p>Agrega productos para comenzar</p>
+                                    <a href="products.html" class="btn btn-primary">Ver productos</a>
+                                </div>
+                            `}
                         </div>
                     </div>
                     
                     <div class="saved-for-later-section">
-                        <h3>Guardados para más tarde</h3>
+                        <h3>Guardados para más tarde (${savedForLater.length})</h3>
                         <div class="saved-items">
-                            ${renderSavedItems(savedForLater)}
+                            ${savedForLater.length > 0 ? savedForLater.map(item => `
+                                <div class="saved-item" data-id="${item.id}">
+                                    <div class="item-image">
+                                        <img src="${item.image || './assets/images/placeholder.svg'}" 
+                                             alt="${item.name}" 
+                                             onerror="this.src='./assets/images/placeholder.svg'">
+                                    </div>
+                                    <div class="item-info">
+                                        <h4>${item.name}</h4>
+                                        <p class="item-price">${formatPrice(item.price)}</p>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="btn btn-secondary move-to-cart" data-id="${item.id}">
+                                            <i class="fas fa-shopping-cart"></i> Mover al carrito
+                                        </button>
+                                        <button class="btn btn-danger remove-saved-item" data-id="${item.id}">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('') : '<p class="empty-saved">No hay productos guardados para más tarde</p>'}
                         </div>
                     </div>
                 </div>
@@ -337,8 +355,8 @@ function showCart() {
                 </div>
             `;
             
-            // Volver a adjuntar event listeners después de actualizar el contenido
-            Cart.attachEventListeners();
+            // Volver a adjuntar los event listeners después de actualizar el contenido
+            attachCartEventListeners();
         }
     }
 }
@@ -387,9 +405,6 @@ function updateCartUI() {
             checkoutButton.removeAttribute('disabled');
         }
     }
-    
-    // Volver a adjuntar event listeners
-    Cart.attachEventListeners();
 }
 
 // Hacer que updateCartUI esté disponible globalmente

@@ -1,6 +1,13 @@
-// utils.js - Funciones de utilidad compartidas
+/**
+ * utils.js - Funciones de utilidad compartidas
+ * Contiene funciones auxiliares utilizadas en múltiples partes de la aplicación
+ */
 
-// Determinar la URL base del API según el entorno
+/**
+ * Determinar la URL base del API según el entorno
+ * Devuelve la URL correcta dependiendo de si se está en desarrollo o producción
+ * @returns {string} URL base del API
+ */
 const getApiBaseUrl = () => {
   // En producción, usar la URL del backend en Render
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
@@ -20,7 +27,11 @@ const getApiBaseUrl = () => {
 
 const API_BASE_URL = getApiBaseUrl();
 
-// Función para verificar la conectividad con el backend
+/**
+ * Función para verificar la conectividad con el backend
+ * Realiza una serie de intentos para conectar con diferentes endpoints del backend
+ * @returns {Promise<boolean>} True si se puede conectar, false en caso contrario
+ */
 const checkBackendConnectivity = async () => {
   try {
     // Probar primero con un endpoint que probablemente exista
@@ -46,7 +57,12 @@ const checkBackendConnectivity = async () => {
   }
 };
 
-// Función para mostrar notificaciones
+/**
+ * Función para mostrar notificaciones al usuario
+ * Crea y muestra notificaciones temporales en la esquina superior derecha
+ * @param {string} message - Mensaje a mostrar en la notificación
+ * @param {string} type - Tipo de notificación (info, success, warning, error)
+ */
 const showNotification = (message, type = 'info') => {
   // Crear contenedor de notificaciones si no existe
   let notificationContainer = document.getElementById('notification-container');
@@ -127,7 +143,11 @@ const showNotification = (message, type = 'info') => {
   }, 5000);
 };
 
-// Función para verificar si el usuario está autenticado
+/**
+ * Función para verificar si el usuario está autenticado
+ * Verifica si hay un token válido almacenado en el localStorage
+ * @returns {boolean} True si el usuario está autenticado, false en caso contrario
+ */
 const isAuthenticated = () => {
   try {
     const token = localStorage.getItem('token');
@@ -142,7 +162,11 @@ const isAuthenticated = () => {
   }
 };
 
-// Función para obtener información del usuario desde el token
+/**
+ * Función para obtener información del usuario desde el token
+ * Extrae la información del usuario desde el token JWT almacenado
+ * @returns {Object|null} Información del usuario o null si no hay token válido
+ */
 const getUserInfoFromToken = () => {
   try {
     const token = localStorage.getItem('token');
@@ -164,33 +188,58 @@ const getUserInfoFromToken = () => {
   }
 };
 
-// Función para formatear fechas
+/**
+ * Función para formatear fechas
+ * Formatea una fecha en el formato local de Chile (es-ES)
+ * @param {string|Date} dateString - Fecha a formatear
+ * @returns {string} Fecha formateada
+ */
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('es-ES', options);
 };
 
-// Función para validar email
+/**
+ * Función para validar email
+ * Valida el formato de un email usando una expresión regular
+ * @param {string} email - Email a validar
+ * @returns {boolean} True si el email tiene un formato válido
+ */
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
-// Función para validar contraseña
+/**
+ * Función para validar contraseña
+ * Valida que la contraseña cumpla con los requisitos mínimos de seguridad
+ * @param {string} password - Contraseña a validar
+ * @returns {boolean} True si la contraseña cumple con los requisitos
+ */
 const isValidPassword = (password) => {
   // Al menos 8 caracteres, una mayúscula, una minúscula y un número
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
   return passwordRegex.test(password);
 };
 
-// Función para validar teléfono
+/**
+ * Función para validar teléfono
+ * Valida que el teléfono tenga el formato chileno correcto
+ * @param {string} phone - Teléfono a validar
+ * @returns {boolean} True si el teléfono tiene un formato válido
+ */
 const isValidPhone = (phone) => {
   // Formato chileno: +569xxxxxxxx o 9xxxxxxxx
   const phoneRegex = /^(\+569|9)\d{8}$/;
   return phoneRegex.test(phone);
 };
 
-// Función para formatear precios
+/**
+ * Función para formatear precios
+ * Formatea un número como precio en formato chileno (CLP)
+ * @param {number} price - Precio a formatear
+ * @returns {string} Precio formateado con separadores de miles
+ */
 const formatPrice = (price) => {
   return new Intl.NumberFormat('es-CL', {
     style: 'currency',
@@ -200,7 +249,10 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
-// Función para actualizar el contador del carrito en el header
+/**
+ * Función para actualizar el contador del carrito en el header
+ * Actualiza la cantidad de productos mostrada en el icono del carrito
+ */
 const updateCartCount = () => {
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const savedForLater = JSON.parse(localStorage.getItem('savedForLater')) || [];
@@ -216,18 +268,28 @@ const updateCartCount = () => {
   }
 };
 
-// Función para obtener el carrito del localStorage
+/**
+ * Función para obtener el carrito del localStorage
+ * @returns {Array} Carrito de compras actual
+ */
 const getCart = () => {
   return JSON.parse(localStorage.getItem('cart')) || [];
 };
 
-// Función para guardar el carrito en el localStorage
+/**
+ * Función para guardar el carrito en el localStorage
+ * @param {Array} cart - Carrito de compras a guardar
+ */
 const saveCart = (cart) => {
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
 };
 
-// Función para agregar un producto al carrito
+/**
+ * Función para agregar un producto al carrito
+ * Agrega un producto al carrito o incrementa su cantidad si ya existe
+ * @param {Object} product - Producto a agregar al carrito
+ */
 const addToCart = (product) => {
   const cart = getCart();
   
@@ -255,14 +317,23 @@ const addToCart = (product) => {
   showNotification(`"${product.name}" agregado al carrito`, 'success');
 };
 
-// Función para eliminar un producto del carrito
+/**
+ * Función para eliminar un producto del carrito
+ * Elimina un producto específico del carrito
+ * @param {string} productId - ID del producto a eliminar
+ */
 const removeFromCart = (productId) => {
   let cart = getCart();
   cart = cart.filter(item => item.id !== productId);
   saveCart(cart);
 };
 
-// Función para actualizar la cantidad de un producto en el carrito
+/**
+ * Función para actualizar la cantidad de un producto en el carrito
+ * Actualiza la cantidad de un producto específico en el carrito
+ * @param {string} productId - ID del producto
+ * @param {number} quantity - Nueva cantidad
+ */
 const updateCartQuantity = (productId, quantity) => {
   const cart = getCart();
   const item = cart.find(item => item.id === productId);
@@ -277,19 +348,28 @@ const updateCartQuantity = (productId, quantity) => {
   }
 };
 
-// Función para cerrar sesión
+/**
+ * Función para cerrar sesión
+ * Elimina los datos de autenticación y redirige al usuario a la página principal
+ */
 const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   window.location.href = 'index.html';
 };
 
-// Función para obtener el token de autenticación
+/**
+ * Función para obtener el token de autenticación
+ * @returns {string|null} Token de autenticación o null si no existe
+ */
 const getAuthToken = () => {
     return localStorage.getItem('authToken');
 };
 
-// Función para verificar si el usuario es administrador
+/**
+ * Función para verificar si el usuario es administrador
+ * @returns {boolean} True si el usuario tiene rol de administrador
+ */
 const isAdmin = () => {
   const user = getUserInfoFromToken();
   return user && user.role === 'admin';

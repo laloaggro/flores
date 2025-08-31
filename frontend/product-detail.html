@@ -40,6 +40,29 @@
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
     
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "Arreglo Floral",
+      "image": [
+        "./assets/images/placeholder.svg"
+      ],
+      "description": "Hermoso arreglo floral fresco",
+      "sku": "001",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://arreglos-victoria-backend.onrender.com/product-detail.html",
+        "priceCurrency": "CLP",
+        "price": "15000",
+        "priceValidUntil": "2025-12-31",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition"
+      }
+    }
+    </script>
+    
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/product-detail.html">
@@ -401,15 +424,25 @@
             });
             
             // Event listeners para cantidad
-            document.getElementById('increaseQuantity').addEventListener('click', function() {
-                const quantityInput = document.getElementById('quantity');
-                quantityInput.value = Math.min(parseInt(quantityInput.value) + 1, 10);
-            });
+            const increaseQuantityBtn = document.getElementById('increaseQuantity');
+            const decreaseQuantityBtn = document.getElementById('decreaseQuantity');
+            const quantityInput = document.getElementById('quantity');
             
-            document.getElementById('decreaseQuantity').addEventListener('click', function() {
-                const quantityInput = document.getElementById('quantity');
-                quantityInput.value = Math.max(parseInt(quantityInput.value) - 1, 1);
-            });
+            if (increaseQuantityBtn && quantityInput) {
+                increaseQuantityBtn.addEventListener('click', function() {
+                    const currentValue = parseInt(quantityInput.value) || 1;
+                    const maxValue = parseInt(quantityInput.max) || 10;
+                    quantityInput.value = Math.min(currentValue + 1, maxValue);
+                });
+            }
+            
+            if (decreaseQuantityBtn && quantityInput) {
+                decreaseQuantityBtn.addEventListener('click', function() {
+                    const currentValue = parseInt(quantityInput.value) || 1;
+                    const minValue = parseInt(quantityInput.min) || 1;
+                    quantityInput.value = Math.max(currentValue - 1, minValue);
+                });
+            }
             
             // Event listeners para el panel de administración
             if (document.getElementById('editProductBtn')) {
@@ -427,17 +460,23 @@
             }
             
             // Event listeners para el modal
-            if (document.querySelector('.close')) {
-                document.querySelector('.close').addEventListener('click', function() {
-                    document.getElementById('editProductModal').style.display = 'none';
+            const closeButtons = document.querySelectorAll('.close');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
                 });
-            }
+            });
             
             window.addEventListener('click', function(event) {
-                const modal = document.getElementById('editProductModal');
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
             });
             
             // Event listener para el formulario de edición

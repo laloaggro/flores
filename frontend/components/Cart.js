@@ -23,28 +23,28 @@ function Cart(cartItems = [], savedForLater = []) {
   const cartTotal = calculateCartTotal(cartItems);
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  // Generar HTML del carrito
+  // Generar HTML del carrito con mejor accesibilidad
   return `
-    <div class="cart-modal" id="cartModal">
-      <div class="cart-content">
+    <div class="cart-modal" id="cartModal" role="dialog" aria-labelledby="cart-title" aria-modal="true">
+      <div class="cart-content" tabindex="0">
         <div class="cart-header">
-          <h2>Carrito de Compras</h2>
+          <h2 id="cart-title">Carrito de Compras</h2>
           <button class="btn btn-icon cart-close" aria-label="Cerrar carrito">
-            <i class="fas fa-times"></i>
+            <i class="fas fa-times" aria-hidden="true"></i>
           </button>
         </div>
         
         <div class="cart-body">
           <div class="cart-items-section">
-            <h3>Tus Productos (${itemCount} ${itemCount === 1 ? 'item' : 'items'})</h3>
-            <div class="cart-items">
+            <h3 id="cart-items-title">Tus Productos (${itemCount} ${itemCount === 1 ? 'item' : 'items'})</h3>
+            <div class="cart-items" role="list" aria-labelledby="cart-items-title">
               ${renderCartItems(cartItems)}
             </div>
           </div>
           
           <div class="saved-for-later-section">
-            <h3>Guardados para más tarde</h3>
-            <div class="saved-items">
+            <h3 id="saved-items-title">Guardados para más tarde</h3>
+            <div class="saved-items" role="list" aria-labelledby="saved-items-title">
               ${renderSavedItems(savedForLater)}
             </div>
           </div>
@@ -54,13 +54,15 @@ function Cart(cartItems = [], savedForLater = []) {
           <div class="cart-summary">
             <div class="summary-row">
               <span>Total:</span>
-              <span class="total-amount">${formatPrice(cartTotal)}</span>
+              <span class="cart-total" aria-live="polite">${formatPrice(cartTotal)}</span>
             </div>
           </div>
           <div class="cart-actions">
-            <button class="btn btn-secondary clear-cart">Vaciar carrito</button>
-            <button class="btn btn-primary checkout-button" ${cartItems.length === 0 ? 'disabled' : ''}>
-              Proceder al pedido
+            <button class="btn btn-secondary" id="continueShopping" aria-label="Seguir comprando">
+              Seguir Comprando
+            </button>
+            <button class="btn btn-primary" id="checkoutButton" ${itemCount === 0 ? 'disabled' : ''} aria-label="Proceder al pago">
+              Proceder al Pago
             </button>
           </div>
         </div>
@@ -75,75 +77,89 @@ function calculateCartTotal(items) {
   return items.reduce((total, item) => total + (item.price * item.quantity), 0);
 }
 
-// Función para renderizar items guardados para más tarde
+/**
+ * Renderiza los items guardados para más tarde
+ * @param {Array} items - Array de items guardados
+ * @returns {string} - HTML de los items guardados
+ */
 function renderSavedItems(items) {
-  if (items.length === 0) {
-    return '<p class="empty-saved">No hay productos guardados para más tarde</p>';
+  if (!items || items.length === 0) {
+    return '<p class="empty-saved-message">No hay items guardados</p>';
   }
 
   return items.map(item => `
-    <div class="saved-item" data-id="${item.id}">
+    <div class="saved-item" role="listitem">
       <div class="item-image">
-        <img src="${item.image || './assets/images/placeholder.svg'}" 
+        <img src="${item.image || './assets/images/default-product.jpg'}" 
              alt="${item.name}" 
-             onerror="this.src='./assets/images/placeholder.svg'">
+             loading="lazy"
+             onerror="this.src='./assets/images/default-product.jpg'">
       </div>
       <div class="item-info">
         <h4>${item.name}</h4>
         <p class="item-price">${formatPrice(item.price)}</p>
       </div>
       <div class="item-actions">
-        <button class="btn btn-secondary move-to-cart" data-id="${item.id}">
-          <i class="fas fa-shopping-cart"></i> Mover al carrito
+        <button class="btn-icon move-to-cart" 
+                aria-label="Mover ${item.name} al carrito" 
+                data-id="${item.id}">
+          <i class="fas fa-cart-plus" aria-hidden="true"></i>
         </button>
-        <button class="btn btn-danger remove-saved-item" data-id="${item.id}">
-          <i class="fas fa-trash"></i> Eliminar
+        <button class="btn-icon remove-saved-item" 
+                aria-label="Eliminar ${item.name} de guardados" 
+                data-id="${item.id}">
+          <i class="fas fa-trash" aria-hidden="true"></i>
         </button>
       </div>
     </div>
   `).join('');
 }
 
-// Función para renderizar items del carrito
+/**
+ * Renderiza los items del carrito
+ * @param {Array} items - Array de items del carrito
+ * @returns {string} - HTML de los items del carrito
+ */
 function renderCartItems(items) {
-  if (items.length === 0) {
-    return `
-      <div class="empty-cart">
-        <i class="fas fa-shopping-cart fa-3x"></i>
-        <h3>Tu carrito está vacío</h3>
-        <p>Agrega productos para comenzar</p>
-        <a href="products.html" class="btn btn-primary">Ver productos</a>
-      </div>
-    `;
+  if (!items || items.length === 0) {
+    return '<p class="empty-cart-message">Tu carrito está vacío</p>';
   }
 
   return items.map(item => `
-    <div class="cart-item" data-id="${item.id}">
+    <div class="cart-item" role="listitem">
       <div class="item-image">
-        <img src="./assets/images/products/1.png" alt="${item.name}"> // Reemplazar por la ruta local
+        <img src="${item.image || './assets/images/default-product.jpg'}" 
+             alt="${item.name}" 
+             loading="lazy"
+             onerror="this.src='./assets/images/default-product.jpg'">
       </div>
       <div class="item-info">
         <h4>${item.name}</h4>
         <p class="item-price">${formatPrice(item.price)}</p>
-      </div>
-      <div class="item-quantity">
-        <button class="btn btn-quantity decrease" data-id="${item.id}" aria-label="Disminuir cantidad">
-          <i class="fas fa-minus"></i>
-        </button>
-        <span class="quantity">${item.quantity}</span>
-        <button class="btn btn-quantity increase" data-id="${item.id}" aria-label="Aumentar cantidad">
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
-      <div class="item-total">
-        <span>${formatPrice(item.price * item.quantity)}</span>
+        <div class="item-quantity">
+          <button class="quantity-btn decrease" 
+                  aria-label="Disminuir cantidad de ${item.name}" 
+                  data-id="${item.id}">
+            <i class="fas fa-minus" aria-hidden="true"></i>
+          </button>
+          <span class="quantity-display" id="quantity-${item.id}">${item.quantity}</span>
+          <button class="quantity-btn increase" 
+                  aria-label="Aumentar cantidad de ${item.name}" 
+                  data-id="${item.id}">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
       <div class="item-actions">
-        <button class="btn btn-icon save-for-later" data-id="${item.id}" aria-label="Guardar para más tarde">
-          <i class="fas fa-save"></i>
+        <button class="btn-icon save-for-later" 
+                aria-label="Guardar ${item.name} para más tarde" 
+                data-id="${item.id}">
+          <i class="fas fa-save" aria-hidden="true"></i>
         </button>
-        <button class="btn btn-icon remove-item" data-id="${item.id}" aria-label="Eliminar del carrito">
-          <i class="fas fa-trash"></i>
+        <button class="btn-icon remove-item" 
+                aria-label="Eliminar ${item.name} del carrito" 
+                data-id="${item.id}">
+          <i class="fas fa-trash" aria-hidden="true"></i>
         </button>
       </div>
     </div>
@@ -199,15 +215,15 @@ Cart.attachEventListeners = function() {
     button.addEventListener('click', handleRemoveSavedItem);
   });
 
-  // Botón de vaciar carrito
-  const clearCartButton = cartModal.querySelector('.clear-cart');
-  if (clearCartButton) {
-    clearCartButton.removeEventListener('click', handleClearCart);
-    clearCartButton.addEventListener('click', handleClearCart);
+  // Botón de "Seguir comprando"
+  const continueShoppingButton = cartModal.querySelector('#continueShopping');
+  if (continueShoppingButton) {
+    continueShoppingButton.removeEventListener('click', handleContinueShopping);
+    continueShoppingButton.addEventListener('click', handleContinueShopping);
   }
 
   // Botón de checkout
-  const checkoutButton = cartModal.querySelector('.checkout-button');
+  const checkoutButton = cartModal.querySelector('#checkoutButton');
   if (checkoutButton) {
     checkoutButton.removeEventListener('click', handleCheckout);
     checkoutButton.addEventListener('click', handleCheckout);
@@ -385,6 +401,20 @@ function handleCheckout(e) {
   }
 }
 
-// Exportar componente y funciones
+// Función para continuar comprando
+function handleContinueShopping(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const cartModal = document.getElementById('cartModal');
+  if (cartModal) {
+    cartModal.style.display = 'none';
+  }
+}
+
+// Asegurar que estas funciones estén disponibles globalmente
+window.renderCartItems = renderCartItems;
+window.renderSavedItems = renderSavedItems;
+window.updateCartUI = updateCartUI;
+
+// Exportar componente
 export default Cart;
-export { renderCartItems, renderSavedItems };

@@ -1,94 +1,78 @@
+/**
+ * Componente de pie de página (Footer)
+ * Muestra información de contacto, enlaces importantes y redes sociales
+ * Incluye copyright y enlaces al mapa del sitio, privacidad y términos
+ */
 class Footer extends HTMLElement {
+  /**
+   * Se ejecuta cuando el elemento se conecta al DOM
+   * Renderiza el contenido del pie de página
+   */
   connectedCallback() {
-    // Usamos template literals para crear un HTML estructurado
     this.innerHTML = `
-      <footer class="site-footer">
+      <footer role="contentinfo">
         <div class="container">
-          <!-- Contenedor principal del footer -->
           <div class="footer-content">
-            <!-- Sección de información principal -->
-            <div class="footer-section footer-brand">
-              <h3>Arreglos Victoria</h3>
+            <div class="footer-section">
+              <h3 aria-label="Información de la empresa">Arreglos Victoria</h3>
               <p>Flores frescas y hermosos arreglos florales para alegrar tus momentos especiales.</p>
               
               <!-- Redes sociales -->
-              <div class="social-links">
+              <div class="social-links" aria-label="Redes sociales de Arreglos Victoria">
                 <a href="https://www.facebook.com/profile.php?id=61578999845743" 
-                   aria-label="Facebook" 
+                   aria-label="Visite nuestra página de Facebook" 
                    target="_blank" 
                    rel="noopener noreferrer">
                   <i class="fab fa-facebook-f" aria-hidden="true"></i>
                 </a>
                 <a href="https://www.instagram.com/arreglosvictoria/" 
-                   aria-label="Instagram" 
+                   aria-label="Síganos en Instagram" 
                    target="_blank" 
                    rel="noopener noreferrer">
                   <i class="fab fa-instagram" aria-hidden="true"></i>
                 </a>
                 <a href="https://wa.me/56963603177" 
-                   aria-label="WhatsApp" 
+                   aria-label="Contáctenos por WhatsApp" 
                    target="_blank" 
                    rel="noopener noreferrer">
                   <i class="fab fa-whatsapp" aria-hidden="true"></i>
                 </a>
               </div>
             </div>
-
-            <!-- Secciones de enlaces -->
+            
             <div class="footer-section">
-              <h4>Enlaces Rápidos</h4>
-              <ul class="footer-links">
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="products.html">Productos</a></li>
-                <li><a href="index.html#about">Nosotros</a></li>
-                <li><a href="contact.html">Contacto</a></li>
-                <li><a href="sitemap.html">Mapa del Sitio</a></li>
+              <h4 aria-label="Enlaces rápidos">Enlaces</h4>
+              <ul role="navigation" aria-label="Enlaces del pie de página">
+                <li><a href="index.html" aria-label="Ir a la página de inicio"><i class="fas fa-home" aria-hidden="true"></i> Inicio</a></li>
+                <li><a href="products.html" aria-label="Ver productos"><i class="fas fa-box" aria-hidden="true"></i> Productos</a></li>
+                <li><a href="contact.html" aria-label="Ir a la página de contacto"><i class="fas fa-envelope" aria-hidden="true"></i> Contacto</a></li>
+                <li><a href="about.html" aria-label="Conocer más sobre nosotros"><i class="fas fa-info-circle" aria-hidden="true"></i> Nosotros</a></li>
               </ul>
             </div>
-
+            
             <div class="footer-section">
-              <h4>Categorías</h4>
-              <ul class="footer-links">
-                <li><a href="products.html?category=arreglos">Arreglos Florales</a></li>
-                <li><a href="products.html?category=ramos">Ramos</a></li>
-                <li><a href="products.html?category=plantas">Plantas</a></li>
-                <li><a href="products.html?category=accesorios">Accesorios</a></li>
-              </ul>
+              <h4 aria-label="Horario de atención">Horario</h4>
+              <p><i class="fas fa-clock" aria-hidden="true"></i> Lunes a Sábado: 9:00 - 19:00</p>
+              <p><i class="fas fa-clock" aria-hidden="true"></i> Domingo: 10:00 - 16:00</p>
             </div>
-
+            
             <div class="footer-section">
-              <h4>Información</h4>
-              <ul class="footer-links">
-                <li><a href="privacy.html">Política de Privacidad</a></li>
-                <li><a href="terms.html">Términos y Condiciones</a></li>
-                <li><a href="shipping.html">Envíos y Devoluciones</a></li>
-                <li><a href="faq.html">Preguntas Frecuentes</a></li>
-              </ul>
-            </div>
-
-            <!-- Información de contacto -->
-            <div class="footer-section">
-              <h4>Contacto</h4>
-              <ul class="contact-info">
-                <li>
-                  <i class="fas fa-map-marker-alt" aria-hidden="true"></i> 
-                  Av. Valdivieso 593, Recoleta
-                </li>
-                <li>
-                  <i class="fas fa-phone" aria-hidden="true"></i> 
-                  +569 6360 3177
-                </li>
-                <li>
-                  <i class="fas fa-clock" aria-hidden="true"></i> 
-                  Lunes a Sábado: 9:00 AM - 7:00 PM
-                </li>
-              </ul>
+              <h4 aria-label="Información de contacto">Contacto</h4>
+              <address>
+                <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Av. Valdivieso 593, Recoleta</p>
+                <p><i class="fas fa-phone" aria-hidden="true"></i> Tel: +56 9 6360 3177</p>
+                <p><i class="fas fa-envelope" aria-hidden="true"></i> Email: contacto@arreglosvictoria.com</p>
+              </address>
             </div>
           </div>
-
-          <!-- Pie de página con derechos reservados -->
+          
           <div class="footer-bottom">
-            <p>&copy; 2025 Arreglos Victoria Florería. Todos los derechos reservados.</p>
+            <p>&copy; 2023 Arreglos Florales Victoria. Todos los derechos reservados.</p>
+            <div class="footer-links">
+              <a href="privacy.html" aria-label="Política de privacidad"><i class="fas fa-user-secret" aria-hidden="true"></i> Privacidad</a>
+              <a href="terms.html" aria-label="Términos y condiciones"><i class="fas fa-file-contract" aria-hidden="true"></i> Términos</a>
+              <a href="sitemap.html" aria-label="Mapa del sitio"><i class="fas fa-sitemap" aria-hidden="true"></i> Mapa del Sitio</a>
+            </div>
           </div>
         </div>
       </footer>
@@ -96,5 +80,5 @@ class Footer extends HTMLElement {
   }
 }
 
-// Registramos el componente personalizado
+// Registramos el componente personalizado para que pueda ser usado en el HTML
 customElements.define('site-footer', Footer);

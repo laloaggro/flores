@@ -1,161 +1,114 @@
-import productManager from '../assets/js/productManager.js';
-import ProductCard from './ProductCard.js';
+// Productos de ejemplo - En una aplicación real, estos datos vendrían de una API
+const products = [
+  {
+    id: 1,
+    name: "Ramo de Rosas Rojas",
+    description: "Hermoso ramo de 12 rosas rojas frescas, ideal para ocasiones especiales",
+    price: 15000,
+    image: "https://images.unsplash.com/photo-1597221335472-6f87484f8b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    category: "ramos"
+  },
+  {
+    id: 2,
+    name: "Orquídea Blanca",
+    description: "Elegante orquídea blanca en maceta decorativa",
+    price: 12000,
+    image: "https://images.unsplash.com/photo-1582081732673-0e1fd9b2398e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    category: "plantas"
+  },
+  {
+    id: 3,
+    name: "Arreglo de Girasoles",
+    description: "Vibrante arreglo de girasoles frescos que ilumina cualquier espacio",
+    price: 18000,
+    image: "https://images.unsplash.com/photo-1511002208436-974ba13aa1a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    category: "arreglos"
+  },
+  {
+    id: 4,
+    name: "Ramo de Tulipanes",
+    description: "Colorido ramo de tulipanes frescos, perfecto para cualquier ocasión",
+    price: 14000,
+    image: "https://images.unsplash.com/photo-1517632233540-81b947103b7c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    category: "ramos"
+  },
+  {
+    id: 5,
+    name: "Cesta de Frutas y Flores",
+    description: "Encantadora combinación de flores frescas y frutas de temporada",
+    price: 22000,
+    image: "https://images.unsplash.com/photo-1595007859182-330e4f768b90?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    category: "arreglos"
+  },
+  {
+    id: 6,
+    name: "Lirios Blancos",
+    description: "Elegantes lirios blancos en un hermoso arreglo",
+    price: 16000,
+    image: "https://images.unsplash.com/photo-1599840589059-0667109819a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+    category: "arreglos"
+  }
+];
 
 /**
- * Componente para mostrar los productos y testimonios
+ * Componente de productos
  */
-const Products = {
+class Products extends HTMLElement {
   /**
-   * Renderiza la sección de productos
-   * @returns {string} HTML del componente
+   * Se ejecuta cuando el elemento se conecta al DOM
+   * Renderiza la lista de productos
    */
-  render: async () => {
-    return `
-      <section class="products-section" aria-labelledby="products-heading">
-        <div class="container">
-          <h2 id="products-heading">Nuestros Arreglos</h2>
-          <p class="section-description">Descubre nuestra exclusiva colección de arreglos florales</p>
-          
-          <div class="products-grid" id="productsGrid" role="list">
-            <!-- Los productos se cargarán aquí dinámicamente -->
-          </div>
+  connectedCallback() {
+    // Verificar si ya se ha renderizado el contenido
+    if (this.hasAttribute('rendered')) {
+      return;
+    }
 
-          <div class="testimonials" id="testimonials" aria-labelledby="testimonials-heading">
-            <h3 id="testimonials-heading">Lo que dicen nuestros clientes</h3>
-            <div class="testimonials-grid" id="testimonialsGrid">
-              <!-- Los testimonios se cargarán aquí dinámicamente -->
-            </div>
+    // Marcar como renderizado
+    this.setAttribute('rendered', '');
+
+    // Renderizar el contenido
+    this.innerHTML = `
+      <section class="products-section">
+        <div class="container">
+          <h2 class="section-title">Nuestros Productos</h2>
+          <div class="products-grid" id="productsGrid">
+            ${products.map(product => this.renderProductCard(product)).join('')}
           </div>
         </div>
       </section>
     `;
-  },
-
-  /**
-   * Se ejecuta después de montar el componente
-   */
-  mount: async () => {
-    // Cargar productos cuando el componente esté montado
-    Products.loadProducts();
-  },
-
-  /**
-   * Carga los productos desde la API
-   */
-  loadProducts: async () => {
-    try {
-      const data = await productManager.loadProducts(1, 8);
-      
-      if (data && data.products.length > 0) {
-        Products.displayProducts(data.products);
-        Products.loadTestimonials(); // Cargar testimonios después de obtener productos
-      }
-    } catch (error) {
-      Products.showError('productsGrid', 'Error al cargar productos. Por favor, inténtelo más tarde.');
-      console.error('Error al cargar productos:', error);
-    }
-  },
-
-  /**
-   * Muestra los productos en el grid
-   * @param {Array} products - Lista de productos a mostrar
-   */
-  displayProducts: (products) => {
-    const productsGrid = document.getElementById('productsGrid');
-    if (!productsGrid) return;
-    
-    productsGrid.innerHTML = products.map(product => ProductCard(product)).join('');
-  },
-
-  /**
-   * Carga los testimonios desde la API
-   */
-  loadTestimonials: async () => {
-    // Esta implementación puede ser reemplazada por una llamada real a una API
-    // Para este ejemplo, usamos datos estáticos
-    const testimonials = [
-      {
-        id: 1,
-        name: 'María González',
-        rating: 5,
-        comment: '¡Excelente servicio! Recibí mi arreglo floral justo a tiempo para el cumpleaños de mi mamá. Las flores estaban frescas y hermosamente arregladas.',
-        date: '2024-03-15'
-      },
-      {
-        id: 2,
-        name: 'Carlos Mendoza',
-        rating: 4,
-        comment: 'Buena experiencia general. La entrega fue rápida y el arreglo lucía tal como aparecía en la imagen del sitio web. Solo le falta un poco más de variedad en opciones.',
-        date: '2024-02-28'
-      },
-      {
-        id: 3,
-        name: 'Ana Rodríguez',
-        rating: 5,
-        comment: 'Servicio excepcional. Compré un arreglo para un amigo que estaba en el hospital y me aseguraron la entrega antes de las 2 horas que indican. ¡Muy recomendable!',
-        date: '2024-04-05'
-      }
-    ];
-    
-    Products.displayTestimonials(testimonials);
-  },
-
-  /**
-   * Muestra los testimonios en el grid correspondiente
-   * @param {Array} testimonials - Lista de testimonios a mostrar
-   */
-  displayTestimonials: (testimonials) => {
-    const testimonialsGrid = document.getElementById('testimonialsGrid');
-    if (!testimonialsGrid) return;
-    
-    testimonialsGrid.innerHTML = testimonials.map(testimonial => `
-      <div class="testimonial-card" role="article" aria-labelledby="testimonial-${testimonial.id}">
-        <div class="testimonial-header">
-          <div class="testimonial-rating">
-            ${Products.renderStars(testimonial.rating)}
-          </div>
-          <h4 id="testimonial-${testimonial.id}" class="testimonial-name">${testimonial.name}</h4>
-          <time class="testimonial-date" datetime="${testimonial.date}">${Products.formatDate(testimonial.date)}</time>
-        </div>
-        <p class="testimonial-comment">${testimonial.comment}</p>
-      </div>
-    `).join('');
-  },
-
-  /**
-   * Renderiza las estrellas de calificación
-   * @param {number} rating - Calificación del 1 al 5
-   * @returns {string} HTML con las estrellas
-   */
-  renderStars: (rating) => {
-    let stars = '';
-    for (let i = 1; i <= 5; i++) {
-      stars += `<i class="fas fa-star${i <= rating ? '' : '-o'}" aria-hidden="true"></i>`;
-    }
-    return stars;
-  },
-
-  /**
-   * Formatea la fecha a un formato más legible
-   * @param {string} dateString - Fecha en formato YYYY-MM-DD
-   * @returns {string} Fecha formateada
-   */
-  formatDate: (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
-  },
-
-  /**
-   * Muestra un mensaje de error en lugar de contenido
-   * @param {string} elementId - ID del elemento donde mostrar el error
-   * @param {string} message - Mensaje de error a mostrar
-   */
-  showError: (elementId, message) => {
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.innerHTML = `<div class="error-message">${message}</div>`;
-    }
   }
-};
 
-export default Products;
+  /**
+   * Renderiza una tarjeta de producto
+   * @param {Object} product - Información del producto
+   * @returns {string} HTML de la tarjeta de producto
+   */
+  renderProductCard(product) {
+    return `
+      <div class="product-card">
+        <div class="product-image">
+          <img 
+            src="${product.image}" 
+            alt="${product.name}" 
+            loading="lazy" 
+            width="300" 
+            height="200"
+            onerror="this.src='assets/images/placeholder.svg'; this.onerror=null;">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">${product.name}</h3>
+          <p class="product-description">${product.description}</p>
+          <div class="product-price">$${parseInt(product.price).toLocaleString('es-CL')}</div>
+          <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">
+            <i class="fas fa-shopping-cart"></i> Agregar al carrito
+          </button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// Registrar el componente personalizado
+customElements.define('products-component', Products);

@@ -1,36 +1,89 @@
 import { API_BASE_URL, showNotification } from './utils.js';
 
 let googleClientInitialized = false;
+let googleScriptLoadAttempts = 0;
+const MAX_SCRIPT_LOAD_ATTEMPTS = 3;
 
 // Inicializar Google Sign-In
 async function initializeGoogleSignIn() {
     console.log('Inicializando Google Sign-In con clientId: 888681528450-havivkoibjv0ht3vu4q46hc8k0i3f8iu.apps.googleusercontent.com');
     
-    // Cargar la biblioteca de Google Identity Services
-    if (!document.getElementById('google-jssdk')) {
+    // Verificar si ya existe un script de Google cargado o en proceso de carga
+    const existingScript = document.getElementById('google-jssdk');
+    const loadingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+    
+    if (!existingScript && !loadingScript) {
         console.log('Cargando biblioteca de Google Identity Services');
         const script = document.createElement('script');
         script.id = 'google-jssdk';
         script.src = 'https://accounts.google.com/gsi/client';
         script.async = true;
         script.defer = true;
+        
+        // Contador de intentos de carga
+        googleScriptLoadAttempts = 0;
+        
         script.onload = () => {
             console.log('Biblioteca de Google cargada exitosamente');
+            // Reiniciar el contador de intentos en caso de éxito
+            googleScriptLoadAttempts = 0;
             // Añadir un pequeño retraso para asegurar que la biblioteca esté completamente lista
             setTimeout(() => {
                 initializeGoogleClient();
             }, 100);
         };
+        
         script.onerror = () => {
             console.error('Error al cargar la biblioteca de Google');
-            showNotification('Error al cargar la autenticación con Google', 'error');
+            googleScriptLoadAttempts++;
+            
+            if (googleScriptLoadAttempts < MAX_SCRIPT_LOAD_ATTEMPTS) {
+                console.log(`Reintentando cargar la biblioteca de Google (intento ${googleScriptLoadAttempts + 1}/${MAX_SCRIPT_LOAD_ATTEMPTS})`);
+                setTimeout(() => {
+                    document.head.removeChild(script); // Eliminar el script fallido
+                    initializeGoogleSignIn(); // Reintentar la inicialización
+                }, 2000); // Esperar 2 segundos antes de reintentar
+            } else {
+                showNotification('Error al cargar la autenticación con Google. Verifica tu conexión a internet o intenta más tarde.', 'error');
+                // Deshabilitar el botón de inicio de sesión con Google si existe
+                const googleButton = document.getElementById('googleSignInButton');
+                if (googleButton) {
+                    googleButton.style.display = 'none';
+                }
+            }
         };
+        
+        script.onloadstart = () => {
+            console.log('Inicio de carga de la biblioteca de Google');
+            showNotification('Cargando biblioteca de autenticación de Google...', 'info');
+        };
+        
+        script.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percentComplete = Math.round((event.loaded / event.total) * 100);
+                console.log(`Cargando biblioteca de Google: ${percentComplete}%`);
+                // Actualizar notificación con el progreso
+                if (percentComplete > 0 && percentComplete < 100) {
+                    showNotification(`Cargando biblioteca de Google: ${percentComplete}% completado`, 'info');
+                }
+            }
+        };
+        
         document.head.appendChild(script);
     } else {
-        console.log('Biblioteca de Google ya está cargada');
+        console.log('Biblioteca de Google ya está cargada o en proceso de carga');
         // Añadir un pequeño retraso para asegurar que la biblioteca esté completamente lista
         setTimeout(() => {
-            initializeGoogleClient();
+            if (typeof google !== 'undefined' && google.accounts) {
+                initializeGoogleClient();
+            } else {
+                // Si la biblioteca no se ha cargado completamente después del retraso
+                console.warn('Biblioteca de Google parece estar cargada pero no completamente funcional');
+                // Verificar si hay que reinicializar el cliente
+                if (!googleClientInitialized) {
+                    initializeGoogleClient();
+                }
+            }
         }, 100);
     }
 }
@@ -55,45 +108,71 @@ function initializeGoogleClient() {
             
             // Renderizar el botón de Google Sign-In
             console.log('Renderizando botón de Google Sign-In');
-            google.accounts.id.renderButton(
-                document.getElementById("googleSignInButton"),
-                { 
-                    theme: "outline", 
-                    size: "large",
-                    width: 200,
-                    text: "signin_with",
-                    logo_alignment: "center"
-                }
-            );
+            const buttonContainer = document.getElementById("googleSignInButton");
             
-            // No mostrar el prompt de Google One Tap para evitar errores de FedCM
-            // El usuario puede hacer clic en el botón de forma explícita
-            /*
-            google.accounts.id.prompt((notification) => {
-                console.log('Google Sign-In prompt notification:', notification);
+            if (buttonContainer) {
+                // Limpiar contenedor primero si ya tiene contenido
+                buttonContainer.innerHTML = '';
                 
-                // Manejar todas las notificaciones de FedCM para evitar advertencias
-                if (notification.isNotDisplayed()) {
-                    console.log('Google One Tap no se muestra');
-                } else if (notification.isSkippedMoment()) {
-                    console.log('Usuario omitió el prompt de Google One Tap');
-                } else if (notification.isDismissedMoment()) {
-                    console.log('Usuario cerró el prompt de Google One Tap');
-                } else if (notification.isDisplayed()) {
-                    console.log('Google One Tap se muestra correctamente');
-                }
-            });
-            */
+                google.accounts.id.renderButton(
+                    buttonContainer,
+                    { 
+                        theme: "outline", 
+                        size: "large",
+                        width: 200,
+                        text: "signin_with",
+                        logo_alignment: "center"
+                    }
+                );
+                
+                console.log('Botón de Google Sign-In renderizado exitosamente');
+                // Añadir un listener para manejar errores de renderizado del botón
+                buttonContainer.addEventListener('error', (event) => {
+                    console.error('Error al renderizar el botón de Google Sign-In:', event);
+                    showNotification('Error al mostrar el botón de inicio de sesión con Google', 'error');
+                });
+            } else {
+                console.error('No se encontró el contenedor para el botón de Google Sign-In');
+                showNotification('Error al mostrar el botón de inicio de sesión con Google. Elemento no encontrado.', 'error');
+            }
             
             console.log('Botón de Google Sign-In mostrado');
             googleClientInitialized = true;
         } catch (error) {
             console.error('Error al inicializar Google Sign-In:', error);
-            showNotification('Error al inicializar la autenticación con Google', 'error');
+            showNotification('Error al inicializar la autenticación con Google. Por favor recarga la página e inténtalo nuevamente.', 'error');
+            
+            // Deshabilitar el botón de Google en caso de error crítico
+            const googleButton = document.getElementById('googleSignInButton');
+            if (googleButton) {
+                googleButton.style.display = 'none';
+            }
         }
     } else {
         console.warn('Google Identity Services no disponible aún, reintentando en 1 segundo...');
-        setTimeout(initializeGoogleClient, 1000);
+        // Limitar los reintentos para evitar bucles infinitos
+        let retryCount = 0;
+        const maxRetries = 5;
+        
+        const retryInterval = setInterval(() => {
+            if (typeof google !== 'undefined' && google.accounts) {
+                clearInterval(retryInterval);
+                initializeGoogleClient();
+            } else if (retryCount >= maxRetries) {
+                clearInterval(retryInterval);
+                console.error('No se pudo cargar Google Identity Services después de varios intentos');
+                showNotification('Error al cargar el servicio de autenticación con Google. Por favor recarga la página.', 'error');
+                
+                // Deshabilitar el botón de Google después de fallar los reintentos
+                const googleButton = document.getElementById('googleSignInButton');
+                if (googleButton) {
+                    googleButton.style.display = 'none';
+                }
+            } else {
+                retryCount++;
+                console.log(`Reintentando inicialización de Google Sign-In (intento ${retryCount}/${maxRetries})`);
+            }
+        }, 1000);
     }
 }
 

@@ -17,6 +17,12 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/uploads', express.static('uploads')); // Servir archivos subidos
 
+// Configurar Content-Security-Policy
+app.use((req, res, next) => {
+    res.header('Content-Security-Policy', "connect-src 'self' http://localhost:5000");
+    next();
+});
+
 // Configurar CORS
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

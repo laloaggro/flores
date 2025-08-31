@@ -1,22 +1,118 @@
 /* admin.css - Estilos específicos para el panel de administración */
 
 /* Estilos para el panel de administración */
-
-.admin-panel {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 0.375rem;
-    padding: 1rem;
-    margin-top: 2rem;
+.admin-header {
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 2rem 0;
 }
 
-.admin-panel h3 {
-    margin-top: 0;
-    color: #495057;
+.admin-header h2 {
+    font-size: 2rem;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
 }
 
-.admin-panel .btn {
-    margin-right: 0.5rem;
+.admin-header p {
+    font-size: 1.1rem;
+    color: var(--dark-gray);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-card {
+    background: var(--bg-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-light);
+}
+
+.admin-card-header {
+    margin-bottom: 1rem;
+}
+
+.admin-card-header h3 {
+    color: var(--dark);
+    font-size: 1.3rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.admin-card-header h3 i {
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.admin-card-body p {
+    color: var(--dark-gray);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.admin-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: none;
+    margin: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.admin-actions .btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+    border: 2px solid var(--primary);
+}
+
+.admin-actions .btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.admin-actions .btn-secondary {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.admin-actions .btn-secondary:hover {
+    background-color: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Estilos para la tabla de pedidos de administración */
@@ -29,15 +125,6 @@
 .admin-orders-table th:first-child,
 .admin-orders-table td:first-child {
     text-align: left;
-}
-
-.admin-header {
-    margin-bottom: 1.5rem;
-}
-
-.admin-header h2 {
-    margin-top: 0;
-    margin-bottom: 1rem;
 }
 
 .admin-controls {
@@ -72,6 +159,8 @@
     align-items: center;
     gap: 0.5rem;
     height: fit-content;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
 }
 
 /* Estilos para el modal de edición de pedidos */
@@ -100,453 +189,103 @@
     overflow-y: auto;
 }
 
-#editOrderModal .modal-header {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#editOrderModal .modal-header h2 {
-    margin: 0;
-    color: var(--text-color);
-}
-
-#editOrderModal .btn-close {
-    color: var(--muted-text);
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    background: none;
-    border: none;
-}
-
-#editOrderModal .btn-close:hover,
-#editOrderModal .btn-close:focus {
-    color: var(--text-color);
-}
-
-#editOrderModal .modal-body {
-    padding: 1.5rem;
-    background-color: var(--bg-color);
-}
-
-#editOrderModal .form-group {
-    margin-bottom: 1rem;
-}
-
-#editOrderModal label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--text-color);
-}
-
-#editOrderModal .form-control {
-    width: 100%;
-    padding: 0.75rem;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-    background: var(--bg-color);
-    color: var(--text-color);
-    font-family: var(--font-family);
-}
-
-#editOrderModal textarea.form-control {
-    resize: vertical;
-    min-height: 100px;
-}
-
-#editOrderModal .form-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 1.5rem;
-}
-
-/* Modo oscuro para el modal de edición de pedidos */
-body[data-theme="dark"] #editOrderModal .modal-content {
-    background-color: var(--dark-bg);
-    color: var(--dark-text);
-}
-
-body[data-theme="dark"] #editOrderModal .modal-header {
-    border-color: var(--dark-border);
-}
-
-body[data-theme="dark"] #editOrderModal .modal-header h2 {
-    color: var(--dark-text);
-}
-
-body[data-theme="dark"] #editOrderModal .btn-close {
-    color: var(--dark-muted-text);
-}
-
-body[data-theme="dark"] #editOrderModal .btn-close:hover,
-body[data-theme="dark"] #editOrderModal .btn-close:focus {
-    color: var(--dark-text);
-}
-
-body[data-theme="dark"] #editOrderModal .modal-body {
-    background-color: var(--dark-bg);
-}
-
-body[data-theme="dark"] #editOrderModal label {
-    color: var(--dark-text);
-}
-
-body[data-theme="dark"] #editOrderModal .form-control {
-    background: var(--dark-bg);
-    border-color: var(--dark-border);
-    color: var(--dark-text);
-}
-
-/* Modo oscuro para admin-orders */
-body[data-theme="dark"] .admin-controls .filter-sort select,
-body[data-theme="dark"] #editOrderModal .form-control {
-    background: var(--dark-bg);
-    border-color: var(--dark-border);
-    color: var(--dark-text);
-}
-
-body[data-theme="dark"] #editOrderModal label {
-    color: var(--dark-text);
-}
-
-/* Responsive */
+/* Media Queries */
 @media (max-width: 768px) {
-    .admin-controls {
-        flex-direction: column;
-        align-items: stretch;
+    .admin-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
-    .admin-controls .search-container {
-        min-width: auto;
+    .admin-card {
+        padding: 1.25rem;
     }
     
-    .admin-controls .filter-sort {
-        flex-direction: column;
-    }
-    
-    .admin-orders-table {
-        font-size: 0.875rem;
-    }
-    
-    .admin-orders-table th,
-    .admin-orders-table td {
-        padding: 0.5rem;
-    }
-    
-    #editOrderModal .modal-content {
-        margin: 1rem;
-        max-width: calc(100% - 2rem);
-    }
-    
-    #editOrderModal .form-actions {
+    .admin-actions {
         flex-direction: column;
     }
     
-    #editOrderModal .form-actions button {
+    .admin-actions .btn {
         width: 100%;
     }
 }
 
-/* Estilos para el modal de edición genérico */
-.modal {
-    position: fixed;
-    z-index: 999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+@media (max-width: 480px) {
+    .admin-header {
+        padding: 1rem 0;
+    }
+    
+    .admin-header h2 {
+        font-size: 1.7rem;
+    }
+    
+    .admin-header p {
+        font-size: 1rem;
+    }
+    
+    .admin-grid {
+        gap: 0.75rem;
+    }
 }
 
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 998;
-}
-
-.modal-content {
-    background-color: var(--bg-color);
-    margin: 5% auto;
-    padding: 0;
-    border: none;
-    border-radius: var(--border-radius);
-    width: 90%;
-    max-width: 600px;
-    box-shadow: var(--shadow);
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
-    z-index: 1000;
-    border-radius: 0.375rem;
-}
-
-.modal-content h2 {
-    margin: 0;
-    color: var(--text-color);
-}
-
-.close {
-    color: var(--muted-text);
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    background: none;
-    border: none;
-    position: absolute;
-    right: 15px;
-    top: 10px;
-}
-
-.close:hover,
-.close:focus {
-    color: var(--text-color);
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-}
-
-.form-control {
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.form-control:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.btn-danger {
-    color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-.btn-danger:hover {
-    color: #fff;
-    background-color: #c82333;
-    border-color: #bd2130;
-}
-
-/* Modo oscuro para el panel de administración */
-body[data-theme="dark"] .admin-panel {
-    background-color: #343a40;
-    border-color: #495057;
-    color: #fff;
-}
-
-body[data-theme="dark"] .admin-panel h3 {
-    color: #fff;
-}
-
-body[data-theme="dark"] .form-control {
-    background-color: #495057;
-    border-color: #6c757d;
-    color: #fff;
-}
-
-body[data-theme="dark"] .modal-content {
-    background-color: var(--dark-bg); /* Fondo opaco en lugar de semi-transparente */
+/* Modo oscuro para las tarjetas de administración */
+body[data-theme="dark"] .admin-card {
+    background-color: var(--dark-card-bg);
     border-color: var(--dark-border);
     color: var(--dark-text);
 }
 
-body[data-theme="dark"] .close {
-    color: #fff;
+body[data-theme="dark"] .admin-card:hover {
+    border-color: var(--primary);
 }
 
-body[data-theme="dark"] .close:hover,
-body[data-theme="dark"] .close:focus {
-    color: #ddd;
-}
-
-/* Estilos para el modal de agregar producto */
-#addProductModal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para el overlay */
-}
-
-#addProductModal .modal-content {
-    background-color: var(--bg-color);
-    margin: 5% auto;
-    padding: 0;
-    border: none;
-    border-radius: var(--border-radius);
-    width: 90%;
-    max-width: 600px;
-    box-shadow: var(--shadow);
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-#addProductModal .modal-header {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--bg-color);
-}
-
-#addProductModal .modal-header h2 {
-    margin: 0;
-    color: var(--text-color);
-}
-
-#addProductModal .close {
-    color: var(--muted-text);
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    background: none;
-    border: none;
-}
-
-#addProductModal .close:hover,
-#addProductModal .close:focus {
-    color: var(--text-color);
-}
-
-#addProductModal .modal-body {
-    padding: 1.5rem;
-    background-color: var(--bg-color);
-}
-
-#addProductModal .form-group {
-    margin-bottom: 1rem;
-}
-
-#addProductModal label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--text-color);
-}
-
-#addProductModal .form-control {
-    width: 100%;
-    padding: 0.75rem;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-    background: var(--bg-color);
-    color: var(--text-color);
-    font-family: var(--font-family);
-    box-sizing: border-box;
-}
-
-#addProductModal textarea.form-control {
-    resize: vertical;
-    min-height: 100px;
-}
-
-#addProductModal .form-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 1.5rem;
-}
-
-/* Modo oscuro para el modal de agregar producto */
-body[data-theme="dark"] #addProductModal .modal-content {
-    background-color: var(--dark-bg);
+body[data-theme="dark"] .admin-card-header h3 {
     color: var(--dark-text);
 }
 
-body[data-theme="dark"] #addProductModal .modal-header {
-    background-color: var(--dark-bg);
-    border-color: var(--dark-border);
+body[data-theme="dark"] .admin-card-header h3 i {
+    color: var(--primary);
 }
 
-body[data-theme="dark"] #addProductModal .modal-header h2 {
+body[data-theme="dark"] .admin-card-body p {
+    color: #adb5bd;
+}
+
+body[data-theme="dark"] .admin-actions .btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+body[data-theme="dark"] .admin-actions .btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+body[data-theme="dark"] .admin-actions .btn-secondary {
+    background-color: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+body[data-theme="dark"] .admin-actions .btn-secondary:hover {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+body[data-theme="dark"] .admin-controls .filter-sort select {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-input-border);
     color: var(--dark-text);
 }
 
-body[data-theme="dark"] #addProductModal .close {
-    color: var(--dark-muted-text);
+body[data-theme="dark"] .admin-controls .filter-sort select:focus {
+    border-color: var(--primary);
 }
 
-body[data-theme="dark"] #addProductModal .close:hover,
-body[data-theme="dark"] #addProductModal .close:focus {
+body[data-theme="dark"] .admin-header h2 {
     color: var(--dark-text);
 }
 
-body[data-theme="dark"] #addProductModal .modal-body {
-    background-color: var(--dark-bg);
-}
-
-body[data-theme="dark"] #addProductModal label {
-    color: var(--dark-text);
-}
-
-body[data-theme="dark"] #addProductModal .form-control {
-    background: var(--dark-bg);
-    border-color: var(--dark-border);
-    color: var(--dark-text);
-}
-
-/* Responsive para el modal de agregar producto */
-@media (max-width: 768px) {
-    #addProductModal .modal-content {
-        margin: 1rem;
-        max-width: calc(100% - 2rem);
-    }
-    
-    #addProductModal .form-actions {
-        flex-direction: column;
-    }
-    
-    #addProductModal .form-actions button {
-        width: 100%;
-    }
-}
-
-/* Responsive para modales */
-@media (max-width: 768px) {
-    .modal-content {
-        margin: 1rem;
-        max-width: calc(100% - 2rem);
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .form-actions button {
-        width: 100%;
-    }
+body[data-theme="dark"] .admin-header p {
+    color: #adb5bd;
 }

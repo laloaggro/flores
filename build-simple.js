@@ -35,11 +35,13 @@ function minifyCSS(css) {
     return css
         .replace(/\/\*(?:(?!\*\/)[\s\S])*\*\//g, '') // Eliminar comentarios
         .replace(/\/\/.*$/gm, '') // Eliminar comentarios de línea
-        .replace(/\s+/g, ' ') // Eliminar espacios múltiples
         .replace(/\s*([{}:;,])\s*/g, '$1') // Eliminar espacios alrededor de caracteres
         .replace(/\s*>\s*/g, '>') // Eliminar espacios alrededor de >
         .replace(/\s*\+\s*/g, '+') // Eliminar espacios alrededor de +
         .replace(/\s*~\s*/g, '~') // Eliminar espacios alrededor de ~
+        .replace(/;\}/g, '}') // Eliminar punto y coma antes de llaves de cierre
+        .replace(/([a-zA-Z0-9_\-])\s+(?=[a-zA-Z0-9_\-])/g, '$1 ') // Conservar un espacio entre propiedades y valores
+        .replace(/\s+/g, ' ') // Reducir espacios múltiples a uno solo
         .trim();
 }
 

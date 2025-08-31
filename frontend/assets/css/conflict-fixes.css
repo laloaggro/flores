@@ -1,213 +1,300 @@
-/* conflict-fixes.css - Correcciones para resolver conflictos de estilo */
+/* conflict-fixes.css - Correcciones de conflictos de estilo */
 
-/* Reset de estilos para asegurar que no haya fondos verdes no deseados */
-header, .header, #header, .navbar, #navbar {
-    background-color: #ffffff !important;
-    background: #ffffff !important;
-    background-image: none !important;
+/* Corrección de conflictos de estilo para el sitio Arreglos Florales Victoria */
+
+/* Asegurar que los estilos del header se apliquen correctamente */
+header {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-bottom: 1px solid var(--border-color) !important;
 }
 
-/* Asegurar que el body tenga fondo blanco */
-body {
-    background-color: #ffffff;
-    background: #ffffff;
+body[data-theme="dark"] header {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
 }
 
-/* Corrección de estilos en visibility-fix.css que usan el color verde */
-a {
-    color: #0066cc; /* Azul en lugar del verde */
+/* Asegurar visibilidad del logo */
+.logo {
+  color: var(--text-color) !important;
 }
 
-a:hover {
-    color: #004499; /* Azul más oscuro en lugar del verde */
+body[data-theme="dark"] .logo {
+  color: var(--text-color) !important;
 }
 
-/* Botones con colores neutros */
-.btn {
-    color: #ffffff;
-    background-color: #6c757d; /* Gris en lugar del verde */
-    border: none; /* Eliminar borde para evitar problemas de visualización */
+/* Asegurar visibilidad de enlaces de navegación */
+.navbar ul li a {
+  color: var(--text-color) !important;
 }
 
-.btn:hover {
-    background-color: #5a6268; /* Gris más oscuro en lugar del verde */
+body[data-theme="dark"] .navbar ul li a {
+  color: var(--text-color) !important;
 }
 
-/* Ajustes para elementos específicos que usaban fondo verde */
-.product-card {
-    color: #333333;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-}
-
-/* Mejoras para la visualización de imágenes de productos */
-.product-image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f8f9fa; /* Fondo claro para mejor contraste */
-}
-
-body[data-theme="dark"] .product-image {
-    background-color: #343a40; /* Fondo oscuro en modo oscuro */
-}
-
-/* Ajustes para elementos de formulario */
-input, textarea, select {
-    color: #333333;
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-}
-
-input:focus, textarea:focus, select:focus {
-    border-color: #6c757d; /* Gris en lugar del verde */
-    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25); /* Sombra gris en lugar de verde */
-}
-
-/* Ajustes para enlaces de navegación */
-nav ul {
-    /* Eliminar todos los fondos y efectos que causan doble fondo */
-    background: transparent !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-}
-
-/* Correcciones para el menú de usuario */
-.user-menu {
-    background: transparent !important;
-    box-shadow: none !important;
-}
-
-.user-dropdown {
-    background-color: var(--bg-color) !important;
-    border: 1px solid var(--border-color) !important;
-    box-shadow: var(--shadow) !important;
-}
-
-body[data-theme="dark"] .user-dropdown {
-    background-color: var(--dark-bg) !important;
-    border-color: var(--dark-border) !important;
-}
-
-/* Correcciones para el carrito */
-.cart-modal {
-    background-color: rgba(0, 0, 0, 0.5) !important; /* Fondo semitransparente */
-}
-
-.cart-content {
-    background-color: var(--bg-color) !important;
-    border: none !important;
-    box-shadow: var(--shadow) !important;
-}
-
-body[data-theme="dark"] .cart-content {
-    background-color: var(--dark-bg) !important;
-    border-color: var(--dark-border) !important;
-}
-
-/* Correcciones para modales */
-.modal {
-    background-color: rgba(0, 0, 0, 0.5) !important; /* Fondo semitransparente */
-}
-
-.modal-content {
-    background-color: var(--bg-color) !important;
-    border: none !important;
-    box-shadow: var(--shadow) !important;
-}
-
-body[data-theme="dark"] .modal-content {
-    background-color: var(--dark-bg) !important;
-    border-color: var(--dark-border) !important;
-}
-
-/* Ajustes para tablas */
-table {
-    background-color: transparent !important;
-}
-
-th, td {
-    background-color: transparent !important;
-}
-
-/* Correcciones para formularios */
+/* Asegurar visibilidad de elementos de formulario */
 .form-control {
-    background-color: var(--bg-color) !important;
-    border: 1px solid var(--border-color) !important;
-    color: var(--text-color) !important;
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--input-border) !important;
 }
 
 body[data-theme="dark"] .form-control {
-    background-color: var(--dark-bg) !important;
-    border-color: var(--dark-border) !important;
-    color: var(--dark-text) !important;
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--input-border) !important;
 }
 
-/* Correcciones para el footer */
+/* Asegurar visibilidad de botones */
+.btn {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+body[data-theme="dark"] .btn {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Asegurar visibilidad de enlaces */
+a {
+  color: var(--link-color) !important;
+}
+
+body[data-theme="dark"] a {
+  color: var(--link-color) !important;
+}
+
+a:hover {
+  color: var(--link-hover-color) !important;
+}
+
+body[data-theme="dark"] a:hover {
+  color: var(--link-hover-color) !important;
+}
+
+/* Asegurar visibilidad de tarjetas de productos */
+.product-card {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+body[data-theme="dark"] .product-card {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Asegurar visibilidad de secciones */
+section {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+body[data-theme="dark"] section {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Asegurar visibilidad de contenedores */
+.container {
+  background-color: transparent !important;
+}
+
+/* Asegurar visibilidad de texto en formularios */
+input, select, textarea {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--input-border) !important;
+}
+
+body[data-theme="dark"] input, 
+body[data-theme="dark"] select, 
+body[data-theme="dark"] textarea {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--input-border) !important;
+}
+
+/* Asegurar visibilidad de tablas */
+table {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+body[data-theme="dark"] table {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+th {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-color) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+body[data-theme="dark"] th {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+td {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+body[data-theme="dark"] td {
+  border-color: var(--border-color) !important;
+}
+
+/* Asegurar visibilidad de elementos de paginación */
+.pagination a,
+.pagination span {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+body[data-theme="dark"] .pagination a,
+body[data-theme="dark"] .pagination span {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+.pagination a:hover {
+  background-color: var(--hover-bg) !important;
+  color: var(--primary) !important;
+}
+
+body[data-theme="dark"] .pagination a:hover {
+  background-color: var(--hover-bg) !important;
+  color: var(--primary) !important;
+}
+
+/* Asegurar visibilidad de breadcrumbs */
+.breadcrumb {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+body[data-theme="dark"] .breadcrumb {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Asegurar visibilidad de elementos de alerta */
+.alert {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+body[data-theme="dark"] .alert {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Asegurar visibilidad de elementos de pie de página */
 footer {
-    background-color: #f8f9fa !important;
-    color: #212529 !important;
-    border-top: 1px solid #dee2e6 !important;
-}
-
-.footer-section h3 {
-    color: #212529 !important;
-}
-
-.footer-section h4 {
-    color: #212529 !important;
-}
-
-.footer-section p {
-    color: #495057 !important;
-}
-
-.footer-section ul li a {
-    color: #6c757d !important;
-}
-
-.footer-section ul li a:hover {
-    color: #2e7d32 !important;
-}
-
-.footer-bottom {
-    border-top: 1px solid #dee2e6 !important;
-    color: #495057 !important;
-}
-
-.footer-bottom p {
-    color: #495057 !important;
+  background-color: var(--dark) !important;
+  color: var(--white) !important;
 }
 
 body[data-theme="dark"] footer {
-    background-color: #343a40 !important;
-    color: #e9ecef !important;
-    border-color: #495057 !important;
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-color) !important;
+}
+
+.footer-section {
+  color: var(--text-color) !important;
+}
+
+body[data-theme="dark"] .footer-section {
+  color: var(--text-color) !important;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  color: var(--text-color) !important;
 }
 
 body[data-theme="dark"] .footer-section h3,
 body[data-theme="dark"] .footer-section h4 {
-    color: #e9ecef !important;
+  color: var(--text-color) !important;
 }
 
-body[data-theme="dark"] .footer-section p {
-    color: #adb5bd !important;
+.footer-links a {
+  color: var(--text-color) !important;
 }
 
-body[data-theme="dark"] .footer-section ul li a {
-    color: #adb5bd !important;
+body[data-theme="dark"] .footer-links a {
+  color: var(--text-color) !important;
 }
 
-body[data-theme="dark"] .footer-section ul li a:hover {
-    color: #a5d6a7 !important;
+/* Corrección de estilos para botones del header */
+.theme-toggle,
+.cart-icon,
+.nav-toggle {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
 }
 
-body[data-theme="dark"] .footer-bottom {
-    border-color: #495057 !important;
-    color: #adb5bd !important;
+body[data-theme="dark"] .theme-toggle,
+body[data-theme="dark"] .cart-icon,
+body[data-theme="dark"] .nav-toggle {
+  background-color: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
 }
 
-body[data-theme="dark"] .footer-bottom p {
-    color: #adb5bd !important;
+.theme-toggle:hover,
+.cart-icon:hover,
+.nav-toggle:hover {
+  background-color: var(--primary) !important;
+  color: white !important;
+  border-color: var(--primary) !important;
+}
+
+/* Corrección de estilos para botones de redes sociales */
+.social-links a {
+  background-color: var(--primary) !important;
+  color: white !important;
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.social-links a:hover {
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+}
+
+body[data-theme="dark"] .social-links a {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+body[data-theme="dark"] .social-links a:hover {
+  background-color: var(--primary-dark) !important;
+  color: white !important;
+}
+
+.social-links a i {
+  color: white !important;
+}
+
+body[data-theme="dark"] .social-links a i {
+  color: white !important;
 }

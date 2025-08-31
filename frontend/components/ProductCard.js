@@ -1,82 +1,103 @@
-import productManager from '../../assets/js/productManager.js';
-import CartUtils from '../../assets/js/cartUtils.js';
+const PLACEHOLDER_IMAGE = 'assets/images/placeholder.svg';
 
-// Componente para una tarjeta de producto individual
-const ProductCard = (product) => {
-  // Generar URLs para diferentes formatos de imagen
-  const webpSrc = './assets/images/products/1.png'; // Reemplazar por la ruta local
-  const avifSrc = './assets/images/products/1.png'; // Reemplazar por la ruta local
-  let imageUrl = './assets/images/products/1.png'; // Reemplazar por la ruta local
+class ProductCard extends HTMLElement {
+    
+    /**
+     * Renderiza la imagen del producto con manejo de errores
+     * @param {string} imageUrl - URL de la imagen
+     * @param {string} altText - Texto alternativo
+     * @returns {string} HTML de la imagen
+     */
+    static renderImage(imageUrl, altText) {
+        return `
+            <img 
+                src="${imageUrl}" 
+                alt="${altText}" 
+                loading="lazy" 
+                width="300" 
+                height="200"
+                onerror="this.src='${PLACEHOLDER_IMAGE}'; this.onerror = null;">
+        `;
+    }
+    
+    /**
+     * Se ejecuta cuando el elemento se conecta al DOM
+     * Renderiza el contenido de la tarjeta de producto
+     */
+    connectedCallback() {
+        // Verificar si ya se ha renderizado el contenido
+        if (this.hasAttribute('rendered')) {
+            return;
+        }
 
-  // Crear srcset para imágenes responsivas
-  const srcset = product.image_url 
-    ? `${product.image_url}?w=300 300w, ${product.image_url}?w=600 600w, ${product.image_url}?w=900 900w`
-    : '';
-  
-  // Traducir categoría si es necesario
-  const translateCategory = (category) => {
-    const categories = {
-      'ramos': 'Ramos',
-      'arreglos': 'Arreglos',
-      'coronas': 'Coronas',
-      'insumos': 'Insumos',
-      'accesorios': 'Accesorios',
-      'condolencias': 'Condolencias',
-      'jardinería': 'Jardinería'
-    };
-    return categories[category.toLowerCase()] || category;
-  };
-  
-  const categoryName = translateCategory(product.category || 'Sin categoría');
+        const product = this.product;
+        
+        // Marcar como renderizado
+        this.setAttribute('rendered', '');
 
-  return `
-    <article class="product-card" itemscope itemtype="http://schema.org/Product" tabindex="0" role="article" aria-labelledby="product-name-${product.id}">
-      <div class="product-image" style="padding: 1rem;">
-        <picture>
-          ${avifSrc ? `<source srcset="${avifSrc}" type="image/avif">` : ''}
-          ${webpSrc ? `<source srcset="${webpSrc}" type="image/webp">` : ''}
-          <img src="${imageUrl}" 
-               srcset="${srcset}"
-               sizes="(max-width: 600px) 300px, (max-width: 900px) 600px, 900px"
-               alt="${product.name || 'Producto sin nombre'}" 
-               loading="lazy" 
-               itemprop="image"
-               width="300"
-               height="300"
-               decoding="async"
-               fetchpriority="auto"
-               onerror="this.onerror=null;this.src='${defaultImage}';"
-               style="width: 100%; height: 100%; object-fit: cover;">
-        </picture>
-      </div>
-      <div class="product-info">
-        <h3 id="product-name-${product.id}" itemprop="name">${product.name || 'Producto sin nombre'}</h3>
-        <p itemprop="description">${product.description || 'Sin descripción disponible'}</p>
-        <div class="product-details">
-          <span class="detail-item" itemprop="category"><i class="fas fa-tag" aria-hidden="true"></i> ${categoryName}</span>
-          <span class="detail-item"><i class="fas fa-calendar-alt" aria-hidden="true"></i> ${product.created_at ? new Date(product.created_at).toLocaleDateString('es-CL') : 'Fecha no disponible'}</span>
-        </div>
-        <span class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-          <span itemprop="price" content="${product.price || 0}">$${parseInt(product.price || 0).toLocaleString('es-CL')}</span>
-          <meta itemprop="priceCurrency" content="CLP">
-        </span>
-        <button class="btn btn-secondary add-to-cart" 
-                data-id="${product.id || ''}" 
-                data-name="${product.name || 'Producto sin nombre'}" 
-                data-price="${product.price || 0}"
-                data-image="${imageUrl}"
-                aria-label="Agregar ${product.name || 'producto'} al carrito"
-                role="button"
-                tabindex="0">
-          <i class="fas fa-shopping-cart" aria-hidden="true"></i> Agregar
-        </button>
-        <div class="product-card-notification" id="notification-${product.id}" style="display: none; margin-top: 10px; padding: 5px; background-color: #48bb78; color: white; border-radius: 4px; font-size: 0.8rem;">
-          ¡Agregado al carrito!
-        </div>
-      </div>
-    </article>
-  `;
-};
+        // Si no hay producto, mostrar una tarjeta vacía o con contenido de carga
+        if (!product) {
+            this.innerHTML = `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${ProductCard.renderImage(PLACEHOLDER_IMAGE, 'Producto no disponible')}
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Producto no disponible</h3>
+                        <p class="product-description">La información del producto no está disponible en este momento.</p>
+                        <div class="product-price">-</div>
+                        <button class="btn btn-primary add-to-cart" disabled>
+                            <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                        </button>
+                    </div>
+                </div>
+            `;
+            return;
+        }
 
-// Función para manejar errores de carga de imágenes
+        // Renderizar el contenido del producto
+        this.innerHTML = `
+            <div class="product-card">
+                <div class="product-image">
+                    ${ProductCard.renderImage(
+                        product.image_url || product.image || PLACEHOLDER_IMAGE,
+                        product.name
+                    )}
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-description">${product.description || 'Sin descripción disponible'}</p>
+                    <div class="product-price">$${parseInt(product.price || 0).toLocaleString('es-CL')}</div>
+                    <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">
+                        <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                    </button>
+                    <button class="btn btn-secondary add-to-wishlist" data-product-id="${product.id}">
+                        <i class="far fa-heart"></i> Agregar a deseos
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Obtiene la información del producto
+     * @returns {Object} Información del producto
+     */
+    get product() {
+        return this._product;
+    }
+
+    /**
+     * Establece la información del producto y actualiza la interfaz
+     * @param {Object} value - Información del producto
+     */
+    set product(value) {
+        this._product = value;
+        this.connectedCallback();
+    }
+}
+
+// Registrar el componente personalizado
+customElements.define('product-card', ProductCard);
+
 export default ProductCard;

@@ -1,11 +1,7 @@
 // profile.js - Manejo de la página de perfil de usuario
-import UserMenu from './userMenu.js';
 import { formatPrice, getUserInfoFromToken as getUser } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar menú de usuario
-    UserMenu.init();
-    
     // Verificar si el usuario está logueado
     const token = localStorage.getItem('token');
     const user = getUser();
@@ -25,14 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar datos adicionales del usuario
     loadUserStats();
     
-    // Configurar navegación del perfil
-    setupProfileNavigation();
-    
-    // Cargar datos adicionales del usuario
-    loadUserStats();
-    
     // Cargar pedidos del usuario
-    loadUserOrders(user.id);
+    loadUserOrders()
 });
 
 // Mostrar información del usuario

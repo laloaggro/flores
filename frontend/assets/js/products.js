@@ -1,6 +1,7 @@
 import { showNotification, formatPrice } from './utils.js';
 import CartUtils from './cartUtils.js';
 import UserMenu from './userMenu.js';
+import ErrorHandler from './errorHandler.js';
 
 // Variables globales
 let allProducts = [];
@@ -50,6 +51,7 @@ async function initializeApp() {
         CartUtils.init();
     } catch (error) {
         console.error('Error al inicializar la aplicación:', error);
+        ErrorHandler.handleGenericError(error, 'inicializar la aplicación');
         // Reintentar después de un breve retraso
         setTimeout(initializeApp, 1000);
     }
@@ -70,7 +72,12 @@ async function loadProducts(filters = {}) {
         }
         
         // Mostrar indicador de carga
-        productsGrid.innerHTML = '<p class="loading-message">Cargando productos...</p>';
+        productsGrid.innerHTML = `
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Cargando productos...</p>
+            </div>
+        `;
         
         // Construir URL con parámetros de búsqueda
         const params = new URLSearchParams();
@@ -79,7 +86,7 @@ async function loadProducts(filters = {}) {
             params.append('search', filters.search);
         }
         
-        if (filters.category) {
+        if (filters.category && filters.category !== 'all') {
             params.append('category', filters.category);
         }
         
@@ -99,7 +106,11 @@ async function loadProducts(filters = {}) {
             params.append('order', filters.order);
         }
         
-        const url = `${API_BASE_URL}/api/products?${params.toString()}`;
+        // Determinar la URL base según el entorno
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const baseUrl = isLocalhost ? 'http://localhost:5000' : 'https://arreglos-victoria-backend.onrender.com';
+        
+        const url = `${baseUrl}/api/products?${params.toString()}`;
         console.log('URL de solicitud:', url);
         
         const response = await fetch(url);
@@ -108,26 +119,39 @@ async function loadProducts(filters = {}) {
             throw new Error(`Error al cargar productos: ${response.status} ${response.statusText}`);
         }
         
-        const data = await response.json();
-        allProducts = data.products;
+        const result = await response.json();
+        console.log('Respuesta de la API:', result); // Para depuración
         
-        // Precargar imágenes
-        preloadImages(data.products);
+        // Verificar la estructura de la respuesta
+        if (Array.isArray(result)) {
+            // Si la respuesta es directamente un array
+            allProducts = result;
+        } else if (result && Array.isArray(result.data)) {
+            // Si la respuesta tiene una propiedad data que es un array
+            allProducts = result.data;
+        } else if (result && Array.isArray(result.products)) {
+            // Si la respuesta tiene una propiedad products que es un array
+            allProducts = result.products;
+        } else {
+            // Si no se puede determinar la estructura, usar un array vacío
+            console.warn('La estructura de la respuesta no es la esperada:', result);
+            allProducts = [];
+        }
         
-        displayProducts(data.products);
+        displayProducts(allProducts);
     } catch (error) {
         console.error('Error al cargar productos:', error);
+        ErrorHandler.handleGenericError(error, 'cargar productos');
         const productsGrid = document.getElementById('productGrid');
         if (productsGrid) {
             productsGrid.innerHTML = `
-                <div class="error-message">
-                    <p>Error al cargar productos. Por favor, inténtelo de nuevo.</p>
-                    <p>${error.message}</p>
-                    <button onclick="location.reload()" class="btn btn-primary">Reintentar</button>
+                <div class="error-container">
+                    <p class="error-message">Error al cargar productos. Por favor, inténtelo de nuevo más tarde.</p>
+                    <button class="btn btn-primary" onclick="loadProducts()">Reintentar</button>
                 </div>
             `;
         }
-        showNotification('Error al cargar productos. Por favor, inténtelo de nuevo.', 'error');
+        showNotification('Error al cargar productos', 'error');
     }
 }
 
@@ -236,8 +260,18 @@ function displayProducts(products) {
     });
 }
 
-// Crear tarjeta de producto
+/**
+ * Crear tarjeta de producto
+ * @param {Object} product - Objeto con información del producto
+ * @returns {string} - HTML de la tarjeta de producto
+ */
 function createProductCard(product) {
+    // Verificar que el producto tenga todas las propiedades necesarias
+    if (!product || !product.id || !product.name) {
+        console.error('Producto inválido:', product);
+        return '';
+    }
+    
     const card = document.createElement('div');
     card.className = 'product-card';
     
@@ -255,40 +289,39 @@ function createProductCard(product) {
     }
     
     card.innerHTML = `
-        <div class="product-image" style="padding: 1rem;">
-            <img src="${imageUrl}" alt="${product.name}" onerror="this.src='./assets/images/placeholder.svg'" style="width: 100%; height: 100%; object-fit: cover;">
-            <div class="product-overlay">
-                <button class="btn btn-secondary btn-view-details" data-id="${product.id}">Ver Detalles</button>
-            </div>
+        <div class="product-image">
+            <img src="${imageUrl}" alt="${product.name}" onerror="this.src='./assets/images/placeholder.svg'">
+            <button class="add-to-cart" data-id="${product.id}" aria-label="Agregar ${product.name} al carrito">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="tooltip">Agregar al carrito</span>
+            </button>
         </div>
         <div class="product-info">
-            <h3>${product.name}</h3>
-            <p class="product-description">${product.description || 'Descripción no disponible'}</p>
-            <div class="product-price">${formatPrice(product.price)}</div>
-            <div class="product-actions">
-                <button class="btn btn-primary btn-add-to-cart" data-id="${product.id}">
-                    <i class="fas fa-shopping-cart"></i> Agregar al Carrito
-                </button>
-            </div>
-            <div class="product-notification" id="notification-${product.id}">
-                <i class="fas fa-check"></i> ¡Agregado al carrito!
-            </div>
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-description">${product.description || 'Sin descripción'}</p>
+            <div class="product-price">${formatPrice(parseFloat(product.price) || 0)}</div>
+            <button class="btn btn-primary view-details" data-id="${product.id}" aria-label="Ver detalles de ${product.name}">
+                Ver detalles
+            </button>
+        </div>
+        <div class="product-notification" id="notification-${product.id}">
+            <i class="fas fa-check"></i> Agregado al carrito
         </div>
     `;
     
-    // Agregar event listeners
-    const addToCartButton = card.querySelector('.btn-add-to-cart');
+    // Agregar event listeners a los botones
+    const addToCartButton = card.querySelector('.add-to-cart');
     if (addToCartButton) {
-        addToCartButton.addEventListener('click', (e) => {
+        addToCartButton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             addToCart(product.id);
         });
     }
     
-    const viewDetailsButton = card.querySelector('.btn-view-details');
+    const viewDetailsButton = card.querySelector('.view-details');
     if (viewDetailsButton) {
-        viewDetailsButton.addEventListener('click', (e) => {
+        viewDetailsButton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             viewProductDetails(product.id);
@@ -428,6 +461,20 @@ function translateCategory(categoryKey) {
     return categories[categoryKey] || categoryKey;
 }
 
+/**
+ * Mostrar imagen del producto
+ * @param {Object} product - Producto para mostrar la imagen
+ * @returns {HTMLElement} - Elemento de imagen
+ */
+function displayProductImage(product) {
+    const imgElement = document.createElement('img');
+    imgElement.src = product.image_url || product.image || './assets/images/placeholder.svg';
+    imgElement.alt = product.name;
+    imgElement.className = 'product-image-main';
+    imgElement.loading = 'lazy';
+    return imgElement;
+}
+
 // Función para actualizar el contador del carrito
 function updateCartCount() {
     // Esta función ahora es manejada por CartUtils
@@ -438,14 +485,4 @@ function updateCartCount() {
 function initUserMenu() {
     console.log('Menú de usuario inicializado en products.js');
     // Esta función se maneja en userMenu.js
-}
-
-function displayProductImage(product) {
-    const imgElement = document.createElement('img');
-    imgElement.src = './assets/images/products/1.png'; // Reemplazar por la ruta local
-    imgElement.alt = product.name;
-    imgElement.style.width = '100%';
-    imgElement.style.height = '100%';
-    imgElement.style.objectFit = 'cover';
-    return imgElement;
 }

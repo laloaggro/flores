@@ -1,87 +1,102 @@
-// errorHandler.js - Centralized error handling for the application
-
+/**
+ * Clase para manejar errores de manera centralizada
+ */
 class ErrorHandler {
-  /**
-   * Handle API errors
-   * @param {Error} error - The error object
-   * @param {string} context - Context where the error occurred
-   */
-  static handleApiError(error, context) {
-    console.error(`API Error in ${context}:`, error);
-    
-    // Log error to analytics service (in a real app)
-    // analytics.logError(error, context);
-    
-    // Show user-friendly error message
-    let message = 'Ocurrió un error inesperado. Por favor, inténtelo más tarde.';
-    
-    if (error.name === 'TypeError' && error.message.includes('fetch')) {
-      message = 'Error de conexión. Por favor, verifique su conexión a internet.';
-    } else if (error.message) {
-      message = error.message;
+    /**
+     * Maneja errores de red
+     * @param {Error} error - El error de red
+     * @param {string} operation - La operación que causó el error
+     */
+    static handleNetworkError(error, operation) {
+        console.error(`Error de red en ${operation}:`, error);
+        this.showNotification(`Error de conexión en ${operation}. Por favor, verifica tu conexión a internet.`, 'error');
     }
-    
-    // Show notification to user
-    this.showNotification(message, 'error');
-  }
-  
-  /**
-   * Handle network errors
-   * @param {Error} error - The network error
-   * @param {string} context - Context where the error occurred
-   */
-  static handleNetworkError(error, context) {
-    console.error(`Network Error in ${context}:`, error);
-    
-    const message = 'Error de conexión. Por favor, verifique su conexión a internet.';
-    this.showNotification(message, 'error');
-  }
-  
-  /**
-   * Show notification to user
-   * @param {string} message - Message to display
-   * @param {string} type - Type of notification (error, warning, info, success)
-   */
-  static showNotification(message, type = 'info') {
-    // Check if we have the showNotification function from utils
-    if (typeof window !== 'undefined' && window.showNotification) {
-      window.showNotification(message, type);
-      return;
+
+    /**
+     * Maneja errores de la API
+     * @param {Response} response - La respuesta de error de la API
+     * @param {string} operation - La operación que causó el error
+     */
+    static async handleAPIError(response, operation) {
+        let message = `Error en ${operation}: ${response.status} ${response.statusText}`;
+        
+        try {
+            const errorData = await response.json();
+            if (errorData.message) {
+                message = errorData.message;
+            }
+        } catch (e) {
+            // Si no se puede parsear el JSON, usar el mensaje por defecto
+        }
+        
+        console.error(message);
+        this.showNotification(message, 'error');
     }
-    
-    // Fallback to simple alert for critical errors
-    if (type === 'error') {
-      alert(`Error: ${message}`);
+
+    /**
+     * Maneja errores genéricos
+     * @param {Error} error - El error
+     * @param {string} operation - La operación que causó el error
+     */
+    static handleGenericError(error, operation) {
+        console.error(`Error en ${operation}:`, error);
+        this.showNotification(`Ocurrió un error inesperado en ${operation}. Por favor, inténtalo de nuevo.`, 'error');
     }
-  }
-  
-  /**
-   * Log error information for debugging
-   * @param {Error} error - The error object
-   * @param {string} context - Context where the error occurred
-   * @param {Object} additionalInfo - Additional information about the error
-   */
-  static logError(error, context, additionalInfo = {}) {
-    const errorInfo = {
-      message: error.message,
-      stack: error.stack,
-      context,
-      timestamp: new Date().toISOString(),
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
-      url: typeof window !== 'undefined' ? window.location.href : '',
-      additionalInfo
-    };
-    
-    console.error('Error logged:', errorInfo);
-    
-    // In a production environment, you might send this to an error tracking service
-    // sendToErrorTrackingService(errorInfo);
-  }
+
+    /**
+     * Muestra una notificación al usuario
+     * @param {string} message - El mensaje a mostrar
+     * @param {string} type - El tipo de notificación (error, success, info, warning)
+     */
+    static showNotification(message, type = 'info') {
+        // Verificar si ya existe una función de notificación en utils.js
+        if (typeof window !== 'undefined' && window.showNotification) {
+            window.showNotification(message, type);
+            return;
+        }
+        
+        // Implementación básica de notificación si no existe la función
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            z-index: 9999;
+            max-width: 300px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            background-color: ${type === 'error' ? '#dc3545' : 
+                               type === 'success' ? '#28a745' : 
+                               type === 'warning' ? '#ffc107' : '#17a2b8'};
+        `;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        // Eliminar la notificación después de 5 segundos
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
+    }
+
+    /**
+     * Maneja errores de validación
+     * @param {Array} errors - Array de errores de validación
+     */
+    static handleValidationErrors(errors) {
+        if (Array.isArray(errors) && errors.length > 0) {
+            const message = errors.map(err => err.message || err).join(', ');
+            this.showNotification(`Errores de validación: ${message}`, 'error');
+        } else {
+            this.showNotification('Error de validación en los datos ingresados', 'error');
+        }
+    }
 }
 
-// Make ErrorHandler available globally
-if (typeof window !== 'undefined') {
-  window.ErrorHandler = ErrorHandler;
-}
-
+// Exportar la clase
 export default ErrorHandler;

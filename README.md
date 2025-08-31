@@ -45,6 +45,20 @@ npm run build
 
 Esto generará archivos optimizados en el directorio `frontend/dist/`.
 
+### Linting CSS
+
+El proyecto utiliza Stylelint para verificar la calidad del código CSS:
+
+```
+npm run lint:css
+```
+
+Para corregir automáticamente problemas menores:
+
+```
+npx stylelint frontend/assets/css/**/*.css --fix
+```
+
 ## Estructura de Archivos Frontend
 
 - `assets/css/` - Hojas de estilo

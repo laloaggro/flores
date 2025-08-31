@@ -1,0 +1,275 @@
+/* dark-mode.css - Archivo obsoleto, reemplazado por consistent-theme.css */
+/* Este archivo se mantiene temporalmente para compatibilidad */
+/* Paleta de colores coherente y unificada para modo oscuro */
+:root {
+  /* Fondos */
+  --bg-color: #0f172a;              /* Fondo principal */
+  --bg-secondary: #1e293b;          /* Fondo secundario (footer, header) */
+  --bg-card: #334155;               /* Fondo de tarjetas */
+  --hover-bg: #475569;              /* Fondo al pasar el mouse */
+  
+  /* Textos */
+  --text-color: #f1f5f9;            /* Texto principal */
+  --text-secondary: #cbd5e1;        /* Texto secundario */
+  --text-tertiary: #94a3b8;         /* Texto terciario */
+  
+  /* Bordes */
+  --border-color: #475569;          /* Color de bordes */
+  
+  /* Colores principales */
+  --primary: #4ade80;               /* Verde principal */
+  --primary-dark: #22c55e;          /* Verde oscuro */
+  --primary-light: #86efac;         /* Verde claro */
+  
+  /* Colores de apoyo */
+  --secondary: #f97316;             /* Naranja */
+  --danger: #f87171;                /* Rojo */
+  --warning: #fbbf24;               /* Amarillo */
+  --success: #4ade80;               /* Verde (igual al primario) */
+  --info: #60a5fa;                  /* Azul */
+  
+  /* Sombras */
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos específicos para modo oscuro */
+[data-theme="dark"] {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Header en modo oscuro */
+[data-theme="dark"] header {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow);
+
+body[data-theme="dark"] .logo {
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] nav ul {
+  background-color: var(--dark-bg-secondary);
+  border-color: var(--dark-border);
+}
+
+body[data-theme="dark"] nav ul li a {
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] nav ul li a:hover {
+  background-color: var(--dark-bg-hover);
+  color: var(--dark-primary);
+}
+
+body[data-theme="dark"] nav ul li a.active {
+  background-color: var(--dark-primary-dark);
+  color: white;
+}
+
+/* Iconos de navegación en modo oscuro */
+[data-theme="dark"] .theme-toggle,
+[data-theme="dark"] .cart-icon {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .theme-toggle:hover,
+[data-theme="dark"] .cart-icon:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Menú de usuario en modo oscuro */
+[data-theme="dark"] .user-dropdown {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow);
+  color: var(--text-color);
+
+body[data-theme="dark"] .user-dropdown a {
+  color: var(--dark-text-secondary);
+}
+
+body[data-theme="dark"] .user-dropdown a:hover {
+  background-color: var(--dark-bg-hover);
+  color: var(--dark-primary);
+}
+
+/* Secciones en modo oscuro */
+body[data-theme="dark"] .hero {
+  background-color: var(--dark-bg-secondary);
+}
+
+body[data-theme="dark"] .featured-products,
+body[data-theme="dark"] .categories,
+body[data-theme="dark"] .about,
+body[data-theme="dark"] .services,
+body[data-theme="dark"] .testimonials {
+  background-color: var(--dark-bg);
+}
+
+body[data-theme="dark"] .section-header h2 {
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] .section-description {
+  color: var(--dark-text-secondary);
+}
+
+/* Tarjetas de productos en modo oscuro */
+body[data-theme="dark"] .product-card {
+  background-color: var(--dark-bg-card);
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] .product-card:hover {
+  box-shadow: var(--dark-shadow-hover);
+}
+
+body[data-theme="dark"] .product-title {
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] .product-description {
+  color: var(--dark-text-secondary);
+}
+
+body[data-theme="dark"] .product-price {
+  color: var(--dark-primary);
+}
+
+/* Botones en modo oscuro */
+body[data-theme="dark"] .btn {
+  background-color: var(--dark-bg-card);
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] .btn:hover {
+  background-color: var(--dark-bg-hover);
+  color: var(--dark-primary);
+}
+
+body[data-theme="dark"] .btn-primary {
+  background-color: var(--dark-primary-dark);
+  border-color: var(--dark-primary-dark);
+  color: white;
+}
+
+body[data-theme="dark"] .btn-primary:hover {
+  background-color: var(--dark-primary);
+  border-color: var(--dark-primary);
+  color: white;
+}
+
+body[data-theme="dark"] .btn-outline {
+  background-color: transparent;
+  border-color: var(--dark-primary);
+  color: var(--dark-primary);
+}
+
+body[data-theme="dark"] .btn-outline:hover {
+  background-color: var(--dark-primary);
+  border-color: var(--dark-primary);
+  color: white;
+}
+
+/* Footer en modo oscuro */
+[data-theme="dark"] footer {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .footer-section h3 {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .footer-links a {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .footer-links a:hover {
+  color: var(--primary);
+
+/* Formularios en modo oscuro */
+body[data-theme="dark"] .form-control {
+  background-color: var(--dark-bg-card);
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] .form-control:focus {
+  border-color: var(--dark-primary);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3);
+}
+
+/* Tablas en modo oscuro */
+body[data-theme="dark"] table {
+  background-color: var(--dark-bg-card);
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] table th {
+  background-color: var(--dark-bg-secondary);
+  color: var(--dark-text);
+  border-color: var(--dark-border);
+}
+
+body[data-theme="dark"] table td {
+  border-color: var(--dark-border);
+}
+
+body[data-theme="dark"] table tr:hover {
+  background-color: var(--dark-bg-hover);
+}
+
+/* Alertas en modo oscuro */
+body[data-theme="dark"] .alert {
+  background-color: var(--dark-bg-card);
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+body[data-theme="dark"] .alert-primary {
+  border-color: var(--dark-primary);
+  background-color: rgba(74, 222, 128, 0.1);
+}
+
+body[data-theme="dark"] .alert-success {
+  border-color: var(--success);
+  background-color: rgba(74, 222, 128, 0.1);
+}
+
+body[data-theme="dark"] .alert-warning {
+  border-color: var(--warning);
+  background-color: rgba(251, 191, 36, 0.1);
+}
+
+body[data-theme="dark"] .alert-danger {
+  border-color: var(--danger);
+  background-color: rgba(248, 113, 113, 0.1);
+}
+
+/* Enlaces en modo oscuro */
+[data-theme="dark"] a {
+  color: var(--primary-light);
+}
+
+[data-theme="dark"] a:hover {
+  color: var(--primary);
+}
+
+/* Mejoras en transiciones */
+* {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
