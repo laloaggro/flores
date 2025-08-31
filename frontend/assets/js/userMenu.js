@@ -69,6 +69,13 @@ class UserMenu {
                 if (userNameDisplay) {
                     userNameDisplay.textContent = user.name || 'Usuario';
                 }
+                
+                // Mostrar avatar de Google si está disponible
+                const userProfileImage = document.getElementById('userProfileImage');
+                if (userProfileImage && user.picture) {
+                    userProfileImage.src = user.picture;
+                    userProfileImage.style.display = 'block';
+                }
             }
         }
         
@@ -104,10 +111,11 @@ class UserMenu {
             
             const payload = JSON.parse(atob(token.split('.')[1]));
             return {
-                id: payload.userId,
-                name: payload.name,
+                id: payload.userId || payload.id,
+                name: payload.name || payload.username,
                 email: payload.email,
-                role: payload.role
+                role: payload.role,
+                picture: payload.picture || payload.image_url
             };
         } catch (error) {
             console.error('Error al obtener información del usuario:', error);

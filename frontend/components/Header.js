@@ -9,7 +9,7 @@ class Header extends HTMLElement {
                 <div class="navbar">
                     <div class="logo">
                         <a href="index.html" aria-label="Arreglos Florales Victoria - Inicio">
-                            <img src="assets/images/logo.svg" alt="Logo de Arreglos Florales Victoria" width="80" height="80">
+                            <img src="assets/images/logo.png" alt="Logo de Arreglos Florales Victoria" width="80" height="80">
                         </a>
                     </div>
                     
@@ -23,10 +23,6 @@ class Header extends HTMLElement {
                     </nav>
                     
                     <div class="nav-icons">
-                        <button id="nav-toggle" class="nav-icon" aria-label="Menú" aria-expanded="false">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        
                         <button id="theme-toggle" class="nav-icon" aria-label="Cambiar tema">
                             <i class="fas fa-moon"></i>
                         </button>
@@ -38,6 +34,7 @@ class Header extends HTMLElement {
                         
                         <div class="user-menu">
                             <button class="user-info nav-icon" aria-haspopup="true" aria-expanded="false">
+                                <img id="userProfileImage" src="" alt="Foto de perfil" style="display: none; width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
                                 <i class="fas fa-user"></i>
                             </button>
                             <ul class="user-dropdown">
@@ -66,42 +63,6 @@ class Header extends HTMLElement {
      * Configura la interactividad del header
      */
     setupInteractivity() {
-        // Toggle de navegación para móviles
-        const navToggle = this.querySelector('#nav-toggle');
-        const navLinks = this.querySelector('.nav-links');
-        
-        if (navToggle && navLinks) {
-            navToggle.addEventListener('click', () => {
-                const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
-                navToggle.setAttribute('aria-expanded', !isExpanded);
-                navLinks.classList.toggle('show');
-            });
-        }
-        
-        // Dropdown de usuario
-        const userMenu = this.querySelector('.user-menu');
-        const userInfo = this.querySelector('.user-info');
-        const userDropdown = this.querySelector('.user-dropdown');
-        
-        if (userInfo && userDropdown) {
-            userInfo.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isExpanded = userInfo.getAttribute('aria-expanded') === 'true';
-                userInfo.setAttribute('aria-expanded', !isExpanded);
-                userDropdown.classList.toggle('show');
-            });
-            
-            // Cerrar el dropdown al hacer clic fuera
-            document.addEventListener('click', (e) => {
-                if (userMenu && !userMenu.contains(e.target)) {
-                    userInfo.setAttribute('aria-expanded', 'false');
-                    if (userDropdown) {
-                        userDropdown.classList.remove('show');
-                    }
-                }
-            });
-        }
-        
         // Toggle de tema
         const themeToggle = this.querySelector('#theme-toggle');
         if (themeToggle) {
@@ -116,6 +77,35 @@ class Header extends HTMLElement {
                 const themeIcon = themeToggle.querySelector('i');
                 if (themeIcon) {
                     themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            });
+        }
+        
+        // Dropdown de usuario
+        const userInfo = this.querySelector('.user-info');
+        const userDropdown = this.querySelector('.user-dropdown');
+        
+        if (userInfo && userDropdown) {
+            userInfo.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isExpanded = userInfo.getAttribute('aria-expanded') === 'true';
+                userInfo.setAttribute('aria-expanded', !isExpanded);
+                userDropdown.classList.toggle('show');
+            });
+            
+            // Cerrar el dropdown al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                if (!userInfo.contains(e.target)) {
+                    userInfo.setAttribute('aria-expanded', 'false');
+                    userDropdown.classList.remove('show');
+                }
+            });
+            
+            // Cerrar el dropdown al presionar Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    userInfo.setAttribute('aria-expanded', 'false');
+                    userDropdown.classList.remove('show');
                 }
             });
         }
