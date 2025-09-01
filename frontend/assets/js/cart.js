@@ -1,6 +1,5 @@
 // cart.js - Funcionalidad del carrito de compras
 import CartUtils from './cartUtils.js';
-import Cart from '../components/cart/cart.js';
 import { isAuthenticated, showNotification, formatPrice } from './utils.js';
 
 // Variable para rastrear si los eventos ya han sido adjuntados
