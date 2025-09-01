@@ -12,9 +12,12 @@ const localStorageMock = {
 
 global.localStorage = localStorageMock;
 
-// Mock de funciones del carrito
+// Mock de funciones globales
 global.updateCartCount = jest.fn();
 global.showNotification = jest.fn();
+
+// Importar funciones reales del carrito
+import { addToCart, getCartTotal, removeFromCart, updateQuantity } from '../../frontend/assets/js/cart.js';
 
 describe('Cart Functionality', () => {
   beforeEach(() => {
@@ -32,11 +35,9 @@ describe('Cart Functionality', () => {
       return null;
     });
 
-    // Importar el módulo del carrito
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    
-    // Verificar que se pueda acceder a las funciones del carrito
-    expect(cartModule).toBeDefined();
+    // Verificar que las funciones estén definidas
+    expect(typeof addToCart).toBe('function');
+    expect(typeof getCartTotal).toBe('function');
   });
 
   test('debería agregar productos al carrito', () => {
@@ -49,9 +50,6 @@ describe('Cart Functionality', () => {
     // Mock para guardar en localStorage
     localStorageMock.setItem.mockImplementation(() => {});
 
-    // Importar el módulo del carrito
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    
     // Crear un producto de prueba
     const testProduct = {
       id: '1',
@@ -61,7 +59,7 @@ describe('Cart Functionality', () => {
     };
 
     // Verificar que la función addToCart exista
-    expect(typeof cartModule.addToCart).toBe('function');
+    expect(typeof addToCart).toBe('function');
   });
 
   test('debería calcular correctamente el total del carrito', () => {
@@ -76,11 +74,8 @@ describe('Cart Functionality', () => {
       return null;
     });
 
-    // Importar el módulo del carrito
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    
     // Verificar que la función getCartTotal exista
-    expect(typeof cartModule.getCartTotal).toBe('function');
+    expect(typeof getCartTotal).toBe('function');
   });
 
   test('debería manejar correctamente un carrito vacío', () => {
@@ -90,11 +85,8 @@ describe('Cart Functionality', () => {
       return null;
     });
 
-    // Importar el módulo del carrito
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    
     // Obtener el total del carrito vacío
-    const total = cartModule.getCartTotal();
+    const total = getCartTotal();
     expect(total).toBe(0);
   });
 
@@ -109,11 +101,8 @@ describe('Cart Functionality', () => {
       return null;
     });
 
-    // Importar el módulo del carrito
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    
     // Obtener el total del carrito
-    const total = cartModule.getCartTotal();
+    const total = getCartTotal();
     expect(total).toBe(0);
   });
 
@@ -129,11 +118,8 @@ describe('Cart Functionality', () => {
       return null;
     });
 
-    // Importar el módulo del carrito
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    
     // Obtener el total del carrito
-    const total = cartModule.getCartTotal();
+    const total = getCartTotal();
     // Verificar redondeo correcto a 2 decimales
     expect(total).toBeCloseTo(21.22, 2);
   });
@@ -153,11 +139,8 @@ describe('Cart Functionality', () => {
     // Mock para guardar en localStorage
     localStorageMock.setItem.mockImplementation(() => {});
 
-    // Importar el módulo del carrito
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    
     // Verificar que la función removeFromCart exista
-    expect(typeof cartModule.removeFromCart).toBe('function');
+    expect(typeof removeFromCart).toBe('function');
   });
 
   test('debería actualizar la cantidad de productos en el carrito', () => {
@@ -174,10 +157,7 @@ describe('Cart Functionality', () => {
     // Mock para guardar en localStorage
     localStorageMock.setItem.mockImplementation(() => {});
 
-    // Importar el módulo del carrito
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    
     // Verificar que la función updateQuantity exista
-    expect(typeof cartModule.updateQuantity).toBe('function');
+    expect(typeof updateQuantity).toBe('function');
   });
 });
