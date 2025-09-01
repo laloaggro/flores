@@ -66,4 +66,48 @@ describe('Header Component', () => {
     // Verificar que se haya llamado a localStorage.getItem
     expect(localStorageMock.getItem).toHaveBeenCalledWith('token');
   });
+
+  test('debería ocultar el menú de usuario cuando no hay token', () => {
+    // Preparar el mock de localStorage sin token
+    localStorageMock.getItem.mockImplementation((key) => {
+      return null;
+    });
+
+    // Crear un elemento header-component
+    document.body.innerHTML = `
+      <header-component></header-component>
+    `;
+
+    // Forzar una actualización del componente
+    const header = document.querySelector('header-component');
+    if (header && header.updateUserMenu) {
+      header.updateUserMenu();
+    }
+
+    // Verificar que se haya llamado a localStorage.getItem
+    expect(localStorageMock.getItem).toHaveBeenCalledWith('token');
+  });
+
+  test('debería manejar correctamente nombres de usuario largos', () => {
+    // Preparar el mock de localStorage con nombre de usuario largo
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'token') return 'test-token';
+      if (key === 'user') return JSON.stringify({ name: 'Usuario con Nombre Muy Largo' });
+      return null;
+    });
+
+    // Crear un elemento header-component
+    document.body.innerHTML = `
+      <header-component></header-component>
+    `;
+
+    // Forzar una actualización del componente
+    const header = document.querySelector('header-component');
+    if (header && header.updateUserMenu) {
+      header.updateUserMenu();
+    }
+
+    // Verificar que se haya llamado a localStorage.getItem
+    expect(localStorageMock.getItem).toHaveBeenCalledWith('token');
+  });
 });

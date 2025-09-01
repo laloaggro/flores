@@ -57,4 +57,40 @@ describe('Products', () => {
     
     expect(element.className).toBe('products-container');
   });
+
+  test('should handle large number of products', () => {
+    // Create a large array of products
+    const manyProducts = Array.from({ length: 50 }, (_, i) => ({
+      id: i + 1,
+      name: `Product ${i + 1}`,
+      price: (i + 1) * 10,
+      image: `/frontend/assets/images/placeholder-${i + 1}.svg`,
+      description: `Description for product ${i + 1}`
+    }));
+    
+    const productsComponent = new Products(manyProducts);
+    const element = productsComponent.render();
+    
+    const productCards = element.querySelectorAll('.product-card');
+    expect(productCards.length).toBe(manyProducts.length);
+  });
+
+  test('should handle products with special characters', () => {
+    const productsWithSpecialChars = [
+      {
+        id: 1,
+        name: 'Ramo de Rosas & Tulipanes',
+        price: 32.99,
+        image: '/frontend/assets/images/placeholder.svg',
+        description: 'Hermoso ramo de rosas rojas & tulipanes blancos'
+      }
+    ];
+    
+    const productsComponent = new Products(productsWithSpecialChars);
+    const element = productsComponent.render();
+    
+    const productCards = element.querySelectorAll('.product-card');
+    expect(productCards.length).toBe(1);
+    expect(productCards[0].dataset.productId).toBe('1');
+  });
 });

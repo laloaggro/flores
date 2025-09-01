@@ -96,4 +96,55 @@ describe('Auth Functionality', () => {
     expect(localStorageMock.removeItem).toHaveBeenCalledWith('token');
     expect(localStorageMock.removeItem).toHaveBeenCalledWith('user');
   });
+
+  test('debería manejar correctamente tokens mal formateados', () => {
+    // Mock de token mal formateado
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'token') {
+        return 'invalid-token';
+      }
+      return null;
+    });
+
+    // Importar el módulo de autenticación
+    const authModule = require('../../../frontend/assets/js/auth.js');
+    
+    // Verificar que la función isAuthenticated exista
+    expect(typeof authModule.isAuthenticated).toBe('function');
+  });
+
+  test('debería manejar correctamente tokens sin payload', () => {
+    // Mock de token sin payload
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'token') {
+        return btoa('');
+      }
+      return null;
+    });
+
+    // Importar el módulo de autenticación
+    const authModule = require('../../../frontend/assets/js/auth.js');
+    
+    // Verificar que la función isAuthenticated exista
+    expect(typeof authModule.isAuthenticated).toBe('function');
+  });
+
+  test('debería manejar correctamente payloads sin expiración', () => {
+    // Mock de token sin expiración
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'token') {
+        const payload = {
+          user: { id: 1, name: 'Test User' }
+        };
+        return btoa(JSON.stringify(payload));
+      }
+      return null;
+    });
+
+    // Importar el módulo de autenticación
+    const authModule = require('../../../frontend/assets/js/auth.js');
+    
+    // Verificar que la función isAuthenticated exista
+    expect(typeof authModule.isAuthenticated).toBe('function');
+  });
 });

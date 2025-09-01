@@ -40,4 +40,35 @@ describe('ProductCard', () => {
     
     expect(element.dataset.productId).toBe(product.id.toString());
   });
+
+  test('should render product with special characters in name and description', () => {
+    const productWithSpecialChars = {
+      id: 4,
+      name: 'Ramo de Rosas & Tulipanes',
+      price: 32.99,
+      image: '/frontend/assets/images/placeholder.svg',
+      description: 'Hermoso ramo de rosas rojas & tulipanes blancos'
+    };
+    
+    const productCard = new ProductCard(productWithSpecialChars);
+    const element = productCard.render();
+    
+    expect(element.querySelector('h3').textContent).toBe(productWithSpecialChars.name);
+    expect(element.querySelector('p').textContent).toBe(productWithSpecialChars.description);
+  });
+
+  test('should handle product with zero price', () => {
+    const freeProduct = {
+      id: 5,
+      name: 'Muestra Gratuita',
+      price: 0,
+      image: '/frontend/assets/images/placeholder.svg',
+      description: 'Muestra gratuita de nuestro trabajo'
+    };
+    
+    const productCard = new ProductCard(freeProduct);
+    const element = productCard.render();
+    
+    expect(element.querySelector('.product-price').textContent).toBe('$0');
+  });
 });
