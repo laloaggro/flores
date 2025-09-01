@@ -16,7 +16,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint:css": "stylelint frontend/assets/css/**/*.css",
-    "lint:js": "eslint frontend/assets/js/**/*.js frontend/components/**/*.js"
+    "lint:js": "eslint frontend/assets/js/**/*.js frontend/components/**/*.js",
+    "deploy": "node scripts/deploy.js",
+    "deploy:prod": "NODE_ENV=production node scripts/deploy.js"
   },
   "keywords": [
     "ecommerce",
