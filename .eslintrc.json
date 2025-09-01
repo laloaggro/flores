@@ -1,7 +1,8 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es2021": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended"
@@ -11,12 +12,17 @@
     "sourceType": "module"
   },
   "rules": {
-    "indent": ["error", 4],
+    "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "no-unused-vars": "warn",
-    "no-console": "off",
-    "no-undef": "error"
-  }
+    "no-console": "off"
+  },
+  "ignorePatterns": [
+    "frontend/assets/js/vendor/**/*.js",
+    "node_modules/",
+    "dist/",
+    "build/"
+  ]
 }
