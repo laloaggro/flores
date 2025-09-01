@@ -10,13 +10,19 @@ Este proyecto es una tienda en línea para la venta de arreglos florales. Incluy
 
 ```
 arreglos-victoria/
-├── backend/          # Servidor y API
-├── frontend/         # Cliente web
-│   ├── assets/       # Recursos estáticos
-│   ├── components/   # Componentes web reutilizables
-│   └── ...           # Páginas HTML
-├── build-simple.js   # Script de construcción
-└── package.json      # Configuración del proyecto
+├── backend/
+│   ├── data/
+│   ├── routes/
+│   └── server.js
+├── frontend/
+│   ├── assets/
+│   │   ├── css/
+│   │   ├── images/
+│   │   └── js/
+│   ├── components/
+│   └── *.html
+├── build-simple.js
+└── package.json
 ```
 
 ## Instalación
@@ -31,33 +37,12 @@ arreglos-victoria/
    npm install
    ```
 
-## Desarrollo
+## Comandos disponibles
 
-### Iniciar servidor de desarrollo:
-```
-npm run dev
-```
-
-### Construir para producción:
-```
-npm run build
-```
-
-Esto generará archivos optimizados en el directorio `frontend/dist/`.
-
-### Linting CSS
-
-El proyecto utiliza Stylelint para verificar la calidad del código CSS:
-
-```
-npm run lint:css
-```
-
-Para corregir automáticamente problemas menores:
-
-```
-npx stylelint frontend/assets/css/**/*.css --fix
-```
+- `npm run dev` - Iniciar servidor de desarrollo con nodemon
+- `npm start` - Iniciar servidor en producción
+- `npm run build` - Construir proyecto para producción
+- `npm test` - Ejecutar pruebas
 
 ## Estructura de Archivos Frontend
 
@@ -86,31 +71,21 @@ Para información detallada sobre la arquitectura del frontend, consulte [FRONTE
 
 2. Subir los archivos del directorio `frontend/` al servidor de producción.
 
-## Mantenimiento
+## Historial de versiones
 
-### Actualizar dependencias:
-```
-npm update
-```
+- v1.0.0 - Versión inicial del proyecto  
+- v1.1.0 - Añadida funcionalidad del carrito de compras  
+- v1.2.0 - Implementado panel de administración  
+- v1.3.0 - Añadido modo claro/oscuro  
+- v1.4.0 - Mejoras en el diseño responsivo  
+- v1.5.0 - Implementado sistema de autenticación  
+- v1.5.1 - Correcciones menores  
+- v2.2.1 - Mejoras en SEO y accesibilidad  
+- v2.3.0 - Implementadas mejoras de optimización, estructura, pruebas y calidad de código
 
-### Verificar problemas de código:
-```
-npx eslint frontend/assets/js/
-```
+## Contribuidores
 
-## Contribución
-
-1. Crear una rama para la nueva funcionalidad:
-   ```
-   git checkout -b feature/nueva-funcionalidad
-   ```
-
-2. Hacer commits descriptivos:
-   ```
-   git commit -m "Añadir: nueva funcionalidad para ..."
-   ```
-
-3. Hacer push de la rama y crear un Pull Request
+- Mauricio Garay
 
 ## Licencia
 
