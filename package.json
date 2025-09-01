@@ -10,11 +10,13 @@
     "dev": "nodemon backend/server.js",
     "start": "node backend/server.js",
     "test": "npm run test:unit && npm run test:integration",
-    "test:unit": "jest frontend/assets/js/*.test.js",
-    "test:integration": "jest frontend/integration/*.test.js",
+    "test:unit": "jest frontend/__tests__/unit/*.test.js",
+    "test:integration": "jest frontend/__tests__/integration/*.test.js",
     "test:e2e": "cypress run",
     "test:watch": "jest --watch",
-    "lint:css": "stylelint frontend/assets/css/**/*.css"
+    "test:coverage": "jest --coverage",
+    "lint:css": "stylelint frontend/assets/css/**/*.css",
+    "lint:js": "eslint frontend/assets/js/**/*.js frontend/components/**/*.js"
   },
   "keywords": [
     "ecommerce",
@@ -30,7 +32,10 @@
   },
   "devDependencies": {
     "cypress": "^13.0.0",
+    "eslint": "^8.0.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.7.0",
     "stylelint": "^15.11.0",
     "stylelint-config-standard": "^34.0.0"
   }
