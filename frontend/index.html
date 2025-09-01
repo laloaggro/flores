@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/visibility-fix.css">
     <link rel="stylesheet" href="assets/css/conflict-fixes.css">
+    <link rel="stylesheet" href="assets/css/color-enhancements.css">
     
     <meta name="description" content="Arreglos Victoria - La mejor florería en Recoleta. Flores frescas, arreglos florales personalizados y entrega a domicilio.">
     <meta name="keywords" content="florería, arreglos florales, flores, Recoleta, entrega a domicilio, ramos, plantas">
@@ -81,7 +82,7 @@
 
     <main id="main-content" tabindex="-1">
         <!-- Hero Section -->
-        <section class="hero full-height">
+        <section class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">Arreglos Florales Victoria</h1>
                 <p class="hero-subtitle">Flores frescas y hermosos arreglos florales para cada ocasión</p>
@@ -95,27 +96,43 @@
                 <h2 id="categories-heading" class="section-title text-center">Nuestras Categorías</h2>
                 <div class="categories-grid">
                     <a href="products.html?category=ramos" class="category-card">
-                        <img src="assets/images/categories/rosas.jpg" alt="Ramos de flores" loading="lazy" width="300" height="200">
+                        <img src="assets/images/categories/bouquets.jpg" alt="Ramos de flores" loading="lazy" width="300" height="200">
                         <div class="category-overlay">
-                            <h3>Ramos</h3>
+                            <h3>Ramos de flores</h3>
+                            <p> Hermosos ramos de flores frescas para cualquier ocasión</p>
+                            <div class="category-button">
+                                <span class="btn btn-primary">Ver Ramos</span>
+                            </div>
                         </div>
                     </a>
                     <a href="products.html?category=arreglos" class="category-card">
-                        <img src="assets/images/categories/orquideas.jpg" alt="Arreglos florales" loading="lazy" width="300" height="200">
+                        <img src="assets/images/categories/arrangements.jpg" alt="Arreglos florales" loading="lazy" width="300" height="200">
                         <div class="category-overlay">
-                            <h3>Arreglos</h3>
+                            <h3>Arreglos florales</h3>
+                            <p>Arreglos florales elaborados para eventos especiales</p>
+                            <div class="category-button">
+                                <span class="btn btn-primary">Ver Arreglos</span>
+                            </div>
                         </div>
                     </a>
                     <a href="products.html?category=plantas" class="category-card">
-                        <img src="assets/images/categories/plantas.jpg" alt="Plantas" loading="lazy" width="300" height="200">
+                        <img src="assets/images/categories/plants.jpg" alt="Plantas" loading="lazy" width="300" height="200">
                         <div class="category-overlay">
                             <h3>Plantas</h3>
+                            <p>Plantas de interior y exterior para decorar tu hogar</p>
+                            <div class="category-button">
+                                <span class="btn btn-primary">Ver Plantas</span>
+                            </div>
                         </div>
                     </a>
                     <a href="products.html?category=accesorios" class="category-card">
-                        <img src="assets/images/categories/accesorios.jpg" alt="Accesorios florales" loading="lazy" width="300" height="200">
+                        <img src="assets/images/categories/accessories.jpg" alt="Accesorios florales" loading="lazy" width="300" height="200">
                         <div class="category-overlay">
-                            <h3>Accesorios</h3>
+                            <h3>Accesorios florales</h3>
+                            <p>Accesorios y decoraciones para complementar tus flores</p>
+                            <div class="category-button">
+                                <span class="btn btn-primary">Ver Accesorios</span>
+                            </div>
                         </div>
                     </a>
                 </div>
@@ -137,58 +154,6 @@
             </div>
         </section>
 
-        <!-- Sobre Nosotros -->
-        <section id="about" class="about-section" aria-labelledby="about-heading">
-            <div class="container">
-                <div class="about-content">
-                    <div class="about-text">
-                        <h2 id="about-heading" class="section-title">Sobre Nosotros</h2>
-                        <p>Arreglos Victoria es una florería familiar ubicada en el corazón de Recoleta, dedicada a crear hermosos arreglos florales desde 2010. Nuestra pasión por las flores y el compromiso con la calidad nos ha convertido en la florería preferida de muchos clientes.</p>
-                        <p>Utilizamos solo las flores más frescas y trabajamos con proveedores locales para garantizar la mejor calidad en cada arreglo. Nuestro equipo de floristas expertos crea diseños únicos para cada ocasión.</p>
-                        <a href="about.html" class="btn btn-secondary">Conoce más sobre nosotros</a>
-                    </div>
-                    <div class="about-image">
-                        <img src="assets/images/about-florist.jpg" alt="Nuestra florería en Recoleta" loading="lazy" width="500" height="400">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contacto -->
-        <section id="contacto" class="contact-section" aria-labelledby="contact-heading">
-            <div class="container">
-                <h2 id="contact-heading" class="section-title text-center">Contáctanos</h2>
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <h3>Información de Contacto</h3>
-                        <ul>
-                            <li><i class="fas fa-map-marker-alt"></i> Av. Recoleta 1234, Recoleta, Santiago</li>
-                            <li><i class="fas fa-phone"></i> +56 2 1234 5678</li>
-                            <li><i class="fas fa-envelope"></i> info@arreglosvictoria.cl</li>
-                            <li><i class="fas fa-clock"></i> Lunes a Domingo: 9:00 - 21:00</li>
-                        </ul>
-                    </div>
-                    <div class="contact-form">
-                        <h3>Envíanos un mensaje</h3>
-                        <form id="contactForm">
-                            <div class="form-group">
-                                <label for="name">Nombre</label>
-                                <input type="text" id="name" name="name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Mensaje</label>
-                                <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->

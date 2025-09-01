@@ -40,10 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Verificar si hay una preferencia de tema guardada
     let savedTheme = localStorage.getItem('theme');
     
-    // Si no hay preferencia guardada, detectar la preferencia del sistema
+    // Si no hay preferencia guardada, usar el modo claro por defecto
     if (!savedTheme) {
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        savedTheme = prefersDarkScheme.matches ? 'dark' : 'light';
+        savedTheme = 'light';
         localStorage.setItem('theme', savedTheme);
     }
     

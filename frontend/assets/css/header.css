@@ -143,6 +143,38 @@ nav ul li a.active {
                 border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
                 transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+}
+
+.nav-icon:hover {
+    background-color: rgba(46, 125, 50, 0.1);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.nav-icon:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.nav-icon i {
+    transition: all 0.3s ease;
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .nav-icon {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .nav-icon:hover {
+    background-color: rgba(46, 125, 50, 0.2);
+    color: var(--primary);
 }
 
 /* User Info */
@@ -157,10 +189,24 @@ nav ul li a.active {
     border-radius: var(--border-radius);
     transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     gap: 0.5rem;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
 }
 
 .user-info:hover {
-    background-color: var(--hover-bg);
+    background-color: rgba(46, 125, 50, 0.1);
+    color: var(--primary);
+}
+
+.user-info:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.user-info i {
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
 }
 
 .user-info img {
@@ -179,6 +225,15 @@ nav ul li a.active {
     text-overflow: ellipsis;
     white-space: nowrap;
     transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] .user-info {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .user-info:hover {
+    background-color: rgba(46, 125, 50, 0.2);
+    color: var(--primary);
 }
 
 .user-info:hover img {
@@ -264,6 +319,7 @@ body[data-theme="dark"] .header-button:hover {
     font-weight: 600;
     transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
                 color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes badge-pulse {
@@ -281,80 +337,59 @@ body[data-theme="dark"] .header-button:hover {
     }
 }
 
-.cart-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: var(--danger);
-    color: var(--white);
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.6rem;
-    font-weight: 600;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: badge-pulse 2s infinite;
+[data-theme="dark"] .cart-count {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-@keyframes badge-pulse {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.1);
-        opacity: 0.8;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* User Dropdown Menu */
+/* User Dropdown */
 .user-dropdown {
     position: absolute;
-    top: calc(100% + 10px);
+    top: 100%;
     right: 0;
-    background: var(--bg-card);
+    background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow);
-    padding: var(--spacing-md) 0;
     min-width: 200px;
     z-index: 999999999;
     display: none;
+    flex-direction: column;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
     transform: translateY(0);
-    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--text-color);
-    overflow: visible;
-    isolation: isolate;
+    overflow: hidden;
     pointer-events: auto;
-    margin: 0;
     contain: layout style paint;
     will-change: transform, opacity, visibility;
-    background-clip: border-box;
+}
+
+.user-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--border-color);
+}
+
+[data-theme="dark"] .user-dropdown {
+    background-color: var(--dark-bg);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
 }
 
 .user-dropdown.show {
-    display: block;
+    display: flex;
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
-}
-
-.user-dropdown.hide {
-    display: none;
-    opacity: 0;
-    transform: translateY(-10px);
-    visibility: hidden;
 }
 
 .user-dropdown li {
@@ -367,37 +402,31 @@ body[data-theme="dark"] .header-button:hover {
 .user-dropdown a {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: var(--spacing-md) calc(var(--spacing-lg) + 5px);
-    color: var(--text-secondary);
+    padding: 0.75rem 1rem;
+    color: var(--text-color);
     text-decoration: none;
-    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: auto;
-    position: relative;
-    z-index: 1;
-    isolation: isolate;
+    transition: background-color 0.3s ease;
+    gap: 0.75rem;
     width: 100%;
     box-sizing: border-box;
 }
 
 .user-dropdown a:hover {
-    background: var(--hover-bg);
+    background-color: rgba(46, 125, 50, 0.1);
     color: var(--primary);
 }
 
-body[data-theme="dark"] .user-dropdown {
-    background-color: var(--bg-card);
-    border-color: var(--border-color);
-    color: var(--text-color);
+.user-dropdown a i {
+    width: 20px;
+    text-align: center;
 }
 
-body[data-theme="dark"] .user-dropdown a {
-    color: var(--text-color);
+[data-theme="dark"] .user-dropdown a {
+    color: var(--dark-text);
 }
 
-body[data-theme="dark"] .user-dropdown a:hover {
-    background-color: var(--hover-bg);
+[data-theme="dark"] .user-dropdown a:hover {
+    background-color: rgba(46, 125, 50, 0.2);
     color: var(--primary);
 }
 
