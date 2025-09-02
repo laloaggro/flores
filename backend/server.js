@@ -61,8 +61,13 @@ app.use((req, res, next) => {
     next();
 });
 
-// Servir archivos estáticos
+// Ruta para servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Servir el archivo utils.js con la ruta correcta
+app.get('/components/assets/js/utils.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/assets/js/utils.js'));
+});
 
 // Importar manejador de errores
 const { globalErrorHandler } = require('./middleware/errorHandler');
@@ -130,6 +135,24 @@ const server = app.listen(PORT, () => {
     const message = `🚀 Servidor backend corriendo en http://localhost:${PORT}`;
     logInfo(message);
     console.log(message);
+}).on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        const message = `❌ El puerto ${PORT} está ocupado. Intentando con el puerto ${PORT + 1}...`;
+        logError(message, err);
+        console.error(message);
+        
+        // Intentar con el siguiente puerto
+        app.listen(PORT + 1, () => {
+            const newMessage = `🚀 Servidor backend corriendo en http://localhost:${PORT + 1}`;
+            logInfo(newMessage);
+            console.log(newMessage);
+        });
+    } else {
+        const message = `❌ Error al iniciar el servidor: ${err.message}`;
+        logError(message, err);
+        console.error(message);
+        process.exit(1);
+    }
 });
 
 // Manejo de errores no capturados
@@ -139,9 +162,13 @@ process.on('uncaughtException', (err) => {
     console.error(message, err);
     
     // Cerrar el servidor y salir
-    server.close(() => {
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        });
+    } else {
         process.exit(1);
-    });
+    }
 });
 
 process.on('unhandledRejection', (reason, promise) => {

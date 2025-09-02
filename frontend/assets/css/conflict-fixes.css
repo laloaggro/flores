@@ -206,8 +206,8 @@ body[data-theme="dark"] .alert {
 
 /* Asegurar visibilidad de elementos de pie de página */
 footer {
-  background-color: var(--dark) !important;
-  color: var(--white) !important;
+  background-color: var(--light-50) !important; /* Fondo blanco en modo claro */
+  color: var(--text-color) !important;
 }
 
 body[data-theme="dark"] footer {

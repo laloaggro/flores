@@ -1,5 +1,21 @@
 class Footer extends HTMLElement {
   connectedCallback() {
+    // Verificar si Font Awesome ya está cargado
+    const isFontAwesomeLoaded = document.querySelector('link[href*="font-awesome"]') || 
+                               document.querySelector('link[href*="fontawesome"]') ||
+                               document.querySelector('link[href*="cdnjs.cloudflare.com/ajax/libs/font-awesome"]');
+    
+    // Si Font Awesome no está cargado, cargarlo
+    if (!isFontAwesomeLoaded) {
+      const fontAwesomeLink = document.createElement('link');
+      fontAwesomeLink.rel = 'stylesheet';
+      fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+      fontAwesomeLink.integrity = 'sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==';
+      fontAwesomeLink.crossOrigin = 'anonymous';
+      fontAwesomeLink.referrerPolicy = 'no-referrer';
+      document.head.appendChild(fontAwesomeLink);
+    }
+    
     this.innerHTML = `
       <footer class="site-footer" role="contentinfo">
         <div class="container">

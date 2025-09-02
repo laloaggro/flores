@@ -18,6 +18,9 @@ global.showNotification = jest.fn();
 // Mock de fetch
 global.fetch = jest.fn();
 
+// Importar funciones reales de autenticación
+import { isAuthenticated, logout } from '../../frontend/assets/js/auth.js';
+
 describe('Auth Functionality', () => {
   beforeEach(() => {
     jest.resetModules();
@@ -41,11 +44,8 @@ describe('Auth Functionality', () => {
       return null;
     });
 
-    // Importar el módulo de autenticación
-    const authModule = require('../../../frontend/assets/js/auth.js');
-    
     // Verificar que la función isAuthenticated exista
-    expect(typeof authModule.isAuthenticated).toBe('function');
+    expect(typeof isAuthenticated).toBe('function');
   });
 
   test('debería detectar cuando el usuario no está autenticado', () => {
@@ -54,11 +54,8 @@ describe('Auth Functionality', () => {
       return null;
     });
 
-    // Importar el módulo de autenticación
-    const authModule = require('../../../frontend/assets/js/auth.js');
-    
     // Verificar que la función isAuthenticated exista
-    expect(typeof authModule.isAuthenticated).toBe('function');
+    expect(typeof isAuthenticated).toBe('function');
   });
 
   test('debería detectar cuando el token ha expirado', () => {
@@ -75,11 +72,8 @@ describe('Auth Functionality', () => {
       return null;
     });
 
-    // Importar el módulo de autenticación
-    const authModule = require('../../../frontend/assets/js/auth.js');
-    
     // Verificar que la función isAuthenticated exista
-    expect(typeof authModule.isAuthenticated).toBe('function');
+    expect(typeof isAuthenticated).toBe('function');
   });
 
   test('debería realizar el logout correctamente', () => {
@@ -106,11 +100,8 @@ describe('Auth Functionality', () => {
       return null;
     });
 
-    // Importar el módulo de autenticación
-    const authModule = require('../../../frontend/assets/js/auth.js');
-    
     // Verificar que la función isAuthenticated exista
-    expect(typeof authModule.isAuthenticated).toBe('function');
+    expect(typeof isAuthenticated).toBe('function');
   });
 
   test('debería manejar correctamente tokens sin payload', () => {
@@ -122,11 +113,8 @@ describe('Auth Functionality', () => {
       return null;
     });
 
-    // Importar el módulo de autenticación
-    const authModule = require('../../../frontend/assets/js/auth.js');
-    
     // Verificar que la función isAuthenticated exista
-    expect(typeof authModule.isAuthenticated).toBe('function');
+    expect(typeof isAuthenticated).toBe('function');
   });
 
   test('debería manejar correctamente payloads sin expiración', () => {
@@ -141,10 +129,7 @@ describe('Auth Functionality', () => {
       return null;
     });
 
-    // Importar el módulo de autenticación
-    const authModule = require('../../../frontend/assets/js/auth.js');
-    
     // Verificar que la función isAuthenticated exista
-    expect(typeof authModule.isAuthenticated).toBe('function');
+    expect(typeof isAuthenticated).toBe('function');
   });
 });

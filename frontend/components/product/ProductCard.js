@@ -1,114 +1,95 @@
-const PLACEHOLDER_IMAGE = './assets/images/placeholder.svg';
+import { formatPrice } from '../assets/js/utils.js';
 
+/**
+ * Componente para mostrar una tarjeta de producto
+ * Muestra la imagen, nombre, descripción y precio de un producto
+ * Incluye un botón para agregar al carrito
+ * 
+ * Puede usarse como elemento personalizado <product-card></product-card>
+ * o programáticamente creando una instancia de la clase ProductCard
+ */
 class ProductCard extends HTMLElement {
+  constructor() {
+    super();
+    this._product = null;
+  }
+
+  /**
+   * Método llamado cuando el elemento es conectado al DOM
+   * Renderiza el contenido del producto si está disponible
+   */
+  connectedCallback() {
+    // Si no hay producto definido, mostrar un mensaje de error
+    if (!this._product) {
+      this.innerHTML = `
+        <div class="product-card error">
+          <p>Error: No se ha definido un producto para mostrar</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Renderizar el contenido del producto
+    this.innerHTML = `
+      <div class="product-card">
+        <div class="product-image">
+          ${ProductCard.renderImage(
+            this._product.image_url || this._product.image,
+            this._product.name
+          )}
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">${this._product.name}</h3>
+          <p class="product-description">${this._product.description || 'Sin descripción disponible'}</p>
+          <div class="product-price">${formatPrice(parseFloat(this._product.price || 0))}</div>
+          <button class="btn btn-primary add-to-cart" data-product-id="${this._product.id}">
+            <i class="fas fa-shopping-cart"></i> Agregar al carrito
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Renderiza la imagen del producto con fallback
+   * @param {string} imageUrl - URL de la imagen del producto
+   * @param {string} productName - Nombre del producto (para el atributo alt)
+   * @returns {string} HTML de la imagen del producto
+   */
+  static renderImage(imageUrl, productName) {
+    // Determinar la URL de la imagen con fallback
+    let finalImageUrl = './assets/images/placeholder.svg';
     
-    /**
-     * Renderiza la imagen del producto con manejo de errores
-     * @param {string} imageUrl - URL de la imagen
-     * @param {string} altText - Texto alternativo
-     * @returns {string} HTML de la imagen
-     */
-    static renderImage(imageUrl, altText) {
-        // Asegurarse de que la ruta de la imagen sea correcta
-        let correctImageUrl = imageUrl;
-        if (imageUrl && imageUrl.startsWith('/assets/images/')) {
-            correctImageUrl = `.${imageUrl}`;
-        } else if (imageUrl && imageUrl.startsWith('assets/images/')) {
-            correctImageUrl = `./${imageUrl}`;
-        } else if (imageUrl && !imageUrl.startsWith('./assets/images/') && !imageUrl.startsWith('http')) {
-            // Si la imagen no es una URL completa ni una ruta relativa correcta, usar el placeholder
-            correctImageUrl = PLACEHOLDER_IMAGE;
-        }
-        
-        // Si no hay imagen, usar el placeholder
-        if (!correctImageUrl) {
-            correctImageUrl = PLACEHOLDER_IMAGE;
-        }
-        
-        return `
-            <img 
-                src="${correctImageUrl}" 
-                alt="${altText}" 
-                loading="lazy" 
-                width="300" 
-                height="200"
-                onerror="this.src='${PLACEHOLDER_IMAGE}'; this.onerror = null;">
-        `;
+    if (imageUrl) {
+      // Asegurarse de que la ruta de la imagen sea correcta
+      if (imageUrl.startsWith('/assets/images/')) {
+        finalImageUrl = `.${imageUrl}`;
+      } else if (imageUrl.startsWith('assets/images/')) {
+        finalImageUrl = `./${imageUrl}`;
+      } else if (imageUrl.startsWith('./assets/images/') || imageUrl.startsWith('http')) {
+        finalImageUrl = imageUrl;
+      }
     }
     
-    /**
-     * Se ejecuta cuando el elemento se conecta al DOM
-     * Renderiza el contenido de la tarjeta de producto
-     */
-    connectedCallback() {
-        // Verificar si ya se ha renderizado el contenido
-        if (this.hasAttribute('rendered')) {
-            return;
-        }
+    return `<img src="${finalImageUrl}" alt="${productName}" onerror="this.src='./assets/images/placeholder.svg'">`;
+  }
 
-        const product = this.product;
-        
-        // Marcar como renderizado
-        this.setAttribute('rendered', '');
+  /**
+   * Obtiene la información del producto
+   * @returns {Object} Información del producto
+   */
+  get product() {
+    return this._product;
+  }
 
-        // Si no hay producto, mostrar una tarjeta vacía o con contenido de carga
-        if (!product) {
-            this.innerHTML = `
-                <div class="product-card">
-                    <div class="product-image">
-                        ${ProductCard.renderImage(PLACEHOLDER_IMAGE, 'Producto no disponible')}
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Producto no disponible</h3>
-                        <p class="product-description">La información del producto no está disponible en este momento.</p>
-                        <div class="product-price">-</div>
-                        <button class="btn btn-primary add-to-cart" disabled>
-                            <i class="fas fa-shopping-cart"></i> Agregar al carrito
-                        </button>
-                    </div>
-                </div>
-            `;
-            return;
-        }
-
-        // Renderizar el contenido del producto
-        this.innerHTML = `
-            <div class="product-card">
-                <div class="product-image">
-                    ${ProductCard.renderImage(
-                        product.image_url || product.image,
-                        product.name
-                    )}
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.name}</h3>
-                    <p class="product-description">${product.description || 'Sin descripción disponible'}</p>
-                    <div class="product-price">$${parseInt(product.price || 0).toLocaleString('es-CL')}</div>
-                    <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">
-                        <i class="fas fa-shopping-cart"></i> Agregar al carrito
-                    </button>
-                    // Removido el botón de wishlist ya que no estaba en el diseño original y no se usaba
-                </div>
-            </div>
-        `;
-    }
-
-    /**
-     * Obtiene la información del producto
-     * @returns {Object} Información del producto
-     */
-    get product() {
-        return this._product;
-    }
-
-    /**
-     * Establece la información del producto y actualiza la interfaz
-     * @param {Object} value - Información del producto
-     */
-    set product(value) {
-        this._product = value;
-        this.connectedCallback();
-    }
+  /**
+   * Establece la información del producto y actualiza la interfaz
+   * @param {Object} value - Información del producto
+   */
+  set product(value) {
+    this._product = value;
+    this.connectedCallback();
+  }
 }
 
 // Registrar el componente personalizado

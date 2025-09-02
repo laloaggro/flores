@@ -33,6 +33,9 @@
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "babel-jest": "^30.1.2",
     "cypress": "^13.0.0",
     "eslint": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",

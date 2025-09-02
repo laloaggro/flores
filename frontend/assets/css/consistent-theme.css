@@ -506,12 +506,18 @@ header {
 
 /* Estilos para el footer */
 footer {
-  background-color: var(--bg-secondary);
+  background-color: var(--light-50); /* Fondo blanco en modo claro */
   color: var(--text-color);
   padding: 3rem 0 1.5rem;
   border-top: 1px solid var(--border-color);
   backdrop-filter: blur(10px);
   background-clip: padding-box;
+}
+
+body[data-theme="dark"] footer {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-color);
 }
 
 .footer-content {

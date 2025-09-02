@@ -70,8 +70,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <!-- Preload critical scripts -->
-    <link rel="preload" href="components/Header.js" as="script">
-    <link rel="preload" href="components/Footer.js" as="script">
+    <link rel="preload" href="components/header/Header.js" as="script">
+    <link rel="preload" href="components/header/Footer.js" as="script">
     <link rel="preload" href="assets/js/utils.js" as="script">
     <link rel="preload" href="assets/js/cart.js" as="script">
     <link rel="preload" href="assets/js/userMenu.js" as="script">
@@ -124,17 +124,17 @@
                         <img src="assets/images/categories/plants.jpg" alt="Plantas" loading="lazy" width="300" height="200">
                         <div class="category-overlay">
                             <h3>Plantas</h3>
-                            <p>Plantas de interior y exterior para decorar tu hogar</p>
+                            <p>Plantas hermosas y duraderas para tu hogar o oficina</p>
                             <div class="category-button">
                                 <span class="btn btn-primary">Ver Plantas</span>
                             </div>
                         </div>
                     </a>
                     <a href="products.html?category=accesorios" class="category-card">
-                        <img src="assets/images/categories/accessories.jpg" alt="Accesorios florales" loading="lazy" width="300" height="200">
+                        <img src="assets/images/categories/accessories.jpg" alt="Accesorios" loading="lazy" width="300" height="200">
                         <div class="category-overlay">
-                            <h3>Accesorios florales</h3>
-                            <p>Accesorios y decoraciones para complementar tus flores</p>
+                            <h3>Accesorios</h3>
+                            <p>Accesorios florales y regalos complementarios</p>
                             <div class="category-button">
                                 <span class="btn btn-primary">Ver Accesorios</span>
                             </div>
@@ -147,14 +147,26 @@
         <!-- Productos Destacados -->
         <section class="featured-products" aria-labelledby="featured-products-heading">
             <div class="container">
-                <div class="section-header">
-                    <h2 id="featured-products-heading" class="section-title">Productos Destacados</h2>
-                    <a href="products.html" class="view-all-products">Ver todos los productos</a>
+                <h2 id="featured-products-heading" class="section-title text-center">Productos Destacados</h2>
+                <div class="products-grid" id="featuredProductsGrid">
+                    <!-- Los productos se cargarán dinámicamente -->
                 </div>
-                <div class="products-grid">
-                    <product-card id="product-1"></product-card>
-                    <product-card id="product-2"></product-card>
-                    <product-card id="product-3"></product-card>
+            </div>
+        </section>
+
+        <!-- Sobre Nosotros -->
+        <section class="about-section" aria-labelledby="about-heading">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2 id="about-heading" class="section-title">Sobre Arreglos Florales Victoria</h2>
+                        <p>Somos una florería familiar con más de 20 años de experiencia en Recoleta, dedicados a crear hermosos arreglos florales con las flores más frescas y de la mejor calidad.</p>
+                        <p>Nuestro equipo de floristas expertos trabaja con pasión para crear diseños únicos que expresen tus sentimientos más profundos en cada ocasión especial.</p>
+                        <a href="about.html" class="btn btn-secondary">Conoce más sobre nosotros</a>
+                    </div>
+                    <div class="about-image">
+                        <img src="assets/images/about-florist.jpg" alt="Nuestra florería" loading="lazy" width="500" height="400">
+                    </div>
                 </div>
             </div>
         </section>
@@ -165,9 +177,10 @@
     <site-footer></site-footer>
 
     <!-- Scripts -->
-    <script type="module" src="components/Header.js"></script>
-    <script type="module" src="components/Footer.js"></script>
-    <script type="module" src="components/ProductCard.js"></script>
+    <script type="module" src="components/header/Header.js"></script>
+    <script type="module" src="components/header/Footer.js"></script>
+    <script type="module" src="components/Testimonials.js"></script>
+    <script type="module" src="components/product/ProductCard.js"></script>
     <script type="module" src="assets/js/utils.js"></script>
     <script type="module" src="assets/js/cart.js"></script>
     <script type="module" src="assets/js/userMenu.js"></script>
@@ -177,7 +190,7 @@
     
     <!-- Script para inicializar productos destacados -->
     <script type="module">
-        import ProductCard from './components/ProductCard.js';
+        import ProductCard from './components/product/ProductCard.js';
         
         // Datos de ejemplo para productos destacados
         const featuredProducts = [
@@ -201,29 +214,23 @@
                 description: "Vibrante arreglo de girasoles frescos",
                 price: 18000,
                 image: "https://images.unsplash.com/photo-1511002208436-974ba13aa1a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 4,
+                name: "Ramo de Tulipanes",
+                description: "Colorido ramo de tulipanes de varios colores",
+                price: 14000,
+                image: "https://images.unsplash.com/photo-1511002208436-974ba13aa1a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
             }
         ];
         
-        // Inicializar productos destacados
-        featuredProducts.forEach((product, index) => {
-            const productCard = document.getElementById(`product-${index + 1}`);
-            if (productCard) {
-                productCard.product = product;
-            }
-        });
-    </script>
-    
-    <!-- Asegurar que el tema se aplique correctamente -->
-    <script>
-        // Si theme.js no establece el tema, usamos un script de respaldo
-        document.addEventListener('DOMContentLoaded', function() {
-            const html = document.documentElement;
-            const theme = localStorage.getItem('theme') || 'light';
-            html.setAttribute('data-theme', theme);
-            if (theme === 'dark') {
-                html.classList.add('dark');
-            }
-        });
+        // Renderizar productos destacados
+        const featuredProductsGrid = document.getElementById('featuredProductsGrid');
+        if (featuredProductsGrid) {
+            featuredProductsGrid.innerHTML = featuredProducts.map(product => 
+                `<product-card data-product='${JSON.stringify(product)}'></product-card>`
+            ).join('');
+        }
     </script>
 </body>
 </html>
