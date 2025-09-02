@@ -385,19 +385,23 @@ class Products extends HTMLElement {
   }
 
   /**
-   * Renderiza una tarjeta de producto
-   * @param {Object} product - Información del producto
-   * @returns {string} HTML de la tarjeta de producto
+   * Renderiza una tarjeta de producto individual
+   * @param {Object} product - Objeto con la información del producto
+   * @returns {string} HTML de la tarjeta del producto
    */
   renderProductCard(product) {
-    // Asegurarse de que la ruta de la imagen sea correcta
+    // Determinar la URL de la imagen
     let imageUrl = product.image_url || product.image || './assets/images/placeholder.svg';
+    
+    // Asegurar que la URL de la imagen sea correcta
     if (imageUrl.startsWith('/assets/images/')) {
       imageUrl = `.${imageUrl}`;
     } else if (imageUrl.startsWith('assets/images/')) {
       imageUrl = `./${imageUrl}`;
-    } else if (!imageUrl.startsWith('./assets/images/') && !imageUrl.startsWith('http')) {
-      // Si la imagen no es una URL completa ni una ruta relativa correcta, usar el placeholder
+    }
+    
+    // Si la imagen aún no es válida, usar el placeholder
+    if (!imageUrl || imageUrl === 'null' || imageUrl === 'undefined') {
       imageUrl = './assets/images/placeholder.svg';
     }
     
@@ -410,9 +414,10 @@ class Products extends HTMLElement {
             loading="lazy" 
             width="300" 
             height="200"
+            style="background-color: transparent;"
             onerror="this.src='./assets/images/placeholder.svg'; this.onerror=null;">
         </div>
-        <div class="product-info">
+        <div class="product-info" style="background-color: white;">
           <h3 class="product-title">${product.name}</h3>
           <p class="product-description">${product.description}</p>
           <div class="product-price">${formatPrice(parseFloat(product.price))}</div>

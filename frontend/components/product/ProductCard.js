@@ -38,7 +38,7 @@ class ProductCard extends HTMLElement {
             this._product.name
           )}
         </div>
-        <div class="product-info">
+        <div class="product-info" style="background-color: white;">
           <h3 class="product-title">${this._product.name}</h3>
           <p class="product-description">${this._product.description || 'Sin descripción disponible'}</p>
           <div class="product-price">${formatPrice(parseFloat(this._product.price || 0))}</div>
@@ -71,7 +71,7 @@ class ProductCard extends HTMLElement {
       }
     }
     
-    return `<img src="${finalImageUrl}" alt="${productName}" onerror="this.src='./assets/images/placeholder.svg'">`;
+    return `<img src="${finalImageUrl}" alt="${productName}" style="background-color: transparent;" onerror="this.src='./assets/images/placeholder.svg'">`;
   }
 
   /**
