@@ -1,22 +1,26 @@
 // admin.js - Funcionalidad del panel de administración
-import { API_BASE_URL, isAuthenticated, isAdmin, logout, showNotification, getAuthToken } from './utils.js';
-import UserMenu from './userMenu.js';
+import { API_BASE_URL, isAuthenticated, isAdmin, logout, showNotification, getAuthToken } from '../utils/utils.js';
+import UserMenu from '../ui/userMenu.js';
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Verificar autenticación
-    if (!isAuthenticated()) {
-        window.location.href = '../login.html';
-        return;
-    }
-    
-    // Verificar rol de administrador
-    if (!isAdmin()) {
-        window.location.href = '../index.html';
+// Función para inicializar la página de administración
+async function initializeAdmin() {
+    // Verificar autenticación y rol de administrador
+    if (!isAuthenticated() || !isAdmin()) {
+        window.location.href = '/login.html';
         return;
     }
     
     // Inicializar el menú de usuario
     UserMenu.init();
+    
+    // Cargar datos del dashboard
+    await loadDashboardData();
+    
+    console.log('✅ Página de administración inicializada');
+}
+
+// Exportar función de inicialización
+export { initializeAdmin };
     
     // Configurar el evento de logout
     const logoutLink = document.getElementById('logoutLink');
@@ -133,17 +137,33 @@ function setupNavigationButtons() {
 async function loadDashboardData() {
     try {
         const token = getAuthToken();
-        // En una implementación real, esto cargaría datos reales desde la API
-        console.log('Cargando datos del dashboard...');
         
-        // Simular carga de datos
-        setTimeout(() => {
-            console.log('Datos del dashboard cargados');
-        }, 1000);
+        // Llamada a la API para obtener datos del dashboard
+        const response = await fetch(`${API_BASE_URL}/admin/dashboard`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al cargar datos del dashboard');
+        }
+
+        const data = await response.json();
+        updateDashboardUI(data);
     } catch (error) {
         console.error('Error al cargar datos del dashboard:', error);
         showNotification('Error al cargar datos del dashboard', 'error');
     }
+}
+
+// Función para actualizar la interfaz del dashboard
+function updateDashboardUI(data) {
+    // Actualizar estadísticas
+    document.getElementById('totalProducts').textContent = data.totalProducts || 0;
+    document.getElementById('totalOrders').textContent = data.totalOrders || 0;
+    document.getElementById('totalUsers').textContent = data.totalUsers || 0;
+    document.getElementById('pendingOrders').textContent = data.pendingOrders || 0;
 }
 
 // Función para mostrar estadísticas en un modal

@@ -13,6 +13,14 @@ export default defineConfig({
     outDir: '../dist',
     emptyOutDir: true,
     rollupOptions: {
+      external: [
+        'components/Header.js',
+        'components/Footer.js',
+        'components/Testimonials.js',
+        'components/product/Products.js',
+        'components/product/ProductCard.js',
+        'components/cart/CartItem.js'
+      ],
       input: {
         main: resolve(__dirname, 'frontend/index.html'),
         about: resolve(__dirname, 'frontend/about.html'),

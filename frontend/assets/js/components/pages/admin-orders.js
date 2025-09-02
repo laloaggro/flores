@@ -1,28 +1,19 @@
 // admin-orders.js - Manejo de la página de gestión de pedidos del administrador
-import { initUserMenu, logout } from './auth.js';
-import { API_BASE_URL, isAuthenticated, isAdmin, getAuthToken, showNotification } from './utils.js';
+import { initUserMenu } from '../auth.js';
+import { API_BASE_URL, isAuthenticated, isAdmin, getAuthToken, showNotification } from '../utils.js';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Verificar autenticación y rol de administrador
+    if (!isAuthenticated() || !isAdmin()) {
+        window.location.href = '/login.html';
+        return;
+    }
+
     // Inicializar menú de usuario
     initUserMenu();
     
-    // Verificar autenticación
-    if (!isAuthenticated()) {
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    // Verificar rol de administrador
-    if (!isAdmin()) {
-        window.location.href = 'index.html';
-        return;
-    }
-    
-    // Cargar todos los pedidos
-    loadAllOrders();
-    
-    // Configurar eventos
-    setupEventListeners();
+    // Cargar pedidos
+    await loadOrders();
 });
 
 // Configurar eventos
@@ -69,31 +60,29 @@ function setupEventListeners() {
     });
 }
 
-// Cargar todos los pedidos
-async function loadAllOrders() {
+// Cargar pedidos
+async function loadOrders() {
     try {
-        // Mostrar indicador de carga
-        document.getElementById('ordersList').innerHTML = '<tr><td colspan="6" class="text-center">Cargando pedidos...</td></tr>';
-        
-        // En una implementación real, esto cargaría datos desde la API
-        // const response = await fetch(`${API_BASE_URL}/api/orders`, {
-        //     headers: {
-        //         'Authorization': `Bearer ${getAuthToken()}`
-        //     }
-        // });
-        // const orders = await response.json();
-        
-        // Generar pedidos de ejemplo (simulación)
-        const orders = generateMockOrders();
-        
-        // Simular demora de red
-        setTimeout(() => {
-            renderOrders(orders);
-        }, 500);
-        
+        const token = getAuthToken();
+        const response = await fetch(`${API_BASE_URL}/admin/orders`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al cargar pedidos');
+        }
+
+        const orders = await response.json();
+        renderOrders(orders);
     } catch (error) {
         console.error('Error al cargar pedidos:', error);
-        document.getElementById('ordersList').innerHTML = '<tr><td colspan="6" class="text-center">Error al cargar los pedidos. Por favor, intenta nuevamente.</td></tr>';
+        const ordersContainer = document.getElementById('ordersContainer');
+        if (ordersContainer) {
+            ordersContainer.innerHTML = '<p>Error al cargar pedidos. Por favor, intenta nuevamente.</p>';
+        }
+        showNotification('Error al cargar pedidos', 'error');
     }
 }
 
@@ -138,31 +127,33 @@ function generateMockOrders() {
     ];
 }
 
-// Renderizar pedidos en la tabla
+// Renderizar pedidos
 function renderOrders(orders) {
-    const ordersList = document.getElementById('ordersList');
-    
+    const ordersContainer = document.getElementById('ordersContainer');
+    if (!ordersContainer) return;
+
     if (!orders || orders.length === 0) {
-        ordersList.innerHTML = '<tr><td colspan="6" class="text-center">No se encontraron pedidos.</td></tr>';
+        ordersContainer.innerHTML = '<p>No hay pedidos disponibles.</p>';
         return;
     }
-    
-    ordersList.innerHTML = orders.map(order => `
-        <tr>
-            <td>#${order.id}</td>
-            <td>${new Date(order.date).toLocaleDateString('es-CL')}</td>
-            <td>${order.customer}</td>
-            <td>$${order.total.toLocaleString('es-CL')}</td>
-            <td><span class="order-status ${order.status}">${getStatusLabel(order.status)}</span></td>
-            <td>
-                <button class="btn-small btn-secondary" onclick="viewOrderDetails('${order.id}')">
-                    <i class="fas fa-eye"></i> Ver
-                </button>
-                <button class="btn-small btn-primary" onclick="editOrderStatus('${order.id}', '${order.status}')">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-            </td>
-        </tr>
+
+    ordersContainer.innerHTML = orders.map(order => `
+        <div class="order-card">
+            <div class="order-header">
+                <h3>Pedido #${order.id}</h3>
+                <span class="order-status ${order.status}">${order.status}</span>
+            </div>
+            <div class="order-details">
+                <p><strong>Cliente:</strong> ${order.customerName}</p>
+                <p><strong>Fecha:</strong> ${new Date(order.date).toLocaleDateString()}</p>
+                <p><strong>Total:</strong> $${order.total}</p>
+            </div>
+            <div class="order-actions">
+                <button onclick="updateOrderStatus(${order.id}, 'processing')" class="btn btn-secondary">Procesando</button>
+                <button onclick="updateOrderStatus(${order.id}, 'shipped')" class="btn btn-warning">Enviado</button>
+                <button onclick="updateOrderStatus(${order.id}, 'delivered')" class="btn btn-success">Entregado</button>
+            </div>
+        </div>
     `).join('');
 }
 
@@ -280,6 +271,10 @@ function filterOrders() {
     });
 }
 
-// Exportar funciones para uso en otros archivos
-window.editOrderStatus = editOrderStatus;
-window.viewOrderDetails = viewOrderDetails;
+// Función para inicializar la página de pedidos de administración
+function initializeAdminOrders() {
+    console.log('✅ Página de pedidos de administración inicializada');
+}
+
+// Exportar función de inicialización
+export { initializeAdminOrders };

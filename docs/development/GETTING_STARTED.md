@@ -23,12 +23,20 @@ npm install
 Para iniciar el servidor de desarrollo:
 
 ```bash
-npm run dev
+# Método 1: Usar script de inicio (recomendado)
+./start-dev.sh
+
+# Método 2: Iniciar servicios por separado
+# Terminal 1: Iniciar backend
+cd backend && node server.js
+
+# Terminal 2: Iniciar frontend
+npx vite
 ```
 
 Esto iniciará:
-- El servidor backend en el puerto 3000
-- El servidor de desarrollo de Vite con recarga en caliente
+- El servidor backend en el puerto 5000
+- El servidor de desarrollo de Vite con recarga en caliente en el puerto 3000
 
 ## Estructura del Proyecto
 
@@ -48,8 +56,11 @@ floreria-arreglos-victoria/
 ### Desarrollo
 
 ```bash
-# Iniciar servidor de desarrollo
-npm run dev
+# Iniciar servidor de desarrollo (ambos servicios)
+./start-dev.sh
+
+# Iniciar solo el frontend con Vite
+npx vite
 
 # Construir para producción
 npm run build
@@ -111,4 +122,25 @@ git commit -m "Agregar nueva funcionalidad"
 3. Subir cambios y crear pull request:
 ```bash
 git push origin feature/nueva-funcionalidad
+```
+
+## Solución de Problemas
+
+### Problemas comunes con Vite
+
+El proceso de empaquetado con Vite puede encontrar problemas con las rutas relativas de los componentes web. Esto es normal ya que los componentes web personalizados no se procesan de la misma manera que los módulos ES6.
+
+Si encuentras errores durante el empaquetado:
+1. Verifica que las rutas en los HTML sean correctas
+2. Asegúrate de que los componentes web estén correctamente registrados
+3. Considera migrar componentes web a módulos ES6 si es posible
+
+### Problemas de puertos
+
+Si los puertos 5000 o 3000 están en uso:
+1. El script `start-dev.sh` intentará detener los procesos automáticamente
+2. También puedes detenerlos manualmente:
+```bash
+lsof -ti:5000 | xargs kill -9
+lsof -ti:3000 | xargs kill -9
 ```

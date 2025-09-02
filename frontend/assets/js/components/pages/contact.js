@@ -1,115 +1,68 @@
-// contact.js - Manejo del formulario de contacto
+// contact.js - Funcionalidad de la página de contacto
+
+// Importar utilidades
+import { showNotification, API_BASE_URL } from '../utils/utils.js';
 
 // Importar UserMenu
-import UserMenu from './userMenu.js';
+import UserMenu from '../ui/userMenu.js';
 
 // Función para manejar el envío del formulario de contacto
-async function handleContactFormSubmission(event) {
-    event.preventDefault();
+async function handleContactFormSubmit(e) {
+    e.preventDefault();
     
-    const form = event.target;
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton.innerHTML;
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
     
-    // Deshabilitar botón y mostrar carga
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<span class="loading"></span> Enviando...';
-    
-    // Obtener datos del formulario
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    
-    // Agregar token CSRF si existe
-    const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
-    if (csrfTokenMeta) {
-        data._token = csrfTokenMeta.getAttribute('content');
-    }
+    // Deshabilitar botón y mostrar indicador de carga
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
     
     try {
+        // Obtener datos del formulario
+        const formData = new FormData(form);
+        const contactData = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            subject: formData.get('subject'),
+            message: formData.get('message')
+        };
+        
+        // Validar datos
+        if (!contactData.name || !contactData.email || !contactData.message) {
+            showNotification('Por favor complete todos los campos requeridos', 'error');
+            return;
+        }
+        
         // Enviar datos al servidor
-        const response = await fetch('/api/contact', {
+        const response = await fetch(`${API_BASE_URL}/contact`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(contactData)
         });
         
+        const result = await response.json();
+        
         if (response.ok) {
-            // Mostrar éxito
             showNotification('Mensaje enviado correctamente. Nos pondremos en contacto pronto.', 'success');
             form.reset();
         } else {
-            // Mostrar error
-            const errorData = await response.json();
-            showNotification(errorData.message || 'Error al enviar el mensaje. Por favor, inténtelo de nuevo.', 'error');
+            throw new Error(result.message || 'Error al enviar el mensaje');
         }
     } catch (error) {
-        // Mostrar error de red
-        showNotification('Error de conexión. Por favor, verifique su conexión a internet e inténtelo de nuevo.', 'error');
+        console.error('Error al enviar el formulario de contacto:', error);
+        showNotification(error.message || 'Error al enviar el mensaje. Por favor intente nuevamente.', 'error');
     } finally {
         // Rehabilitar botón
-        submitButton.disabled = false;
-        submitButton.innerHTML = originalButtonText;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
     }
 }
 
-// Función para mostrar notificaciones
-function showNotification(message, type = 'info') {
-    // Crear elemento de notificación
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    notification.setAttribute('role', 'alert');
-    notification.setAttribute('aria-live', 'assertive');
-    
-    // Agregar estilo
-    Object.assign(notification.style, {
-        position: 'fixed',
-        top: '20px',
-        right: '20px',
-        padding: '15px 20px',
-        borderRadius: '5px',
-        color: 'white',
-        fontWeight: 'bold',
-        zIndex: '10000',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        opacity: '0',
-        transform: 'translateY(-20px)',
-        transition: 'opacity 0.3s, transform 0.3s'
-    });
-    
-    // Estilos por tipo
-    if (type === 'success') {
-        notification.style.backgroundColor = '#2e7d32';
-    } else if (type === 'error') {
-        notification.style.backgroundColor = '#c62828';
-    } else if (type === 'warning') {
-        notification.style.backgroundColor = '#ef6c00';
-    } else {
-        notification.style.backgroundColor = '#2196f3';
-    }
-    
-    // Agregar al documento
-    document.body.appendChild(notification);
-    
-    // Animar entrada
-    setTimeout(() => {
-        notification.style.opacity = '1';
-        notification.style.transform = 'translateY(0)';
-    }, 100);
-    
-    // Eliminar después de 3 segundos
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateY(-20px)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
-}
+// Función para mostrar notificaciones ya está importada desde '../utils/utils.js'
 
 // Función para validar el formulario
 function validateContactForm(form) {
@@ -218,26 +171,21 @@ function addCSRFTokenToForms() {
     });
 }
 
-// Inicializar cuando se carga el DOM
-document.addEventListener('DOMContentLoaded', () => {
+// Función para inicializar la página de contacto
+function initializeContactForm() {
     // Inicializar UserMenu
     UserMenu.init();
     
-    // Añadir token CSRF a los formularios
-    addCSRFTokenToForms();
-    
-    // Agregar evento al formulario de contacto
+    // Obtener formulario de contacto
     const contactForm = document.getElementById('contactForm');
+    
+    // Añadir event listener para el envío del formulario
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            // Validar formulario
-            if (!validateContactForm(contactForm)) {
-                e.preventDefault();
-                return;
-            }
-            
-            // Manejar envío
-            handleContactFormSubmission(e);
-        });
+        contactForm.addEventListener('submit', handleContactFormSubmit);
     }
-});
+    
+    console.log('✅ Página de contacto inicializada');
+}
+
+// Exportar función de inicialización
+export { initializeContactForm };
