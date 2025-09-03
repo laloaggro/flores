@@ -15,6 +15,8 @@ import { initializeLazyLoading } from './components/utils/lazyLoad.js';
 import { initializeUserMenu } from './components/utils/userMenu.js';
 import webAnalytics from './components/analytics/WebAnalytics.js';
 import stateManager from './components/utils/stateManager.js';
+import { preconnectToCDN } from './components/utils/imageOptimizer.js';
+import { preconnectToCdn } from '../../../config/cdn.config.js';
 
 // Importar componentes de página
 import { initializeHomeProducts } from './components/pages/homeProducts.js';
@@ -71,6 +73,12 @@ async function initializeApp() {
         
         // Esperar a que los componentes se carguen
         await waitForComponents();
+        
+        // Preconectar a CDN
+        preconnectToCdn();
+        preconnectToCDN('https://cdnjs.cloudflare.com');
+        preconnectToCDN('https://fonts.googleapis.com');
+        preconnectToCDN('https://fonts.gstatic.com');
         
         // Inicializar utilidades
         initializeTheme();

@@ -44,10 +44,14 @@ flores-1/
 │   └── prod-config.json     # Configuración de producción
 ├── dist/                    # Archivos compilados para producción
 ├── docs/                    # Documentación adicional del proyecto
+│   └── migration-to-react.md # Guía de migración a React
 ├── backup/                  # Componentes y archivos en backup
 │   ├── components/          # Componentes no utilizados
 │   └── COMPONENTES_BACKUP.md # Registro de componentes en backup
 ├── scripts/                 # Scripts de utilidad
+│   └── optimize-images.js    # Script para optimización de imágenes
+├── config/                  # Archivos de configuración
+│   └── cdn.config.js         # Configuración de CDN
 ├── tests/                   # Pruebas del sistema
 └── jest.config.js           # Configuración de Jest
 ```
@@ -163,6 +167,12 @@ Se ha implementado un sistema de notificaciones push utilizando Service Workers.
 ### 12. Validación de formularios mejorada
 Se ha creado un componente para validación robusta de formularios con mejoras de accesibilidad.
 
+### 13. Optimización de imágenes
+Se ha creado un script para optimizar imágenes y prepararlas para servir desde un CDN.
+
+### 14. Configuración de CDN
+Se ha implementado una configuración para integrar un CDN con el sitio web.
+
 ## Componentes Principales
 
 ### Componentes Web
@@ -235,6 +245,8 @@ El sistema de autenticación permite:
 12. **Estado global**: Sistema de estado global para compartir datos
 13. **Notificaciones**: Sistema de notificaciones push
 14. **Validación**: Sistema de validación de formularios robusto
+15. **Optimización de imágenes**: Proceso para optimizar imágenes
+16. **CDN**: Configuración para servir recursos desde un CDN
 
 ## Problemas Conocidos
 
@@ -252,3 +264,5 @@ El sistema de autenticación permite:
 6. Añadir más opciones de autenticación (Facebook, etc.)
 7. Implementar notificaciones push reales con un servicio como Firebase
 8. Migrar a un framework más avanzado como React o Vue
+9. Implementar Server-Side Rendering (SSR) para mejor SEO
+10. Añadir internacionalización (i18n) para múltiples idiomas
