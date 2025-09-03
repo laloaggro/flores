@@ -13,6 +13,7 @@ import '../css/combined.css';
 import { initializeTheme } from './components/utils/theme.js';
 import { initializeLazyLoading } from './components/utils/lazyLoad.js';
 import { initializeUserMenu } from './components/utils/userMenu.js';
+import webAnalytics from './components/analytics/WebAnalytics.js';
 
 // Importar componentes de página
 import { initializeHomeProducts } from './components/pages/homeProducts.js';
@@ -74,6 +75,12 @@ async function initializeApp() {
         initializeTheme();
         initializeLazyLoading();
         initializeUserMenu();
+        
+        // Inicializar sistema de análisis web
+        webAnalytics.init('AV-001'); // ID de seguimiento de ejemplo
+        
+        // Registrar evento de inicio de la aplicación
+        webAnalytics.trackEvent('Aplicación', 'Inicialización', 'Inicio de la aplicación');
         
         // Inicializar componentes de página
         initializeHomeProducts();

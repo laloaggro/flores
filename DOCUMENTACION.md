@@ -19,6 +19,7 @@ flores-1/
 │   │   ├── css/             # Hojas de estilo (incluyendo combined.css)
 │   │   ├── js/              # Código JavaScript
 │   │   │   ├── components/  # Componentes JavaScript
+│   │   │   │   ├── analytics/ # Componentes de análisis
 │   │   │   │   ├── auth/    # Componentes de autenticación
 │   │   │   │   ├── cart/    # Componentes del carrito
 │   │   │   │   ├── product/ # Componentes de productos
@@ -142,6 +143,15 @@ Se ha añadido un componente para autenticación con Google utilizando la API de
 ### 6. Manejo de errores mejorado
 Se ha implementado un sistema de manejo de errores global para proporcionar una mejor experiencia de usuario.
 
+### 7. Recuperación de contraseña
+Se ha implementado una funcionalidad de recuperación de contraseña para que los usuarios puedan restablecer su contraseña mediante su correo electrónico.
+
+### 8. Sistema de logging
+Se ha implementado un sistema de logging para el frontend que puede registrar mensajes de diferentes niveles de severidad.
+
+### 9. Análisis web
+Se ha implementado un sistema básico de análisis web para rastrear el comportamiento de los usuarios en el sitio.
+
 ## Componentes Principales
 
 ### Componentes Web
@@ -152,6 +162,7 @@ Se ha implementado un sistema de manejo de errores global para proporcionar una 
 4. **CartItem** - Elementos del carrito de compras
 5. **Testimonials** - Componente de testimonios
 6. **GoogleAuth** - Componente para autenticación con Google
+7. **PasswordRecovery** - Componente para recuperación de contraseña
 
 ### Sistema de Carrito
 
@@ -167,6 +178,7 @@ El sistema de autenticación permite:
 - Registro de nuevos usuarios
 - Inicio de sesión
 - Inicio de sesión con Google
+- Recuperación de contraseña
 - Perfiles de usuario
 - Historial de pedidos
 
@@ -182,11 +194,15 @@ El sistema de autenticación permite:
 - `POST /api/users/register` - Registrar un nuevo usuario
 - `POST /api/users/login` - Iniciar sesión
 - `POST /api/users/google-login` - Iniciar sesión con Google
+- `POST /api/users/recover-password` - Recuperar contraseña
 - `GET /api/users/profile` - Obtener perfil de usuario
 - `PUT /api/users/profile` - Actualizar perfil de usuario
 
 ### Contacto
 - `POST /api/contact` - Enviar mensaje de contacto
+
+### Análisis
+- `POST /api/analytics` - Enviar datos de análisis (simulado)
 
 ## Mejores Prácticas Implementadas
 
@@ -199,6 +215,8 @@ El sistema de autenticación permite:
 7. **Rendimiento**: Combinación de CSS, lazy loading de imágenes
 8. **Pruebas**: Sistema de pruebas con Jest
 9. **Manejo de errores**: Sistema de manejo de errores global
+10. **Logging**: Sistema de registro de eventos
+11. **Análisis**: Sistema básico de análisis web
 
 ## Problemas Conocidos
 
@@ -209,8 +227,9 @@ El sistema de autenticación permite:
 ## Próximas Mejoras
 
 1. Implementar más pruebas unitarias y E2E
-2. Mejorar el sistema de logging
-3. Implementar recuperación de contraseña
-4. Añadir más métricas de análisis
-5. Optimizar aún más el rendimiento del frontend
-6. Implementar un sistema de estado global
+2. Mejorar el sistema de logging para enviar datos a un servicio externo
+3. Añadir más métricas de análisis
+4. Optimizar aún más el rendimiento del frontend
+5. Implementar un sistema de estado global
+6. Añadir más opciones de autenticación (Facebook, etc.)
+7. Implementar notificaciones push
