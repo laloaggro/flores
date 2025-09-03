@@ -44,7 +44,10 @@ flores-1/
 │   └── prod-config.json     # Configuración de producción
 ├── dist/                    # Archivos compilados para producción
 ├── docs/                    # Documentación adicional del proyecto
-│   └── migration-to-react.md # Guía de migración a React
+│   ├── migration-to-react.md # Guía de migración a React
+│   ├── ssr-implementation.md # Implementación de SSR
+│   ├── i18n-implementation.md # Implementación de i18n
+│   └── firebase-push-notifications.md # Configuración de notificaciones push
 ├── backup/                  # Componentes y archivos en backup
 │   ├── components/          # Componentes no utilizados
 │   └── COMPONENTES_BACKUP.md # Registro de componentes en backup
@@ -266,3 +269,8 @@ El sistema de autenticación permite:
 8. Migrar a un framework más avanzado como React o Vue
 9. Implementar Server-Side Rendering (SSR) para mejor SEO
 10. Añadir internacionalización (i18n) para múltiples idiomas
+11. Implementar Progressive Web App (PWA) completa
+12. Añadir modo offline con Service Workers
+13. Implementar sistema de comentarios y reseñas de productos
+14. Añadir funcionalidad de lista de deseos
+15. Implementar sistema de recomendaciones personalizadas
