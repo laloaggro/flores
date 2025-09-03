@@ -7,8 +7,7 @@
  */
 
 // Importar estilos
-import '../css/styles.css';
-import '../css/index.css';
+import '../css/combined.css';
 
 // Importar utilidades
 import { initializeTheme } from './components/utils/theme.js';

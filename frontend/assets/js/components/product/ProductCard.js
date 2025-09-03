@@ -70,11 +70,13 @@ class ProductCard extends HTMLElement {
 
         // Generar estrellas de calificación
         const stars = this.generateStars(rating);
+        // Añadir evento de carga diferida para la imagen
+        this.lazyLoadImage();
 
         this.innerHTML = `
             <div class="product-card" data-product-id="${id}">
                 <div class="product-image">
-                    <img src="${image}" alt="${name}" loading="lazy">
+                    <img src="${image}" data-src="${image}" alt="${name}" loading="lazy" class="lazy">
                     ${hasDiscount ? `
                         <div class="discount-badge">
                             -${Math.round((1 - discount_price / price) * 100)}%

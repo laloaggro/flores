@@ -12,9 +12,13 @@ flores-1/
 │   ├── routes/              # Rutas de la API
 │   ├── middleware/          # Middleware de Express
 │   ├── utils/               # Utilidades del backend
+│   ├── config/              # Configuración del backend
 │   └── ...
 ├── frontend/                # Código del cliente original
 │   ├── assets/              # Recursos estáticos (CSS, JS, imágenes)
+│   │   ├── css/             # Hojas de estilo (incluyendo combined.css)
+│   │   ├── js/              # Código JavaScript
+│   │   └── images/          # Imágenes del sitio
 │   ├── components/          # Componentes web personalizados
 │   ├── pages/               # Páginas HTML
 │   └── ...
@@ -105,6 +109,20 @@ Esto iniciará el servidor de desarrollo en el puerto 3000.
 - `npm test` - Ejecuta las pruebas
 - `npm run lint` - Verifica el código con ESLint
 
+## Optimizaciones implementadas
+
+### 1. Combinación de archivos CSS
+Se ha implementado un script para combinar todos los archivos CSS en un solo archivo `combined.css` para reducir el número de solicitudes HTTP y mejorar el rendimiento.
+
+### 2. Carga diferida de imágenes (Lazy Loading)
+Se ha implementado lazy loading para imágenes utilizando IntersectionObserver para cargar solo las imágenes que están cerca de la ventana gráfica.
+
+### 3. Configuración de seguridad mejorada
+Se ha añadido una configuración de seguridad específica por entorno con:
+- Configuración de CORS más segura
+- Rate limiting para prevenir abusos
+- Política de seguridad de contenido (CSP)
+
 ## Componentes Principales
 
 ### Componentes Web
@@ -156,6 +174,7 @@ El sistema de autenticación permite:
 4. **SEO optimizado**: Meta etiquetas y estructura semántica adecuada
 5. **Accesibilidad**: Atributos ARIA y navegación por teclado
 6. **Seguridad**: Headers de seguridad y CSP configurados
+7. **Rendimiento**: Combinación de CSS, lazy loading de imágenes
 
 ## Problemas Conocidos
 
