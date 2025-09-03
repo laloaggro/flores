@@ -18,6 +18,13 @@ flores-1/
 │   ├── assets/              # Recursos estáticos (CSS, JS, imágenes)
 │   │   ├── css/             # Hojas de estilo (incluyendo combined.css)
 │   │   ├── js/              # Código JavaScript
+│   │   │   ├── components/  # Componentes JavaScript
+│   │   │   │   ├── auth/    # Componentes de autenticación
+│   │   │   │   ├── cart/    # Componentes del carrito
+│   │   │   │   ├── product/ # Componentes de productos
+│   │   │   │   ├── ui/      # Componentes de interfaz de usuario
+│   │   │   │   └── utils/   # Utilidades
+│   │   │   └── main.js      # Punto de entrada principal
 │   │   └── images/          # Imágenes del sitio
 │   ├── components/          # Componentes web personalizados
 │   ├── pages/               # Páginas HTML
@@ -38,7 +45,8 @@ flores-1/
 │   ├── components/          # Componentes no utilizados
 │   └── COMPONENTES_BACKUP.md # Registro de componentes en backup
 ├── scripts/                 # Scripts de utilidad
-└── tests/                   # Pruebas del sistema
+├── tests/                   # Pruebas del sistema
+└── jest.config.js           # Configuración de Jest
 ```
 
 ## Tecnologías Utilizadas
@@ -107,6 +115,8 @@ Esto iniciará el servidor de desarrollo en el puerto 3000.
 - `npm run build:components` - Construye los componentes para producción
 - `npm run preview` - Previsualiza la construcción de producción
 - `npm test` - Ejecuta las pruebas
+- `npm test:watch` - Ejecuta las pruebas en modo observador
+- `npm test:coverage` - Ejecuta las pruebas y genera reporte de cobertura
 - `npm run lint` - Verifica el código con ESLint
 
 ## Optimizaciones implementadas
@@ -123,6 +133,15 @@ Se ha añadido una configuración de seguridad específica por entorno con:
 - Rate limiting para prevenir abusos
 - Política de seguridad de contenido (CSP)
 
+### 4. Sistema de pruebas
+Se ha implementado un sistema de pruebas con Jest para validar el comportamiento de los componentes.
+
+### 5. Autenticación con Google
+Se ha añadido un componente para autenticación con Google utilizando la API de Google Identity Services.
+
+### 6. Manejo de errores mejorado
+Se ha implementado un sistema de manejo de errores global para proporcionar una mejor experiencia de usuario.
+
 ## Componentes Principales
 
 ### Componentes Web
@@ -132,6 +151,7 @@ Se ha añadido una configuración de seguridad específica por entorno con:
 3. **ProductCard** - Tarjetas de productos con información, precios y acciones
 4. **CartItem** - Elementos del carrito de compras
 5. **Testimonials** - Componente de testimonios
+6. **GoogleAuth** - Componente para autenticación con Google
 
 ### Sistema de Carrito
 
@@ -146,6 +166,7 @@ El carrito de compras está implementado con JavaScript y utiliza localStorage p
 El sistema de autenticación permite:
 - Registro de nuevos usuarios
 - Inicio de sesión
+- Inicio de sesión con Google
 - Perfiles de usuario
 - Historial de pedidos
 
@@ -160,6 +181,7 @@ El sistema de autenticación permite:
 ### Usuarios
 - `POST /api/users/register` - Registrar un nuevo usuario
 - `POST /api/users/login` - Iniciar sesión
+- `POST /api/users/google-login` - Iniciar sesión con Google
 - `GET /api/users/profile` - Obtener perfil de usuario
 - `PUT /api/users/profile` - Actualizar perfil de usuario
 
@@ -175,6 +197,8 @@ El sistema de autenticación permite:
 5. **Accesibilidad**: Atributos ARIA y navegación por teclado
 6. **Seguridad**: Headers de seguridad y CSP configurados
 7. **Rendimiento**: Combinación de CSS, lazy loading de imágenes
+8. **Pruebas**: Sistema de pruebas con Jest
+9. **Manejo de errores**: Sistema de manejo de errores global
 
 ## Problemas Conocidos
 
@@ -184,9 +208,9 @@ El sistema de autenticación permite:
 
 ## Próximas Mejoras
 
-1. Implementar pruebas unitarias y E2E
+1. Implementar más pruebas unitarias y E2E
 2. Mejorar el sistema de logging
-3. Añadir autenticación con redes sociales
-4. Implementar recuperación de contraseña
-5. Añadir más métricas de análisis
-6. Optimizar el rendimiento del frontend
+3. Implementar recuperación de contraseña
+4. Añadir más métricas de análisis
+5. Optimizar aún más el rendimiento del frontend
+6. Implementar un sistema de estado global
