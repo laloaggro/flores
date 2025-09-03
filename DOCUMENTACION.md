@@ -25,6 +25,10 @@ flores-1/
 │   │   │   │   ├── forms/   # Componentes de formularios
 │   │   │   │   ├── notifications/ # Componentes de notificaciones
 │   │   │   │   ├── product/ # Componentes de productos
+│   │   │   │   ├── recommendations/ # Componentes de recomendaciones
+│   │   │   │   ├── reviews/ # Componentes de reseñas
+│   │   │   │   ├── wishlist/ # Componentes de lista de deseos
+│   │   │   │   ├── pwa/     # Componentes de PWA
 │   │   │   │   ├── ui/      # Componentes de interfaz de usuario
 │   │   │   │   └── utils/   # Utilidades
 │   │   │   └── main.js      # Punto de entrada principal
@@ -203,6 +207,10 @@ Se han creado guías detalladas para:
 6. **GoogleAuth** - Componente para autenticación con Google
 7. **PasswordRecovery** - Componente para recuperación de contraseña
 8. **PushNotifications** - Componente para notificaciones push
+9. **Recommendations** - Componente para recomendaciones personalizadas
+10. **Wishlist** - Componente para lista de deseos
+11. **ProductReviews** - Componente para reseñas de productos
+12. **PWAInstaller** - Componente para instalación de PWA
 
 ### Sistema de Carrito
 

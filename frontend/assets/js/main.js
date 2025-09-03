@@ -27,6 +27,12 @@ import Footer from './components/ui/Footer.js';
 import Testimonials from './components/ui/Testimonials.js';
 import CartItem from './components/cart/CartItem.js';
 
+// Importar nuevos componentes
+import Recommendations from './components/recommendations/Recommendations.js';
+import Wishlist from './components/wishlist/Wishlist.js';
+import ProductReviews from './components/reviews/ProductReviews.js';
+import PWAInstaller from './components/pwa/PWAInstaller.js';
+
 // Función para esperar a que los componentes personalizados se carguen
 function waitForComponents() {
     return new Promise((resolve) => {
@@ -60,6 +66,23 @@ function registerCustomComponents() {
     
     if (!customElements.get('cart-item-component')) {
         customElements.define('cart-item-component', CartItem);
+    }
+    
+    // Registrar nuevos componentes
+    if (!customElements.get('recommendations-component')) {
+        customElements.define('recommendations-component', Recommendations);
+    }
+    
+    if (!customElements.get('wishlist-component')) {
+        customElements.define('wishlist-component', Wishlist);
+    }
+    
+    if (!customElements.get('product-reviews')) {
+        customElements.define('product-reviews', ProductReviews);
+    }
+    
+    if (!customElements.get('pwa-installer')) {
+        customElements.define('pwa-installer', PWAInstaller);
     }
 }
 

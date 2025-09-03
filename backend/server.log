@@ -12711,3 +12711,7 @@ Error: listen EADDRINUSE: address already in use :::5000
 [2025-09-03T01:31:11.278Z] Servidor de correo configurado correctamente
 [2025-09-03T01:45:15.997Z] Servidor de correo configurado correctamente
 [2025-09-03T01:47:15.691Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T21:03:06.393Z] Servidor de correo configurado correctamente
+[2025-09-03T21:13:15.951Z] Servidor de correo configurado correctamente
+[2025-09-03T21:17:00.583Z] Servidor de correo configurado correctamente
+[2025-09-03T21:25:23.269Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
