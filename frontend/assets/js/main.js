@@ -14,6 +14,7 @@ import { initializeTheme } from './components/utils/theme.js';
 import { initializeLazyLoading } from './components/utils/lazyLoad.js';
 import { initializeUserMenu } from './components/utils/userMenu.js';
 import webAnalytics from './components/analytics/WebAnalytics.js';
+import stateManager from './components/utils/stateManager.js';
 
 // Importar componentes de página
 import { initializeHomeProducts } from './components/pages/homeProducts.js';
@@ -82,6 +83,9 @@ async function initializeApp() {
         // Registrar evento de inicio de la aplicación
         webAnalytics.trackEvent('Aplicación', 'Inicialización', 'Inicio de la aplicación');
         
+        // Inicializar el estado de la aplicación
+        initializeAppState();
+        
         // Inicializar componentes de página
         initializeHomeProducts();
         
@@ -89,6 +93,58 @@ async function initializeApp() {
     } catch (error) {
         console.error('Error al inicializar la aplicación:', error);
     }
+}
+
+// Inicializar el estado de la aplicación
+function initializeAppState() {
+    // Cargar el usuario del localStorage si existe
+    const user = localStorage.getItem('user');
+    if (user) {
+        try {
+            stateManager.set('user', JSON.parse(user));
+        } catch (e) {
+            console.error('Error al parsear usuario del localStorage:', e);
+        }
+    }
+    
+    // Cargar el carrito del localStorage si existe
+    const cart = localStorage.getItem('cart');
+    if (cart) {
+        try {
+            stateManager.set('cart', JSON.parse(cart));
+        } catch (e) {
+            console.error('Error al parsear carrito del localStorage:', e);
+        }
+    }
+    
+    // Cargar la lista de deseos del localStorage si existe
+    const wishlist = localStorage.getItem('wishlist');
+    if (wishlist) {
+        try {
+            stateManager.set('wishlist', JSON.parse(wishlist));
+        } catch (e) {
+            console.error('Error al parsear lista de deseos del localStorage:', e);
+        }
+    }
+    
+    // Suscribirse a cambios en el estado del usuario
+    stateManager.subscribe('user', (user) => {
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+        } else {
+            localStorage.removeItem('user');
+        }
+    });
+    
+    // Suscribirse a cambios en el estado del carrito
+    stateManager.subscribe('cart', (cart) => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    });
+    
+    // Suscribirse a cambios en el estado de la lista de deseos
+    stateManager.subscribe('wishlist', (wishlist) => {
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    });
 }
 
 // Inicializar la aplicación cuando el DOM esté cargado

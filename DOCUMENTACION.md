@@ -22,6 +22,8 @@ flores-1/
 │   │   │   │   ├── analytics/ # Componentes de análisis
 │   │   │   │   ├── auth/    # Componentes de autenticación
 │   │   │   │   ├── cart/    # Componentes del carrito
+│   │   │   │   ├── forms/   # Componentes de formularios
+│   │   │   │   ├── notifications/ # Componentes de notificaciones
 │   │   │   │   ├── product/ # Componentes de productos
 │   │   │   │   ├── ui/      # Componentes de interfaz de usuario
 │   │   │   │   └── utils/   # Utilidades
@@ -29,7 +31,7 @@ flores-1/
 │   │   └── images/          # Imágenes del sitio
 │   ├── components/          # Componentes web personalizados
 │   ├── pages/               # Páginas HTML
-│   └── ...
+│   └── service-worker.js    # Service Worker para PWA
 ├── dev/                     # Entorno de desarrollo
 │   ├── assets/              # Recursos para desarrollo
 │   ├── components/          # Componentes para desarrollo
@@ -152,6 +154,15 @@ Se ha implementado un sistema de logging para el frontend que puede registrar me
 ### 9. Análisis web
 Se ha implementado un sistema básico de análisis web para rastrear el comportamiento de los usuarios en el sitio.
 
+### 10. Sistema de estado global
+Se ha implementado un sistema de estado global para compartir datos entre componentes.
+
+### 11. Notificaciones push
+Se ha implementado un sistema de notificaciones push utilizando Service Workers.
+
+### 12. Validación de formularios mejorada
+Se ha creado un componente para validación robusta de formularios con mejoras de accesibilidad.
+
 ## Componentes Principales
 
 ### Componentes Web
@@ -163,6 +174,7 @@ Se ha implementado un sistema básico de análisis web para rastrear el comporta
 5. **Testimonials** - Componente de testimonios
 6. **GoogleAuth** - Componente para autenticación con Google
 7. **PasswordRecovery** - Componente para recuperación de contraseña
+8. **PushNotifications** - Componente para notificaciones push
 
 ### Sistema de Carrito
 
@@ -201,6 +213,9 @@ El sistema de autenticación permite:
 ### Contacto
 - `POST /api/contact` - Enviar mensaje de contacto
 
+### Notificaciones
+- `POST /api/notifications/subscribe` - Suscribirse a notificaciones push
+
 ### Análisis
 - `POST /api/analytics` - Enviar datos de análisis (simulado)
 
@@ -217,6 +232,9 @@ El sistema de autenticación permite:
 9. **Manejo de errores**: Sistema de manejo de errores global
 10. **Logging**: Sistema de registro de eventos
 11. **Análisis**: Sistema básico de análisis web
+12. **Estado global**: Sistema de estado global para compartir datos
+13. **Notificaciones**: Sistema de notificaciones push
+14. **Validación**: Sistema de validación de formularios robusto
 
 ## Problemas Conocidos
 
@@ -230,6 +248,7 @@ El sistema de autenticación permite:
 2. Mejorar el sistema de logging para enviar datos a un servicio externo
 3. Añadir más métricas de análisis
 4. Optimizar aún más el rendimiento del frontend
-5. Implementar un sistema de estado global
+5. Implementar un sistema de estado global más avanzado
 6. Añadir más opciones de autenticación (Facebook, etc.)
-7. Implementar notificaciones push
+7. Implementar notificaciones push reales con un servicio como Firebase
+8. Migrar a un framework más avanzado como React o Vue
