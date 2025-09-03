@@ -7,7 +7,10 @@
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
     "build": "vite build",
-    "preview": "vite preview"
+    "build:components": "node scripts/build-components.js",
+    "preview": "vite preview",
+    "test": "jest",
+    "lint": "eslint frontend/assets/js/**/*.js"
   },
   "keywords": [
     "floreria",
@@ -19,14 +22,17 @@
   "author": "Arreglos Victoria",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mime-types": "^3.0.1",
     "nodemailer": "^6.9.4"
   },
   "devDependencies": {
-    "vite": "^4.4.9",
-    "nodemon": "^3.0.1"
+    "eslint": "^8.46.0",
+    "jest": "^29.6.2",
+    "nodemon": "^3.0.1",
+    "vite": "^4.4.9"
   },
   "engines": {
     "node": ">=14.0.0"

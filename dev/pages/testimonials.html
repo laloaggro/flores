@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonios - Arreglos Victoria Florería</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Lee lo que nuestros clientes dicen sobre Arreglos Victoria Florería.">
+    <meta name="keywords" content="testimonios, clientes, reseñas, opiniones, floristería">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglosvictoria.cl/testimonials.html">
+    <meta property="og:title" content="Testimonios - Arreglos Victoria Florería">
+    <meta property="og:description" content="Lee lo que nuestros clientes dicen sobre Arreglos Victoria Florería.">
+    <meta property="og:image" content="/assets/images/logo.avif">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglosvictoria.cl/testimonials.html">
+    <meta property="twitter:title" content="Testimonios - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Lee lo que nuestros clientes dicen sobre Arreglos Victoria Florería.">
+    <meta property="twitter:image" content="/assets/images/logo.avif">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/assets/images/logo.avif" as="image">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <site-header></site-header>
+    
+    <main>
+        <section class="testimonials-hero">
+            <div class="container">
+                <h1>Testimonios</h1>
+                <p>Lo que dicen nuestros clientes</p>
+            </div>
+        </section>
+        
+        <section class="testimonials-section">
+            <div class="container">
+                <site-testimonials></site-testimonials>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <site-footer></site-footer>
+    
+    <!-- Scripts -->
+    <script type="module">
+        // Importar componentes migrados
+        import Header from './assets/js/components/ui/Header.js';
+        import Footer from './assets/js/components/ui/Footer.js';
+        import Testimonials from './assets/js/components/ui/Testimonials.js';
+        
+        // Registrar componentes
+        if (!customElements.get('site-header')) {
+            customElements.define('site-header', Header);
+        }
+        
+        if (!customElements.get('site-footer')) {
+            customElements.define('site-footer', Footer);
+        }
+        
+        if (!customElements.get('site-testimonials')) {
+            customElements.define('site-testimonials', Testimonials);
+        }
+        
+        // Importar utilidades y funcionalidades
+        import { initUserMenu } from './assets/js/components/utils/auth.js';
+        
+        // Inicializar menú de usuario
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserMenu();
+        });
+    </script>
+</body>
+</html>

@@ -1,142 +1,173 @@
 # Arreglos Victoria Florería
 
-Sitio web de una florería familiar con más de 20 años de experiencia en Recoleta.
+Florería en línea con catálogo de productos, carrito de compras y panel de administración.
+
+## Descripción
+
+Este proyecto es una tienda en línea para una florería llamada "Arreglos Victoria". Permite a los usuarios navegar por productos, agregar artículos al carrito, realizar pedidos y gestionar su cuenta. También incluye un panel de administración para gestionar productos y pedidos.
+
+**Para una documentación completa del proyecto, consulte [DOCUMENTACION.md](DOCUMENTACION.md).**
+
+## Tecnologías Utilizadas
+
+### Frontend
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- Web Components
+- Vite (para empaquetado y desarrollo)
+
+### Backend
+- Node.js
+- Express
+- MongoDB (con Mongoose)
+
+### Herramientas de Desarrollo
+- Git para control de versiones
+- npm para gestión de paquetes
+- ESLint y Prettier para linting y formateo
+- Jest para pruebas unitarias
 
 ## Estructura del Proyecto
 
 ```
-frontend/
-├── assets/
-│   ├── css/
-│   │   ├── styles.css          # Estilos principales
-│   │   ├── index.css           # Estilos específicos de la página de inicio
-│   │   ├── consistent-theme.css # Sistema de temas unificado
-│   │   └── theme.css           # Variables de tema (obsoleto)
-│   ├── images/                 # Imágenes del sitio
-│   │   ├── products/           # Imágenes de productos
-│   │   ├── categories/         # Imágenes de categorías
-│   │   └── ...                 # Otras imágenes
-│   └── js/                     # Scripts JavaScript
-│       ├── utils.js            # Funciones de utilidad
-│       ├── theme.js            # Manejo de temas claro/oscuro
-│       ├── cart.js             # Funcionalidad del carrito
-│       ├── contact.js          # Manejo del formulario de contacto
-│       ├── userMenu.js         # Manejo del menú de usuario
-│       ├── lazyLoad.js         # Carga diferida de imágenes
-│       └── ...                 # Otros scripts auxiliares
-├── components/                 # Componentes web reutilizables
-│   ├── header/                 # Componentes del encabezado
-│   │   ├── Header.js           # Componente de encabezado principal
-│   │   └── Footer.js           # Componente de pie de página
-│   ├── product/                # Componentes relacionados con productos
-│   │   ├── Products.js         # Componente de lista de productos
-│   │   ├── ProductCard.js      # Componente de tarjeta de producto
-│   │   └── styles.css          # Estilos de componentes de productos
-│   ├── cart/                   # Componentes del carrito
-│   │   └── CartItem.js         # Componente de ítem del carrito
-│   └── Testimonials.js         # Componente de testimonios
-├── pages/                      # Páginas adicionales
-│   └── admin/                  # Páginas del panel de administración
-├── __tests__/                  # Pruebas unitarias
-├── dist/                       # Archivos compilados (si se usa un proceso de compilación)
-└── documentacion/             # Documentación adicional
-
-backend/
-├── routes/                     # Rutas de la API
-├── controllers/                # Controladores de la lógica de negocio
-├── models/                     # Modelos de datos
-├── middleware/                 # Middleware de la aplicación
-├── database/                   # Archivos de configuración de base de datos
-├── utils/                      # Funciones de utilidad del backend
-└── tests/                      # Pruebas del backend
+flores-1/
+├── backend/                 # Código del servidor
+├── frontend/                # Código del cliente original
+├── dev/                     # Entorno de desarrollo
+│   ├── assets/              # Recursos para desarrollo
+│   ├── components/          # Componentes para desarrollo
+│   ├── pages/               # Páginas HTML para desarrollo
+│   └── dev-config.json      # Configuración de desarrollo
+├── prod/                    # Entorno de producción
+│   ├── assets/              # Recursos para producción
+│   ├── components/          # Componentes para producción
+│   ├── pages/               # Páginas HTML para producción
+│   └── prod-config.json     # Configuración de producción
+├── dist/                    # Archivos compilados para producción
+├── docs/                    # Documentación del proyecto
+└── scripts/                 # Scripts de utilidad
 ```
 
-## Tecnologías Utilizadas
+## Instalación
 
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+), Web Components
-- **Backend**: Node.js, Express.js
-- **Base de Datos**: SQLite
-- **Autenticación**: JWT (JSON Web Tokens)
-- **Pruebas**: Jest (unitarias), Cypress (E2E)
-- **Herramientas de Desarrollo**: ESLint, Prettier
-
-## Características Principales
-
-1. **Sistema de Temas**: Modo claro y oscuro con persistencia de preferencias
-2. **Carrito de Compras**: Funcionalidad completa de carrito con almacenamiento local
-3. **Gestión de Productos**: Visualización, filtrado y búsqueda de productos
-4. **Sistema de Usuarios**: Registro, inicio de sesión y perfiles de usuario
-5. **Formulario de Contacto**: Envío de mensajes con validación
-6. **Responsive Design**: Diseño adaptable a diferentes dispositivos
-7. **Accesibilidad**: Cumplimiento de estándares WCAG
-
-## Instalación y Configuración
-
-1. **Instalar dependencias del backend**:
+1. Clonar el repositorio:
    ```bash
-   cd backend
+   git clone <url-del-repositorio>
+   ```
+
+2. Navegar al directorio del proyecto:
+   ```bash
+   cd flores-1
+   ```
+
+3. Instalar dependencias:
+   ```bash
    npm install
    ```
 
-2. **Configurar variables de entorno**:
-   Crear un archivo `.env` en el directorio backend con las siguientes variables:
-   ```
-   PORT=5000
-   JWT_SECRET=your_jwt_secret_here
-   SMTP_HOST=smtp.yourprovider.com
-   SMTP_PORT=587
-   SMTP_USERNAME=your_email@yourprovider.com
-   SMTP_PASSWORD=your_email_password
-   ```
-
-3. **Iniciar el servidor**:
+4. Configurar variables de entorno:
    ```bash
-   npm start
+   cp .env.example .env
+   # Editar .env con las configuraciones apropiadas
    ```
 
-4. **Acceder al sitio**:
-   Abrir `http://localhost:5000` en el navegador
+## Desarrollo
 
-## Archivos Importantes
+### Flujo de trabajo de desarrollo y producción
 
-- `frontend/index.html`: Página de inicio
-- `frontend/products.html`: Página de productos
-- `frontend/contact.html`: Página de contacto
-- `frontend/login.html`: Página de inicio de sesión
-- `frontend/register.html`: Página de registro
-- `frontend/cart.html`: Página del carrito de compras
-- `backend/server.js`: Punto de entrada del servidor
-- `backend/routes/products.js`: Rutas de la API de productos
+El proyecto utiliza entornos separados para desarrollo y producción:
 
-## Mantenimiento
+1. **Desarrollo**: Trabajar en el directorio `dev/`
+2. **Producción**: Promocionar cambios al directorio `prod/` cuando estén listos
+3. **Empaquetado**: Generar la versión final en el directorio `dist/`
 
-### Limpieza de Archivos
+Para más detalles sobre este flujo de trabajo, consulte [DOCUMENTACION.md](DOCUMENTACION.md).
 
-El directorio `frontend/assets/js/` contiene muchos archivos que parecen ser dependencias de terceros. Estos pueden ser limpiados para mantener una estructura más clara:
+### Iniciar servidor de desarrollo
+```bash
+node scripts/start-dev-env.js
+```
 
-1. Identificar scripts realmente utilizados en el proyecto
-2. Eliminar bibliotecas de terceros no utilizadas
-3. Consolidar scripts auxiliares en archivos específicos por funcionalidad
+Esto iniciará el servidor de desarrollo en el puerto 3000.
 
-### Mejora Continua
+### Scripts disponibles
+- `npm run dev` - Inicia el servidor de desarrollo
+- `npm run build` - Construye el proyecto para producción
+- `npm run preview` - Previsualiza la construcción de producción
+- `npm test` - Ejecuta las pruebas
+- `npm run lint` - Verifica el código con ESLint
 
-1. **Optimización de Rendimiento**:
-   - Implementar carga diferida de imágenes
-   - Minimizar y combinar archivos CSS/JS
-   - Utilizar compresión GZIP
+## Componentes Principales
 
-2. **SEO y Accesibilidad**:
-   - Verificar metadatos de todas las páginas
-   - Asegurar etiquetas semánticas HTML
-   - Implementar atributos ARIA
+### Componentes Web
+1. **Header** - Barra de navegación principal
+2. **Footer** - Pie de página
+3. **ProductCard** - Tarjeta de producto
+4. **Products** - Lista de productos
+5. **CartItem** - Elemento del carrito de compras
+6. **Testimonials** - Sección de testimonios
 
-3. **Seguridad**:
-   - Validar y sanitizar entradas de usuario
-   - Implementar protección CSRF
-   - Asegurar almacenamiento de contraseñas
+### Páginas Principales
+- Inicio (index.html)
+- Productos (products.html)
+- Detalle de producto (product-detail.html)
+- Carrito (cart.html)
+- Checkout (checkout.html)
+- Login/Registro (login.html, register.html)
+- Perfil de usuario (profile.html)
+- Panel de administración (admin.html)
 
-## Documentación Adicional
+## Funcionalidades Clave
 
-- [Sistema de Temas](FRONTEND_THEME.md): Documentación detallada del sistema de temas claro/oscuro
-- Documentación de la API: Pendiente de crear
-- Guía de contribución: Pendiente de crear
+### Para Usuarios
+- Navegación por productos
+- Agregar productos al carrito
+- Realizar pedidos
+- Gestión de cuenta de usuario
+- Lista de deseos
+- Historial de pedidos
+
+### Para Administradores
+- Gestión de productos
+- Gestión de pedidos
+- Panel de administración
+
+## Empaquetado para Producción
+
+Para crear una versión optimizada del sitio para producción:
+
+```bash
+npm run build
+```
+
+Este comando genera una versión optimizada del sitio en el directorio `dist/`.
+
+## Despliegue
+
+Los archivos del directorio `dist/` pueden ser desplegados en cualquier servidor web estático.
+
+## Pruebas
+
+Para ejecutar las pruebas unitarias:
+
+```bash
+npm test
+```
+
+## Contribuciones
+
+1. Crear una rama específica para la funcionalidad (`git checkout -b feature/nueva-funcionalidad`)
+2. Realizar los cambios necesarios
+3. Asegurarse de que las pruebas pasen
+4. Crear un commit con un mensaje descriptivo (`git commit -m 'Añadir nueva funcionalidad'`)
+5. Subir la rama (`git push origin feature/nueva-funcionalidad`)
+6. Crear un pull request para revisión
+
+## Licencia
+
+[Incluir información de licencia si aplica]
+
+## Contacto
+
+Para preguntas o soporte, contactar al equipo de desarrollo.

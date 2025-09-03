@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Arreglos Victoria Florería</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Gestiona tu perfil en Arreglos Victoria Florería.">
+    <meta name="keywords" content="perfil, cuenta, usuario, configuración">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglosvictoria.cl/profile.html">
+    <meta property="og:title" content="Perfil - Arreglos Victoria Florería">
+    <meta property="og:description" content="Gestiona tu perfil en Arreglos Victoria Florería.">
+    <meta property="og:image" content="/assets/images/logo.avif">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglosvictoria.cl/profile.html">
+    <meta property="twitter:title" content="Perfil - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Gestiona tu perfil en Arreglos Victoria Florería.">
+    <meta property="twitter:image" content="/assets/images/logo.avif">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/assets/images/logo.avif" as="image">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/profile.html">
+    <meta property="og:title" content="Perfil de Usuario - Arreglos Victoria Florería">
+    <meta property="og:description" content="Gestiona tu perfil de usuario en Arreglos Victoria Florería.">
+    <meta property="og:image" content="../assets/images/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/profile.html">
+    <meta property="twitter:title" content="Perfil de Usuario - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Gestiona tu perfil de usuario en Arreglos Victoria Florería.">
+    <meta property="twitter:image" content="../assets/images/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Preload critical scripts -->
+    <link rel="preload" href="components/Header.js" as="script">
+    <link rel="preload" href="components/Footer.js" as="script">
+    <link rel="preload" href="assets/js/profile.js" as="script">
+    <link rel="preload" href="assets/js/accessibility.js" as="script">
+    <link rel="preload" href="assets/js/components/utils/auth.js" as="script">
+    <link rel="preload" href="assets/js/components/ui/Header.js" as="script">
+    <link rel="preload" href="assets/js/components/utils/theme.js" as="script">
+</head>
+<body data-theme="light">
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <!-- Header -->
+    <site-header></site-header>
+
+    <main>
+        <section class="profile-section">
+            <div class="container">
+                <h1>Perfil de Usuario</h1>
+                <div id="profileContainer" class="profile-container">
+                    <div class="loading-placeholder">
+                        <p><i class="fas fa-spinner fa-spin"></i> Cargando perfil...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <site-footer></site-footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        // Importar componentes migrados
+        import Header from './assets/js/components/ui/Header.js';
+        import Footer from './assets/js/components/ui/Footer.js';
+        
+        // Registrar componentes
+        if (!customElements.get('site-header')) {
+            customElements.define('site-header', Header);
+        }
+        
+        if (!customElements.get('site-footer')) {
+            customElements.define('site-footer', Footer);
+        }
+        
+        // Importar utilidades y funcionalidades
+        import { showNotification, API_BASE_URL } from './assets/js/components/utils/utils.js';
+        import { initUserMenu, isAuthenticated, setAuthState } from './assets/js/components/utils/auth.js';
+        
+        // Inicializar menú de usuario
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserMenu();
+            
+            // Verificar autenticación
+            if (!isAuthenticated()) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            // Cargar perfil
+            loadProfile();
+        });
+        
+        // Cargar perfil
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar el perfil');
+                }
+                
+                const user = await response.json();
+                renderProfile(user);
+            } catch (error) {
+                console.error('Error al cargar el perfil:', error);
+                showNotification('Error al cargar el perfil', 'error');
+                document.getElementById('profileContainer').innerHTML = '<p>Error al cargar el perfil. Por favor intente nuevamente.</p>';
+            }
+        }
+        
+        // Renderizar perfil
+        function renderProfile(user) {
+            const profileContainer = document.getElementById('profileContainer');
+            if (!profileContainer) return;
+            
+            profileContainer.innerHTML = `
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <h2>${user.name}</h2>
+                        <p>${user.email}</p>
+                    </div>
+                    <div class="profile-details">
+                        <div class="profile-field">
+                            <label>Nombre:</label>
+                            <span>${user.name}</span>
+                        </div>
+                        <div class="profile-field">
+                            <label>Email:</label>
+                            <span>${user.email}</span>
+                        </div>
+                        <div class="profile-field">
+                            <label>Fecha de registro:</label>
+                            <span>${new Date(user.createdAt).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button onclick="editProfile()" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Editar Perfil
+                        </button>
+                        <button onclick="changePassword()" class="btn btn-secondary">
+                            <i class="fas fa-key"></i> Cambiar Contraseña
+                        </button>
+                        <button onclick="logout()" class="btn btn-danger">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Editar perfil
+        function editProfile() {
+            showNotification('Funcionalidad de edición de perfil no implementada aún', 'info');
+        }
+        
+        // Cambiar contraseña
+        function changePassword() {
+            showNotification('Funcionalidad de cambio de contraseña no implementada aún', 'info');
+        }
+        
+        // Cerrar sesión
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            setAuthState(false);
+            window.location.href = '/index.html';
+        }
+    </script>
+</body>
+</html>

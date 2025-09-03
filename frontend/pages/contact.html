@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Arreglos Victoria Florería</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Contáctanos en Arreglos Victoria Florería. Estamos aquí para ayudarte con tus consultas y pedidos.">
+    <meta name="keywords" content="contacto, floristería, arreglos, flores, teléfono, email">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglosvictoria.cl/contact.html">
+    <meta property="og:title" content="Contacto - Arreglos Victoria Florería">
+    <meta property="og:description" content="Contáctanos en Arreglos Victoria Florería. Estamos aquí para ayudarte con tus consultas y pedidos.">
+    <meta property="og:image" content="/assets/images/logo.avif">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglosvictoria.cl/contact.html">
+    <meta property="twitter:title" content="Contacto - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Contáctanos en Arreglos Victoria Florería. Estamos aquí para ayudarte con tus consultas y pedidos.">
+    <meta property="twitter:image" content="/assets/images/logo.avif">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/assets/images/logo.avif" as="image">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <site-header></site-header>
+    
+    <main>
+        <section class="contact-hero">
+            <div class="container">
+                <h1>Contáctanos</h1>
+                <p>Estamos aquí para ayudarte</p>
+            </div>
+        </section>
+        
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h2>Información de Contacto</h2>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h3>Dirección</h3>
+                                <p>Calle Falsa 123, Ciudad, País</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h3>Teléfono</h3>
+                                <p>+1 234 567 890</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h3>Email</h3>
+                                <p>info@arreglosvictoria.cl</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h3>Horario</h3>
+                                <p>Lunes a Domingo: 9:00 AM - 8:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form-container">
+                        <h2>Envíanos un Mensaje</h2>
+                        <form id="contactForm" class="contact-form">
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Asunto</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Mensaje</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <site-footer></site-footer>
+    
+    <!-- Scripts -->
+    <script type="module">
+        // Importar componentes migrados
+        import Header from './assets/js/components/ui/Header.js';
+        import Footer from './assets/js/components/ui/Footer.js';
+        
+        // Registrar componentes
+        if (!customElements.get('site-header')) {
+            customElements.define('site-header', Header);
+        }
+        
+        if (!customElements.get('site-footer')) {
+            customElements.define('site-footer', Footer);
+        }
+        
+        // Importar utilidades y funcionalidades
+        import { showNotification, API_BASE_URL } from './assets/js/components/utils/utils.js';
+        import { initUserMenu } from './assets/js/components/utils/auth.js';
+        
+        // Inicializar menú de usuario
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserMenu();
+        });
+        
+        // Manejar envío del formulario de contacto
+        document.addEventListener('DOMContentLoaded', () => {
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(contactForm);
+                    const data = Object.fromEntries(formData);
+                    
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/contact`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        
+                        if (response.ok) {
+                            showNotification('Mensaje enviado correctamente', 'success');
+                            contactForm.reset();
+                        } else {
+                            throw new Error('Error al enviar el mensaje');
+                        }
+                    } catch (error) {
+                        console.error('Error al enviar el mensaje:', error);
+                        showNotification('Error al enviar el mensaje. Por favor intente nuevamente.', 'error');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -12687,3 +12687,27 @@ Error: listen EADDRINUSE: address already in use :::5000
 [2025-09-02T16:30:14.182Z] Servidor de correo configurado correctamente
 [2025-09-02T16:37:09.012Z] Servidor de correo configurado correctamente
 [2025-09-02T16:43:35.061Z] Servidor de correo configurado correctamente
+[2025-09-02T17:48:51.744Z] Servidor de correo configurado correctamente
+[2025-09-02T17:54:08.771Z] Servidor de correo configurado correctamente
+[2025-09-02T23:47:16.948Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-02T23:55:55.618Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-02T23:56:03.206Z] Servidor de correo configurado correctamente
+[2025-09-02T23:56:27.575Z] Servidor de correo configurado correctamente
+[2025-09-02T23:57:22.360Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-02T23:58:14.160Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T00:10:03.588Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T00:10:24.763Z] Servidor de correo configurado correctamente
+[2025-09-03T00:11:00.727Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T00:13:43.332Z] Servidor de correo configurado correctamente
+[2025-09-03T00:14:17.125Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T00:15:29.829Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T00:19:43.470Z] Servidor de correo configurado correctamente
+[2025-09-03T00:20:10.608Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T00:54:25.923Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T00:55:10.311Z] Servidor de correo configurado correctamente
+[2025-09-03T01:07:14.154Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"
+[2025-09-03T01:07:55.381Z] Servidor de correo configurado correctamente
+[2025-09-03T01:13:03.562Z] Servidor de correo configurado correctamente
+[2025-09-03T01:31:11.278Z] Servidor de correo configurado correctamente
+[2025-09-03T01:45:15.997Z] Servidor de correo configurado correctamente
+[2025-09-03T01:47:15.691Z] Error en la configuración del transporte de correo: Error: Missing credentials for "PLAIN"

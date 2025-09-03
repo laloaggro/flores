@@ -1,0 +1,448 @@
+/* theme.css - Archivo obsoleto, reemplazado por consistent-theme.css */
+/* Este archivo se mantiene temporalmente para compatibilidad */
+/* Variables CSS para tema claro y oscuro - Versión mejorada */
+:root {
+  /* Nueva paleta de colores principal - Escala completa de verdes */
+  --primary-50: #e8f5e9;
+  --primary-100: #c8e6c9;
+  --primary-200: #a5d6a7;
+  --primary-300: #81c784;
+  --primary-400: #66bb6a;
+  --primary-500: #4caf50;
+  --primary-600: #43a047;
+  --primary-700: #388e3c;
+  --primary-800: #2e7d32;
+  --primary-900: #1b5e20;
+  
+  /* Colores de apoyo - Naranjas y complementarios */
+  --secondary-50: #fff8f2;
+  --secondary-100: #ffefd9;
+  --secondary-200: #ffe3bf;
+  --secondary-300: #ffd19f;
+  --secondary-400: #ffbb7c;
+  --secondary-500: #ff9800;
+  --secondary-600: #f57c00;
+  --secondary-700: #ef6c00;
+  --secondary-800: #d25f00;
+  --secondary-900: #b65200;
+  
+  /* Escala de grises para modo claro */
+  --light-50: #ffffff;
+  --light-100: #fafafa;
+  --light-200: #f5f5f5;
+  --light-300: #eeeeee;
+  --light-400: #e0e0e0;
+  --light-500: #bdbdbd;
+  --light-600: #9e9e9e;
+  --light-700: #757575;
+  --light-800: #616161;
+  --light-900: #424242;
+  --light-950: #212121;
+  
+  /* Estados */
+  --success-50: #e8f5e9;
+  --success-100: #c8e6c9;
+  --success-200: #a5d6a7;
+  --success-300: #81c784;
+  --success-400: #66bb6a;
+  --success-500: #4caf50;
+  --success-600: #43a047;
+  --success-700: #388e3c;
+  --success-800: #2e7d32;
+  --success-900: #1b5e20;
+  
+  --danger-50: #ffebee;
+  --danger-100: #ffcdd2;
+  --danger-200: #ef9a9a;
+  --danger-300: #e57373;
+  --danger-400: #ef5350;
+  --danger-500: #f44336;
+  --danger-600: #e53935;
+  --danger-700: #d32f2f;
+  --danger-800: #c62828;
+  --danger-900: #b71c1c;
+  
+  --warning-50: #fff8e1;
+  --warning-100: #ffecb3;
+  --warning-200: #ffe082;
+  --warning-300: #ffd54f;
+  --warning-400: #ffca28;
+  --warning-500: #ffc107;
+  --warning-600: #ffb300;
+  --warning-700: #ffa000;
+  --warning-800: #ff8f00;
+  --warning-900: #ff6f00;
+  
+  --info-50: #e3f2fd;
+  --info-100: #bbdefb;
+  --info-200: #90caf9;
+  --info-300: #64b5f6;
+  --info-400: #42a5f5;
+  --info-500: #2196f3;
+  --info-600: #1e88e5;
+  --info-700: #1976d2;
+  --info-800: #1565c0;
+  --info-900: #0d47a1;
+  
+  /* Modo claro - Variables semánticas */
+  --bg-color: var(--light-50);
+  --bg-secondary: var(--light-100);
+  --bg-card: var(--light-50);
+  --text-color: var(--light-950);
+  --text-secondary: var(--light-700);
+  --text-tertiary: var(--light-600);
+  --border-color: var(--light-300);
+  --hover-bg: var(--light-200);
+  --link-color: var(--primary-700);
+  --link-hover-color: var(--primary-900);
+  --focus-outline: var(--primary-700);
+  --input-bg: var(--light-50);
+  --input-border: var(--light-400);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Modo oscuro - Variables semánticas mejoradas y coherentes */
+[data-theme="dark"] {
+  /* Fondos */
+  --bg-color: #0f172a;              /* Fondo principal */
+  --bg-secondary: #1e293b;          /* Fondo secundario */
+  --bg-card: #334155;               /* Fondo de tarjetas */
+  --hover-bg: #475569;              /* Fondo al pasar el mouse */
+  
+  /* Textos */
+  --text-color: #f1f5f9;            /* Texto principal */
+  --text-secondary: #cbd5e1;        /* Texto secundario */
+  --text-tertiary: #94a3b8;         /* Texto terciario */
+  
+  /* Bordes */
+  --border-color: #475569;          /* Color de bordes */
+  
+  /* Colores principales */
+  --primary: #4ade80;               /* Verde principal */
+  --primary-dark: #22c55e;          /* Verde oscuro */
+  --primary-light: #86efac;         /* Verde claro */
+  
+  /* Colores de apoyo */
+  --secondary: #f97316;             /* Naranja */
+  --danger: #f87171;                /* Rojo */
+  --warning: #fbbf24;               /* Amarillo */
+  --success: #4ade80;               /* Verde (igual al primario) */
+  --info: #60a5fa;                  /* Azul */
+  
+  /* Enlaces */
+  --link-color: #86efac;
+  --link-hover-color: #bbf7d0;
+  --focus-outline: #86efac;
+  
+  /* Formularios */
+  --input-bg: #1e293b;
+  --input-border: #64748b;
+  
+  /* Sombras */
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Asignación de variables a componentes existentes */
+:root {
+  --primary: var(--primary-700);
+  --primary-dark: var(--primary-900);
+  --primary-light: var(--primary-100);
+  --secondary: var(--secondary-500);
+  --secondary-dark: var(--secondary-700);
+  --white: var(--light-50);
+  --dark: var(--light-950);
+  --dark-gray: var(--light-800);
+  --gray: var(--light-400);
+  --light: var(--light-200);
+  --light-gray: var(--light-300);
+  --danger: var(--danger-600);
+  --danger-dark: var(--danger-800);
+  --success: var(--success-600);
+  --warning: var(--warning-600);
+  --info: var(--info-600);
+  --text-color: var(--text-primary);
+}
+
+[data-theme="dark"] {
+  --primary: var(--primary-400);
+  --primary-dark: var(--primary-300);
+  --primary-light: var(--primary-600);
+  --secondary: var(--secondary-400);
+  --secondary-dark: var(--secondary-600);
+  --white: #ffffff;
+  --dark: var(--light-50);
+  --dark-gray: var(--light-300);
+  --gray: var(--light-600);
+  --light: var(--light-800);
+  --light-gray: var(--light-700);
+  --danger: var(--danger-400);
+  --danger-dark: var(--danger-300);
+  --success: var(--success-400);
+  --warning: var(--warning-400);
+  --info: var(--info-400);
+  --text-color: var(--text-primary);
+}
+
+/* Asegurar que el body tenga el color de fondo correcto */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Asegurar que el body tenga el color de fondo correcto en modo oscuro */
+[data-theme="dark"] body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Reset de estilos para asegurar que no haya fondos verdes no deseados */
+header, .header, #header, .navbar, #navbar {
+    background-color: var(--bg-card);
+    background: var(--bg-card);
+    background-image: none;
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+/* Asegurar que los elementos del header tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] header {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-color);
+    background-image: none;
+}
+
+/* Asegurar que los elementos de navegación tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] nav ul {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] nav ul li a {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] nav ul li a:hover {
+    background-color: var(--hover-bg);
+}
+
+/* Asegurar que los elementos de productos tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] .product-card {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .product-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+[data-theme="dark"] .product-name {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .product-price {
+    color: var(--primary);
+}
+
+/* Asegurar que los elementos del carrito tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] .cart-icon,
+[data-theme="dark"] .theme-toggle {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .cart-icon:hover,
+[data-theme="dark"] .theme-toggle:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+/* Asegurar que el pie de página tenga el fondo correcto en modo oscuro */
+footer {
+  background-color: var(--light-50); /* Fondo blanco en modo claro */
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] footer {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .footer-section h3,
+[data-theme="dark"] .footer-section h4 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .footer-links a {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .footer-links a:hover {
+    color: var(--primary);
+}
+
+/* Asegurar que los botones tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] .btn {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .btn:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary);
+}
+
+[data-theme="dark"] .btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+[data-theme="dark"] .btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: var(--white);
+}
+
+[data-theme="dark"] .btn-outline {
+    background-color: transparent;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+[data-theme="dark"] .btn-outline:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+/* Asegurar que las secciones tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] .hero {
+    background-color: var(--bg-secondary);
+}
+
+[data-theme="dark"] .featured-products,
+[data-theme="dark"] .categories,
+[data-theme="dark"] .about,
+[data-theme="dark"] .services,
+[data-theme="dark"] .testimonials {
+    background-color: var(--bg-color);
+}
+
+[data-theme="dark"] .section-header h2 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .section-description {
+    color: var(--text-secondary);
+}
+
+/* Asegurar que las tarjetas de categoría tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] .category-card {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .category-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+[data-theme="dark"] .category-info h3 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .category-info p {
+    color: var(--text-secondary);
+}
+
+/* Asegurar que las tarjetas de servicio tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] .service-card {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .service-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+[data-theme="dark"] .service-card h3 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .service-card p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .service-icon {
+    color: var(--primary);
+}
+
+/* Asegurar que las tarjetas de testimonio tengan el fondo correcto en modo oscuro */
+[data-theme="dark"] .testimonial-card {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .testimonial-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+[data-theme="dark"] .testimonial-user h3 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .testimonial-content p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .testimonial-rating .fas {
+    color: #ffc107;
+}
+
+[data-theme="dark"] .testimonial-rating .fas.unchecked {
+    color: var(--light-gray);
+}
+
+[data-theme="dark"] .testimonial-product {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .testimonial-content time {
+    color: var(--text-tertiary);
+}
+
+/* Asegurar que la sección CTA tenga el fondo correcto en modo oscuro */
+[data-theme="dark"] .cta-section {
+    background: linear-gradient(135deg, var(--primary-800), var(--primary-900));
+}
+
+[data-theme="dark"] .cta-content h2 {
+    color: var(--white);
+}
+
+[data-theme="dark"] .cta-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .cta-section .btn-primary {
+    background-color: var(--white);
+    color: var(--primary-800);
+    border-color: var(--white);
+}
+
+[data-theme="dark"] .cta-section .btn-primary:hover {
+    background-color: transparent;
+    color: var(--white);
+}

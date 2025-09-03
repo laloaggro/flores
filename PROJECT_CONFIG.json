@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "lastOrganized": "2025-09-02T20:14:40.163Z",
+  "structure": {
+    "config": "config/",
+    "docs": "docs/",
+    "src": {
+      "dev": "dev/",
+      "prod": "prod/",
+      "frontend": "frontend/"
+    },
+    "tests": "tests/",
+    "utils": "utils/",
+    "temp": "temp/",
+    "scripts": "scripts/"
+  },
+  "environments": [
+    "development",
+    "production"
+  ],
+  "packageManager": "npm"
+}

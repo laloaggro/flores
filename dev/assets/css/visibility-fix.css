@@ -1,0 +1,305 @@
+/* visibility-fix.css - Correcciones para mejorar la visibilidad del texto */
+
+/* Asegurar contraste adecuado para todo el texto */
+body {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Asegurar visibilidad de encabezados */
+h1, h2, h3, h4, h5, h6 {
+  color: #188e44;
+  font-weight: 600;
+}
+
+/* Asegurar visibilidad de encabezados en modo oscuro */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: #4ade80;
+}
+
+/* Asegurar visibilidad de enlaces */
+a {
+  color: var(--primary);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* Asegurar visibilidad de texto en botones */
+.btn {
+  color: var(--white);
+  background-color: var(--primary);
+}
+
+.btn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Asegurar visibilidad de texto en formularios */
+input, textarea, select {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--dark-gray);
+}
+
+/* Asegurar visibilidad de texto en tarjetas de productos */
+.product-card {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.product-card h3 {
+  color: var(--dark);
+}
+
+.product-card .price {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Asegurar visibilidad de texto en secciones */
+section {
+  color: var(--text-color);
+}
+
+/* Asegurar visibilidad de texto en el navbar */
+/* Navbar styles - modo claro por defecto */
+.navbar {
+  color: var(--dark);
+  background-color: var(--white);
+}
+
+/* Navbar styles - modo oscuro */
+[data-theme="dark"] .navbar {
+  background-color: #1e293b;
+}
+
+/* Estilos para enlaces del navbar en ambos modos */
+.navbar a {
+  color: var(--dark);
+}
+
+.navbar a:hover {
+  color: var(--primary);
+}
+
+/* Asegurar visibilidad de texto en el footer */
+footer {
+  color: var(--dark);
+  background-color: var(--light);
+  padding: 2rem 0;
+}
+
+footer h3, footer h4 {
+  color: #188e44;
+  margin-bottom: 1rem;
+}
+
+[data-theme="dark"] footer h3,
+[data-theme="dark"] footer h4 {
+  color: #4ade80;
+}
+
+footer a {
+  color: var(--primary);
+  text-decoration: none;
+  display: inline-block;
+  margin: 0.25rem 0;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+footer .social-links a {
+  color: var(--white);
+  background-color: var(--primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+footer .social-links a:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-3px);
+}
+
+footer address {
+  font-style: normal;
+}
+
+footer .footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+footer .footer-bottom {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer .footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Asegurar visibilidad de texto en mensajes de error */
+.error-message {
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.success-message {
+  color: var(--success);
+  font-weight: 500;
+}
+
+.info-message {
+  color: var(--info);
+  font-weight: 500;
+}
+
+.warning-message {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+/* Asegurar visibilidad de texto en breadcrumbs */
+.breadcrumb {
+  color: var(--dark-gray);
+}
+
+.breadcrumb a {
+  color: var(--primary);
+}
+
+.breadcrumb a:hover {
+  color: var(--primary-dark);
+}
+
+/* Asegurar visibilidad de texto en paginación */
+.pagination {
+  color: var(--dark);
+}
+
+.pagination a {
+  color: var(--primary);
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+}
+
+.pagination a:hover {
+  color: var(--white);
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.pagination .active a {
+  color: var(--white);
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Asegurar visibilidad de texto en tooltips */
+.tooltip {
+  color: var(--white);
+  background-color: var(--dark);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1000;
+  max-width: 200px;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0;
+  border-style: solid;
+  border-color: var(--dark) transparent transparent transparent;
+}
+
+body[data-theme="dark"] .tooltip {
+  color: var(--dark-text);
+  background-color: var(--dark-card-bg);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 30%);
+}
+
+body[data-theme="dark"] .tooltip::after {
+  border-color: var(--dark-card-bg) transparent transparent transparent;
+}
+
+.tooltip-top::after {
+  top: -5px;
+  bottom: auto;
+  border-width: 0 5px 5px;
+  border-color: var(--dark) transparent transparent transparent;
+}
+
+.tooltip-bottom::after {
+  bottom: -5px;
+  border-width: 5px 5px 0;
+  border-color: var(--dark) transparent transparent transparent;
+}
+
+.tooltip-left::after {
+  top: 50%;
+  left: -5px;
+  bottom: auto;
+  transform: translateY(-50%);
+  border-width: 5px 5px 5px 0;
+  border-color: transparent var(--dark) transparent transparent;
+}
+
+.tooltip-right::after {
+  inset: 50% -5px auto auto;
+  transform: translateY(-50%);
+  border-width: 5px 0 5px 5px;
+  border-color: transparent transparent transparent var(--dark);
+}
+
+body[data-theme="dark"] .tooltip-top::after,
+body[data-theme="dark"] .tooltip-bottom::after {
+  border-color: var(--dark-card-bg) transparent transparent transparent;
+}
+
+body[data-theme="dark"] .tooltip-left::after {
+  border-color: transparent var(--dark-card-bg) transparent transparent;
+}
+
+body[data-theme="dark"] .tooltip-right::after {
+  border-color: transparent transparent transparent var(--dark-card-bg);
+}

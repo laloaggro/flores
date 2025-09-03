@@ -1,364 +1,309 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración - Arreglos Victoria</title>
+    <title>Panel de Administración - Arreglos Victoria Florería</title>
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+    
+    <!-- Cargar estilos CSS optimizados -->
+    <link rel="stylesheet" href="../assets/css/preflight.css">
+    <link rel="stylesheet" href="../assets/css/index.css">
     <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/theme.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="../assets/css/conflict-fixes.css">
+    <link rel="stylesheet" href="../assets/css/color-enhancements.css">
+    
+    <meta name="description" content="Panel de administración de Arreglos Victoria Florería. Gestiona productos, pedidos y usuarios.">
+    <meta name="keywords" content="administración, panel, florería, arreglos florales, Recoleta">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/; frame-src 'self' https://www.google.com;">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Scripts will be updated below -->
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
-    <header>
-        <div class="container">
-            <nav class="navbar" role="navigation" aria-label="Menú principal">
-                <a href="../index.html" class="logo" aria-label="Arreglos Florales Victoria - Inicio"><i class="fas fa-leaf" aria-hidden="true"></i> Arreglos Florales Victoria</a>
-                
-                <button class="hamburger" aria-label="Menú" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                
-                <ul class="nav-links">
-                    <li><a href="../index.html">Inicio</a></li>
-                    <li><a href="../products.html">Productos</a></li>
-                    <li><a href="../index.html#about">Nosotros</a></li>
-                    <li><a href="../index.html#contacto">Contacto</a></li>
-                </ul>
-                
-                <div class="user-actions">
-                    <a href="../login.html" id="loginLink" class="btn-login" aria-label="Iniciar sesión" style="display: none;">
-                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                        <span>Iniciar sesión</span>
-                    </a>
-                    <div class="user-menu" id="userMenu" role="navigation" aria-label="Menú de usuario" style="display: none;">
-                        <button class="user-info" aria-haspopup="true" aria-expanded="false">
-                            <span id="userNameDisplay"></span>
-                            <i class="fas fa-user" aria-hidden="true"></i>
-                            <i class="fas fa-caret-down" aria-hidden="true"></i>
-                        </button>
-                        <ul class="user-dropdown" role="menu">
-                            <li><a href="../profile.html" role="menuitem"><i class="fas fa-user-circle" aria-hidden="true"></i> Perfil</a></li>
-                            <li><a href="#" id="logoutLink" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión</a></li>
-                        </ul>
-                    </div>
-                    <div class="cart-icon" role="button" tabindex="0" aria-label="Carrito de compras" aria-expanded="false">
-                        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-                        <span class="cart-count" id="cartCount">0</span>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Header -->
+    <site-header></site-header>
 
     <main id="main-content">
-        <div class="admin-container">
-            <aside class="admin-menu">
-                <h2>Administración</h2>
-                <nav role="navigation" aria-label="Menú de administración">
-                    <ul>
-                        <li><a href="#" data-section="dashboard" class="active" aria-current="page"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                        <li><a href="#" data-section="products"><i class="fas fa-box"></i> Productos</a></li>
-                        <li><a href="#" data-section="orders"><i class="fas fa-shopping-cart"></i> Pedidos</a></li>
-                        <li><a href="#" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
-                        <li><a href="#" data-section="reviews"><i class="fas fa-star"></i> Reseñas</a></li>
-                        <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
-                    </ul>
-                </nav>
-            </aside>
-
-            <div class="admin-content">
-                <!-- Sección Dashboard -->
-                <section id="dashboard-section" class="admin-content-section active">
-                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-                    <div class="dashboard-stats">
-                        <div class="stat-card">
-                            <h3>Total Ventas</h3>
-                            <p class="stat-value" id="totalSales">-</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Pedidos</h3>
-                            <p class="stat-value" id="totalOrders">-</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Productos</h3>
-                            <p class="stat-value" id="totalProducts">-</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Usuarios</h3>
-                            <p class="stat-value" id="totalUsers">-</p>
+        <div class="container">
+            <div class="admin-header">
+                <h2>Panel de Administración</h2>
+                <p>Gestiona productos, pedidos y usuarios</p>
+            </div>
+            
+            <div class="admin-grid">
+                <!-- Gestión de Productos -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-box"></i> Gestión de Productos</h3>
+                    </div>
+                    <div class="admin-card-body">
+                        <p>Administra el catálogo de productos de la tienda</p>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="manageProductsBtn">
+                                <i class="fas fa-list"></i> Ver Productos
+                            </button>
+                            <button class="btn btn-secondary" id="addProductBtn">
+                                <i class="fas fa-plus"></i> Agregar Nuevo
+                            </button>
                         </div>
                     </div>
-                    <div class="dashboard-charts">
-                        <div class="chart-container">
-                            <h3>Ventas por Mes</h3>
-                            <canvas id="salesChart"></canvas>
-                        </div>
-                        <div class="chart-container">
-                            <h3>Categorías de Productos</h3>
-                            <canvas id="categoriesChart"></canvas>
-                        </div>
+                </div>
+                
+                <!-- Gestión de Pedidos -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-shopping-cart"></i> Gestión de Pedidos</h3>
                     </div>
-                </section>
-
-                <!-- Sección Productos -->
-                <section id="products-section" class="admin-content-section">
-                    <h2><i class="fas fa-box"></i> Gestión de Productos</h2>
-                    <div class="admin-actions">
-                        <button id="addProductBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Producto</button>
-                        <div class="search-box">
-                            <input type="text" id="productSearch" placeholder="Buscar productos...">
-                            <i class="fas fa-search"></i>
+                    <div class="admin-card-body">
+                        <p>Revisa y actualiza el estado de los pedidos</p>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="manageOrdersBtn">
+                                <i class="fas fa-list"></i> Ir a Pedidos
+                            </button>
+                            <button class="btn btn-secondary" id="viewPendingOrdersBtn">
+                                <i class="fas fa-clock"></i> Pendientes
+                            </button>
                         </div>
                     </div>
-                    <div class="table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Imagen</th>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Precio</th>
-                                    <th>Categoría</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="productsTableBody">
-                                <!-- Los productos se cargarán aquí -->
-                            </tbody>
-                        </table>
+                </div>
+                
+                <!-- Gestión de Usuarios -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-users"></i> Gestión de Usuarios</h3>
                     </div>
-                </section>
-
-                <!-- Sección Pedidos -->
-                <section id="orders-section" class="admin-content-section">
-                    <h2><i class="fas fa-shopping-cart"></i> Gestión de Pedidos</h2>
-                    <div class="admin-actions">
-                        <select id="orderStatusFilter">
-                            <option value="">Todos los estados</option>
-                            <option value="pending">Pendiente</option>
-                            <option value="processing">Procesando</option>
-                            <option value="shipped">Enviado</option>
-                            <option value="delivered">Entregado</option>
-                            <option value="cancelled">Cancelado</option>
-                        </select>
-                        <div class="search-box">
-                            <input type="text" id="orderSearch" placeholder="Buscar pedidos...">
-                            <i class="fas fa-search"></i>
+                    <div class="admin-card-body">
+                        <p>Administra los usuarios registrados en la plataforma</p>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="manageUsersBtn">
+                                <i class="fas fa-list"></i> Ver Usuarios
+                            </button>
+                            <button class="btn btn-secondary" id="addUserBtn">
+                                <i class="fas fa-user-plus"></i> Agregar Usuario
+                            </button>
                         </div>
                     </div>
-                    <div class="table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Usuario</th>
-                                    <th>Fecha</th>
-                                    <th>Total</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ordersTableBody">
-                                <!-- Los pedidos se cargarán aquí -->
-                            </tbody>
-                        </table>
+                </div>
+                
+                <!-- Estadísticas -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Estadísticas</h3>
                     </div>
-                </section>
-
-                <!-- Sección Usuarios -->
-                <section id="users-section" class="admin-content-section">
-                    <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
-                    <div class="admin-actions">
-                        <button id="addUserBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Usuario</button>
-                        <div class="search-box">
-                            <input type="text" id="userSearch" placeholder="Buscar usuarios...">
-                            <i class="fas fa-search"></i>
+                    <div class="admin-card-body">
+                        <p>Consulta las métricas y estadísticas del negocio</p>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="viewStatsBtn">
+                                <i class="fas fa-chart-line"></i> Ver Estadísticas
+                            </button>
+                            <button class="btn btn-secondary" id="generateReportBtn">
+                                <i class="fas fa-file-pdf"></i> Generar Reporte
+                            </button>
                         </div>
                     </div>
-                    <div class="table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Email</th>
-                                    <th>Rol</th>
-                                    <th>Fecha de Registro</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="usersTableBody">
-                                <!-- Los usuarios se cargarán aquí -->
-                            </tbody>
-                        </table>
+                </div>
+                
+                <!-- Logs del Sistema -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-file-alt"></i> Logs del Sistema</h3>
                     </div>
-                </section>
-
-                <!-- Sección Reseñas -->
-                <section id="reviews-section" class="admin-content-section">
-                    <h2><i class="fas fa-star"></i> Gestión de Reseñas</h2>
-                    <div class="admin-actions">
-                        <select id="reviewStatusFilter">
-                            <option value="">Todos los estados</option>
-                            <option value="pending">Pendiente</option>
-                            <option value="approved">Aprobado</option>
-                            <option value="rejected">Rechazado</option>
-                        </select>
-                        <div class="search-box">
-                            <input type="text" id="reviewSearch" placeholder="Buscar reseñas...">
-                            <i class="fas fa-search"></i>
+                    <div class="admin-card-body">
+                        <p>Revisa los registros del sistema y actividad</p>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="viewLogsBtn">
+                                <i class="fas fa-search"></i> Ver Logs
+                            </button>
+                            <button class="btn btn-secondary" id="exportLogsBtn">
+                                <i class="fas fa-download"></i> Exportar
+                            </button>
                         </div>
                     </div>
-                    <div class="table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Usuario</th>
-                                    <th>Calificación</th>
-                                    <th>Comentario</th>
-                                    <th>Fecha</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="reviewsTableBody">
-                                <!-- Las reseñas se cargarán aquí -->
-                            </tbody>
-                        </table>
+                </div>
+                
+                <!-- Actividad Reciente -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-history"></i> Actividad Reciente</h3>
                     </div>
-                </section>
-
-                <!-- Sección Configuración -->
-                <section id="settings-section" class="admin-content-section">
-                    <h2><i class="fas fa-cog"></i> Configuración</h2>
-                    <div class="settings-container">
-                        <div class="setting-group">
-                            <h3>Información de la Tienda</h3>
-                            <form id="storeInfoForm">
-                                <div class="form-group">
-                                    <label for="storeName">Nombre de la Tienda</label>
-                                    <input type="text" id="storeName" name="storeName">
-                                </div>
-                                <div class="form-group">
-                                    <label for="storeEmail">Email de Contacto</label>
-                                    <input type="email" id="storeEmail" name="storeEmail">
-                                </div>
-                                <div class="form-group">
-                                    <label for="storePhone">Teléfono</label>
-                                    <input type="tel" id="storePhone" name="storePhone">
-                                </div>
-                                <div class="form-group">
-                                    <label for="storeAddress">Dirección</label>
-                                    <textarea id="storeAddress" name="storeAddress" rows="3"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                            </form>
-                        </div>
-                        
-                        <div class="setting-group">
-                            <h3>Configuración de Pagos</h3>
-                            <form id="paymentSettingsForm">
-                                <div class="form-group">
-                                    <label for="paymentMethod">Método de Pago Predeterminado</label>
-                                    <select id="paymentMethod" name="paymentMethod">
-                                        <option value="cash">Efectivo</option>
-                                        <option value="card">Tarjeta</option>
-                                        <option value="transfer">Transferencia</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                            </form>
+                    <div class="admin-card-body">
+                        <p>Últimas acciones realizadas en el sistema</p>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="viewActivityBtn">
+                                <i class="fas fa-eye"></i> Ver Actividad
+                            </button>
+                            <button class="btn btn-secondary" id="clearActivityBtn">
+                                <i class="fas fa-trash"></i> Limpiar
+                            </button>
                         </div>
                     </div>
-                </section>
+                </div>
+                
+                <!-- Configuración -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-cog"></i> Configuración</h3>
+                    </div>
+                    <div class="admin-card-body">
+                        <p>Configura opciones del sistema y preferencias</p>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="manageSettingsBtn">
+                                <i class="fas fa-sliders-h"></i> Configuración
+                            </button>
+                            <button class="btn btn-secondary" id="manageConfigurationBtn">
+                                <i class="fas fa-tools"></i> Administrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Modal para agregar/editar productos -->
-    <div id="productModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modalTitle">Agregar Producto</h2>
-            <form id="productForm">
-                <input type="hidden" id="productId">
-                <div class="form-group">
-                    <label for="productName">Nombre</label>
-                    <input type="text" id="productName" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">Descripción</label>
-                    <textarea id="productDescription" name="description" rows="3" required></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productPrice">Precio</label>
-                        <input type="number" id="productPrice" name="price" min="0" step="100" required>
+    <!-- Footer -->
+    <site-footer></site-footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        // Importar componentes migrados
+        import Header from '/assets/js/components/ui/Header.js';
+        import Footer from '/assets/js/components/ui/Footer.js';
+        
+        // Registrar componentes
+        if (!customElements.get('site-header')) {
+            customElements.define('site-header', Header);
+        }
+        
+        if (!customElements.get('site-footer')) {
+            customElements.define('site-footer', Footer);
+        }
+        
+        // Importar utilidades y funcionalidades
+        import { showNotification, API_BASE_URL } from '/assets/js/components/utils/utils.js';
+        import { initUserMenu, isAuthenticated, setAuthState } from '/assets/js/components/utils/auth.js';
+        
+        // Inicializar menú de usuario
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserMenu();
+            
+            // Verificar autenticación y rol de administrador
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!isAuthenticated() || !user || user.role !== 'admin') {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            // Cargar panel de administración
+            loadAdminPanel();
+        });
+        
+        // Cargar panel de administración
+        async function loadAdminPanel() {
+            try {
+                // Cargar datos básicos del panel
+                const response = await fetch(`${API_BASE_URL}/admin/stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar el panel de administración');
+                }
+                
+                const stats = await response.json();
+                renderAdminPanel(stats);
+            } catch (error) {
+                console.error('Error al cargar el panel de administración:', error);
+                showNotification('Error al cargar el panel de administración', 'error');
+                document.getElementById('adminContainer').innerHTML = '<p>Error al cargar el panel de administración. Por favor intente nuevamente.</p>';
+            }
+        }
+        
+        // Renderizar panel de administración
+        function renderAdminPanel(stats) {
+            const adminContainer = document.getElementById('adminContainer');
+            if (!adminContainer) return;
+            
+            adminContainer.innerHTML = `
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <h3>Total de Pedidos</h3>
+                        <p>${stats.totalOrders || 0}</p>
                     </div>
-                    <div class="form-group">
-                        <label for="productCategory">Categoría</label>
-                        <select id="productCategory" name="category" required>
-                            <option value="">Seleccionar categoría</option>
-                            <option value="arreglos">Arreglos Florales</option>
-                            <option value="ramos">Ramos</option>
-                            <option value="plantas">Plantas</option>
-                            <option value="accesorios">Accesorios</option>
-                        </select>
+                    <div class="stat-card">
+                        <h3>Total de Productos</h3>
+                        <p>${stats.totalProducts || 0}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total de Usuarios</h3>
+                        <p>${stats.totalUsers || 0}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Ingresos Totales</h3>
+                        <p>$${stats.totalRevenue || 0}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="productImage">Imagen URL</label>
-                    <input type="url" id="productImage" name="image">
+                
+                <div class="admin-actions">
+                    <button onclick="manageProducts()" class="btn btn-primary">
+                        <i class="fas fa-box"></i> Gestionar Productos
+                    </button>
+                    <button onclick="manageOrders()" class="btn btn-secondary">
+                        <i class="fas fa-shopping-cart"></i> Gestionar Pedidos
+                    </button>
+                    <button onclick="manageUsers()" class="btn btn-tertiary">
+                        <i class="fas fa-users"></i> Gestionar Usuarios
+                    </button>
                 </div>
-                <button type="submit" class="btn btn-primary">Guardar Producto</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal para agregar/editar usuarios -->
-    <div id="userModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="userModalTitle">Agregar Usuario</h2>
-            <form id="userForm">
-                <input type="hidden" id="userId">
-                <div class="form-group">
-                    <label for="userName">Nombre</label>
-                    <input type="text" id="userName" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="userEmail">Email</label>
-                    <input type="email" id="userEmail" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="userPassword">Contraseña</label>
-                    <input type="password" id="userPassword" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="userRole">Rol</label>
-                    <select id="userRole" name="role" required>
-                        <option value="user">Usuario</option>
-                        <option value="admin">Administrador</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Guardar Usuario</button>
-            </form>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <script type="module" src="../assets/js/admin.js"></script>
+            `;
+        }
+        
+        // Gestionar productos
+        function manageProducts() {
+            window.location.href = '/admin-products.html';
+        }
+        
+        // Gestionar pedidos
+        function manageOrders() {
+            window.location.href = '/admin-orders.html';
+        }
+        
+        // Gestionar usuarios
+        function manageUsers() {
+            window.location.href = '/admin-users.html';
+        }
+    </script>
 </body>
 </html>

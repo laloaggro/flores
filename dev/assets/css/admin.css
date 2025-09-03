@@ -1,0 +1,291 @@
+/* admin.css - Estilos específicos para el panel de administración */
+
+/* Estilos para el panel de administración */
+.admin-header {
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.admin-header h2 {
+    font-size: 2rem;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.admin-header p {
+    font-size: 1.1rem;
+    color: var(--dark-gray);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-card {
+    background: var(--bg-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-light);
+}
+
+.admin-card-header {
+    margin-bottom: 1rem;
+}
+
+.admin-card-header h3 {
+    color: var(--dark);
+    font-size: 1.3rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.admin-card-header h3 i {
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.admin-card-body p {
+    color: var(--dark-gray);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.admin-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: none;
+    margin: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.admin-actions .btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+    border: 2px solid var(--primary);
+}
+
+.admin-actions .btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.admin-actions .btn-secondary {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.admin-actions .btn-secondary:hover {
+    background-color: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para la tabla de pedidos de administración */
+.admin-orders-table th,
+.admin-orders-table td {
+    text-align: left;
+    padding: 0.75rem;
+}
+
+.admin-orders-table th:first-child,
+.admin-orders-table td:first-child {
+    text-align: left;
+}
+
+.admin-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.admin-controls .search-container {
+    flex: 1;
+    min-width: 200px;
+}
+
+.admin-controls .filter-sort {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.admin-controls .filter-sort select {
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.admin-controls .btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: fit-content;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+}
+
+/* Estilos para el modal de edición de pedidos */
+#editOrderModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para el overlay */
+}
+
+#editOrderModal .modal-content {
+    background-color: var(--bg-color);
+    margin: 5% auto;
+    padding: 0;
+    border: none;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 600px;
+    box-shadow: var(--shadow);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .admin-card {
+        padding: 1.25rem;
+    }
+    
+    .admin-actions {
+        flex-direction: column;
+    }
+    
+    .admin-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-header {
+        padding: 1rem 0;
+    }
+    
+    .admin-header h2 {
+        font-size: 1.7rem;
+    }
+    
+    .admin-header p {
+        font-size: 1rem;
+    }
+    
+    .admin-grid {
+        gap: 0.75rem;
+    }
+}
+
+/* Modo oscuro para las tarjetas de administración */
+body[data-theme="dark"] .admin-card {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body[data-theme="dark"] .admin-card:hover {
+    border-color: var(--primary);
+}
+
+body[data-theme="dark"] .admin-card-header h3 {
+    color: var(--dark-text);
+}
+
+body[data-theme="dark"] .admin-card-header h3 i {
+    color: var(--primary);
+}
+
+body[data-theme="dark"] .admin-card-body p {
+    color: #adb5bd;
+}
+
+body[data-theme="dark"] .admin-actions .btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+body[data-theme="dark"] .admin-actions .btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+body[data-theme="dark"] .admin-actions .btn-secondary {
+    background-color: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+body[data-theme="dark"] .admin-actions .btn-secondary:hover {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+body[data-theme="dark"] .admin-controls .filter-sort select {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-input-border);
+    color: var(--dark-text);
+}
+
+body[data-theme="dark"] .admin-controls .filter-sort select:focus {
+    border-color: var(--primary);
+}
+
+body[data-theme="dark"] .admin-header h2 {
+    color: var(--dark-text);
+}
+
+body[data-theme="dark"] .admin-header p {
+    color: #adb5bd;
+}

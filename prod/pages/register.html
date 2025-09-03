@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - Arreglos Victoria Florería</title>
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+    
+    <!-- Cargar estilos CSS optimizados -->
+    <link rel="stylesheet" href="assets/css/preflight.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/visibility-fix.css">
+    <link rel="stylesheet" href="assets/css/conflict-fixes.css">
+    <link rel="stylesheet" href="assets/css/color-enhancements.css">
+    
+    <meta name="description" content="Crea una cuenta en Arreglos Victoria Florería para realizar compras más rápido y fácil.">
+    <meta name="keywords" content="registrarse, cuenta, registro, usuario, crear cuenta">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglos-victoria-backend.onrender.com/register.html">
+    <meta property="og:title" content="Registrarse - Arreglos Victoria Florería">
+    <meta property="og:description" content="Crea una cuenta en Arreglos Victoria Florería para realizar compras más rápido y fácil.">
+    <meta property="og:image" content="./assets/images/register-hero.jpg">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
+    <meta property="og:site_name" content="Arreglos Victoria Florería">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglos-victoria-backend.onrender.com/register.html">
+    <meta property="twitter:title" content="Registrarse - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Crea una cuenta en Arreglos Victoria Florería para realizar compras más rápido y fácil.">
+    <meta property="twitter:image" content="./assets/images/register-hero.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
+    
+    <!-- Preload critical scripts -->
+    <link rel="preload" href="assets/js/components/utils/utils.js" as="script">
+    <link rel="preload" href="assets/js/components/pages/register.js" as="script">
+    <link rel="preload" href="assets/js/components/utils/auth.js" as="script">
+    <link rel="preload" href="assets/js/components/utils/auth.js" as="script">
+    
+</head>
+<body data-theme="light" class="register-page">
+    <!-- Skip link para navegación por teclado -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <!-- Header -->
+    <site-header></site-header>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero half-height">
+            <div class="hero-content">
+                <h1>Crear Cuenta</h1>
+                <p>Regístrate para acceder a todas nuestras funciones</p>
+            </div>
+        </section>
+
+        <!-- Registration Section -->
+        <section class="auth-section">
+            <div class="container">
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <h2>Registrarse</h2>
+                        <p>Crea una cuenta para continuar</p>
+                    </div>
+                    
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input type="text" id="name" name="name" class="form-input" required aria-required="true">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-input" required aria-required="true">
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <label for="password">Contraseña</label>
+                            <div class="password-input-container">
+                                <input type="password" id="password" name="password" class="form-input" required aria-required="true" minlength="6">
+                                <button type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar/ocultar contraseña" aria-pressed="false">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="form-text">La contraseña debe tener al menos 6 caracteres</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar contraseña</label>
+                            <div class="password-input-container">
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" required aria-required="true">
+                                <button type="button" id="toggleConfirmPassword" class="toggle-password" aria-label="Mostrar/ocultar contraseña" aria-pressed="false">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" id="registerButton" class="btn btn-primary btn-block">Registrarse</button>
+                    </form>
+                    
+                    <div class="divider">
+                        <span>o</span>
+                    </div>
+                    
+                    <div class="google-login">
+                        <div id="googleSignInButton"></div>
+                    </div>
+                    
+                    <div class="auth-links">
+                        <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <site-footer></site-footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        // Importar componentes migrados
+        import Header from './assets/js/components/ui/Header.js';
+        import Footer from './assets/js/components/ui/Footer.js';
+        
+        // Registrar componentes
+        if (!customElements.get('site-header')) {
+            customElements.define('site-header', Header);
+        }
+        
+        if (!customElements.get('site-footer')) {
+            customElements.define('site-footer', Footer);
+        }
+        
+        // Importar utilidades y funcionalidades
+        import { showNotification, API_BASE_URL } from './assets/js/components/utils/utils.js';
+        import { initUserMenu } from './assets/js/components/utils/auth.js';
+        
+        // Inicializar menú de usuario
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserMenu();
+        });
+        
+        // Funcionalidad del formulario de registro
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            const registerButton = document.getElementById('registerButton');
+            
+            if (registerForm) {
+                registerForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    
+                    // Validaciones
+                    if (!name || !email || !password || !confirmPassword) {
+                        showNotification('Por favor complete todos los campos', 'error');
+                        return;
+                    }
+                    
+                    if (password !== confirmPassword) {
+                        showNotification('Las contraseñas no coinciden', 'error');
+                        return;
+                    }
+                    
+                    if (password.length < 6) {
+                        showNotification('La contraseña debe tener al menos 6 caracteres', 'error');
+                        return;
+                    }
+                    
+                    // Deshabilitar botón y mostrar indicador de carga
+                    registerButton.disabled = true;
+                    const originalBtnText = registerButton.innerHTML;
+                    registerButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
+                    
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ name, email, password })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (response.ok) {
+                            showNotification('Registro exitoso. Por favor inicie sesión.', 'success');
+                            registerForm.reset();
+                            // Redirigir a la página de login después de 2 segundos
+                            setTimeout(() => {
+                                window.location.href = 'login.html';
+                            }, 2000);
+                        } else {
+                            throw new Error(data.message || 'Error en el registro');
+                        }
+                    } catch (error) {
+                        console.error('Error en el registro:', error);
+                        showNotification(error.message || 'Error en el registro. Por favor intente nuevamente.', 'error');
+                    } finally {
+                        // Rehabilitar botón
+                        registerButton.disabled = false;
+                        registerButton.innerHTML = originalBtnText;
+                    }
+                });
+            }
+            
+            // Toggle de visibilidad de contraseña
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+            }
+            
+            // Toggle de visibilidad de confirmación de contraseña
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            if (toggleConfirmPassword && confirmPasswordInput) {
+                toggleConfirmPassword.addEventListener('click', function() {
+                    const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    confirmPasswordInput.setAttribute('type', type);
+                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

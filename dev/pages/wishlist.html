@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Deseos - Arreglos Victoria Florería</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Consulta y gestiona tu lista de deseos en Arreglos Victoria Florería.">
+    <meta name="keywords" content="lista de deseos, favoritos, cuenta, productos">
+    <meta name="author" content="Arreglos Victoria Florería">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglosvictoria.cl/wishlist.html">
+    <meta property="og:title" content="Lista de Deseos - Arreglos Victoria Florería">
+    <meta property="og:description" content="Consulta y gestiona tu lista de deseos en Arreglos Victoria Florería.">
+    <meta property="og:image" content="/assets/images/logo.avif">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglosvictoria.cl/wishlist.html">
+    <meta property="twitter:title" content="Lista de Deseos - Arreglos Victoria Florería">
+    <meta property="twitter:description" content="Consulta y gestiona tu lista de deseos en Arreglos Victoria Florería.">
+    <meta property="twitter:image" content="/assets/images/logo.avif">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/assets/images/logo.avif" as="image">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <site-header></site-header>
+    
+    <main>
+        <section class="wishlist-section">
+            <div class="container">
+                <h1>Lista de Deseos</h1>
+                <div id="wishlistContainer" class="wishlist-container">
+                    <div class="loading-placeholder">
+                        <p><i class="fas fa-spinner fa-spin"></i> Cargando lista de deseos...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <site-footer></site-footer>
+    
+    <!-- Scripts -->
+    <script type="module">
+        // Importar componentes migrados
+        import Header from './assets/js/components/ui/Header.js';
+        import Footer from './assets/js/components/ui/Footer.js';
+        
+        // Registrar componentes
+        if (!customElements.get('site-header')) {
+            customElements.define('site-header', Header);
+        }
+        
+        if (!customElements.get('site-footer')) {
+            customElements.define('site-footer', Footer);
+        }
+        
+        // Importar utilidades y funcionalidades
+        import { showNotification, API_BASE_URL } from './assets/js/components/utils/utils.js';
+        import { initUserMenu, isAuthenticated, setAuthState } from './assets/js/components/utils/auth.js';
+        
+        // Inicializar menú de usuario
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserMenu();
+            
+            // Verificar autenticación
+            if (!isAuthenticated()) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            // Cargar lista de deseos
+            loadWishlist();
+        });
+        
+        // Cargar lista de deseos
+        async function loadWishlist() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/wishlist`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar la lista de deseos');
+                }
+                
+                const wishlist = await response.json();
+                renderWishlist(wishlist);
+            } catch (error) {
+                console.error('Error al cargar la lista de deseos:', error);
+                showNotification('Error al cargar la lista de deseos', 'error');
+                document.getElementById('wishlistContainer').innerHTML = '<p>Error al cargar la lista de deseos. Por favor intente nuevamente.</p>';
+            }
+        }
+        
+        // Renderizar lista de deseos
+        function renderWishlist(wishlist) {
+            const wishlistContainer = document.getElementById('wishlistContainer');
+            if (!wishlistContainer) return;
+            
+            if (!wishlist || wishlist.length === 0) {
+                wishlistContainer.innerHTML = '<p>No tienes productos en tu lista de deseos aún.</p>';
+                return;
+            }
+            
+            wishlistContainer.innerHTML = wishlist.map(item => `
+                <div class="wishlist-item">
+                    <div class="wishlist-item-image">
+                        <img src="${item.image}" alt="${item.name}" loading="lazy">
+                    </div>
+                    <div class="wishlist-item-details">
+                        <h3>${item.name}</h3>
+                        <p class="wishlist-item-price">$${item.price}</p>
+                    </div>
+                    <div class="wishlist-item-actions">
+                        <button onclick="addToCart(${item.id})" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                        </button>
+                        <button onclick="removeFromWishlist(${item.id})" class="btn btn-secondary">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Agregar al carrito
+        async function addToCart(productId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/cart/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({ productId, quantity: 1 })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al agregar producto al carrito');
+                }
+                
+                showNotification('Producto agregado al carrito', 'success');
+            } catch (error) {
+                console.error('Error al agregar producto al carrito:', error);
+                showNotification('Error al agregar producto al carrito', 'error');
+            }
+        }
+        
+        // Eliminar de la lista de deseos
+        async function removeFromWishlist(productId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/wishlist/remove`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({ productId })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al eliminar producto de la lista de deseos');
+                }
+                
+                showNotification('Producto eliminado de la lista de deseos', 'success');
+                
+                // Recargar la lista de deseos
+                loadWishlist();
+            } catch (error) {
+                console.error('Error al eliminar producto de la lista de deseos:', error);
+                showNotification('Error al eliminar producto de la lista de deseos', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
