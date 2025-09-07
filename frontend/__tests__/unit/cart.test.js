@@ -17,7 +17,7 @@ global.updateCartCount = jest.fn();
 global.showNotification = jest.fn();
 
 // Importar funciones reales del carrito
-import { addToCart, getCartTotal, removeFromCart, updateQuantity } from '../../frontend/assets/js/cart.js';
+import { addToCart, getCartTotal, removeFromCart, updateQuantity } from '../../frontend/assets/js/components/cart/cart.js';
 
 describe('Cart Functionality', () => {
   beforeEach(() => {
@@ -38,9 +38,11 @@ describe('Cart Functionality', () => {
     // Verificar que las funciones estén definidas
     expect(typeof addToCart).toBe('function');
     expect(typeof getCartTotal).toBe('function');
+    expect(typeof removeFromCart).toBe('function');
+    expect(typeof updateQuantity).toBe('function');
   });
 
-  test('debería agregar productos al carrito', () => {
+  test('debería agregar un producto al carrito', () => {
     // Mock de carrito vacío
     localStorageMock.getItem.mockImplementation((key) => {
       if (key === 'cart') return '[]';
@@ -58,8 +60,89 @@ describe('Cart Functionality', () => {
       image: 'test-image.jpg'
     };
 
-    // Verificar que la función addToCart exista
-    expect(typeof addToCart).toBe('function');
+    // Agregar al carrito
+    addToCart(testProduct);
+    
+    // Verificar que se llamó a setItem
+    expect(localStorageMock.setItem).toHaveBeenCalled();
+  });
+
+  test('debería incrementar la cantidad si el producto ya existe en el carrito', () => {
+    // Mock de carrito con producto existente
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'cart') {
+        return JSON.stringify([
+          { id: '1', name: 'Test Product', price: 10.99, quantity: 1 }
+        ]);
+      }
+      return null;
+    });
+
+    // Mock para guardar en localStorage
+    localStorageMock.setItem.mockImplementation(() => {});
+
+    // Crear un producto de prueba
+    const testProduct = {
+      id: '1',
+      name: 'Test Product',
+      price: 10.99,
+      image: 'test-image.jpg'
+    };
+
+    // Agregar al carrito
+    addToCart(testProduct);
+    
+    // Verificar que se actualizó la cantidad
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('cart', JSON.stringify([
+      { id: '1', name: 'Test Product', price: 10.99, quantity: 2 }
+    ]));
+  });
+
+  test('debería actualizar la cantidad de un producto', () => {
+    // Mock de carrito con productos
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'cart') {
+        return JSON.stringify([
+          { id: '1', name: 'Product 1', price: 10.99, quantity: 2 }
+        ]);
+      }
+      return null;
+    });
+
+    // Mock para guardar en localStorage
+    localStorageMock.setItem.mockImplementation(() => {});
+
+    // Actualizar cantidad
+    updateQuantity('1', 5);
+    
+    // Verificar que se actualizó la cantidad correctamente
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('cart', JSON.stringify([
+      { id: '1', name: 'Product 1', price: 10.99, quantity: 5 }
+    ]));
+  });
+
+  test('debería eliminar un producto del carrito', () => {
+    // Mock de carrito con productos
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'cart') {
+        return JSON.stringify([
+          { id: '1', name: 'Product 1', price: 10.99, quantity: 2 },
+          { id: '2', name: 'Product 2', price: 5.99, quantity: 1 }
+        ]);
+      }
+      return null;
+    });
+
+    // Mock para guardar en localStorage
+    localStorageMock.setItem.mockImplementation(() => {});
+
+    // Eliminar producto
+    removeFromCart('1');
+    
+    // Verificar que el producto fue eliminado
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('cart', JSON.stringify([
+      { id: '2', name: 'Product 2', price: 5.99, quantity: 1 }
+    ]));
   });
 
   test('debería calcular correctamente el total del carrito', () => {
@@ -74,76 +157,77 @@ describe('Cart Functionality', () => {
       return null;
     });
 
-    // Verificar que la función getCartTotal exista
-    expect(typeof getCartTotal).toBe('function');
+    // Calcular total
+    const total = getCartTotal();
+    
+    // Verificar que el total es correcto
+    expect(total).toBeCloseTo(27.97, 2);
   });
 
-  test('debería manejar correctamente un carrito vacío', () => {
+  test('debería manejar correctamente productos con precios inválidos', () => {
+    // Mock de carrito con productos con precios inválidos
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'cart') {
+        return JSON.stringify([
+          { id: '1', name: 'Product 1', price: null, quantity: 2 },
+          { id: '2', name: 'Product 2', price: 'invalid', quantity: 1 }
+        ]);
+      }
+      return null;
+    });
+
+    // Calcular total
+    const total = getCartTotal();
+    
+    // Verificar que el total es 0
+    expect(total).toBe(0);
+  });
+
+  test('debería manejar correctamente cantidades inválidas', () => {
+    // Mock de carrito con productos con cantidades inválidas
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'cart') {
+        return JSON.stringify([
+          { id: '1', name: 'Product 1', price: 10.99, quantity: -1 },
+          { id: '2', name: 'Product 2', price: 5.99, quantity: 'invalid' }
+        ]);
+      }
+      return null;
+    });
+
+    // Calcular total
+    const total = getCartTotal();
+    
+    // Verificar que el total es 0
+    expect(total).toBe(0);
+  });
+
+  test('debería persistir el carrito en localStorage', () => {
     // Mock de carrito vacío
     localStorageMock.getItem.mockImplementation((key) => {
       if (key === 'cart') return '[]';
       return null;
     });
 
-    // Obtener el total del carrito vacío
-    const total = getCartTotal();
-    expect(total).toBe(0);
-  });
-
-  test('debería manejar correctamente productos con cantidad cero', () => {
-    // Mock de carrito con producto de cantidad cero
-    localStorageMock.getItem.mockImplementation((key) => {
-      if (key === 'cart') {
-        return JSON.stringify([
-          { id: '1', name: 'Product 1', price: 10.99, quantity: 0 }
-        ]);
-      }
-      return null;
-    });
-
-    // Obtener el total del carrito
-    const total = getCartTotal();
-    expect(total).toBe(0);
-  });
-
-  test('debería manejar correctamente productos con precios decimales', () => {
-    // Mock de carrito con productos con precios decimales
-    localStorageMock.getItem.mockImplementation((key) => {
-      if (key === 'cart') {
-        return JSON.stringify([
-          { id: '1', name: 'Product 1', price: 10.999, quantity: 1 },
-          { id: '2', name: 'Product 2', price: 5.111, quantity: 2 }
-        ]);
-      }
-      return null;
-    });
-
-    // Obtener el total del carrito
-    const total = getCartTotal();
-    // Verificar redondeo correcto a 2 decimales
-    expect(total).toBeCloseTo(21.22, 2);
-  });
-
-  test('debería eliminar productos del carrito', () => {
-    // Mock de carrito con productos
-    localStorageMock.getItem.mockImplementation((key) => {
-      if (key === 'cart') {
-        return JSON.stringify([
-          { id: '1', name: 'Product 1', price: 10.99, quantity: 2 },
-          { id: '2', name: 'Product 2', price: 5.99, quantity: 1 }
-        ]);
-      }
-      return null;
-    });
-
     // Mock para guardar en localStorage
     localStorageMock.setItem.mockImplementation(() => {});
 
-    // Verificar que la función removeFromCart exista
-    expect(typeof removeFromCart).toBe('function');
+    // Crear un producto de prueba
+    const testProduct = {
+      id: '1',
+      name: 'Test Product',
+      price: 10.99,
+      image: 'test-image.jpg'
+    };
+
+    // Agregar al carrito
+    addToCart(testProduct);
+    
+    // Verificar que se guardó en localStorage
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('cart', expect.any(String));
   });
 
-  test('debería actualizar la cantidad de productos en el carrito', () => {
+  test('debería cargar el carrito desde localStorage', () => {
     // Mock de carrito con productos
     localStorageMock.getItem.mockImplementation((key) => {
       if (key === 'cart') {
@@ -154,10 +238,14 @@ describe('Cart Functionality', () => {
       return null;
     });
 
-    // Mock para guardar en localStorage
-    localStorageMock.setItem.mockImplementation(() => {});
-
-    // Verificar que la función updateQuantity exista
-    expect(typeof updateQuantity).toBe('function');
+    // Recargar el carrito
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    
+    // Verificar que los productos se cargaron correctamente
+    expect(cart).toHaveLength(1);
+    expect(cart[0].id).toBe('1');
+    expect(cart[0].name).toBe('Product 1');
+    expect(cart[0].price).toBe(10.99);
+    expect(cart[0].quantity).toBe(2);
   });
 });

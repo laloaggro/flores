@@ -17,7 +17,13 @@
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "no-unused-vars": "warn",
-    "no-console": "off"
+    "no-console": "off",
+    "no-undef": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    "prefer-arrow-callback": "warn",
+    "arrow-spacing": "error",
+    "no-duplicate-imports": "error"
   },
   "ignorePatterns": [
     "frontend/assets/js/vendor/**/*.js",

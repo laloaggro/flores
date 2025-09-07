@@ -1,7 +1,7 @@
 /* TEAM */
-Developer: Mauricio Garay
+Developer: Mauricio Garay Veas
 Contact: laloaggro@gmail.com
-Location: Asunción, Paraguay
+Location: Santiago, Chile
 
 /* SITE */
 Last update: 2025-08-22

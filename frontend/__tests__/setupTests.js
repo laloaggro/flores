@@ -1,30 +1,59 @@
-// Configuración global para las pruebas
+// Configuración de pruebas para simular el entorno del navegador
 
-// Mock de funciones globales
-global.toggleCart = jest.fn();
-global.toggleUserMenu = jest.fn();
-global.toggleMobileMenu = jest.fn();
-global.logout = jest.fn();
-global.updateCartCount = jest.fn();
-global.showNotification = jest.fn();
+// Verificar si window está disponible
+if (typeof window === 'undefined') {
+  global.window = {};
+}
 
-// Mock de fetch
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    ok: true,
-    json: () => Promise.resolve({}),
-  })
-);
+// Verificar si document está disponible
+if (typeof document === 'undefined') {
+  global.document = {
+    createElement: (tag) => {
+      if (tag === 'div') {
+        return {
+          style: {},
+          classList: {
+            add: () => {},
+            remove: () => {},
+            contains: () => false
+          },
+          setAttribute: () => {},
+          getAttribute: () => null,
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          querySelector: () => null,
+          querySelectorAll: () => []
+        };
+      }
+      return {};
+    },
+    querySelector: () => null,
+    querySelectorAll: () => [],
+    getElementById: () => null,
+    addEventListener: () => {},
+    removeEventListener: () => {}
+  };
+}
 
 // Mock de localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-};
+if (typeof localStorage === 'undefined') {
+  global.localStorage = {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+    clear: () => {}
+  };
+}
 
-global.localStorage = localStorageMock;
+// Mock de sessionStorage
+if (typeof sessionStorage === 'undefined') {
+  global.sessionStorage = {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+    clear: () => {}
+  };
+}
 
 // Mock de window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -40,3 +69,38 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
+
+// Mock de fetch
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({}),
+    text: () => Promise.resolve(''),
+    ok: true,
+    status: 200
+  })
+);
+
+// Mock de URL
+global.URL = class {
+  constructor(url) {
+    this.url = url;
+  }
+  toString() {
+    return this.url;
+  }
+};
+
+// Registrar elementos personalizados
+if (typeof customElements === 'undefined') {
+  global.customElements = {
+    define: (name, constructor) => {
+      // Registrar el elemento personalizado
+      global.customElements.registry = global.customElements.registry || {};
+      global.customElements.registry[name] = constructor;
+    },
+    get: (name) => {
+      // Devolver el constructor si está registrado
+      return global.customElements.registry && global.customElements.registry[name];
+    }
+  };
+}

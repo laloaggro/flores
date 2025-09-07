@@ -39,7 +39,7 @@ export async function login(email, password) {
             localStorage.setItem('token', data.token);
             
             // Extraer información del usuario del token
-            const user = getUserInfoFromToken();
+            const user = getUser(); // Usar el alias correcto de la importación
             if (user) {
                 localStorage.setItem('user', JSON.stringify(user));
             }
@@ -223,7 +223,7 @@ export function initAuth() {
             submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...';
             
             try {
-                await handleLogin(email, password);
+                await login(email, password);
             } finally {
                 // Rehabilitar botón
                 submitButton.disabled = false;

@@ -10,9 +10,7 @@ class Footer extends HTMLElement {
       const fontAwesomeLink = document.createElement('link');
       fontAwesomeLink.rel = 'stylesheet';
       fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-      fontAwesomeLink.integrity = 'sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==';
       fontAwesomeLink.crossOrigin = 'anonymous';
-      fontAwesomeLink.referrerPolicy = 'no-referrer';
       document.head.appendChild(fontAwesomeLink);
     }
     
@@ -58,9 +56,9 @@ class Footer extends HTMLElement {
           <div class="footer-bottom">
             <p>&copy; 2025 Arreglos Florales Victoria. Todos los derechos reservados.</p>
             <div class="footer-links">
-              <a href="privacy.html" aria-label="Política de privacidad"><i class="fas fa-user-secret" aria-hidden="true"></i> Privacidad</a>
-              <a href="terms.html" aria-label="Términos y condiciones"><i class="fas fa-file-contract" aria-hidden="true"></i> Términos</a>
-              <a href="sitemap.html" aria-label="Mapa del sitio"><i class="fas fa-sitemap" aria-hidden="true"></i> Mapa del Sitio</a>
+              <a href="/pages/privacy.html" aria-label="Política de privacidad"><i class="fas fa-user-secret" aria-hidden="true"></i> Privacidad</a>
+              <a href="/pages/terms.html" aria-label="Términos y condiciones"><i class="fas fa-file-contract" aria-hidden="true"></i> Términos</a>
+              <a href="/pages/sitemap.html" aria-label="Mapa del sitio"><i class="fas fa-sitemap" aria-hidden="true"></i> Mapa del Sitio</a>
             </div>
             <p>Diseñado con <i class="fas fa-heart" aria-label="amor"></i> en Santiago, Chile</p>
           </div>

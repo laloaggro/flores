@@ -177,11 +177,11 @@
     <site-footer></site-footer>
 
     <!-- Scripts optimizados -->
-    <script type="module" src="../components/Header.js"></script>
-    <script type="module" src="../components/Footer.js"></script>
+    <script type="module" src="/components/header/Header.js"></script>
+    <script type="module" src="/components/header/Footer.js"></script>
     <script type="module">
         // Importar utilidades y funcionalidades
-        import { initUserMenu } from './assets/js/components/utils/auth.js';
+        import { initUserMenu } from '/assets/js/components/utils/auth.js';
         
         // Inicializar menú de usuario
         document.addEventListener('DOMContentLoaded', () => {
@@ -189,8 +189,8 @@
         });
         
         // Importar componentes
-        import Header from './assets/js/components/ui/Header.js';
-        import Footer from './assets/js/components/ui/Footer.js';
+        import Header from '/components/header/Header.js';
+        import Footer from '/components/header/Footer.js';
         
         // Registrar componentes
         if (!customElements.get('site-header')) {

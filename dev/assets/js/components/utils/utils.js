@@ -9,20 +9,20 @@
  * @returns {string} URL base del API
  */
 const getApiBaseUrl = () => {
-  // En producción, usar la URL del backend en Render
+  // En producción, usar la URL del API Gateway
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    // URL real del backend en Render
-    return 'https://arreglos-victoria-backend.onrender.com';
+    // URL del API Gateway en producción
+    return 'http://localhost:3000'; // Cambiar por la URL real del API Gateway en producción
   }
   
   // Detectar si se está usando Live Server (puerto 5500)
   if (typeof window !== 'undefined' && window.location.port === '5500') {
-    // Cuando se usa Live Server, el backend está en localhost:5000
-    return 'http://localhost:5000';
+    // Cuando se usa Live Server, el API Gateway está en localhost:3000
+    return 'http://localhost:3000';
   }
   
-  // En desarrollo normal, usar localhost con puerto 5000
-  return 'http://localhost:5000';
+  // En desarrollo normal, usar localhost con puerto 3000 (API Gateway)
+  return 'http://localhost:3000';
 };
 
 const API_BASE_URL = getApiBaseUrl();
@@ -363,7 +363,7 @@ const logout = () => {
  * @returns {string|null} Token de autenticación o null si no existe
  */
 const getAuthToken = () => {
-    return localStorage.getItem('authToken');
+  return localStorage.getItem('authToken');
 };
 
 /**

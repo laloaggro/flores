@@ -96,12 +96,12 @@
     
     <!-- Footer -->
     <site-footer></site-footer>
-    
+
     <!-- Scripts -->
     <script type="module">
         // Importar componentes migrados
-        import Header from './assets/js/components/ui/Header.js';
-        import Footer from './assets/js/components/ui/Footer.js';
+        import Header from '/components/header/Header.js';
+        import Footer from '/components/header/Footer.js';
         
         // Registrar componentes
         if (!customElements.get('site-header')) {
@@ -113,7 +113,7 @@
         }
         
         // Importar utilidades y funcionalidades
-        import { initUserMenu } from './assets/js/components/utils/auth.js';
+        import { initUserMenu } from '/assets/js/components/utils/auth.js';
         
         // Inicializar menú de usuario
         document.addEventListener('DOMContentLoaded', () => {

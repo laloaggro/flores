@@ -23,16 +23,15 @@
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
     <meta name="description" content="Tus pedidos en Arreglos Victoria Florería. Revisa el estado de tus compras y detalles de envío.">
     <meta name="keywords" content="pedidos, compras, historial, estado de pedido, florería">
     <meta name="author" content="Arreglos Victoria Florería">
     <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Mejoras de seguridad -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -57,11 +56,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
     
-    <!-- Preload critical scripts -->
-    <link rel="preload" href="assets/js/orders.js" as="script">
-    <link rel="preload" href="assets/js/components/utils/auth.js" as="script">
-    <link rel="preload" href="assets/js/components/ui/Header.js" as="script">
-    <link rel="preload" href="assets/js/components/utils/theme.js" as="script">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -74,18 +68,20 @@
         <section class="hero half-height">
             <div class="hero-content">
                 <h1>Mis Pedidos</h1>
-                <p>Consulta tu historial de pedidos</p>
+                <p>Consulta el historial y estado de tus pedidos</p>
             </div>
         </section>
 
-        <!-- Pedidos de usuario -->
+        <!-- Orders Section -->
         <section class="orders-section">
             <div class="container">
-                <h1>Mis Pedidos</h1>
+                <div class="section-header">
+                    <h2>Historial de Pedidos</h2>
+                    <p>Aquí encontrarás todos tus pedidos realizados</p>
+                </div>
+                
                 <div id="ordersContainer" class="orders-container">
-                    <div class="loading-placeholder">
-                        <p><i class="fas fa-spinner fa-spin"></i> Cargando pedidos...</p>
-                    </div>
+                    <!-- Orders will be loaded here -->
                 </div>
             </div>
         </section>
@@ -96,11 +92,11 @@
 
     <!-- Scripts -->
     <script type="module">
-        // Importar componentes migrados
+        // Importar componentes
         import Header from './assets/js/components/ui/Header.js';
         import Footer from './assets/js/components/ui/Footer.js';
         
-        // Registrar componentes
+        // Registrar componentes personalizados
         if (!customElements.get('site-header')) {
             customElements.define('site-header', Header);
         }
@@ -110,8 +106,8 @@
         }
         
         // Importar utilidades y funcionalidades
-        import { showNotification, API_BASE_URL } from './assets/js/components/utils/utils.js';
-        import { initUserMenu, isAuthenticated, setAuthState } from './assets/js/components/utils/auth.js';
+        import { showNotification, API_BASE_URL, isAuthenticated } from './assets/js/components/utils/utils.js';
+        import { initUserMenu } from './assets/js/components/utils/auth.js';
         
         // Inicializar menú de usuario
         document.addEventListener('DOMContentLoaded', () => {
@@ -130,58 +126,71 @@
         // Cargar pedidos
         async function loadOrders() {
             try {
-                const response = await fetch(`${API_BASE_URL}/orders`, {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                const response = await fetch(`${API_BASE_URL}/api/orders`, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                        'Authorization': `Bearer ${token}`
                     }
                 });
                 
                 if (!response.ok) {
-                    throw new Error('Error al cargar pedidos');
+                    throw new Error('Error al cargar los pedidos');
                 }
                 
                 const orders = await response.json();
-                renderOrders(orders);
+                displayOrders(orders);
             } catch (error) {
                 console.error('Error al cargar pedidos:', error);
-                // Mostrar notificación de error
-                const notification = document.createElement('div');
-                notification.className = 'notification error';
-                notification.textContent = 'Error al cargar pedidos';
-                document.body.appendChild(notification);
-                
-                // Eliminar notificación después de 5 segundos
-                setTimeout(() => {
-                    notification.remove();
-                }, 5000);
-                document.getElementById('ordersContainer').innerHTML = '<p>Error al cargar pedidos. Por favor intente nuevamente.</p>';
+                showNotification('Error al cargar los pedidos', 'error');
+                document.getElementById('ordersContainer').innerHTML = `
+                    <div class="error-message">
+                        <p><i class="fas fa-exclamation-circle"></i> Error al cargar los pedidos. Por favor, inténtelo de nuevo más tarde.</p>
+                    </div>
+                `;
             }
         }
         
-        // Renderizar pedidos
-        function renderOrders(orders) {
-            const ordersContainer = document.getElementById('ordersContainer');
-            if (!ordersContainer) return;
+        // Mostrar pedidos
+        function displayOrders(orders) {
+            const container = document.getElementById('ordersContainer');
             
             if (!orders || orders.length === 0) {
-                ordersContainer.innerHTML = '<p>No tienes pedidos aún.</p>';
+                container.innerHTML = `
+                    <div class="no-orders">
+                        <i class="fas fa-shopping-bag"></i>
+                        <h3>No tienes pedidos aún</h3>
+                        <p>¡Explora nuestra tienda y realiza tu primera compra!</p>
+                        <a href="/products.html" class="btn btn-primary">Ver Productos</a>
+                    </div>
+                `;
                 return;
             }
             
-            ordersContainer.innerHTML = orders.map(order => `
+            container.innerHTML = orders.map(order => `
                 <div class="order-card">
                     <div class="order-header">
-                        <h3>Pedido #${order.id}</h3>
-                        <span class="order-status ${order.status}">${order.status}</span>
+                        <div class="order-info">
+                            <h3>Pedido #${order.id}</h3>
+                            <p class="order-date">${new Date(order.created_at).toLocaleDateString('es-CL')}</p>
+                        </div>
+                        <div class="order-status ${order.status.toLowerCase()}">
+                            <span>${order.status}</span>
+                        </div>
                     </div>
+                    
                     <div class="order-details">
-                        <p><strong>Fecha:</strong> ${new Date(order.date).toLocaleDateString()}</p>
-                        <p><strong>Total:</strong> $${order.total}</p>
-                        <p><strong>Productos:</strong> ${order.items?.length || 0}</p>
-                    </div>
-                    <div class="order-actions">
-                        <button onclick="viewOrderDetails(${order.id})" class="btn btn-secondary">
-                            <i class="fas fa-eye"></i> Ver Detalles
+                        <div class="order-summary">
+                            <p><strong>Total:</strong> $${order.total.toLocaleString('es-CL')}</p>
+                            <p><strong>Productos:</strong> ${order.items?.length || 0}</p>
+                        </div>
+                        
+                        <button class="btn btn-secondary" onclick="viewOrderDetails(${order.id})">
+                            Ver Detalles
                         </button>
                     </div>
                 </div>

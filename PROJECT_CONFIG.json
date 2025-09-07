@@ -9,6 +9,7 @@
       "prod": "prod/",
       "frontend": "frontend/"
     },
+    "assets": "assets/", 
     "tests": "tests/",
     "utils": "utils/",
     "temp": "temp/",

@@ -25,7 +25,14 @@
     <meta property="twitter:description" content="Gestiona tu perfil en Arreglos Victoria Florería.">
     <meta property="twitter:image" content="/assets/images/logo.avif">
     
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
     <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" crossorigin="anonymous">
     <link rel="preload" href="/assets/images/logo.avif" as="image">
     
     <!-- Favicon -->
@@ -36,11 +43,7 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="/assets/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" onload="this.onload=null;this.rel='stylesheet'">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -48,7 +51,7 @@
     <!-- Mejoras de seguridad -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
+    <!-- X-Frame-Options must be set via HTTP header, not meta tag -->
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
     
     <!-- Font Awesome -->
@@ -78,13 +81,13 @@
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png">
     
     <!-- Preload critical scripts -->
-    <link rel="preload" href="components/Header.js" as="script">
-    <link rel="preload" href="components/Footer.js" as="script">
-    <link rel="preload" href="assets/js/profile.js" as="script">
-    <link rel="preload" href="assets/js/accessibility.js" as="script">
-    <link rel="preload" href="assets/js/components/utils/auth.js" as="script">
-    <link rel="preload" href="assets/js/components/ui/Header.js" as="script">
-    <link rel="preload" href="assets/js/components/utils/theme.js" as="script">
+    <link rel="preload" href="components/Header.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="components/Footer.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="assets/js/profile.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="assets/js/accessibility.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="assets/js/components/utils/auth.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="assets/js/components/ui/Header.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="assets/js/components/utils/theme.js" as="script" crossorigin="anonymous">
 </head>
 <body data-theme="light">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -114,18 +117,9 @@
         import Header from './assets/js/components/ui/Header.js';
         import Footer from './assets/js/components/ui/Footer.js';
         
-        // Registrar componentes
-        if (!customElements.get('site-header')) {
-            customElements.define('site-header', Header);
-        }
-        
-        if (!customElements.get('site-footer')) {
-            customElements.define('site-footer', Footer);
-        }
-        
         // Importar utilidades y funcionalidades
-        import { showNotification, API_BASE_URL } from './assets/js/components/utils/utils.js';
-        import { initUserMenu, isAuthenticated, setAuthState } from './assets/js/components/utils/auth.js';
+        import { showNotification, API_BASE_URL, isAuthenticated } from './assets/js/components/utils/utils.js';
+        import { initUserMenu } from './assets/js/components/utils/auth.js';
         
         // Inicializar menú de usuario
         document.addEventListener('DOMContentLoaded', () => {

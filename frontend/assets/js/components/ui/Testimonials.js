@@ -1,24 +1,64 @@
 // Migrado de componente web personalizado a módulo ES6
-/**
- * Componente para la sección de testimonios
- * Muestra una cuadrícula con testimonios de clientes satisfechos
- * Incluye información del cliente, calificación y detalles del producto
- * 
- * Puede usarse como elemento personalizado <site-testimonials></site-testimonials>
- */
-class SiteTestimonials extends HTMLElement {
+class Testimonials extends HTMLElement {
   constructor() {
     super();
     // Inicialización básica
   }
 
   /**
-   * Método llamado cuando el elemento es conectado al DOM
-   * Renderiza el contenido del testimonio
+   * Se ejecuta cuando el elemento se conecta al DOM
+   * Renderiza el contenido de los testimonios
    */
   connectedCallback() {
     this.innerHTML = `
-      <section class="testimonials-section" aria-labelledby="testimonials-heading">
+      <section class="testimonials">
+        <div class="container">
+          <div class="section-header">
+            <h2>Lo que dicen nuestros clientes</h2>
+            <p>Testimonios de quienes han disfrutado de nuestros arreglos florales</p>
+          </div>
+          
+          <div class="testimonials-grid">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>"Los arreglos florales de Victoria son simplemente espectaculares. Cada vez que he pedido, la calidad y el diseño superan mis expectativas."</p>
+              </div>
+              <div class="testimonial-author">
+                <img src="/assets/images/flowers/flower1.svg" alt="María González" width="60" height="60">
+                <div>
+                  <h4>María González</h4>
+                  <p>Cliente satisfecha</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>"Para nuestro aniversario de bodas, Victoria creó un arreglo único que capturó perfectamente nuestra historia de amor. ¡Altamente recomendados!"</p>
+              </div>
+              <div class="testimonial-author">
+                <img src="/assets/images/flowers/flower2.svg" alt="Carlos y Elena" width="60" height="60">
+                <div>
+                  <h4>Carlos y Elena</h4>
+                  <p>Clientes para eventos especiales</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>"Como florista profesional, reconozco la excelencia en el trabajo de mis colegas. Victoria demuestra un nivel artístico excepcional en cada arreglo."</p>
+              </div>
+              <div class="testimonial-author">
+                <img src="/assets/images/flowers/flower3.svg" alt="Pedro Ramírez" width="60" height="60">
+                <div>
+                  <h4>Pedro Ramírez</h4>
+                  <p>Florista asociado</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="container">
           <h2 id="testimonials-heading">Testimonios de Nuestros Clientes</h2>
           <p class="section-description">Lo que dicen nuestros clientes sobre nuestros productos</p>
@@ -326,9 +366,8 @@ class SiteTestimonials extends HTMLElement {
   }
 }
 
-// Registrar el elemento personalizado si no existe
-if (!customElements.get('site-testimonials')) {
-  customElements.define('site-testimonials', SiteTestimonials);
+// Registrar el componente personalizado para que pueda ser usado en el HTML
+if (!customElements.get('testimonials-component')) {
+    customElements.define('testimonials-component', Testimonials);
 }
-
-export default SiteTestimonials;
+export default Testimonials;

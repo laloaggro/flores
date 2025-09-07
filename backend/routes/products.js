@@ -103,128 +103,135 @@ router.get('/stats', (req, res) => {
   }
 });
 
-// Ruta para obtener todos los productos
-router.get('/', (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 12;
-  const offset = (page - 1) * limit;
-  const category = req.query.category;
-  const search = req.query.search;
-  
-  let query = 'SELECT * FROM products';
-  let countQuery = 'SELECT COUNT(*) as total FROM products';
+// Función para crear condiciones de filtrado reutilizables
+function buildFilterConditions(req) {
+  const conditions = [];
   const params = [];
-  const countParams = [];
   
-  // Agregar filtros si existen
-  if (category) {
-    query += ' WHERE category = ?';
-    countQuery += ' WHERE category = ?';
-    params.push(category);
-    countParams.push(category);
+  // Filtro por categoría
+  if (req.query.category) {
+    conditions.push('category = ?');
+    params.push(req.query.category);
   }
   
-  if (search) {
-    if (category) {
-      query += ' AND name LIKE ?';
-      countQuery += ' AND name LIKE ?';
-    } else {
-      query += ' WHERE name LIKE ?';
-      countQuery += ' WHERE name LIKE ?';
-    }
-    params.push(`%${search}%`);
-    countParams.push(`%${search}%`);
+  // Filtro por rango de precio
+  if (req.query.minPrice !== undefined) {
+    conditions.push('price >= ?');
+    params.push(parseFloat(req.query.minPrice));
   }
   
-  // Agregar orden y paginación
-  query += ' ORDER BY id LIMIT ? OFFSET ?';
-  params.push(limit, offset);
+  if (req.query.maxPrice !== undefined) {
+    conditions.push('price <= ?');
+    params.push(parseFloat(req.query.maxPrice));
+  }
   
-  // Obtener productos con filtros y paginación
-  db.all(query, params, (err, rows) => {
-    if (err) {
-      console.error('Error al obtener productos:', err.message);
-      return res.status(500).json({ error: 'Error al obtener productos' });
+  // Filtro de búsqueda textual
+  if (req.query.search) {
+    const searchParam = `%${req.query.search}%`;
+    conditions.push('name LIKE ? OR description LIKE ?');
+    params.push(searchParam, searchParam);
+  }
+  
+  return { conditions, params };
+}
+
+// Función para crear ordenamiento reutilizable
+function buildOrderByClause(req) {
+  const sortOptions = {
+    'name': 'name COLLATE NOCASE',
+    'name_desc': 'name COLLATE NOCASE DESC',
+    'price': 'price',
+    'price_desc': 'price DESC',
+    'category': 'category COLLATE NOCASE',
+    'category_desc': 'category COLLATE NOCASE DESC',
+    'default': 'id DESC'
+  };
+  
+  return req.query.sortBy && sortOptions[req.query.sortBy] 
+    ? sortOptions[req.query.sortBy] 
+    : sortOptions.default;
+}
+
+// Función para obtener productos con opciones de filtrado, paginación y ordenamiento
+function getProducts(req, res, next) {
+  try {
+    // Validar y obtener parámetros de paginación
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.max(1, Math.min(100, parseInt(req.query.limit) || 12)); // Límite máximo de 100
+    const offset = (page - 1) * limit;
+    
+    // Construir condiciones de filtro
+    const { conditions, params } = buildFilterConditions(req);
+    
+    // Construir consulta principal
+    let query = 'SELECT * FROM products';
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
     }
     
-    // Contar el total de productos con los filtros aplicados
-    db.get(countQuery, countParams, (err, countRow) => {
+    // Agregar ordenamiento
+    const orderBy = buildOrderByClause(req);
+    query += ` ORDER BY ${orderBy}`;
+    
+    // Agregar paginación
+    query += ' LIMIT ? OFFSET ?';
+    const paginatedParams = [...params, limit, offset];
+    
+    // Ejecutar consulta principal
+    db.all(query, paginatedParams, (err, rows) => {
       if (err) {
-        console.error('Error al contar productos:', err.message);
-        return res.status(500).json({ error: 'Error al contar productos' });
+        throw err;
       }
       
-      const total = countRow.total;
-      const totalPages = Math.ceil(total / limit);
-      
-      res.json({
-        products: rows,
-        pagination: {
-          currentPage: page,
-          totalPages: totalPages,
-          totalProducts: total,
-          hasNextPage: page < totalPages,
-          hasPrevPage: page > 1
-        }
-      });
-    });
-  });
-});
-
-// Ruta para obtener un producto por ID
-router.get('/:id', (req, res) => {
-  const id = req.params.id;
-  
-  db.get(`SELECT * FROM products WHERE id = ?`, [id], (err, row) => {
-    if (err) {
-      console.error('Error al obtener producto:', err.message);
-      return res.status(500).json({ error: 'Error al obtener producto' });
-    }
-    
-    if (!row) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
-    }
-    
-    res.json(row);
-  });
-});
-
-// Ruta para obtener productos por categoría
-router.get('/category/:category', (req, res) => {
-  const category = req.params.category;
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 12;
-  const offset = (page - 1) * limit;
-  
-  // Obtener productos por categoría con paginación
-  db.all(`SELECT * FROM products WHERE category = ? LIMIT ? OFFSET ?`, [category, limit, offset], (err, rows) => {
-    if (err) {
-      console.error('Error al obtener productos por categoría:', err.message);
-      return res.status(500).json({ error: 'Error al obtener productos por categoría' });
-    }
-    
-    // Contar el total de productos en la categoría
-    db.get(`SELECT COUNT(*) as total FROM products WHERE category = ?`, [category], (err, countRow) => {
-      if (err) {
-        console.error('Error al contar productos por categoría:', err.message);
-        return res.status(500).json({ error: 'Error al contar productos por categoría' });
+      // Construir consulta de conteo
+      let countQuery = 'SELECT COUNT(*) as total FROM products';
+      if (conditions.length > 0) {
+        countQuery += ' WHERE ' + conditions.join(' AND ');
       }
       
-      const total = countRow.total;
-      const totalPages = Math.ceil(total / limit);
-      
-      res.json({
-        products: rows,
-        pagination: {
-          currentPage: page,
-          totalPages: totalPages,
-          totalProducts: total,
-          hasNextPage: page < totalPages,
-          hasPrevPage: page > 1
+      // Ejecutar consulta de conteo
+      db.get(countQuery, params, (err, countRow) => {
+        if (err) {
+          throw err;
         }
+        
+        // Calcular datos de paginación
+        const total = countRow.total;
+        const totalPages = Math.ceil(total / limit);
+        
+        // Enviar respuesta
+        res.json({
+          data: rows,
+          pagination: {
+            page,
+            limit,
+            total,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPrevPage: page > 1,
+            sortBy: req.query.sortBy || 'default',
+            filters: req.query
+          }
+        });
       });
     });
-  });
+  } catch (error) {
+    console.error('Error al obtener productos:', error.message);
+    next(error);
+  }
+}
+
+// Ruta para obtener todos los productos con paginación, filtros y ordenamiento
+router.get('/', getProducts);
+
+
+// Ruta para obtener productos por categoría con paginación y filtros avanzados
+router.get('/category/:category', (req, res, next) => {
+  // Usar la categoría como parámetro de filtro
+  req.query.category = req.params.category;
+  
+  // Usar la función getProducts reutilizable
+  getProducts(req, res, next);
 });
 
 // Ruta para buscar productos por nombre
@@ -531,6 +538,29 @@ router.get('/popular', (req, res) => {
     res.json({
       products: rows
     });
+  });
+});
+
+// Ruta para obtener un producto por ID
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  
+  // Verificar que el ID sea un número para evitar conflictos con otras rutas
+  if (isNaN(id)) {
+    return res.status(400).json({ error: 'ID de producto inválido' });
+  }
+  
+  db.get(`SELECT * FROM products WHERE id = ?`, [id], (err, row) => {
+    if (err) {
+      console.error('Error al obtener producto:', err.message);
+      return res.status(500).json({ error: 'Error al obtener producto' });
+    }
+    
+    if (!row) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    
+    res.json(row);
   });
 });
 

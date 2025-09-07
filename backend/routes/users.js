@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 const router = express.Router();
 
@@ -25,7 +26,9 @@ db.serialize(() => {
     phone TEXT,
     password TEXT NOT NULL,
     role TEXT DEFAULT 'user',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    reset_token TEXT,
+    reset_token_expires DATETIME
   )`, (err) => {
     if (err) {
       console.error('Error al crear la tabla de usuarios:', err.message);
@@ -81,6 +84,138 @@ const isAdmin = (req, res, next) => {
   }
   next();
 };
+
+// Ruta para solicitar recuperación de contraseña
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  
+  if (!email) {
+    return res.status(400).json({ error: 'El email es requerido' });
+  }
+  
+  try {
+    // Verificar si el usuario existe
+    const user = await new Promise((resolve, reject) => {
+      db.get(`SELECT id, name, email FROM users WHERE email = ?`, [email], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+    
+    if (!user) {
+      // Por seguridad, no revelamos si el email existe o no
+      return res.json({ message: 'Si el email existe, se ha enviado un enlace de recuperación' });
+    }
+    
+    // Generar token de recuperación
+    const resetToken = jwt.sign(
+      { userId: user.id }, 
+      process.env.JWT_SECRET || 'secreto_por_defecto', 
+      { expiresIn: '1h' }
+    );
+    
+    // Guardar token en la base de datos
+    const expires = new Date(Date.now() + 3600000); // 1 hora
+    
+    await new Promise((resolve, reject) => {
+      db.run(`UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?`,
+        [resetToken, expires.toISOString(), user.id],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+    
+    // Enviar email con enlace de recuperación
+    // En un entorno real, aquí se enviaría un email con el enlace
+    // Por ahora, solo devolvemos el token para pruebas
+    
+    res.json({
+      message: 'Se ha enviado un enlace de recuperación a tu email',
+      resetToken: process.env.NODE_ENV === 'development' ? resetToken : undefined
+    });
+  } catch (error) {
+    console.error('Error al solicitar recuperación de contraseña:', error.message);
+    res.status(500).json({ error: 'Error al procesar la solicitud' });
+  }
+});
+
+// Ruta para restablecer contraseña
+router.post('/reset-password', async (req, res) => {
+  const { token, newPassword } = req.body;
+  
+  if (!token || !newPassword) {
+    return res.status(400).json({ error: 'Token y nueva contraseña son requeridos' });
+  }
+  
+  if (newPassword.length < 6) {
+    return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+  }
+  
+  try {
+    // Verificar token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secreto_por_defecto');
+    
+    // Verificar que el token no haya expirado y corresponda al usuario
+    const user = await new Promise((resolve, reject) => {
+      db.get(`SELECT id, reset_token_expires FROM users WHERE id = ? AND reset_token = ?`, 
+        [decoded.userId, token], 
+        (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        }
+      );
+    });
+    
+    if (!user) {
+      return res.status(400).json({ error: 'Token inválido o expirado' });
+    }
+    
+    // Verificar que el token no haya expirado
+    const now = new Date();
+    const expires = new Date(user.reset_token_expires);
+    
+    if (now > expires) {
+      return res.status(400).json({ error: 'Token expirado' });
+    }
+    
+    // Hashear nueva contraseña
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
+    // Actualizar contraseña y limpiar token
+    await new Promise((resolve, reject) => {
+      db.run(`UPDATE users SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?`,
+        [hashedPassword, decoded.userId],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+    
+    res.json({ message: 'Contraseña actualizada exitosamente' });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+      return res.status(400).json({ error: 'Token inválido o expirado' });
+    }
+    
+    console.error('Error al restablecer contraseña:', error.message);
+    res.status(500).json({ error: 'Error al procesar la solicitud' });
+  }
+});
 
 // Ruta para registrar un nuevo usuario (público)
 router.post('/register', async (req, res) => {

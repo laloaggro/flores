@@ -5,29 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Florería Arreglos Victoria - Flores Naturales en Recoleta</title>
     
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Florería familiar en Recoleta con más de 20 años de experiencia. Flores naturales, arreglos florales para ocasiones especiales, bodas, eventos y decoración.">
-    <meta name="keywords" content="florería, flores, arreglos florales, Recoleta, Santiago, flores naturales, bodas, eventos, decoración">
-    <meta name="author" content="Arreglos Victoria">
-    <link rel="canonical" href="https://arreglosvictoria.cl/">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arreglosvictoria.cl/">
-    <meta property="og:title" content="Florería Arreglos Victoria - Flores Naturales en Recoleta">
-    <meta property="og:description" content="Florería familiar en Recoleta con más de 20 años de experiencia. Flores naturales, arreglos florales para ocasiones especiales, bodas, eventos y decoración.">
-    <meta property="og:image" content="/assets/images/logo.avif">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://arreglosvictoria.cl/">
-    <meta property="twitter:title" content="Florería Arreglos Victoria - Flores Naturales en Recoleta">
-    <meta property="twitter:description" content="Florería familiar en Recoleta con más de 20 años de experiencia. Flores naturales, arreglos florales para ocasiones especiales, bodas, eventos y decoración.">
-    <meta property="twitter:image" content="/assets/images/logo.avif">
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="/assets/images/logo.avif" as="image">
-    <link rel="preload" href="/assets/images/hero.avif" as="image">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" crossorigin="anonymous">
+    <link rel="preload" href="/assets/css/combined.css" as="style">
+    
+    <!-- Fallback for disabled JavaScript -->
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/assets/css/combined.css">
+    </noscript>
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
@@ -35,73 +28,87 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css">
-    <link rel="stylesheet" href="/assets/css/index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos combinados -->
+    <link rel="stylesheet" href="/assets/css/combined.css">
     
-    <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="description" content="Florería familiar en Recoleta con más de 20 años de experiencia. Flores naturales, arreglos florales para ocasiones especiales, bodas, eventos y decoración.">
+    <meta name="keywords" content="florería, flores, arreglos florales, Recoleta, Santiago, flores naturales, bodas, eventos, decoración">
+    <meta name="author" content="Arreglos Victoria">
+    <link rel="canonical" href="https://arreglosvictoria.cl/">
+    
+    <!-- Mejoras de seguridad -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arreglosvictoria.cl/">
+    <meta property="og:title" content="Florería Arreglos Victoria - Flores Naturales en Recoleta">
+    <meta property="og:description" content="Florería familiar en Recoleta con más de 20 años de experiencia. Flores naturales, arreglos florales para ocasiones especiales, bodas, eventos y decoración.">
+    <meta property="og:image" content="/assets/images/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arreglosvictoria.cl/">
+    <meta property="twitter:title" content="Florería Arreglos Victoria - Flores Naturales en Recoleta">
+    <meta property="twitter:description" content="Florería familiar en Recoleta con más de 20 años de experiencia. Flores naturales, arreglos florales para ocasiones especiales, bodas, eventos y decoración.">
+    <meta property="twitter:image" content="/assets/images/logo.png">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
 </head>
 <body>
     <!-- Header -->
-    <header-component></header-component>
+    <site-header></site-header>
     
     <main>
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <h1>Arreglos Florales para Cada Ocasión</h1>
-                <p>Florería familiar con más de 20 años de experiencia en el barrio de Recoleta, Santiago.</p>
+                <h1>Bienvenidos a Arreglos Florales Victoria</h1>
+                <p>Florería familiar en Recoleta con más de 20 años de experiencia. Flores naturales y arreglos florales para todas las ocasiones.</p>
                 <div class="hero-buttons">
-                    <a href="/products.html" class="btn btn-primary">Ver Catálogo</a>
-                    <a href="/contact.html" class="btn btn-secondary">Contáctanos</a>
+                    <a href="products.html" class="btn btn-primary">Ver Productos</a>
+                    <a href="about.html" class="btn btn-secondary">Sobre Nosotros</a>
                 </div>
             </div>
         </section>
-        
-        <!-- Featured Products -->
+
+        <!-- Featured Products Section -->
         <section class="featured-products">
             <div class="container">
-                <h2 class="section-title">Productos Destacados</h2>
-                <div class="products-grid" id="featuredProductsGrid">
-                    <div class="loading-placeholder">
-                        <p><i class="fas fa-spinner fa-spin"></i> Cargando productos destacados...</p>
-                    </div>
+                <div class="section-header">
+                    <h2>Productos Destacados</h2>
+                    <p>Descubre nuestra selección de arreglos florales más populares</p>
+                </div>
+                <div id="home-products" class="products-grid">
+                    <!-- Productos se cargarán aquí dinámicamente -->
                 </div>
             </div>
         </section>
-        
-        <!-- About Section -->
-        <section class="about">
-            <div class="container">
-                <div class="about-content">
-                    <div class="about-image">
-                        <img src="/assets/images/about.avif" alt="Nuestra Florería" loading="lazy">
-                    </div>
-                    <div class="about-text">
-                        <h2>Nuestra Historia</h2>
-                        <p>Con más de 20 años de experiencia en el barrio de Recoleta, nos enorgullece ofrecer flores naturales de la más alta calidad y arreglos florales únicos para cada ocasión especial.</p>
-                        <p>Nuestro equipo de floristas expertos trabaja con pasión y dedicación para crear hermosos arreglos que expresen tus sentimientos de la manera más elegante y significativa.</p>
-                        <a href="/about.html" class="btn btn-primary">Conoce Más</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
+
         <!-- Services Section -->
         <section class="services">
             <div class="container">
-                <h2 class="section-title">Nuestros Servicios</h2>
+                <div class="section-header">
+                    <h2>Nuestros Servicios</h2>
+                    <p>Ofrecemos una amplia gama de servicios florales para cada ocasión</p>
+                </div>
                 <div class="services-grid">
                     <div class="service-card">
-                        <i class="fas fa-heart service-icon"></i>
-                        <h3>Arreglos Florales</h3>
-                        <p>Diseños únicos para bodas, aniversarios, cumpleaños y todas tus ocasiones especiales.</p>
+                        <i class="fas fa-birthday-cake service-icon"></i>
+                        <h3>Arreglos Especiales</h3>
+                        <p>Personalizamos arreglos florales para cumpleaños, aniversarios y celebraciones.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-ring service-icon"></i>
+                        <h3>Flores para Bodas</h3>
+                        <p>Diseños únicos para el día más especial de tu vida.</p>
                     </div>
                     <div class="service-card">
                         <i class="fas fa-church service-icon"></i>
@@ -122,7 +129,7 @@
     </main>
     
     <!-- Footer -->
-    <footer-component></footer-component>
+    <site-footer></site-footer>
     
     <!-- Scripts -->
     <script type="module" src="/assets/js/main.js"></script>

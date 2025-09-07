@@ -1,4 +1,4 @@
-/* color-enhancements.css - Archivo para añadir más color y vitalidad al sitio */
+/* color-enhancements.css - Mejoras de color para el sitio */
 
 /* Añadir variedad a las tarjetas de productos */
 .product-card {
@@ -184,6 +184,20 @@ body {
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/images/fondo.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: -1;
 }
 
 .hero::after {

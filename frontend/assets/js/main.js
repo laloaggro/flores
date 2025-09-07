@@ -6,17 +6,37 @@
  * de nuevos componentes migrados a módulos ES6.
  */
 
-// Importar estilos
-import '../css/combined.css';
+// Función para cargar archivos CSS mediante etiquetas link
+function loadCSS(href) {
+    return new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.onload = resolve;
+        link.onerror = reject;
+        document.head.appendChild(link);
+    });
+}
+
+// Función para cargar todos los estilos necesarios
+async function loadAllCSS() {
+    try {
+        // Cargar los archivos CSS
+        await Promise.all([
+            loadCSS('../assets/css/styles.css'),
+            loadCSS('../assets/css/index.css')
+        ]);
+        
+        console.log('✅ Estilos cargados correctamente');
+    } catch (error) {
+        console.error('❌ Error al cargar los estilos:', error);
+    }
+}
 
 // Importar utilidades
 import { initializeTheme } from './components/utils/theme.js';
 import { initializeLazyLoading } from './components/utils/lazyLoad.js';
 import { initializeUserMenu } from './components/utils/userMenu.js';
-import webAnalytics from './components/analytics/WebAnalytics.js';
-import stateManager from './components/utils/stateManager.js';
-import { preconnectToCDN } from './components/utils/imageOptimizer.js';
-import { preconnectToCdn } from '../../../config/cdn.config.js';
 
 // Importar componentes de página
 import { initializeHomeProducts } from './components/pages/homeProducts.js';
@@ -26,12 +46,6 @@ import Header from './components/ui/Header.js';
 import Footer from './components/ui/Footer.js';
 import Testimonials from './components/ui/Testimonials.js';
 import CartItem from './components/cart/CartItem.js';
-
-// Importar nuevos componentes
-import Recommendations from './components/recommendations/Recommendations.js';
-import Wishlist from './components/wishlist/Wishlist.js';
-import ProductReviews from './components/reviews/ProductReviews.js';
-import PWAInstaller from './components/pwa/PWAInstaller.js';
 
 // Función para esperar a que los componentes personalizados se carguen
 function waitForComponents() {
@@ -49,73 +63,21 @@ function waitForComponents() {
     });
 }
 
-// Función para registrar componentes personalizados
-function registerCustomComponents() {
-    // Registrar componentes migrados como componentes personalizados
-    if (!customElements.get('header-component')) {
-        customElements.define('header-component', Header);
-    }
-    
-    if (!customElements.get('footer-component')) {
-        customElements.define('footer-component', Footer);
-    }
-    
-    if (!customElements.get('testimonials-component')) {
-        customElements.define('testimonials-component', Testimonials);
-    }
-    
-    if (!customElements.get('cart-item-component')) {
-        customElements.define('cart-item-component', CartItem);
-    }
-    
-    // Registrar nuevos componentes
-    if (!customElements.get('recommendations-component')) {
-        customElements.define('recommendations-component', Recommendations);
-    }
-    
-    if (!customElements.get('wishlist-component')) {
-        customElements.define('wishlist-component', Wishlist);
-    }
-    
-    if (!customElements.get('product-reviews')) {
-        customElements.define('product-reviews', ProductReviews);
-    }
-    
-    if (!customElements.get('pwa-installer')) {
-        customElements.define('pwa-installer', PWAInstaller);
-    }
-}
-
 // Función para inicializar la aplicación
 async function initializeApp() {
     try {
         console.log('🚀 Inicializando aplicación...');
         
-        // Registrar componentes personalizados
-        registerCustomComponents();
+        // Cargar estilos primero
+        await loadAllCSS();
         
         // Esperar a que los componentes se carguen
         await waitForComponents();
-        
-        // Preconectar a CDN
-        preconnectToCdn();
-        preconnectToCDN('https://cdnjs.cloudflare.com');
-        preconnectToCDN('https://fonts.googleapis.com');
-        preconnectToCDN('https://fonts.gstatic.com');
         
         // Inicializar utilidades
         initializeTheme();
         initializeLazyLoading();
         initializeUserMenu();
-        
-        // Inicializar sistema de análisis web
-        webAnalytics.init('AV-001'); // ID de seguimiento de ejemplo
-        
-        // Registrar evento de inicio de la aplicación
-        webAnalytics.trackEvent('Aplicación', 'Inicialización', 'Inicio de la aplicación');
-        
-        // Inicializar el estado de la aplicación
-        initializeAppState();
         
         // Inicializar componentes de página
         initializeHomeProducts();
@@ -124,58 +86,6 @@ async function initializeApp() {
     } catch (error) {
         console.error('Error al inicializar la aplicación:', error);
     }
-}
-
-// Inicializar el estado de la aplicación
-function initializeAppState() {
-    // Cargar el usuario del localStorage si existe
-    const user = localStorage.getItem('user');
-    if (user) {
-        try {
-            stateManager.set('user', JSON.parse(user));
-        } catch (e) {
-            console.error('Error al parsear usuario del localStorage:', e);
-        }
-    }
-    
-    // Cargar el carrito del localStorage si existe
-    const cart = localStorage.getItem('cart');
-    if (cart) {
-        try {
-            stateManager.set('cart', JSON.parse(cart));
-        } catch (e) {
-            console.error('Error al parsear carrito del localStorage:', e);
-        }
-    }
-    
-    // Cargar la lista de deseos del localStorage si existe
-    const wishlist = localStorage.getItem('wishlist');
-    if (wishlist) {
-        try {
-            stateManager.set('wishlist', JSON.parse(wishlist));
-        } catch (e) {
-            console.error('Error al parsear lista de deseos del localStorage:', e);
-        }
-    }
-    
-    // Suscribirse a cambios en el estado del usuario
-    stateManager.subscribe('user', (user) => {
-        if (user) {
-            localStorage.setItem('user', JSON.stringify(user));
-        } else {
-            localStorage.removeItem('user');
-        }
-    });
-    
-    // Suscribirse a cambios en el estado del carrito
-    stateManager.subscribe('cart', (cart) => {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    });
-    
-    // Suscribirse a cambios en el estado de la lista de deseos
-    stateManager.subscribe('wishlist', (wishlist) => {
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-    });
 }
 
 // Inicializar la aplicación cuando el DOM esté cargado

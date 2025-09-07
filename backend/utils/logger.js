@@ -1,91 +1,119 @@
+/**
+ * Sistema de logging para la aplicación
+ * Proporciona funciones para registrar diferentes tipos de mensajes
+ */
+
 const fs = require('fs');
 const path = require('path');
 
 // Crear directorio de logs si no existe
-const logDir = path.join(__dirname, '../logs');
-if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir, { recursive: true });
+const logsDir = path.join(__dirname, '../logs');
+if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
 }
 
-// Configurar archivos de log
-const accessLogStream = fs.createWriteStream(path.join(logDir, 'access.log'), { flags: 'a' });
-const errorLogStream = fs.createWriteStream(path.join(logDir, 'error.log'), { flags: 'a' });
-const appLogStream = fs.createWriteStream(path.join(logDir, 'application.log'), { flags: 'a' });
+// Archivo de log
+const logFile = path.join(logsDir, 'app.log');
 
-// Niveles de log
-const LOG_LEVELS = {
-    ERROR: 'error',
-    WARN: 'warn',
-    INFO: 'info',
-    DEBUG: 'debug'
-};
-
-// Función para formatear timestamps
-function formatTimestamp() {
-    return new Date().toISOString();
+/**
+ * Formatear fecha para los logs
+ * @returns {string} Fecha formateada
+ */
+function formatLogDate() {
+    const now = new Date();
+    return now.toISOString();
 }
 
-// Función para escribir logs de acceso
-function logAccess(message) {
-    const logEntry = `[${formatTimestamp()}] [ACCESS] ${message}\n`;
-    accessLogStream.write(logEntry);
-    console.log(`[ACCESS] ${message}`);
-}
-
-// Función para escribir logs de error
-function logError(message, error = null) {
-    const errorMessage = error ? `${message}: ${error.message}\n${error.stack}` : message;
-    const logEntry = `[${formatTimestamp()}] [ERROR] ${errorMessage}\n`;
-    errorLogStream.write(logEntry);
+/**
+ * Escribir mensaje en el archivo de log
+ * @param {string} level - Nivel de log (INFO, ERROR, WARN, etc.)
+ * @param {string} message - Mensaje a loguear
+ * @param {Object} context - Contexto adicional
+ */
+function writeLog(level, message, context = null) {
+    const timestamp = formatLogDate();
+    const logEntry = {
+        timestamp,
+        level,
+        message,
+        context
+    };
     
-    // También escribir en consola para visibilidad inmediata
-    console.error(`[ERROR] ${message}`, error);
-}
-
-// Función para escribir logs de aplicación
-function logInfo(message) {
-    const logEntry = `[${formatTimestamp()}] [INFO] ${message}\n`;
-    appLogStream.write(logEntry);
-    console.log(`[INFO] ${message}`);
-}
-
-// Función para escribir logs de debug
-function logDebug(message) {
-    // En producción, podríamos desactivar los logs de debug
+    // Escribir en archivo
+    const logMessage = `${timestamp} [${level}] ${message}${context ? ` Context: ${JSON.stringify(context)}` : ''}\n`;
+    fs.appendFileSync(logFile, logMessage);
+    
+    // También mostrar en consola para desarrollo
     if (process.env.NODE_ENV !== 'production') {
-        const logEntry = `[${formatTimestamp()}] [DEBUG] ${message}\n`;
-        appLogStream.write(logEntry);
-        console.debug(`[DEBUG] ${message}`);
+        console.log(`[${level}] ${message}`, context || '');
     }
 }
 
-// Función para loggear solicitudes HTTP
+/**
+ * Registrar información
+ * @param {string} message - Mensaje informativo
+ * @param {Object} context - Contexto adicional
+ */
+function logInfo(message, context = null) {
+    writeLog('INFO', message, context);
+}
+
+/**
+ * Registrar errores
+ * @param {string} message - Mensaje de error
+ * @param {Error|Object} error - Error o contexto adicional
+ */
+function logError(message, error = null) {
+    const context = error instanceof Error ? { 
+        message: error.message, 
+        stack: error.stack,
+        name: error.name
+    } : error;
+    
+    writeLog('ERROR', message, context);
+}
+
+/**
+ * Registrar solicitudes HTTP
+ * @param {string} method - Método HTTP
+ * @param {string} url - URL de la solicitud
+ * @param {string} ip - Dirección IP del cliente
+ * @param {number} statusCode - Código de estado (opcional)
+ */
 function logHttpRequest(method, url, ip, statusCode = null) {
-    const statusInfo = statusCode ? `Status: ${statusCode}` : 'In progress';
-    logAccess(`${method} ${url} - IP: ${ip} - ${statusInfo}`);
+    // No registrar solicitudes de herramientas de desarrollo
+    const devToolsPaths = ['.well-known', 'favicon.ico', 'robots.txt'];
+    if (devToolsPaths.some(path => url.includes(path))) {
+        return;
+    }
+    
+    const message = statusCode 
+        ? `[${method}] ${url} - IP: ${ip} - Status: ${statusCode}`
+        : `[${method}] ${url} - IP: ${ip} - In progress`;
+    
+    writeLog(statusCode && statusCode >= 400 ? 'ERROR' : 'INFO', message);
 }
 
-// Función para loggear errores de la aplicación
-function logApplicationError(message, error = null, context = {}) {
-    const contextInfo = Object.keys(context).length > 0 ? `Context: ${JSON.stringify(context)}` : '';
-    const errorMessage = `[APPLICATION_ERROR] ${message} ${contextInfo}`;
-    logError(errorMessage, error);
-}
-
-// Función para cerrar los streams de log
-function closeLogStreams() {
-    accessLogStream.end();
-    errorLogStream.end();
-    appLogStream.end();
+/**
+ * Registrar errores de aplicación
+ * @param {string} message - Mensaje de error
+ * @param {Error} error - Error
+ * @param {Object} context - Contexto adicional
+ */
+function logApplicationError(message, error = null, context = null) {
+    const errorContext = error instanceof Error ? { 
+        message: error.message, 
+        stack: error.stack,
+        name: error.name
+    } : error;
+    
+    const fullContext = { ...context, ...errorContext };
+    writeLog('ERROR', `[APPLICATION_ERROR] ${message}`, fullContext);
 }
 
 module.exports = {
-    LOG_LEVELS,
-    logAccess,
-    logError,
     logInfo,
-    logDebug,
+    logError,
     logHttpRequest,
-    logApplicationError,
-    closeLogStreams
+    logApplicationError
 };

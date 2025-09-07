@@ -6,90 +6,118 @@
  * de nuevos componentes migrados a módulos ES6.
  */
 
-// Importar estilos
-import '../css/styles.css';
-import '../css/index.css';
-
 // Importar utilidades
-import { initializeTheme } from './components/utils/theme.js';
-import { initializeLazyLoading } from './components/utils/lazyLoad.js';
-import { initializeUserMenu } from './components/utils/userMenu.js';
+import { initializeTheme } from '/assets/js/components/utils/theme.js';
+import { initializeLazyLoading } from '/assets/js/components/utils/lazyLoad.js';
+import { initializeUserMenu } from '/assets/js/components/utils/userMenu.js';
+import { initializeAccessibility } from '/components/utils/accessibility.js';
+import { initializeI18n } from '/components/utils/i18n.js';
 
 // Importar componentes de página
-import { initializeHomeProducts } from './components/pages/homeProducts.js';
+import { initializeHomeProducts } from '/assets/js/components/pages/homeProducts.js';
 
 // Importar componentes migrados
-import Header from './components/ui/Header.js';
-import Footer from './components/ui/Footer.js';
-import Testimonials from './components/ui/Testimonials.js';
-import CartItem from './components/cart/CartItem.js';
+import '/components/header/Header.js';
+import '/components/header/Footer.js';
+// import '/components/ui/Testimonials.js'; // Componente no encontrado, comentado temporalmente
+import '/components/cart/CartItem.js';
+import '/components/product/ProductSearch.js';
+import '/components/product/ProductFilters.js';
+import '/components/product/ProductRating.js';
+import '/components/header/MobileMenu.js';
+import '/components/utils/notifications.js';
+import '/components/utils/analytics.js';
+import '/components/utils/errorMonitoring.js';
+
+// Registrar el Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/assets/js/sw.js')
+      .then((registration) => {
+        console.log('[Service Worker] Registrado con éxito:', registration.scope);
+      })
+      .catch((error) => {
+        console.log('[Service Worker] Error en el registro:', error);
+      });
+  });
+}
 
 // Función para esperar a que los componentes personalizados se carguen
 function waitForComponents() {
-    return new Promise((resolve) => {
-        const checkComponents = () => {
-            // Verificar si los componentes personalizados están registrados
-            if (customElements.get('header-component') && customElements.get('footer-component')) {
-                resolve();
-            } else {
-                // Reintentar en 100ms
-                setTimeout(checkComponents, 100);
-            }
-        };
-        checkComponents();
-    });
-}
-
-// Función para registrar componentes personalizados
-function registerCustomComponents() {
-    // Registrar componentes migrados como componentes personalizados
-    if (!customElements.get('header-component')) {
-        customElements.define('header-component', Header);
-    }
-    
-    if (!customElements.get('footer-component')) {
-        customElements.define('footer-component', Footer);
-    }
-    
-    if (!customElements.get('testimonials-component')) {
-        customElements.define('testimonials-component', Testimonials);
-    }
-    
-    if (!customElements.get('cart-item-component')) {
-        customElements.define('cart-item-component', CartItem);
-    }
+  return new Promise((resolve) => {
+    const checkComponents = () => {
+      // Verificar si los componentes personalizados están registrados
+      if (customElements.get('site-header') && customElements.get('site-footer')) {
+        resolve();
+      } else {
+        // Reintentar en 100ms
+        setTimeout(checkComponents, 100);
+      }
+    };
+    checkComponents();
+  });
 }
 
 // Función para inicializar la aplicación
 async function initializeApp() {
-    try {
-        console.log('🚀 Inicializando aplicación...');
+  try {
+    console.log('🚀 Inicializando aplicación...');
         
-        // Registrar componentes personalizados
-        registerCustomComponents();
+    // Esperar a que los componentes se carguen
+    await waitForComponents();
         
-        // Esperar a que los componentes se carguen
-        await waitForComponents();
+    // Inicializar utilidades
+    initializeTheme();
+    console.log('✅ Tema cargado correctamente');
         
-        // Inicializar utilidades
-        initializeTheme();
-        initializeLazyLoading();
-        initializeUserMenu();
+    initializeLazyLoading();
+    console.log('✅ Lazy loading inicializado correctamente');
         
-        // Inicializar componentes de página
-        initializeHomeProducts();
+    initializeUserMenu();
+    console.log('✅ Menú de usuario inicializado correctamente');
         
-        console.log('✅ Aplicación inicializada correctamente');
-    } catch (error) {
-        console.error('Error al inicializar la aplicación:', error);
+    initializeAccessibility();
+    console.log('✅ Accesibilidad inicializada correctamente');
+        
+    initializeI18n();
+    console.log('✅ Internacionalización inicializada correctamente');
+        
+    // Inicializar componentes de página
+    initializeHomeProducts();
+    console.log('✅ Sección de productos de la página principal inicializada');
+        
+    console.log('✅ Aplicación inicializada correctamente');
+  } catch (error) {
+    console.error('❌ Error al inicializar la aplicación:', error);
+    // Registrar el error en el sistema de monitoreo
+    if (typeof window !== 'undefined' && window.errorMonitoring) {
+      window.errorMonitoring.logError(error);
     }
+  }
 }
+
+// Manejar errores no capturados
+window.addEventListener('error', (event) => {
+  console.error('❌ Error no capturado:', event.error);
+  // Registrar el error en el sistema de monitoreo
+  if (typeof window !== 'undefined' && window.errorMonitoring) {
+    window.errorMonitoring.logError(event.error);
+  }
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('❌ Promesa rechazada no manejada:', event.reason);
+  // Registrar el error en el sistema de monitoreo
+  if (typeof window !== 'undefined' && window.errorMonitoring) {
+    window.errorMonitoring.logError(event.reason);
+  }
+});
 
 // Inicializar la aplicación cuando el DOM esté cargado
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeApp);
+  document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
-    initializeApp();
+  initializeApp();
 }
 
 // Exportar funciones para uso global

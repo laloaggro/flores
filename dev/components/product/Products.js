@@ -558,7 +558,7 @@ class Products extends HTMLElement {
     if (!product) return;
     
     // Obtener carrito del localStorage
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
     
     // Verificar si el producto ya está en el carrito
     const existingItem = cart.find(item => item.id === productId);

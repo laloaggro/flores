@@ -26,7 +26,7 @@ class Header extends HTMLElement {
                 <div class="navbar">
                     <div class="logo">
                         <a href="index.html" aria-label="Arreglos Florales Victoria - Inicio">
-                            <img src="assets/images/logo.png" alt="Logo de Arreglos Florales Victoria" width="150" height="150">
+                            <img src="/assets/images/logo.png" alt="Logo de Arreglos Florales Victoria" width="150" height="150">
                         </a>
                     </div>
                     
@@ -164,11 +164,14 @@ class Header extends HTMLElement {
             logoutLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 localStorage.removeItem('token');
-                window.location.href = 'login.html';
+                window.location.href = 'pages/login.html';
             });
         }
     }
 }
 
 // Registrar el componente personalizado para que pueda ser usado en el HTML
+if (!customElements.get('header-component')) {
+    customElements.define('header-component', Header);
+}
 export default Header;

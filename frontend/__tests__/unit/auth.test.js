@@ -18,16 +18,22 @@ global.showNotification = jest.fn();
 // Mock de fetch
 global.fetch = jest.fn();
 
+// Mock de funciones globales
+global.showNotification = jest.fn();
+global.updateCartCount = jest.fn();
+
 // Importar funciones reales de autenticación
-import { isAuthenticated, logout } from '../../frontend/assets/js/auth.js';
+import { isAuthenticated, logout, getUserInfo } from '../../../frontend/assets/js/components/utils/auth.js';
 
 describe('Auth Functionality', () => {
   beforeEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
     
-    // Limpiar el DOM
-    document.body.innerHTML = '';
+    // Limpiar el localStorage
+    localStorageMock.getItem.mockClear();
+    localStorageMock.setItem.mockClear();
+    localStorageMock.removeItem.mockClear();
   });
 
   test('debería verificar correctamente si el usuario está autenticado', () => {
@@ -44,25 +50,64 @@ describe('Auth Functionality', () => {
       return null;
     });
 
-    // Verificar que la función isAuthenticated exista
+    // Verificar autenticación
     expect(typeof isAuthenticated).toBe('function');
+    expect(isAuthenticated()).toBe(true);
   });
 
-  test('debería detectar cuando el usuario no está autenticado', () => {
-    // Mock de token inexistente
+  test('debería cerrar sesión correctamente', () => {
+    // Verificar que la función logout exista
+    expect(typeof logout).toBe('function');
+    
+    // Ejecutar logout
+    logout();
+    
+    // Verificar que se hayan eliminado los items del localStorage
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith('token');
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith('user');
+    expect(showNotification).toHaveBeenCalledWith('Sesión cerrada exitosamente');
+  });
+
+  test('debería obtener información del usuario correctamente', () => {
+    // Mock de token válido
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'token') {
+        // Token válido por 1 hora
+        const payload = {
+          exp: Math.floor(Date.now() / 1000) + 3600,
+          user: { id: 1, name: 'Test User', email: 'test@example.com' }
+        };
+        return btoa(JSON.stringify(payload));
+      }
+      return null;
+    });
+
+    // Verificar que la función getUserInfo exista
+    expect(typeof getUserInfo).toBe('function');
+    
+    // Obtener información del usuario
+    const userInfo = getUserInfo();
+    expect(userInfo).toBeDefined();
+    expect(userInfo.user).toBeDefined();
+    expect(userInfo.user.name).toBe('Test User');
+    expect(userInfo.user.email).toBe('test@example.com');
+  });
+
+  test('debería manejar correctamente cuando no hay token', () => {
+    // Mock de ausencia de token
     localStorageMock.getItem.mockImplementation((key) => {
       return null;
     });
 
-    // Verificar que la función isAuthenticated exista
-    expect(typeof isAuthenticated).toBe('function');
+    // Verificar que isAuthenticated devuelve false cuando no hay token
+    expect(isAuthenticated()).toBe(false);
   });
 
-  test('debería detectar cuando el token ha expirado', () => {
-    // Mock de token expirado
+  test('debería manejar correctamente tokens inválidos', () => {
+    // Mock de token inválido
     localStorageMock.getItem.mockImplementation((key) => {
       if (key === 'token') {
-        // Token expirado (hace 1 hora)
+        // Token expirado
         const payload = {
           exp: Math.floor(Date.now() / 1000) - 3600,
           user: { id: 1, name: 'Test User' }
@@ -72,64 +117,11 @@ describe('Auth Functionality', () => {
       return null;
     });
 
-    // Verificar que la función isAuthenticated exista
-    expect(typeof isAuthenticated).toBe('function');
-  });
-
-  test('debería realizar el logout correctamente', () => {
-    // Importar el módulo de autenticación
-    const authModule = require('../../../frontend/assets/js/auth.js');
-    
-    // Verificar que la función logout exista
-    expect(typeof authModule.logout).toBe('function');
-    
-    // Ejecutar logout
-    authModule.logout();
+    // Verificar que isAuthenticated devuelve false cuando el token ha expirado
+    expect(isAuthenticated()).toBe(false);
     
     // Verificar que se hayan eliminado los items del localStorage
     expect(localStorageMock.removeItem).toHaveBeenCalledWith('token');
     expect(localStorageMock.removeItem).toHaveBeenCalledWith('user');
-  });
-
-  test('debería manejar correctamente tokens mal formateados', () => {
-    // Mock de token mal formateado
-    localStorageMock.getItem.mockImplementation((key) => {
-      if (key === 'token') {
-        return 'invalid-token';
-      }
-      return null;
-    });
-
-    // Verificar que la función isAuthenticated exista
-    expect(typeof isAuthenticated).toBe('function');
-  });
-
-  test('debería manejar correctamente tokens sin payload', () => {
-    // Mock de token sin payload
-    localStorageMock.getItem.mockImplementation((key) => {
-      if (key === 'token') {
-        return btoa('');
-      }
-      return null;
-    });
-
-    // Verificar que la función isAuthenticated exista
-    expect(typeof isAuthenticated).toBe('function');
-  });
-
-  test('debería manejar correctamente payloads sin expiración', () => {
-    // Mock de token sin expiración
-    localStorageMock.getItem.mockImplementation((key) => {
-      if (key === 'token') {
-        const payload = {
-          user: { id: 1, name: 'Test User' }
-        };
-        return btoa(JSON.stringify(payload));
-      }
-      return null;
-    });
-
-    // Verificar que la función isAuthenticated exista
-    expect(typeof isAuthenticated).toBe('function');
   });
 });

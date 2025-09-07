@@ -1,7 +1,7 @@
 import { showNotification, updateCartCount, formatPrice, getUserInfoFromToken as getUser, isAuthenticated, API_BASE_URL } from './utils.js';
 import { initUserMenu } from './auth.js';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
   // Inicializar menú de usuario
   initUserMenu();
   
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Manejar envío del formulario de pago
   if (paymentForm) {
-    paymentForm.addEventListener('submit', function(e) {
+    paymentForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
       // Obtener datos del formulario
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function hideLoading() {
     const loadingElement = document.getElementById('checkout-loading');
     if (loadingElement) {
-        loadingElement.remove();
+      loadingElement.remove();
     }
   }
 
@@ -168,9 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Auto-ocultar después de 5 segundos
     setTimeout(() => {
-        if (errorElement.parentElement) {
-            errorElement.remove();
-        }
+      if (errorElement.parentElement) {
+        errorElement.remove();
+      }
     }, 5000);
   }
   

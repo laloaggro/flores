@@ -1,14 +1,15 @@
 // profile.js - Manejo de la página de perfil de usuario
-import { formatPrice, getUserInfoFromToken as getUser } from './utils.js';
+import { formatPrice, getUserInfoFromToken as getUser } from '../utils/utils.js';
 
-document.addEventListener('DOMContentLoaded', function() {
+// Función de inicialización para exportar
+export function initProfile() {
     // Verificar si el usuario está logueado
     const token = localStorage.getItem('token');
     const user = getUser();
     
     if (!token || !user) {
         // Si no hay token o usuario, redirigir al login
-        window.location.href = 'login.html';
+        window.location.href = '/login.html';
         return;
     }
     
@@ -22,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loadUserStats();
     
     // Cargar pedidos del usuario
-    loadUserOrders()
-});
+    loadUserOrders();
+}
 
 // Mostrar información del usuario
 function displayUserInfo(user) {

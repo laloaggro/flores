@@ -5358,16 +5358,19 @@ body {
 }
 
 .contact-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 15% 20%, rgba(76, 175, 80, 0.08) 0%, transparent 15%),
-    radial-gradient(circle at 85% 80%, rgba(255, 152, 0, 0.08) 0%, transparent 15%);
-  pointer-events: none;
+/* Fondo con imagen */
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/images/fondo.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: -1;
 }
 
 /* Mejorar la sección de testimonios */

@@ -1,44 +1,44 @@
 // CartItem.js - Componente web para elementos del carrito
 
 class CartItem extends HTMLElement {
-    constructor() {
-        super();
-        this.item = null;
+  constructor() {
+    super();
+    this.item = null;
+  }
+
+  static get observedAttributes() {
+    return ['data-item'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'data-item' && oldValue !== newValue) {
+      try {
+        this.item = JSON.parse(newValue);
+        this.render();
+      } catch (e) {
+        console.error('Error al parsear los datos del item:', e);
+      }
     }
+  }
 
-    static get observedAttributes() {
-        return ['data-item'];
+  connectedCallback() {
+    const itemData = this.getAttribute('data-item');
+    if (itemData) {
+      try {
+        this.item = JSON.parse(itemData);
+        this.render();
+      } catch (e) {
+        console.error('Error al parsear los datos del item:', e);
+      }
     }
+  }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'data-item' && oldValue !== newValue) {
-            try {
-                this.item = JSON.parse(newValue);
-                this.render();
-            } catch (e) {
-                console.error('Error al parsear los datos del item:', e);
-            }
-        }
-    }
+  render() {
+    if (!this.item) return;
 
-    connectedCallback() {
-        const itemData = this.getAttribute('data-item');
-        if (itemData) {
-            try {
-                this.item = JSON.parse(itemData);
-                this.render();
-            } catch (e) {
-                console.error('Error al parsear los datos del item:', e);
-            }
-        }
-    }
+    const { id, name, price, quantity, image } = this.item;
 
-    render() {
-        if (!this.item) return;
-
-        const { id, name, price, quantity, image } = this.item;
-
-        this.innerHTML = `
+    this.innerHTML = `
             <div class="cart-item" data-item-id="${id}">
                 <div class="cart-item-image">
                     <img src="${image}" alt="${name}" loading="lazy">
@@ -60,42 +60,42 @@ class CartItem extends HTMLElement {
             </div>
         `;
 
-        this.addEventListeners();
+    this.addEventListeners();
+  }
+
+  addEventListeners() {
+    // Botones de cantidad
+    const minusBtn = this.querySelector('.quantity-btn.minus');
+    const plusBtn = this.querySelector('.quantity-btn.plus');
+    const removeBtn = this.querySelector('.remove-btn');
+
+    if (minusBtn) {
+      minusBtn.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('update-quantity', {
+          detail: { id: this.item.id, change: -1 },
+          bubbles: true
+        }));
+      });
     }
 
-    addEventListeners() {
-        // Botones de cantidad
-        const minusBtn = this.querySelector('.quantity-btn.minus');
-        const plusBtn = this.querySelector('.quantity-btn.plus');
-        const removeBtn = this.querySelector('.remove-btn');
-
-        if (minusBtn) {
-            minusBtn.addEventListener('click', () => {
-                this.dispatchEvent(new CustomEvent('update-quantity', {
-                    detail: { id: this.item.id, change: -1 },
-                    bubbles: true
-                }));
-            });
-        }
-
-        if (plusBtn) {
-            plusBtn.addEventListener('click', () => {
-                this.dispatchEvent(new CustomEvent('update-quantity', {
-                    detail: { id: this.item.id, change: 1 },
-                    bubbles: true
-                }));
-            });
-        }
-
-        if (removeBtn) {
-            removeBtn.addEventListener('click', () => {
-                this.dispatchEvent(new CustomEvent('remove-item', {
-                    detail: { id: this.item.id },
-                    bubbles: true
-                }));
-            });
-        }
+    if (plusBtn) {
+      plusBtn.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('update-quantity', {
+          detail: { id: this.item.id, change: 1 },
+          bubbles: true
+        }));
+      });
     }
+
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('remove-item', {
+          detail: { id: this.item.id },
+          bubbles: true
+        }));
+      });
+    }
+  }
 }
 
 // Registrar el componente

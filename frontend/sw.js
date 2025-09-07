@@ -4,27 +4,22 @@ const CACHE_NAME = 'arreglos-victoria-v1.0.0';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/products.html',
-  '/contact.html',
-  '/about.html',
+  '/pages/products.html',
+  '/pages/contact.html',
+  '/pages/about.html',
   '/assets/css/styles.css',
   '/assets/css/header.css',
   '/assets/css/theme.css',
   '/assets/css/conflict-fixes.css',
   '/assets/css/visibility-fix.css',
   '/assets/css/accessibility.css',
-  '/assets/js/main-app.js',
-  '/assets/js/userMenu.js',
-  '/assets/js/theme.js',
-  '/assets/js/utils.js',
-  '/assets/js/cartUtils.js',
-  '/assets/js/errorHandler.js',
-  '/components/Header.js',
-  '/components/Footer.js',
-  '/components/ProductCard.js',
+  '/assets/js/main.js',
+  '/components/header/Header.js',
+  '/components/product/ProductCard.js',
   '/assets/images/default-avatar.svg',
   '/assets/images/logo.png',
-  '/assets/images/about-florist.jpg'
+  '/assets/images/about-florist.jpg',
+  '/assets/images/placeholder.svg'
 ];
 
 // Instalación del Service Worker
@@ -35,6 +30,9 @@ self.addEventListener('install', event => {
       .then(cache => {
         console.log('Cache abierto');
         return cache.addAll(urlsToCache);
+      })
+      .catch(error => {
+        console.error('[Service Worker] Error al cachear archivos:', error);
       })
   );
 });

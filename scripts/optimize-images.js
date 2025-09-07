@@ -1,213 +1,120 @@
-/**
- * optimize-images.js - Script para optimizar imágenes y prepararlas para CDN
- * 
- * Este script optimiza imágenes y las prepara para ser servidas desde un CDN.
- * Incluye funciones para redimensionar, comprimir y convertir formatos de imagen.
- */
-
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// Directorios de origen y destino
-const sourceDir = path.join(__dirname, '..', 'frontend', 'assets', 'images');
-const optimizedDir = path.join(__dirname, '..', 'frontend', 'assets', 'images', 'optimized');
-const devDir = path.join(__dirname, '..', 'dev', 'assets', 'images', 'optimized');
-const prodDir = path.join(__dirname, '..', 'prod', 'assets', 'images', 'optimized');
+console.log('🔧 Optimizando imágenes del proyecto...\n');
 
-// Formatos de imagen soportados
-const supportedFormats = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif'];
+// Directorios de imágenes
+const imageDirs = [
+  'frontend/assets/images',
+  'frontend/assets/images/products',
+  'frontend/assets/images/categories',
+  'frontend/assets/images/flowers',
+  'frontend/assets/images/backgrounds'
+];
 
-// Calidades para diferentes tamaños
-const qualitySettings = {
-  thumbnail: 75,
-  small: 80,
-  medium: 85,
-  large: 90,
-  original: 95
-};
-
-/**
- * Crear directorios si no existen
- */
-function createDirectories() {
-  [optimizedDir, devDir, prodDir].forEach(dir => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-      console.log(`Directorio creado: ${dir}`);
-    }
-  });
+// Verificar si sharp está instalado, si no, instalarlo
+try {
+  require('sharp');
+} catch (error) {
+  console.log('📦 Instalando sharp para optimización de imágenes...');
+  execSync('npm install sharp', { cwd: __dirname, stdio: 'inherit' });
 }
 
-/**
- * Obtener todas las imágenes del directorio de origen
- * @returns {Array} Lista de rutas de imágenes
- */
-function getImages() {
-  const images = [];
+const sharp = require('sharp');
+
+// Función para convertir imágenes a WebP
+async function convertToWebP(imagePath) {
+  const ext = path.extname(imagePath).toLowerCase();
+  const name = path.basename(imagePath, ext);
+  const dir = path.dirname(imagePath);
+  const webpPath = path.join(dir, `${name}.webp`);
   
-  function walkDir(dir) {
-    const files = fs.readdirSync(dir);
-    files.forEach(file => {
-      const filePath = path.join(dir, file);
-      const stat = fs.statSync(filePath);
+  // Solo convertir imágenes JPG, JPEG y PNG
+  if (['.jpg', '.jpeg', '.png'].includes(ext)) {
+    try {
+      await sharp(imagePath)
+        .webp({ quality: 80 })
+        .toFile(webpPath);
+      console.log(`  ✅ ${path.basename(imagePath)} -> ${name}.webp`);
+      return true;
+    } catch (error) {
+      console.log(`  ❌ Error al convertir ${path.basename(imagePath)}: ${error.message}`);
+      return false;
+    }
+  }
+  return false;
+}
+
+// Función para optimizar una imagen
+async function optimizeImage(imagePath) {
+  const ext = path.extname(imagePath).toLowerCase();
+  
+  // Solo optimizar imágenes JPG, JPEG, PNG y WebP
+  if (['.jpg', '.jpeg', '.png', '.webp'].includes(ext)) {
+    try {
+      const buffer = await sharp(imagePath)
+        .resize({ width: 1920, height: 1080, fit: 'inside', withoutEnlargement: true })
+        .jpeg({ quality: 85, progressive: true })
+        .png({ compressionLevel: 9, adaptiveFiltering: true })
+        .toBuffer();
       
-      if (stat.isDirectory()) {
-        walkDir(filePath);
-      } else if (stat.isFile()) {
-        const ext = path.extname(file).toLowerCase();
-        if (supportedFormats.includes(ext)) {
-          images.push(filePath);
+      fs.writeFileSync(imagePath, buffer);
+      console.log(`  ✅ Optimizada ${path.basename(imagePath)}`);
+      return true;
+    } catch (error) {
+      console.log(`  ❌ Error al optimizar ${path.basename(imagePath)}: ${error.message}`);
+      return false;
+    }
+  }
+  return false;
+}
+
+// Procesar directorios de imágenes
+async function processImageDirectories() {
+  let convertedCount = 0;
+  let optimizedCount = 0;
+  
+  for (const imageDir of imageDirs) {
+    const fullPath = path.join(__dirname, '..', imageDir);
+    
+    if (fs.existsSync(fullPath)) {
+      console.log(`📁 Procesando directorio: ${imageDir}`);
+      
+      const files = fs.readdirSync(fullPath)
+        .filter(file => {
+          const ext = path.extname(file).toLowerCase();
+          return ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext);
+        });
+      
+      for (const file of files) {
+        const filePath = path.join(fullPath, file);
+        
+        // Convertir a WebP
+        if (await convertToWebP(filePath)) {
+          convertedCount++;
+        }
+        
+        // Optimizar imagen original
+        if (await optimizeImage(filePath)) {
+          optimizedCount++;
         }
       }
-    });
+      
+      console.log(`  📊 ${files.length} archivos procesados en ${imageDir}\n`);
+    } else {
+      console.log(`  ⚠️  Directorio no encontrado: ${imageDir}`);
+    }
   }
   
-  walkDir(sourceDir);
-  return images;
+  console.log(`\n✅ Proceso completado:`);
+  console.log(`  - ${convertedCount} imágenes convertidas a WebP`);
+  console.log(`  - ${optimizedCount} imágenes optimizadas`);
+  console.log(`\n💡 Recomendación: Actualiza las referencias en HTML/CSS para usar las versiones WebP`);
 }
 
-/**
- * Optimizar una imagen
- * @param {string} imagePath - Ruta de la imagen
- * @param {string} size - Tamaño de la imagen (thumbnail, small, medium, large, original)
- */
-function optimizeImage(imagePath, size) {
-  try {
-    const fileName = path.basename(imagePath);
-    const fileNameWithoutExt = path.parse(fileName).name;
-    const ext = path.extname(fileName).toLowerCase();
-    
-    // Definir dimensiones según el tamaño
-    let dimensions = '';
-    switch (size) {
-      case 'thumbnail':
-        dimensions = '150x150';
-        break;
-      case 'small':
-        dimensions = '300x300';
-        break;
-      case 'medium':
-        dimensions = '600x600';
-        break;
-      case 'large':
-        dimensions = '1200x1200';
-        break;
-      default:
-        dimensions = '';
-    }
-    
-    // Definir calidad según el tamaño
-    const quality = qualitySettings[size];
-    
-    // Crear nombre de archivo optimizado
-    const optimizedFileName = `${fileNameWithoutExt}-${size}${ext}`;
-    const outputPath = path.join(optimizedDir, optimizedFileName);
-    
-    // Comando de optimización (requiere ImageMagick)
-    let command = `convert "${imagePath}"`;
-    
-    // Añadir redimensionamiento si es necesario
-    if (dimensions) {
-      command += ` -resize ${dimensions}^ -gravity center -extent ${dimensions}`;
-    }
-    
-    // Añadir compresión
-    if (ext === '.jpg' || ext === '.jpeg') {
-      command += ` -quality ${quality} -interlace Plane`;
-    } else if (ext === '.png') {
-      command += ` -quality ${quality} -strip`;
-    } else if (ext === '.webp') {
-      command += ` -quality ${quality}`;
-    }
-    
-    command += ` "${outputPath}"`;
-    
-    // Ejecutar comando
-    execSync(command);
-    console.log(`Imagen optimizada: ${optimizedFileName}`);
-    
-    // Copiar a directorios dev y prod
-    fs.copyFileSync(outputPath, path.join(devDir, optimizedFileName));
-    fs.copyFileSync(outputPath, path.join(prodDir, optimizedFileName));
-    
-  } catch (error) {
-    console.error(`Error al optimizar imagen ${imagePath}:`, error.message);
-  }
-}
-
-/**
- * Convertir imagen a WebP
- * @param {string} imagePath - Ruta de la imagen
- */
-function convertToWebP(imagePath) {
-  try {
-    const fileName = path.basename(imagePath);
-    const fileNameWithoutExt = path.parse(fileName).name;
-    const webpFileName = `${fileNameWithoutExt}.webp`;
-    const outputPath = path.join(optimizedDir, webpFileName);
-    
-    // Comando de conversión (requiere ImageMagick)
-    const command = `convert "${imagePath}" -quality 85 "${outputPath}"`;
-    
-    // Ejecutar comando
-    execSync(command);
-    console.log(`Imagen convertida a WebP: ${webpFileName}`);
-    
-    // Copiar a directorios dev y prod
-    fs.copyFileSync(outputPath, path.join(devDir, webpFileName));
-    fs.copyFileSync(outputPath, path.join(prodDir, webpFileName));
-    
-  } catch (error) {
-    console.error(`Error al convertir imagen a WebP ${imagePath}:`, error.message);
-  }
-}
-
-/**
- * Generar conjunto de imágenes responsivas
- * @param {string} imagePath - Ruta de la imagen
- */
-function generateResponsiveImages(imagePath) {
-  // Optimizar para diferentes tamaños
-  ['thumbnail', 'small', 'medium', 'large'].forEach(size => {
-    optimizeImage(imagePath, size);
-  });
-  
-  // Convertir a WebP
-  convertToWebP(imagePath);
-}
-
-/**
- * Optimizar todas las imágenes
- */
-function optimizeAllImages() {
-  console.log('Iniciando optimización de imágenes...');
-  
-  // Crear directorios
-  createDirectories();
-  
-  // Obtener imágenes
-  const images = getImages();
-  console.log(`Encontradas ${images.length} imágenes para optimizar`);
-  
-  // Optimizar cada imagen
-  images.forEach(imagePath => {
-    console.log(`Optimizando: ${imagePath}`);
-    generateResponsiveImages(imagePath);
-  });
-  
-  console.log('Optimización de imágenes completada');
-}
-
-// Ejecutar optimización si se llama directamente
-if (require.main === module) {
-  optimizeAllImages();
-}
-
-// Exportar funciones
-module.exports = {
-  optimizeAllImages,
-  optimizeImage,
-  convertToWebP,
-  generateResponsiveImages
-};
+// Ejecutar optimización
+processImageDirectories().catch(error => {
+  console.error('❌ Error durante la optimización:', error.message);
+  process.exit(1);
+});

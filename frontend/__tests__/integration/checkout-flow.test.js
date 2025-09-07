@@ -55,8 +55,8 @@ describe('Checkout Flow Integration', () => {
     });
 
     // Importar módulos necesarios
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    const checkoutModule = require('../../../frontend/assets/js/checkout.js');
+    const cartModule = require('../../../frontend/assets/js/components/cart/cart.js');
+    const checkoutModule = require('../../../frontend/assets/js/components/cart/checkout.js');
     
     // Verificar que los módulos se hayan cargado correctamente
     expect(cartModule).toBeDefined();
@@ -75,13 +75,13 @@ describe('Checkout Flow Integration', () => {
     });
 
     // Importar módulo de checkout
-    const checkoutModule = require('../../../frontend/assets/js/checkout.js');
+    const checkoutModule = require('../../../frontend/assets/js/components/cart/checkout.js');
     
     // Verificar que el módulo se haya cargado correctamente
     expect(checkoutModule).toBeDefined();
   });
 
-  test('debería mostrar error cuando el usuario no está autenticado', () => {
+  test('debería mostrar error cuando el usuario no está autenticado', async () => {
     // Mock de carrito con productos pero sin usuario autenticado
     localStorageMock.getItem.mockImplementation((key) => {
       if (key === 'cart') {
@@ -89,12 +89,17 @@ describe('Checkout Flow Integration', () => {
           { id: '1', name: 'Product 1', price: 10.99, quantity: 2, image: 'image1.jpg' }
         ]);
       }
-      if (key === 'token') return null; // Usuario no autenticado
+      return null;
+    });
+    
+    // Mock de usuario no autenticado
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'token') return null;
       return null;
     });
 
     // Importar módulo de checkout
-    const checkoutModule = require('../../../frontend/assets/js/checkout.js');
+    const checkoutModule = require('../../../frontend/assets/js/components/cart/checkout.js');
     
     // Verificar que el módulo se haya cargado correctamente
     expect(checkoutModule).toBeDefined();
@@ -123,8 +128,8 @@ describe('Checkout Flow Integration', () => {
     fetch.mockRejectedValue(new Error('Network error'));
 
     // Importar módulos necesarios
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    const checkoutModule = require('../../../frontend/assets/js/checkout.js');
+    const cartModule = require('../../../frontend/assets/js/components/cart/cart.js');
+    const checkoutModule = require('../../../frontend/assets/js/components/cart/checkout.js');
     
     // Verificar que los módulos se hayan cargado correctamente
     expect(cartModule).toBeDefined();
@@ -158,8 +163,8 @@ describe('Checkout Flow Integration', () => {
     });
 
     // Importar módulos necesarios
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    const checkoutModule = require('../../../frontend/assets/js/checkout.js');
+    const cartModule = require('../../../frontend/assets/js/components/cart/cart.js');
+    const checkoutModule = require('../../../frontend/assets/js/components/cart/checkout.js');
     
     // Verificar que los módulos se hayan cargado correctamente
     expect(cartModule).toBeDefined();
@@ -198,9 +203,8 @@ describe('Checkout Flow Integration', () => {
       json: () => Promise.resolve({ message: 'Order placed successfully' })
     });
 
-    // Importar módulos necesarios
-    const cartModule = require('../../../frontend/assets/js/cart.js');
-    const checkoutModule = require('../../../frontend/assets/js/checkout.js');
+    // Importar módulo de checkout
+    const checkoutModule = require('../../../frontend/assets/js/components/cart/checkout.js');
     
     // Verificar que los módulos se hayan cargado correctamente
     expect(cartModule).toBeDefined();

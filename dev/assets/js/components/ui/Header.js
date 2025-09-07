@@ -1,27 +1,27 @@
 // Migrado de componente web personalizado a módulo ES6
 class Header extends HTMLElement {
-    /**
+  /**
      * Se ejecuta cuando el elemento se conecta al DOM
      * Renderiza el contenido del encabezado
      */
-    connectedCallback() {
-        // Verificar si Font Awesome ya está cargado
-        const isFontAwesomeLoaded = document.querySelector('link[href*="font-awesome"]') || 
+  connectedCallback() {
+    // Verificar si Font Awesome ya está cargado
+    const isFontAwesomeLoaded = document.querySelector('link[href*="font-awesome"]') || 
                                    document.querySelector('link[href*="fontawesome"]') ||
                                    document.querySelector('link[href*="cdnjs.cloudflare.com/ajax/libs/font-awesome"]');
         
-        // Si Font Awesome no está cargado, cargarlo
-        if (!isFontAwesomeLoaded) {
-            const fontAwesomeLink = document.createElement('link');
-            fontAwesomeLink.rel = 'stylesheet';
-            fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-            fontAwesomeLink.integrity = 'sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==';
-            fontAwesomeLink.crossOrigin = 'anonymous';
-            fontAwesomeLink.referrerPolicy = 'no-referrer';
-            document.head.appendChild(fontAwesomeLink);
-        }
+    // Si Font Awesome no está cargado, cargarlo
+    if (!isFontAwesomeLoaded) {
+      const fontAwesomeLink = document.createElement('link');
+      fontAwesomeLink.rel = 'stylesheet';
+      fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+      fontAwesomeLink.integrity = 'sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==';
+      fontAwesomeLink.crossOrigin = 'anonymous';
+      fontAwesomeLink.referrerPolicy = 'no-referrer';
+      document.head.appendChild(fontAwesomeLink);
+    }
         
-        this.innerHTML = `
+    this.innerHTML = `
             <header>
                 <div class="navbar">
                     <div class="logo">
@@ -74,101 +74,104 @@ class Header extends HTMLElement {
             </header>
         `;
         
-        // Configurar la interactividad después de renderizar
-        setTimeout(() => {
-            this.setupInteractivity();
-        }, 0);
-    }
+    // Configurar la interactividad después de renderizar
+    setTimeout(() => {
+      this.setupInteractivity();
+    }, 0);
+  }
     
-    /**
+  /**
      * Configura la interactividad del header
      */
-    setupInteractivity() {
-        // Toggle de navegación para móviles
-        const navToggle = this.querySelector('#nav-toggle');
-        const navLinks = this.querySelector('.nav-links');
+  setupInteractivity() {
+    // Toggle de navegación para móviles
+    const navToggle = this.querySelector('#nav-toggle');
+    const navLinks = this.querySelector('.nav-links');
         
-        if (navToggle && navLinks) {
-            navToggle.addEventListener('click', () => {
-                const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
-                navToggle.setAttribute('aria-expanded', !isExpanded);
-                navLinks.classList.toggle('show');
-            });
-        }
-        
-        // Toggle de tema
-        const themeToggle = this.querySelector('#theme-toggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                // Cambiar el icono y el aria-label
-                const themeIcon = themeToggle.querySelector('i');
-                if (themeIcon) {
-                    if (newTheme === 'dark') {
-                        themeIcon.className = 'fas fa-sun';
-                        themeToggle.setAttribute('aria-label', 'Cambiar a modo claro');
-                    } else {
-                        themeIcon.className = 'fas fa-moon';
-                        themeToggle.setAttribute('aria-label', 'Cambiar a modo oscuro');
-                    }
-                }
-            });
-        }
-        
-        // Carrito de compras
-        const cartIcon = this.querySelector('#cart-icon');
-        if (cartIcon) {
-            cartIcon.addEventListener('click', () => {
-                // Emitir evento personalizado para mostrar el carrito
-                document.dispatchEvent(new CustomEvent('showCart'));
-            });
-        }
-        
-        // Dropdown de usuario
-        const userInfo = this.querySelector('.user-info');
-        const userDropdown = this.querySelector('.user-dropdown');
-        
-        if (userInfo && userDropdown) {
-            userInfo.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isExpanded = userInfo.getAttribute('aria-expanded') === 'true';
-                userInfo.setAttribute('aria-expanded', !isExpanded);
-                userDropdown.classList.toggle('show');
-            });
-            
-            // Cerrar el dropdown al hacer clic fuera
-            document.addEventListener('click', (e) => {
-                if (!userInfo.contains(e.target)) {
-                    userInfo.setAttribute('aria-expanded', 'false');
-                    userDropdown.classList.remove('show');
-                }
-            });
-            
-            // Cerrar el dropdown al presionar Escape
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    userInfo.setAttribute('aria-expanded', 'false');
-                    userDropdown.classList.remove('show');
-                }
-            });
-        }
-        
-        // Configurar cierre de sesión
-        const logoutLink = this.querySelector('#logout-link');
-        if (logoutLink) {
-            logoutLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.removeItem('token');
-                window.location.href = 'login.html';
-            });
-        }
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', () => {
+        const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+        navToggle.setAttribute('aria-expanded', !isExpanded);
+        navLinks.classList.toggle('show');
+      });
     }
+        
+    // Toggle de tema
+    const themeToggle = this.querySelector('#theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+                
+        // Cambiar el icono y el aria-label
+        const themeIcon = themeToggle.querySelector('i');
+        if (themeIcon) {
+          if (newTheme === 'dark') {
+            themeIcon.className = 'fas fa-sun';
+            themeToggle.setAttribute('aria-label', 'Cambiar a modo claro');
+          } else {
+            themeIcon.className = 'fas fa-moon';
+            themeToggle.setAttribute('aria-label', 'Cambiar a modo oscuro');
+          }
+        }
+      });
+    }
+        
+    // Carrito de compras
+    const cartIcon = this.querySelector('#cart-icon');
+    if (cartIcon) {
+      cartIcon.addEventListener('click', () => {
+        // Emitir evento personalizado para mostrar el carrito
+        document.dispatchEvent(new CustomEvent('showCart'));
+      });
+    }
+        
+    // Dropdown de usuario
+    const userInfo = this.querySelector('.user-info');
+    const userDropdown = this.querySelector('.user-dropdown');
+        
+    if (userInfo && userDropdown) {
+      userInfo.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isExpanded = userInfo.getAttribute('aria-expanded') === 'true';
+        userInfo.setAttribute('aria-expanded', !isExpanded);
+        userDropdown.classList.toggle('show');
+      });
+            
+      // Cerrar el dropdown al hacer clic fuera
+      document.addEventListener('click', (e) => {
+        if (!userInfo.contains(e.target)) {
+          userInfo.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+        }
+      });
+            
+      // Cerrar el dropdown al presionar Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          userInfo.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+        }
+      });
+    }
+        
+    // Configurar cierre de sesión
+    const logoutLink = this.querySelector('#logout-link');
+    if (logoutLink) {
+      logoutLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('token');
+        window.location.href = 'pages/login.html';
+      });
+    }
+  }
 }
 
 // Registrar el componente personalizado para que pueda ser usado en el HTML
+if (!customElements.get('header-component')) {
+  customElements.define('header-component', Header);
+}
 export default Header;

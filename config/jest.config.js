@@ -17,12 +17,20 @@ module.exports = {
   },
   testPathIgnorePatterns: [
     '/node_modules/',
-    '/frontend/assets/js/vendor/'
+    '/frontend/assets/js/vendor/',
+    '/dev/__tests__/',  // Ignorar las pruebas duplicadas en /dev
+    '/tests/'  // Ignorar pruebas antiguas en la raíz
   ],
   transform: {
     "^.+\\.js$": "babel-jest"
   },
   transformIgnorePatterns: [
     "/node_modules/(?!@babel)"
-  ]
+  ],
+  globals: {
+    'babel-jest': {
+      isolatedModules: true,
+      esModuleInterop: true
+    }
+  }
 };

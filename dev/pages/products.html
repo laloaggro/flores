@@ -11,9 +11,16 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/assets/css/combined.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" crossorigin="anonymous">
+    <link rel="preload" href="/assets/css/combined.css" as="style">
+    
+    <!-- Fallback for disabled JavaScript -->
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/assets/css/combined.css">
+    </noscript>
     
     <!-- Estilos combinados -->
     <link rel="stylesheet" href="/assets/css/combined.css">
@@ -26,7 +33,6 @@
     <!-- Mejoras de seguridad -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://accounts.google.com/gsi/; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://accounts.google.com/gsi/;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
     
     <!-- Open Graph / Facebook -->
@@ -54,17 +60,17 @@
     <meta name="theme-color" content="#ffffff">
     
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
     
     <!-- Preload critical scripts -->
-    <link rel="preload" href="/components/header/Header.js" as="script">
-    <link rel="preload" href="/components/header/Footer.js" as="script">
-    <link rel="preload" href="/assets/js/components/utils/utils.js" as="script">
-    <link rel="preload" href="/assets/js/cart.js" as="script">
-    <link rel="preload" href="/assets/js/components/utils/auth.js" as="script">
-    <link rel="preload" href="/assets/js/components/ui/Header.js" as="script">
-    <link rel="preload" href="/assets/js/components/utils/theme.js" as="script">
-    <link rel="preload" href="/assets/js/lazyLoad.js" as="script">
+    <link rel="preload" href="/components/header/Header.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="/components/header/Footer.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="/assets/js/components/utils/utils.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="/assets/js/cart.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="/assets/js/components/utils/auth.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="/assets/js/components/ui/Header.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="/assets/js/components/utils/theme.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="/assets/js/lazyLoad.js" as="script" crossorigin="anonymous">
 </head>
 <body data-theme="light">
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
