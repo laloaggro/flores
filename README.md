@@ -30,8 +30,7 @@ Actualmente el proyecto está en proceso de migración de una arquitectura monol
 - Node.js
 - Express
 - Docker y Docker Compose
-- PostgreSQL
-- MongoDB Atlas
+- MongoDB
 - Redis
 
 ### Middleware y Componentes Compartidos
@@ -54,7 +53,7 @@ Actualmente el proyecto está en proceso de migración de una arquitectura monol
 ```
 flores-1/
 ├── backend/                 # Código del servidor (monolítico - legacy)
-├── frontend/                # Código del cliente original
+├── frontend/                # Código del cliente con Vite
 ├── dev/                     # Entorno de desarrollo principal
 │   ├── assets/              # Recursos para desarrollo
 │   │   ├── css/             # Hojas de estilo
@@ -71,12 +70,9 @@ flores-1/
 │   ├── api-gateway/         # API Gateway (Puerto 3000)
 │   ├── auth-service/        # Servicio de autenticación (Puerto 3001)
 │   ├── product-service/     # Servicio de productos (Puerto 3002)
-│   ├── user-service/        # Servicio de usuarios (Puerto 3003)
-│   ├── order-service/       # Servicio de órdenes (Puerto 3004)
-│   ├── cart-service/        # Servicio de carrito (Puerto 3005)
-│   ├── contact-service/     # Servicio de contacto (Puerto 3006)
-│   ├── wishlist-service/    # Servicio de lista de deseos (Puerto 3007)
-│   ├── review-service/      # Servicio de reseñas (Puerto 3008)
+│   ├── contact-service/     # Servicio de contacto (Puerto 3003)
+│   ├── review-service/      # Servicio de reseñas (Puerto 3004)
+│   ├── order-service/       # Servicio de órdenes (Puerto 3005 - Futuro)
 │   ├── shared/              # Componentes compartidos entre microservicios
 │   └── docker-compose.yml   # Orquestación de microservicios
 ├── dist/                    # Archivos compilados para producción
@@ -90,10 +86,11 @@ La arquitectura actual del proyecto se basa en microservicios con las siguientes
 ### Componentes Principales
 1. **API Gateway** - Punto de entrada único para todas las solicitudes (Puerto 3000)
 2. **Servicios Especializados** - Cada servicio maneja una funcionalidad específica
-3. **Bases de Datos** - PostgreSQL, MongoDB Atlas y Redis para diferentes necesidades
+3. **Bases de Datos** - MongoDB y Redis para diferentes necesidades
 4. **Componentes Compartidos** - Librerías y utilidades reutilizables
 
 ### Flujo de Datos
+
 ```
 Frontend (dev/) 
     ↓ (HTTP)
@@ -101,23 +98,30 @@ API Gateway (Puerto 3000)
     ↓ (Enrutamiento)
 Servicios Especializados
     ↓ (Comunicación con BD)
-Bases de Datos (PostgreSQL en puerto 5433, MongoDB Atlas, Redis en puerto 6380)
+Bases de Datos (MongoDB, Redis)
 ```
 
 ## Cambios Recientes y Mejoras
 
-### Corrección de Problemas de Conectividad
-- Se resolvieron problemas de conexión con MongoDB Atlas eliminando opciones de configuración conflictivas de TLS
-- Se corrigió la configuración de todos los servicios que utilizan MongoDB para asegurar la conectividad
+### Mejoras en la Arquitectura de Microservicios
+- Se ha optimizado la estructura de microservicios eliminando servicios redundantes
+- Se ha mejorado la comunicación entre servicios a través de la API Gateway
+- Se han corregido problemas de configuración en todos los servicios
 
-### Mejoras en el Servicio de Autenticación
-- Se migró el servicio de autenticación de PostgreSQL a SQLite para simplificar la implementación
-- Se corrigieron errores en el modelo de usuarios y en la inicialización de la base de datos
-- Se agregó la dependencia `dotenv` faltante
+### Frontend con Vite
+- Se ha implementado Vite para mejorar el desarrollo y empaquetado del frontend
+- Se ha mejorado la estructura de componentes
+- Se ha optimizado la carga de recursos
 
-### Actualizaciones en la Configuración de Docker
-- Se resolvieron conflictos de puertos al iniciar los contenedores
-- Se mejoró el proceso de construcción de imágenes Docker
+### Documentación Completa
+- Se ha creado documentación detallada en múltiples archivos markdown
+- Se ha generado un cheatsheet con comandos útiles
+- Se ha documentado la arquitectura del sitio web
+
+### Pruebas
+- Se han corregido las configuraciones de pruebas
+- Se han creado nuevos archivos de prueba y fixtures
+- Se ha mejorado el entorno de pruebas
 
 ## Iniciar la Aplicación
 
@@ -137,11 +141,14 @@ npm run start:frontend
 ### Opción 2: Microservicios (recomendado - actual)
 
 ```bash
-# Iniciar microservicios y frontend simultáneamente
-npm run dev:microservices
+# Iniciar todos los microservicios con Docker Compose
+npm run dev:services
 
-# O solo los microservicios
-npm run start:microservices
+# Iniciar el frontend con Vite en modo desarrollo
+npm run dev
+
+# Iniciar ambos al mismo tiempo
+npm run dev:all
 ```
 
 ## Configuración
@@ -156,15 +163,11 @@ Las variables de entorno se configuran en el archivo `microservices/.env`. Aseg�
 | API Gateway | 3000 | http://localhost:3000 |
 | Auth Service | 3001 | http://localhost:3001 |
 | Product Service | 3002 | http://localhost:3002 |
-| User Service | 3003 | http://localhost:3003 |
-| Order Service | 3004 | http://localhost:3004 |
-| Cart Service | 3005 | http://localhost:3005 |
-| Contact Service | 3006 | http://localhost:3006 |
-| Wishlist Service | 3007 | http://localhost:3007 |
-| Review Service | 3008 | http://localhost:3008 |
-| PostgreSQL | 5433 | - |
-| MongoDB Atlas | - | mongodb+srv:// |
-| Redis | 6380 | - |
+| Contact Service | 3003 | http://localhost:3003 |
+| Review Service | 3004 | http://localhost:3004 |
+| Order Service | 3005 | http://localhost:3005 (Futuro) |
+| MongoDB | - | mongodb://localhost:27017 |
+| Redis | 6379 | - |
 
 ## Documentación Adicional
 
@@ -172,10 +175,12 @@ Las variables de entorno se configuran en el archivo `microservices/.env`. Aseg�
 - [Guía de Microservicios](MICROSERVICES_GUIDE.md)
 - [Documentación de la API](backend/README.md)
 - [Guía de Desarrollo](docs/DEVELOPMENT_GUIDE.md)
+- [Arquitectura del Sitio Web](WEB_ARCHITECTURE.md)
+- [Cheatsheet de Comandos](CHEATSHEET.md)
 
 ## Estado de Desarrollo
 
-El proyecto se encuentra en un estado de transición entre la arquitectura monolítica tradicional y la arquitectura de microservicios moderna. Se recomienda utilizar la arquitectura de microservicios para nuevas funcionalidades.
+El proyecto se encuentra en un estado avanzado con una arquitectura de microservicios moderna. Se recomienda utilizar la arquitectura de microservicios para nuevas funcionalidades y el frontend con Vite para una mejor experiencia de desarrollo.
 
 ## Licencia
 
